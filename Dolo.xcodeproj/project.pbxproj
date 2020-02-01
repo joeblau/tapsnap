@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		ED500D4023E5465200330C79 /* LoggedInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED500D3F23E5465200330C79 /* LoggedInViewController.swift */; };
+		ED500D4223E5483800330C79 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED500D4123E5483800330C79 /* RootViewController.swift */; };
 		EDB014F323E53FAC001B61C2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB014F223E53FAC001B61C2 /* AppDelegate.swift */; };
 		EDB014F523E53FAC001B61C2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB014F423E53FAC001B61C2 /* SceneDelegate.swift */; };
-		EDB014F723E53FAC001B61C2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB014F623E53FAC001B61C2 /* ViewController.swift */; };
-		EDB014FA23E53FAC001B61C2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EDB014F823E53FAC001B61C2 /* Main.storyboard */; };
+		EDB014F723E53FAC001B61C2 /* LoggedOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB014F623E53FAC001B61C2 /* LoggedOutViewController.swift */; };
 		EDB014FD23E53FAC001B61C2 /* Dolo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EDB014FB23E53FAC001B61C2 /* Dolo.xcdatamodeld */; };
 		EDB014FF23E53FAD001B61C2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EDB014FE23E53FAD001B61C2 /* Assets.xcassets */; };
 		EDB0150223E53FAD001B61C2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EDB0150023E53FAD001B61C2 /* LaunchScreen.storyboard */; };
@@ -28,11 +29,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		ED37CB4423E54A3B00D2C2BE /* Dolo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dolo.entitlements; sourceTree = "<group>"; };
+		ED500D3F23E5465200330C79 /* LoggedInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInViewController.swift; sourceTree = "<group>"; };
+		ED500D4123E5483800330C79 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		EDB014EF23E53FAC001B61C2 /* Dolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EDB014F223E53FAC001B61C2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EDB014F423E53FAC001B61C2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		EDB014F623E53FAC001B61C2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		EDB014F923E53FAC001B61C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		EDB014F623E53FAC001B61C2 /* LoggedOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedOutViewController.swift; sourceTree = "<group>"; };
 		EDB014FC23E53FAC001B61C2 /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
 		EDB014FE23E53FAD001B61C2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EDB0150123E53FAD001B61C2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -81,10 +84,10 @@
 		EDB014F123E53FAC001B61C2 /* Dolo */ = {
 			isa = PBXGroup;
 			children = (
-				EDB014F223E53FAC001B61C2 /* AppDelegate.swift */,
+				ED37CB4423E54A3B00D2C2BE /* Dolo.entitlements */,
 				EDB014F423E53FAC001B61C2 /* SceneDelegate.swift */,
-				EDB014F623E53FAC001B61C2 /* ViewController.swift */,
-				EDB014F823E53FAC001B61C2 /* Main.storyboard */,
+				EDB0151723E5408E001B61C2 /* Root */,
+				EDB014F223E53FAC001B61C2 /* AppDelegate.swift */,
 				EDB014FE23E53FAD001B61C2 /* Assets.xcassets */,
 				EDB0150023E53FAD001B61C2 /* LaunchScreen.storyboard */,
 				EDB0150323E53FAD001B61C2 /* Info.plist */,
@@ -100,6 +103,48 @@
 				EDB0150E23E53FAD001B61C2 /* Info.plist */,
 			);
 			path = DoloTests;
+			sourceTree = "<group>";
+		};
+		EDB0151723E5408E001B61C2 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				ED500D4123E5483800330C79 /* RootViewController.swift */,
+				EDB0151923E540AA001B61C2 /* LoggedIn */,
+				EDB0151823E540A0001B61C2 /* LoggedOut */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
+		EDB0151823E540A0001B61C2 /* LoggedOut */ = {
+			isa = PBXGroup;
+			children = (
+				EDB014F623E53FAC001B61C2 /* LoggedOutViewController.swift */,
+			);
+			path = LoggedOut;
+			sourceTree = "<group>";
+		};
+		EDB0151923E540AA001B61C2 /* LoggedIn */ = {
+			isa = PBXGroup;
+			children = (
+				EDB0151B23E540B8001B61C2 /* Camera */,
+				EDB0151A23E540AE001B61C2 /* Settings */,
+				ED500D3F23E5465200330C79 /* LoggedInViewController.swift */,
+			);
+			path = LoggedIn;
+			sourceTree = "<group>";
+		};
+		EDB0151A23E540AE001B61C2 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		EDB0151B23E540B8001B61C2 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,7 +230,6 @@
 			files = (
 				EDB0150223E53FAD001B61C2 /* LaunchScreen.storyboard in Resources */,
 				EDB014FF23E53FAD001B61C2 /* Assets.xcassets in Resources */,
-				EDB014FA23E53FAC001B61C2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,7 +247,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EDB014F723E53FAC001B61C2 /* ViewController.swift in Sources */,
+				EDB014F723E53FAC001B61C2 /* LoggedOutViewController.swift in Sources */,
+				ED500D4023E5465200330C79 /* LoggedInViewController.swift in Sources */,
+				ED500D4223E5483800330C79 /* RootViewController.swift in Sources */,
 				EDB014F323E53FAC001B61C2 /* AppDelegate.swift in Sources */,
 				EDB014F523E53FAC001B61C2 /* SceneDelegate.swift in Sources */,
 				EDB014FD23E53FAC001B61C2 /* Dolo.xcdatamodeld in Sources */,
@@ -229,14 +275,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		EDB014F823E53FAC001B61C2 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				EDB014F923E53FAC001B61C2 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		EDB0150023E53FAD001B61C2 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -366,7 +404,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Dolo/Dolo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K78G42H4U2;
 				INFOPLIST_FILE = Dolo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -375,7 +415,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.joeblau.Dolo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -383,7 +423,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Dolo/Dolo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = K78G42H4U2;
 				INFOPLIST_FILE = Dolo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -392,7 +434,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.joeblau.Dolo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
