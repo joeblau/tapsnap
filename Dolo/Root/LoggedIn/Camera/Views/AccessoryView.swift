@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PencilKit
 
 class KeyboardAccessoryView: UIVisualEffectView {
 
@@ -14,6 +15,7 @@ class KeyboardAccessoryView: UIVisualEffectView {
     let accessoryStack: UIStackView
     let textKeyboard = UIButton(type: .system)
     let drawToolPicker = UIButton(type: .system)
+    var canvasView: PKCanvasView?
     
     override init(effect: UIVisualEffect?) {
         textKeyboard.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +38,9 @@ class KeyboardAccessoryView: UIVisualEffectView {
         accessoryStack.spacing = kAccessoryPadding
         
         super.init(effect: UIBlurEffect(style: .regular))
-        
+        textKeyboard.addTarget(self, action: #selector(showKeyboard), for: .touchUpInside)
+        drawToolPicker.addTarget(self, action: #selector(showDrawTool), for: .touchUpInside)
+
         translatesAutoresizingMaskIntoConstraints = false
         configureViews()
     }
@@ -57,6 +61,21 @@ class KeyboardAccessoryView: UIVisualEffectView {
         accessoryStack.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         accessoryStack.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         accessoryStack.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+    }
+    
+    // MARK: - Actions
+    
+    @objc private func showKeyboard() {}
+
+    @objc private func showDrawTool() {
+        guard let window = window,
+            let toolPicker = PKToolPicker.shared(for: window),
+            let canvasView = canvasView else {
+            return
+        }
+        toolPicker.addObserver(canvasView)
+        toolPicker.setVisible(true, forFirstResponder: canvasView)
+        canvasView.becomeFirstResponder()
     }
 
 }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PencilKit
 
 class CameraOverlayView: UIView {
     
@@ -16,6 +17,7 @@ class CameraOverlayView: UIView {
     let textboxButton = UIButton(type: .system)
     let flipButton = UIButton(type: .system)
     let cancelButton = UIButton(type: .system)
+    let canvasView = PKCanvasView(frame: .zero)
     
     let textfield = UITextField(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
     
@@ -37,6 +39,10 @@ class CameraOverlayView: UIView {
         flipButton.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
         flipButton.tintColor = .label
         
+        canvasView.translatesAutoresizingMaskIntoConstraints = false
+        canvasView.isOpaque = false
+        canvasView.backgroundColor = .clear
+        
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
 
@@ -55,6 +61,12 @@ class CameraOverlayView: UIView {
         textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
         flipButton.addTarget(self, action: #selector(flipCamera), for: .touchUpInside)
 
+        self.addSubview(canvasView)
+        canvasView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        canvasView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        canvasView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        canvasView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
         self.addSubview(menuButton)
         menuButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         menuButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
@@ -78,6 +90,9 @@ class CameraOverlayView: UIView {
         flipButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         flipButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
         flipButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
+        
+        
+
     }
     
     private func configureGestureRecoginzers() {
@@ -93,10 +108,11 @@ class CameraOverlayView: UIView {
     // MARK: - Actions
     
     @objc private func showTextbox() {
-        
+        let keyboardAccessoryView = KeyboardAccessoryView()
+        keyboardAccessoryView.canvasView = canvasView
         self.addSubview(textfield)
         textfield.center = center
-        textfield.inputAccessoryView = KeyboardAccessoryView()
+        textfield.inputAccessoryView = keyboardAccessoryView
         textfield.becomeFirstResponder()
     }
     
@@ -107,4 +123,8 @@ class CameraOverlayView: UIView {
     @objc private func flipCamera() {}
 
     @objc private func showMenu() {}
+}
+
+extension CameraOverlayView: PKToolPickerObserver {
+    
 }
