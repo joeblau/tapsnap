@@ -22,20 +22,20 @@ class CameraOverlayView: UIView {
     override init(frame: CGRect) {
         menuButton.translatesAutoresizingMaskIntoConstraints = false
         menuButton.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
-        menuButton.tintColor = .white
+        menuButton.tintColor = .label
         
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        cancelButton.tintColor = .white
+        cancelButton.tintColor = .label
         cancelButton.isHidden = true
         
         textboxButton.translatesAutoresizingMaskIntoConstraints = false
         textboxButton.setImage(UIImage(systemName: "textbox"), for: .normal)
-        textboxButton.tintColor = .white
+        textboxButton.tintColor = .label
         
         flipButton.translatesAutoresizingMaskIntoConstraints = false
         flipButton.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
-        flipButton.tintColor = .white
+        flipButton.tintColor = .label
         
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
@@ -48,7 +48,7 @@ class CameraOverlayView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Configure
+    // MARK: - Configure Views
     
     private func configureViews() {
         menuButton.addTarget(self, action: #selector(showMenu), for: .touchUpInside)
@@ -81,8 +81,13 @@ class CameraOverlayView: UIView {
     }
     
     private func configureGestureRecoginzers() {
-        let dismissTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        addGestureRecognizer(dismissTap)
+        let dismissSingleTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        dismissSingleTap.numberOfTapsRequired = 1
+        addGestureRecognizer(dismissSingleTap)
+
+        let flipCameraDoubleTap = UITapGestureRecognizer(target: self, action: #selector(flipCamera))
+        flipCameraDoubleTap.numberOfTapsRequired = 2
+        addGestureRecognizer(flipCameraDoubleTap)
     }
     
     // MARK: - Actions
@@ -91,6 +96,7 @@ class CameraOverlayView: UIView {
         
         self.addSubview(textfield)
         textfield.center = center
+        textfield.inputAccessoryView = KeyboardAccessoryView()
         textfield.becomeFirstResponder()
     }
     

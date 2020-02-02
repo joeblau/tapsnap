@@ -17,22 +17,21 @@ class CameraPreviewView: UIView {
         backgroundColor = .red
         translatesAutoresizingMaskIntoConstraints = false
         
+        configureViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Configure Views
+    
+    private func configureViews() {
         addSubview(cameraOverlay)
         cameraOverlay.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
         cameraOverlay.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         cameraOverlay.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         cameraOverlay.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
 
 }
