@@ -7,30 +7,41 @@
 //
 
 import UIKit
-import PencilKit
 
-class KeyboardAccessoryView: UIVisualEffectView {
-
+final class KeyboardAccessoryView: UIVisualEffectView {
+    
     let kAccessoryPadding: CGFloat = 4
     let accessoryStack: UIStackView
     let textKeyboard = UIButton(type: .system)
     let drawToolPicker = UIButton(type: .system)
-    var canvasView: PKCanvasView?
+    let doneButton = UIButton(type: .system)
     
-    override init(effect: UIVisualEffect?) {
+    var pressKeyboardClosure: (() -> Void)?
+    var pressDrawingClosure: (() -> Void)?
+    var pressDoneClosure: (() -> Void)?
+    
+    init(pressKeyboard: (() -> Void)? = nil,
+         pressDrawing: (() -> Void)? = nil,
+         pressDone: (() -> Void)? = nil) {
         textKeyboard.translatesAutoresizingMaskIntoConstraints = false
         textKeyboard.setImage(UIImage(systemName: "keyboard"), for: .normal)
         textKeyboard.tintColor = .label
         textKeyboard.backgroundColor = UIColor.label.withAlphaComponent(0.3)
         textKeyboard.layer.cornerRadius = 8
-
+        
         drawToolPicker.translatesAutoresizingMaskIntoConstraints = false
         drawToolPicker.setImage(UIImage(systemName: "pencil.and.outline"), for: .normal)
         drawToolPicker.tintColor = .label
         drawToolPicker.backgroundColor = UIColor.label.withAlphaComponent(0.3)
         drawToolPicker.layer.cornerRadius = 8
-
-        accessoryStack = UIStackView(arrangedSubviews: [textKeyboard, drawToolPicker])
+        
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        doneButton.setTitle("Done", for: .normal)
+        doneButton.tintColor = .label
+        doneButton.backgroundColor = UIColor.label.withAlphaComponent(0.15)
+        doneButton.layer.cornerRadius = 8
+        
+        accessoryStack = UIStackView(arrangedSubviews: [textKeyboard, drawToolPicker, doneButton])
         accessoryStack.translatesAutoresizingMaskIntoConstraints = false
         accessoryStack.distribution = .fillEqually
         accessoryStack.isLayoutMarginsRelativeArrangement = true
@@ -38,13 +49,17 @@ class KeyboardAccessoryView: UIVisualEffectView {
         accessoryStack.spacing = kAccessoryPadding
         
         super.init(effect: UIBlurEffect(style: .regular))
-        textKeyboard.addTarget(self, action: #selector(showKeyboard), for: .touchUpInside)
-        drawToolPicker.addTarget(self, action: #selector(showDrawTool), for: .touchUpInside)
-
+        textKeyboard.addTarget(self, action: #selector(pressKeyboardAction), for: .touchUpInside)
+        drawToolPicker.addTarget(self, action: #selector(pressDrawingAction), for: .touchUpInside)
+        doneButton.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)
+        
+        pressKeyboardClosure = pressKeyboard
+        pressDrawingClosure = pressDrawing
+        pressDoneClosure = pressDone
         translatesAutoresizingMaskIntoConstraints = false
         configureViews()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -65,17 +80,16 @@ class KeyboardAccessoryView: UIVisualEffectView {
     
     // MARK: - Actions
     
-    @objc private func showKeyboard() {}
-
-    @objc private func showDrawTool() {
-        guard let window = window,
-            let toolPicker = PKToolPicker.shared(for: window),
-            let canvasView = canvasView else {
-            return
-        }
-        toolPicker.addObserver(canvasView)
-        toolPicker.setVisible(true, forFirstResponder: canvasView)
-        canvasView.becomeFirstResponder()
+    @objc private func pressKeyboardAction() {
+        pressKeyboardClosure?()
     }
-
+    
+    @objc private func pressDrawingAction() {
+        pressDrawingClosure?()
+    }
+    
+    @objc private func pressDoneAction() {
+        pressDoneClosure?()
+    }
+    
 }
