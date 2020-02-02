@@ -27,7 +27,7 @@ class CameraViewController: UIViewController {
         super.viewDidLayoutSubviews(
         )
         view.addSubview(contacts)
-        contacts.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.bottom +  360).isActive = true
+        contacts.heightAnchor.constraint(equalToConstant: view.safeAreaInsets.bottom +  250).isActive = true
         contacts.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         contacts.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         contacts.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true

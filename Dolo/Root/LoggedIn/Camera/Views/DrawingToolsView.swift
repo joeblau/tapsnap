@@ -22,7 +22,6 @@ class DrawingToolsView: UIVisualEffectView {
         selectColorClosure = selectedColor
         
         intrinsicHeight = height - 48.0
-
         colorButtons = [UIColor.label,
                         UIColor.red,
                         UIColor.orange,

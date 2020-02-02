@@ -28,7 +28,7 @@ class CameraPreviewView: UIView {
     
     private func configureViews() {
         addSubview(cameraOverlay)
-        cameraOverlay.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
+        cameraOverlay.topAnchor.constraint(equalTo: topAnchor).isActive = true
         cameraOverlay.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         cameraOverlay.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         cameraOverlay.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true

@@ -12,7 +12,7 @@ import PencilKit
 class CameraOverlayView: UIView {
     
     let kButtonSize: CGFloat = 56
-    let kButtonPadding: CGFloat = 16
+    let kButtonPadding: CGFloat = 0
     let menuButton = UIButton(type: .system)
     let cancelButton = UIButton(type: .system)
     
@@ -21,9 +21,11 @@ class CameraOverlayView: UIView {
     let flipButton = UIButton(type: .system)
     
     let canvasView = PKCanvasView(frame: .zero)
-    let rushActionStackView: UIStackView
+    let editActionStackView: UIStackView
     
     let textfield = UITextField(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
+    
+    let recordingProgressView = RecordProgressView()
     
     var drawingToolsViewHeight: CGFloat = 340
     
@@ -49,9 +51,9 @@ class CameraOverlayView: UIView {
         flipButton.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
         flipButton.tintColor = .label
         
-        rushActionStackView = UIStackView(arrangedSubviews: [locationButton, textboxButton, flipButton])
-        rushActionStackView.translatesAutoresizingMaskIntoConstraints = false
-        rushActionStackView.distribution = .fillEqually
+        editActionStackView = UIStackView(arrangedSubviews: [locationButton, textboxButton, flipButton])
+        editActionStackView.translatesAutoresizingMaskIntoConstraints = false
+        editActionStackView.distribution = .fillEqually
         
         canvasView.translatesAutoresizingMaskIntoConstraints = false
         canvasView.isOpaque = false
@@ -80,9 +82,15 @@ class CameraOverlayView: UIView {
     // MARK: - Configure Views
     
     private func configureViews() {
-        menuButton.addTarget(self, action: #selector(showMenu), for: .touchUpInside)
+        self.addSubview(recordingProgressView)
+        recordingProgressView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        recordingProgressView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+        recordingProgressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        recordingProgressView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+
+        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
         textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
-        flipButton.addTarget(self, action: #selector(flipCamera), for: .touchUpInside)
+        flipButton.addTarget(self, action: #selector(flipCameraAction), for: .touchUpInside)
         
         self.addSubview(canvasView)
         canvasView.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -94,33 +102,38 @@ class CameraOverlayView: UIView {
         menuButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         menuButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         menuButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
-        menuButton.topAnchor.constraint(equalTo: topAnchor, constant: kButtonPadding).isActive = true
+        menuButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
         
         self.addSubview(cancelButton)
         cancelButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         cancelButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         cancelButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
-        cancelButton.topAnchor.constraint(equalTo: topAnchor, constant: kButtonPadding).isActive = true
+        cancelButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
         
-        self.addSubview(rushActionStackView)
-        let width = kButtonSize * CGFloat(rushActionStackView.arrangedSubviews.count)
-        rushActionStackView.widthAnchor.constraint(equalToConstant: width).isActive = true
-        rushActionStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        rushActionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
-        rushActionStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
+        self.addSubview(editActionStackView)
+        let width = kButtonSize * CGFloat(editActionStackView.arrangedSubviews.count)
+        editActionStackView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        editActionStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        editActionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
+        editActionStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
         
         self.addSubview(textfield)
         textfield.center = center
     }
     
     private func configureGestureRecoginzers() {
-        let dismissSingleTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        let dismissSingleTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardAction))
         dismissSingleTap.numberOfTapsRequired = 1
         addGestureRecognizer(dismissSingleTap)
         
-        let flipCameraDoubleTap = UITapGestureRecognizer(target: self, action: #selector(flipCamera))
+        let flipCameraDoubleTap = UITapGestureRecognizer(target: self, action: #selector(flipCameraAction))
         flipCameraDoubleTap.numberOfTapsRequired = 2
         addGestureRecognizer(flipCameraDoubleTap)
+        
+//        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomAction))
+//        zoomInOutPan.maximumNumberOfTouches = 1
+//        addGestureRecognizer(zoomInOutPan)
+
     }
     
     // MARK: - Actions
@@ -143,13 +156,16 @@ class CameraOverlayView: UIView {
         textfield.becomeFirstResponder()
     }
     
-    @objc private func dismissKeyboard() {
+    @objc private func dismissKeyboardAction() {
         textfield.resignFirstResponder()
     }
     
-    @objc private func flipCamera() {}
+    @objc private func flipCameraAction() {}
     
-    @objc private func showMenu() {}
+    @objc private func showMenuAction() {}
+    
+    @objc private func zoomAction() {}
+
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
