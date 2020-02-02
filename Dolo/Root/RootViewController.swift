@@ -19,27 +19,34 @@ class RootViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let doloUID = UserDefaults.standard.value(forKey: "doloUID") as? String ?? ""
+        
+        #if DEBUG
+            let loggedIn = LoggedInViewController()
+            loggedIn.modalPresentationStyle = .fullScreen
+            self.present(loggedIn, animated: true, completion: nil)
+        #else
+            let doloUID = UserDefaults.standard.value(forKey: "doloUID") as? String ?? ""
 
-        provider.getCredentialState(forUserID: doloUID) { (credentialState, error) in
-            DispatchQueue.main.async {
-                switch credentialState {
-                case .authorized:
-                    let loggedIn = LoggedInViewController()
-                    loggedIn.modalPresentationStyle = .fullScreen
-                    self.present(loggedIn, animated: true, completion: nil)
-                case .revoked, .notFound, .transferred:
-                    if let error = error {
-                        print(error.localizedDescription)
+            provider.getCredentialState(forUserID: doloUID) { (credentialState, error) in
+                DispatchQueue.main.async {
+                    switch credentialState {
+                    case .authorized:
+                        let loggedIn = LoggedInViewController()
+                        loggedIn.modalPresentationStyle = .fullScreen
+                        self.present(loggedIn, animated: true, completion: nil)
+                    case .revoked, .notFound, .transferred:
+                        if let error = error {
+                            print(error.localizedDescription)
+                        }
+                        let loggedOut = LoggedOutViewController()
+                        loggedOut.modalPresentationStyle = .fullScreen
+                        self.present(loggedOut, animated: true, completion: nil)
+                    @unknown default:
+                        break
                     }
-                    let loggedOut = LoggedOutViewController()
-                    loggedOut.modalPresentationStyle = .fullScreen
-                    self.present(loggedOut, animated: true, completion: nil)
-                @unknown default:
-                    break
                 }
             }
-        }
+        #endif
     }
 
 }

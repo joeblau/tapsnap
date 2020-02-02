@@ -10,21 +10,24 @@ import UIKit
 
 class LoggedInViewController: UIViewController {
 
+    let camera = CameraViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        camera.modalPresentationStyle = .overFullScreen
     }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Show onboarding
+        
+        // Show camera
+        present(camera, animated: false) {
+            // Log analytic event
+        }
+        // show settings
+        
     }
-    */
+
 
 }
