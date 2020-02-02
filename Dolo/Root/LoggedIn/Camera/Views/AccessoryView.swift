@@ -48,7 +48,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         accessoryStack.directionalLayoutMargins = NSDirectionalEdgeInsets(top: kAccessoryPadding, leading: kAccessoryPadding, bottom: kAccessoryPadding, trailing: kAccessoryPadding)
         accessoryStack.spacing = kAccessoryPadding
         
-        super.init(effect: UIBlurEffect(style: .regular))
+        super.init(effect: UIBlurEffect(style: .systemMaterial))
         textKeyboard.addTarget(self, action: #selector(pressKeyboardAction), for: .touchUpInside)
         drawToolPicker.addTarget(self, action: #selector(pressDrawingAction), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)

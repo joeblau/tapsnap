@@ -56,7 +56,8 @@ class CameraOverlayView: UIView {
         canvasView.translatesAutoresizingMaskIntoConstraints = false
         canvasView.isOpaque = false
         canvasView.backgroundColor = .clear
-        canvasView.tool = PKInkingTool(.pen, color: .green, width: 14)
+        canvasView.overrideUserInterfaceStyle = .light
+        
         
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
@@ -108,8 +109,8 @@ class CameraOverlayView: UIView {
         rushActionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
         rushActionStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
         
-        
-        
+        self.addSubview(textfield)
+        textfield.center = center
     }
     
     private func configureGestureRecoginzers() {
@@ -125,14 +126,16 @@ class CameraOverlayView: UIView {
     // MARK: - Actions
     
     @objc private func showTextbox() {
-        self.addSubview(textfield)
-        textfield.center = center
+        
         textfield.inputAccessoryView = KeyboardAccessoryView(pressKeyboard: {
             self.textfield.inputView?.removeFromSuperview()
             self.textfield.inputView = nil
             self.textfield.reloadInputViews()
         }, pressDrawing: {
-            self.textfield.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
+            self.textfield.inputView = DrawingToolsView(height: self.drawingToolsViewHeight,
+                                                         selectedColor: { color in
+                                                            self.canvasView.tool = PKInkingTool(.pen, color: color, width: 10)
+            })
             self.textfield.reloadInputViews()
         }, pressDone: {
             self.textfield.resignFirstResponder()
