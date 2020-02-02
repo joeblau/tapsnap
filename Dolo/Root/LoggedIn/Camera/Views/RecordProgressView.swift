@@ -14,6 +14,7 @@ class RecordProgressView: UIView {
     var widthConstraint: NSLayoutConstraint!
     
     override init(frame: CGRect) {
+        progressView.translatesAutoresizingMaskIntoConstraints = false
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .blue
@@ -39,6 +40,12 @@ class RecordProgressView: UIView {
     public func staart() {
         UIView.animate(withDuration: 10) {
             self.widthConstraint.constant = UIScreen.main.bounds.width
+        }
+    }
+    
+    public func reset() {
+        UIView.animate(withDuration: 0.3) {
+            self.widthConstraint.constant = 0
         }
     }
     
