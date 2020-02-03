@@ -23,17 +23,17 @@ extension CameraViewController: UICollectionViewDataSource {
                                                         fatalError("invalid cell converison")
         }
         
-        let url = URL(string: "https://i.pravatar.cc/150?img=\(indexPath.row)")!
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map { UIImage(data: $0.data)! }
-            .eraseToAnyPublisher()
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-//                print(completion)
-            }) { image in
-                cell.configure(image: image)
-            }
-            .store(in: &self.cancellables)
+//        let url = URL(string: "https://i.pravatar.cc/150?img=\(indexPath.row)")!
+//        URLSession.shared.dataTaskPublisher(for: url)
+//            .map { UIImage(data: $0.data)! }
+//            .eraseToAnyPublisher()
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveCompletion: { completion in
+////                print(completion)
+//            }) { image in
+//                cell.configure(image: image)
+//            }
+//            .store(in: &self.cancellables)
         
         return cell
     }

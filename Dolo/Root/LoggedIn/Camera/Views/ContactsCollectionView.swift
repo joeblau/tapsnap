@@ -13,8 +13,8 @@ class ContactsCollectionView: UICollectionView {
     init() {
         var contactLayout: UICollectionViewCompositionalLayout {
             
-            let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(100),
-                                                  heightDimension: .absolute(100))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                  heightDimension: .fractionalWidth(1.0))
             let contactItem = NSCollectionLayoutItem(layoutSize: itemSize)
             contactItem.contentInsets = NSDirectionalEdgeInsets(top: 1,
                                                                 leading: 1,
@@ -25,7 +25,6 @@ class ContactsCollectionView: UICollectionView {
                 .vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25),
                                                              heightDimension: .absolute(200)),
                           subitems: [contactItem])
-            
             
             let section = NSCollectionLayoutSection(group: containerGroup)
             

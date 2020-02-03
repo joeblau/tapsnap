@@ -34,8 +34,7 @@ class RecordProgressView: UIView {
     // MARK: - Subscribe To Streams
     
     private func subscribeToStreams() {
-        Current.recordingSubject
-            .sink { action in
+        Current.recordingSubject.sink { action in
             switch action {
             case .start:
                 self.widthConstraint.constant = UIScreen.main.bounds.width

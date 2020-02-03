@@ -16,13 +16,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
     let drawToolPicker = UIButton(type: .system)
     let doneButton = UIButton(type: .system)
     
-    var pressKeyboardClosure: (() -> Void)?
-    var pressDrawingClosure: (() -> Void)?
-    var pressDoneClosure: (() -> Void)?
-    
-    init(pressKeyboard: (() -> Void)? = nil,
-         pressDrawing: (() -> Void)? = nil,
-         pressDone: (() -> Void)? = nil) {
+    init() {
         textKeyboard.translatesAutoresizingMaskIntoConstraints = false
         textKeyboard.setImage(UIImage(systemName: "keyboard"), for: .normal)
         textKeyboard.tintColor = .label
@@ -53,9 +47,6 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         drawToolPicker.addTarget(self, action: #selector(pressDrawingAction), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)
         
-        pressKeyboardClosure = pressKeyboard
-        pressDrawingClosure = pressDrawing
-        pressDoneClosure = pressDone
         translatesAutoresizingMaskIntoConstraints = false
         configureViews()
     }
@@ -81,15 +72,15 @@ final class KeyboardAccessoryView: UIVisualEffectView {
     // MARK: - Actions
     
     @objc private func pressKeyboardAction() {
-        pressKeyboardClosure?()
+        Current.editingSubject.value = .keyboard
     }
     
     @objc private func pressDrawingAction() {
-        pressDrawingClosure?()
+        Current.editingSubject.value = .drawing
     }
     
     @objc private func pressDoneAction() {
-        pressDoneClosure?()
+        Current.editingSubject.value = .none
     }
     
 }

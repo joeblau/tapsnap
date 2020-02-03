@@ -8,13 +8,15 @@
 
 import UIKit
 import PencilKit
+import Combine
 
 class CameraOverlayView: UIView {
-    
+    var cancellables = Set<AnyCancellable>()
+
     let kButtonSize: CGFloat = 56
     let kButtonPadding: CGFloat = 0
     let menuButton = UIButton(type: .system)
-    let cancelButton = UIButton(type: .system)
+    let clearButton = UIButton(type: .system)
     
     let locationButton = UIButton(type: .system)
     let textboxButton = UIButton(type: .system)
@@ -23,8 +25,10 @@ class CameraOverlayView: UIView {
     let canvasView = PKCanvasView(frame: .zero)
     let editActionStackView: UIStackView
     
-    let textfield = UITextField(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
-    
+    let annotationTextView = UITextView()
+    var annotationTextViewWidth: NSLayoutConstraint!
+    var annotationTextViewHeight: NSLayoutConstraint!
+
     let recordingProgressView = RecordProgressView()
     
     var drawingToolsViewHeight: CGFloat = 340
@@ -34,10 +38,10 @@ class CameraOverlayView: UIView {
         menuButton.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
         menuButton.tintColor = .label
         
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.setImage(UIImage(systemName: "xmark"), for: .normal)
-        cancelButton.tintColor = .label
-        cancelButton.isHidden = true
+        clearButton.translatesAutoresizingMaskIntoConstraints = false
+        clearButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        clearButton.tintColor = .label
+        clearButton.isHidden = true
         
         locationButton.translatesAutoresizingMaskIntoConstraints = false
         locationButton.setImage(UIImage(systemName: "location.slash.fill"), for: .normal)
@@ -55,17 +59,24 @@ class CameraOverlayView: UIView {
         editActionStackView.translatesAutoresizingMaskIntoConstraints = false
         editActionStackView.distribution = .fillEqually
         
+        annotationTextView.translatesAutoresizingMaskIntoConstraints = false
+        annotationTextView.textAlignment = .center
+        annotationTextView.backgroundColor = .clear
+        annotationTextView.sizeToFit()
+        annotationTextView.font = UIFont.systemFont(ofSize: 44, weight: .heavy)
+        
         canvasView.translatesAutoresizingMaskIntoConstraints = false
         canvasView.isOpaque = false
         canvasView.backgroundColor = .clear
-        canvasView.overrideUserInterfaceStyle = .light
-        
+        canvasView.overrideUserInterfaceStyle = .dark
         
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        
+        canvasView.delegate = self
+
         configureViews()
         configureGestureRecoginzers()
+        configureStreams()
         
         NotificationCenter.default.addObserver(
             self,
@@ -89,8 +100,18 @@ class CameraOverlayView: UIView {
         recordingProgressView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
 
         menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
+        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
         textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
-        flipButton.addTarget(self, action: #selector(flipCameraAction), for: .touchUpInside)
+        clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
+        
+
+        self.addSubview(annotationTextView)
+        annotationTextView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        annotationTextView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        annotationTextViewWidth  = annotationTextView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)
+        annotationTextViewWidth.isActive = true
+        annotationTextViewHeight = annotationTextView.heightAnchor.constraint(equalToConstant: 50)
+        annotationTextViewHeight.isActive = true
         
         self.addSubview(canvasView)
         canvasView.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -104,11 +125,11 @@ class CameraOverlayView: UIView {
         menuButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
         menuButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
         
-        self.addSubview(cancelButton)
-        cancelButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        cancelButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        cancelButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
-        cancelButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
+        self.addSubview(clearButton)
+        clearButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        clearButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        clearButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
+        clearButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
         
         self.addSubview(editActionStackView)
         let width = kButtonSize * CGFloat(editActionStackView.arrangedSubviews.count)
@@ -116,9 +137,6 @@ class CameraOverlayView: UIView {
         editActionStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         editActionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
         editActionStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
-        
-        self.addSubview(textfield)
-        textfield.center = center
     }
     
     private func configureGestureRecoginzers() {
@@ -136,28 +154,54 @@ class CameraOverlayView: UIView {
 
     }
     
+    
+    private func configureStreams() {
+            Current.editingSubject.sink { editState in
+                switch editState {
+                case .none:
+                    self.menuButton.isHidden = false
+                    self.clearButton.isHidden = true
+                    self.canvasView.isUserInteractionEnabled = false
+                    self.annotationTextView.resignFirstResponder()
+                case .drawing:
+                    self.menuButton.isHidden = true
+                    
+                    self.canvasView.isUserInteractionEnabled = true
+//                    self.textView.isUserInteractionEnabled = false
+                    
+                    self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight,
+                                                                 selectedColor: { color in
+                                                                    self.canvasView.tool = PKInkingTool(.pen, color: color, width: 10)
+                    })
+                    self.annotationTextView.reloadInputViews()
+                case .keyboard:
+                    self.menuButton.isHidden = true
+                    
+                    self.canvasView.isUserInteractionEnabled = false
+//                    self.textView.isUserInteractionEnabled = true
+
+                    self.annotationTextView.inputView?.removeFromSuperview()
+                    self.annotationTextView.inputView = nil
+                    self.annotationTextView.reloadInputViews()
+                case .clear:
+                    self.clearButton.isHidden = true
+                    self.annotationTextView.text = ""
+                    self.canvasView.drawing = PKDrawing()
+                }
+            }
+        .store(in: &cancellables)
+    }
     // MARK: - Actions
     
     @objc private func showTextbox() {
-        
-        textfield.inputAccessoryView = KeyboardAccessoryView(pressKeyboard: {
-            self.textfield.inputView?.removeFromSuperview()
-            self.textfield.inputView = nil
-            self.textfield.reloadInputViews()
-        }, pressDrawing: {
-            self.textfield.inputView = DrawingToolsView(height: self.drawingToolsViewHeight,
-                                                         selectedColor: { color in
-                                                            self.canvasView.tool = PKInkingTool(.pen, color: color, width: 10)
-            })
-            self.textfield.reloadInputViews()
-        }, pressDone: {
-            self.textfield.resignFirstResponder()
-        })
-        textfield.becomeFirstResponder()
+        annotationTextView.inputAccessoryView = KeyboardAccessoryView()
+        annotationTextView.becomeFirstResponder()
+        annotationTextView.delegate = self
+        Current.editingSubject.value = .keyboard
     }
     
     @objc private func dismissKeyboardAction() {
-        textfield.resignFirstResponder()
+        annotationTextView.resignFirstResponder()
     }
     
     @objc private func flipCameraAction() {}
@@ -165,7 +209,10 @@ class CameraOverlayView: UIView {
     @objc private func showMenuAction() {}
     
     @objc private func zoomAction() {}
-
+    
+    @objc private func clearEditingAction() {
+        Current.editingSubject.value = .clear
+    }
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -175,6 +222,19 @@ class CameraOverlayView: UIView {
     }
 }
 
-extension CameraOverlayView: PKToolPickerObserver {
-    
+extension CameraOverlayView: PKCanvasViewDelegate {
+    func canvasViewDidBeginUsingTool(_ canvasView: PKCanvasView) {
+        clearButton.isHidden = false
+    }
 }
+
+extension CameraOverlayView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        annotationTextViewWidth.constant = textView.contentSize.width
+        annotationTextViewHeight.constant = textView.contentSize.height
+        if !textView.text.isEmpty {
+            clearButton.isHidden = false
+        }
+    }
+}
+

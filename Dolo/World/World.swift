@@ -14,6 +14,13 @@ enum RecordAction {
     case stop
 }
 
+enum EditState {
+    case none
+    case keyboard
+    case drawing
+    case clear
+}
+
 struct World {
     let networkSession: URLSession = {
         let configuraiton = URLSessionConfiguration.background(withIdentifier: "tapsnap_url_session_config")
@@ -25,6 +32,8 @@ struct World {
     }()
     
     let recordingSubject = CurrentValueSubject<RecordAction, Never>(.stop)
+    let editingSubject = CurrentValueSubject<EditState, Never>(.none)
+
 }
 
 let Current = World()

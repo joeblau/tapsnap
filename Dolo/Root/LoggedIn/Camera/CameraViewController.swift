@@ -15,11 +15,9 @@ class CameraViewController: UIViewController {
     let preview = CameraPreviewView()
     let contactsCollectionView = ContactsCollectionView()
     let contactEditorView = ContactEditorView()
-    var cancellables = Set<AnyCancellable>()
     
     init() {
         super.init(nibName: nil, bundle: nil)
-
     }
     
     required init?(coder: NSCoder) {
