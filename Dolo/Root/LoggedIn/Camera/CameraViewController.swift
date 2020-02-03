@@ -7,13 +7,15 @@
 //
 
 import UIKit
+import Combine
 
 class CameraViewController: UIViewController {
 
-    let itemsInSection = [8, 8, 8, 4]
+    let itemsInSection = [15]
     let preview = CameraPreviewView()
     let contactsCollectionView = ContactsCollectionView()
     let contactEditorView = ContactEditorView()
+    var cancellables = Set<AnyCancellable>()
     
     init() {
         super.init(nibName: nil, bundle: nil)

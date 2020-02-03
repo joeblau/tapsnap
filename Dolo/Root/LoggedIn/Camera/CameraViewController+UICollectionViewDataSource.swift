@@ -18,16 +18,22 @@ extension CameraViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContactCollectionViewCell.id,
-                                                      for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContactCollectionViewCell.id,
+                                                      for: indexPath) as? ContactCollectionViewCell else {
+                                                        fatalError("invalid cell converison")
+        }
         
-//        switch indexPath.section {
-//        case 0: cell.contentView.backgroundColor = .red
-//        case 1: cell.contentView.backgroundColor = .orange
-//        case 2: cell.contentView.backgroundColor = .yellow
-//        case 3: cell.contentView.backgroundColor = .green
-//        default: cell.contentView.backgroundColor = .
-//        }
+        let url = URL(string: "https://i.pravatar.cc/150?img=\(indexPath.row)")!
+        URLSession.shared.dataTaskPublisher(for: url)
+            .map { UIImage(data: $0.data)! }
+            .eraseToAnyPublisher()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { completion in
+//                print(completion)
+            }) { image in
+                cell.configure(image: image)
+            }
+            .store(in: &self.cancellables)
         
         return cell
     }
