@@ -34,7 +34,10 @@ class ContactEditorView: UIView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemBackground
-        configureViews()
+        
+        do {
+            configureViews()
+        }
     }
     
     required init?(coder: NSCoder) {

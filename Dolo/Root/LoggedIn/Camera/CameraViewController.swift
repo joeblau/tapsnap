@@ -23,6 +23,8 @@ class CameraViewController: UIViewController {
     
     init() {
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .overFullScreen
+        view.backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {
@@ -38,7 +40,10 @@ class CameraViewController: UIViewController {
         contactsCollectionView.isPagingEnabled = true
         contactsCollectionView.dataSource = self
         
-        configureStreams()
+        do {
+            configureStreams()
+        }
+        
         sessionQueue.async {
             self.configureSession()
         }

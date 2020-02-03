@@ -12,7 +12,6 @@ class ContactsCollectionView: UICollectionView {
     
     init() {
         var contactLayout: UICollectionViewCompositionalLayout {
-            
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: .fractionalWidth(1.0))
             let contactItem = NSCollectionLayoutItem(layoutSize: itemSize)

@@ -16,16 +16,22 @@ class CameraOverlayView: UIView {
 
     let kButtonSize: CGFloat = 56
     let kButtonPadding: CGFloat = 8
+    
+    // Top left
     let menuButton = UIButton(type: .system)
     let clearButton = UIButton(type: .system)
     
+    // Top right
+    let notifictionsButton = UIButton(type: .system)
+    
+    // Bottom right
     let locationButton = UIButton(type: .system)
     let textboxButton = UIButton(type: .system)
     let flipButton = UIButton(type: .system)
     
+    
     let canvasView = PKCanvasView(frame: .zero)
     let editActionStackView: UIStackView
-    
     let annotationTextView = UITextView()
     var annotationTextViewWidth: NSLayoutConstraint!
     var annotationTextViewHeight: NSLayoutConstraint!
@@ -40,7 +46,7 @@ class CameraOverlayView: UIView {
         menuButton.tintColor = .label
         
         clearButton.translatesAutoresizingMaskIntoConstraints = false
-        clearButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        clearButton.setImage(UIImage(systemName: "clear"), for: .normal)
         clearButton.tintColor = .label
         clearButton.isHidden = true
         
@@ -77,17 +83,14 @@ class CameraOverlayView: UIView {
         canvasView.delegate = self
         self.process(authorization: CLLocationManager.authorizationStatus())
 
-        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
-        locationButton.addTarget(self, action: #selector(showLocationAction), for: .touchUpInside)
-        textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
-        clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
-        flipButton.addTarget(self, action: #selector(flipCameraAction), for: .touchUpInside)
 
-        
-        
-        configureViews()
-        configureGestureRecoginzers()
-        configureStreams()
+
+        do {
+            configureButtonTargets()
+            configureViews()
+            configureGestureRecoginzers()
+            configureStreams()
+        }
         
         NotificationCenter.default.addObserver(
             self,
@@ -99,6 +102,16 @@ class CameraOverlayView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Configure Button Targets
+    
+    private func configureButtonTargets() {
+        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
+        locationButton.addTarget(self, action: #selector(showLocationAction), for: .touchUpInside)
+        textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
+        clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
+        flipButton.addTarget(self, action: #selector(flipCameraAction), for: .touchUpInside)
     }
     
     // MARK: - Configure Views

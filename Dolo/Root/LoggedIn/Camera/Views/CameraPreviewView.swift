@@ -21,13 +21,17 @@ class CameraPreviewView: UIView {
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resize
         layer.addSublayer(previewLayer)
-        configureViews()
+        
+        do {
+            configureViews()
+        }
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         previewLayer.frame = bounds
     }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -43,12 +43,12 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         accessoryStack.spacing = kAccessoryPadding
         
         super.init(effect: UIBlurEffect(style: .systemMaterial))
-        textKeyboard.addTarget(self, action: #selector(pressKeyboardAction), for: .touchUpInside)
-        drawToolPicker.addTarget(self, action: #selector(pressDrawingAction), for: .touchUpInside)
-        doneButton.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)
-        
         translatesAutoresizingMaskIntoConstraints = false
-        configureViews()
+        
+        do {
+            configureButtonTargets()
+            configureViews()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -57,6 +57,14 @@ final class KeyboardAccessoryView: UIVisualEffectView {
     
     override var intrinsicContentSize: CGSize {
         return CGSize(width: UIWindow().screen.bounds.width, height: 48)
+    }
+    
+    // MARK: - Configure Button Targets
+    
+    private func configureButtonTargets() {
+        textKeyboard.addTarget(self, action: #selector(pressKeyboardAction), for: .touchUpInside)
+        drawToolPicker.addTarget(self, action: #selector(pressDrawingAction), for: .touchUpInside)
+        doneButton.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)
     }
     
     // MARK: - Configure Views

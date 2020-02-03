@@ -19,17 +19,14 @@ class RecordProgressView: UIView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         
-        configureViews()
-        subscribeToStreams()
+        do {
+            subscribeToStreams()
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Configure Views
-    
-    private func configureViews() {}
     
     // MARK: - Subscribe To Streams
     

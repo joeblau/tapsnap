@@ -38,7 +38,6 @@ class ContactCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    static let id = String(describing: ContactCollectionViewCell.self)
     
     // MARK: - Configure Views
     
@@ -97,4 +96,9 @@ class ContactCollectionViewCell: UICollectionViewCell {
         default: break
         }
     }
+
+    // MARK: - Resuse Identifier
+    
+    static let id = String(describing: ContactCollectionViewCell.self)
+
 }

@@ -45,16 +45,24 @@ class DrawingToolsView: UIVisualEffectView {
         colorPickerStackView.spacing = UIStackView.spacingUseSystem
         
         super.init(effect: UIBlurEffect(style: .systemUltraThinMaterial))
-        
-        colorButtons.forEach { button in
-            button.addTarget(self, action: #selector(selectColorAction), for: .touchUpInside)
-        }
         translatesAutoresizingMaskIntoConstraints = false
-        configureViews()
+        
+        do {
+            configureButtonTargets()
+            configureViews()
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Configure Button Targets
+    
+    private func configureButtonTargets() {
+        colorButtons.forEach { button in
+            button.addTarget(self, action: #selector(selectColorAction), for: .touchUpInside)
+        }
     }
     
     // MARK: - Configure Views

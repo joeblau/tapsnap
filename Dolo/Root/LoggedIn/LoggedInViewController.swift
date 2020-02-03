@@ -10,11 +10,16 @@ import UIKit
 
 class LoggedInViewController: UIViewController {
 
-    let camera = CameraViewController()
+    weak var playback: PlaybackViewController? {
+        return PlaybackViewController()
+    }
+    weak var camera: CameraViewController? {
+        return CameraViewController()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        camera.modalPresentationStyle = .overFullScreen
+//        camera?.modalPresentationStyle = .overFullScreen
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -22,8 +27,10 @@ class LoggedInViewController: UIViewController {
         // Show onboarding
         
         // Show camera
-        present(camera, animated: false) {
-            // Log analytic event
+        if let playback = playback {
+            present(playback, animated: false) {
+                // Log analytic event
+            }
         }
         // show settings
         
