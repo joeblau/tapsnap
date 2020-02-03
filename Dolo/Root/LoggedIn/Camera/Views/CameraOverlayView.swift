@@ -9,12 +9,13 @@
 import UIKit
 import PencilKit
 import Combine
+import CoreLocation
 
 class CameraOverlayView: UIView {
     var cancellables = Set<AnyCancellable>()
 
     let kButtonSize: CGFloat = 56
-    let kButtonPadding: CGFloat = 0
+    let kButtonPadding: CGFloat = 8
     let menuButton = UIButton(type: .system)
     let clearButton = UIButton(type: .system)
     
@@ -46,7 +47,7 @@ class CameraOverlayView: UIView {
         locationButton.translatesAutoresizingMaskIntoConstraints = false
         locationButton.setImage(UIImage(systemName: "location.slash.fill"), for: .normal)
         locationButton.tintColor = .label
-        
+            
         textboxButton.translatesAutoresizingMaskIntoConstraints = false
         textboxButton.setImage(UIImage(systemName: "textbox"), for: .normal)
         textboxButton.tintColor = .label
@@ -58,6 +59,7 @@ class CameraOverlayView: UIView {
         editActionStackView = UIStackView(arrangedSubviews: [locationButton, textboxButton, flipButton])
         editActionStackView.translatesAutoresizingMaskIntoConstraints = false
         editActionStackView.distribution = .fillEqually
+        editActionStackView.spacing = UIStackView.spacingUseSystem
         
         annotationTextView.translatesAutoresizingMaskIntoConstraints = false
         annotationTextView.textAlignment = .center
@@ -73,7 +75,13 @@ class CameraOverlayView: UIView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         canvasView.delegate = self
+        self.process(authorization: CLLocationManager.authorizationStatus())
 
+        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
+        locationButton.addTarget(self, action: #selector(showLocationAction), for: .touchUpInside)
+        textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
+        clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
+        
         configureViews()
         configureGestureRecoginzers()
         configureStreams()
@@ -93,17 +101,21 @@ class CameraOverlayView: UIView {
     // MARK: - Configure Views
     
     private func configureViews() {
+
+        locationButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        locationButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+
+        textboxButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        textboxButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        
+        flipButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        flipButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        
         self.addSubview(recordingProgressView)
         recordingProgressView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         recordingProgressView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
         recordingProgressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         recordingProgressView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-
-        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
-        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
-        textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
-        clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
-        
 
         self.addSubview(annotationTextView)
         annotationTextView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -133,7 +145,7 @@ class CameraOverlayView: UIView {
         
         self.addSubview(editActionStackView)
         let width = kButtonSize * CGFloat(editActionStackView.arrangedSubviews.count)
-        editActionStackView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        editActionStackView.widthAnchor.constraint(lessThanOrEqualToConstant: width).isActive = true
         editActionStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         editActionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
         editActionStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
@@ -167,7 +179,6 @@ class CameraOverlayView: UIView {
                     self.menuButton.isHidden = true
                     
                     self.canvasView.isUserInteractionEnabled = true
-//                    self.textView.isUserInteractionEnabled = false
                     
                     self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight,
                                                                  selectedColor: { color in
@@ -178,7 +189,6 @@ class CameraOverlayView: UIView {
                     self.menuButton.isHidden = true
                     
                     self.canvasView.isUserInteractionEnabled = false
-//                    self.textView.isUserInteractionEnabled = true
 
                     self.annotationTextView.inputView?.removeFromSuperview()
                     self.annotationTextView.inputView = nil
@@ -189,6 +199,13 @@ class CameraOverlayView: UIView {
                     self.canvasView.drawing = PKDrawing()
                 }
             }
+        .store(in: &cancellables)
+        
+        Current.locationManager
+            .didChangeAuthorization
+            .sink { status in
+            self.process(authorization: status)
+        }
         .store(in: &cancellables)
     }
     // MARK: - Actions
@@ -202,6 +219,10 @@ class CameraOverlayView: UIView {
     
     @objc private func dismissKeyboardAction() {
         annotationTextView.resignFirstResponder()
+    }
+    
+    @objc private func showLocationAction() {
+        Current.locationManager.requestWhenInUseAuthorization()
     }
     
     @objc private func flipCameraAction() {}
@@ -218,6 +239,18 @@ class CameraOverlayView: UIView {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             self.drawingToolsViewHeight = keyboardRectangle.height
+        }
+    }
+    
+    // MARK: - Helpers
+    private func process(authorization status: CLAuthorizationStatus) {
+        switch status {
+        case .denied, .notDetermined, .restricted:
+            locationButton.isHidden = false
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationButton.isHidden = true
+        @unknown default:
+            fatalError("Unknown CLLocationManager.authorizationStatus")
         }
     }
 }

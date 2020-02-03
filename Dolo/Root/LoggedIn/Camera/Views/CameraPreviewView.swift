@@ -7,23 +7,34 @@
 //
 
 import UIKit
+import AVFoundation
 
 class CameraPreviewView: UIView {
 
     let cameraOverlay = CameraOverlayView()
+
+    var previewLayer: AVCaptureVideoPreviewLayer!
     
-    override init(frame: CGRect) {
+    init(session: AVCaptureSession) {
         super.init(frame: .zero)
-        backgroundColor = .red
         translatesAutoresizingMaskIntoConstraints = false
-        
+        previewLayer = AVCaptureVideoPreviewLayer(session: session)
+        previewLayer.videoGravity = .resize
+        layer.addSublayer(previewLayer)
         configureViews()
     }
-    
-    required init?(coder: NSCoder) {
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        previewLayer.frame = bounds
+    }
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: 1, height: previewLayer.bounds.height)
+    }
     // MARK: - Configure Views
     
     private func configureViews() {
@@ -33,5 +44,4 @@ class CameraPreviewView: UIView {
         cameraOverlay.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         cameraOverlay.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
-
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import CoreLocation
 
 enum RecordAction {
     case start
@@ -22,6 +23,7 @@ enum EditState {
 }
 
 struct World {
+    let locationManager = CLLocationManager()
     let networkSession: URLSession = {
         let configuraiton = URLSessionConfiguration.background(withIdentifier: "tapsnap_url_session_config")
         configuraiton.allowsCellularAccess = true

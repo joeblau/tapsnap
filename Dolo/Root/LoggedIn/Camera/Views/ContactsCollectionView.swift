@@ -36,7 +36,7 @@ class ContactsCollectionView: UICollectionView {
         
         super.init(frame: .zero, collectionViewLayout: contactLayout)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .magenta
+        backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {

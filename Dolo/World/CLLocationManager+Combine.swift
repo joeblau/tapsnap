@@ -9,6 +9,7 @@ final class CombineLocationManager: CLLocationManager, CLLocationManagerDelegate
         delegate = self
     }
     
+    var _didChangeAuthorization = PassthroughSubject<CLAuthorizationStatus, Never>()
     var _didUpdateLocations = PassthroughSubject<[CLLocation], Error>()
     var _didEnterRegion = PassthroughSubject<CLRegion, Error>()
     var _didExitRegion = PassthroughSubject<CLRegion, Error>()
@@ -16,6 +17,10 @@ final class CombineLocationManager: CLLocationManager, CLLocationManagerDelegate
     var _didVisit =  PassthroughSubject<CLVisit, Error>()
     var _didUpdateHeading =  PassthroughSubject<CLHeading, Error>()
 
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        _didChangeAuthorization.send(status)
+    }
+    
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         _didUpdateLocations.send(locations)
     }
@@ -35,7 +40,6 @@ final class CombineLocationManager: CLLocationManager, CLLocationManagerDelegate
     public func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
          _didStartMonitoringFor.send(region)
     }
-    
     
     public func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
         _didEnterRegion.send(completion: .failure(error))
@@ -57,6 +61,10 @@ final class CombineLocationManager: CLLocationManager, CLLocationManagerDelegate
 
 extension CLLocationManager {
     
+    var didChangeAuthorization: AnyPublisher<CLAuthorizationStatus, Never> {
+        CombineLocationManager.shared._didChangeAuthorization.eraseToAnyPublisher()
+    }
+
     var didUpdateLocations: AnyPublisher<[CLLocation], Error> {
         CombineLocationManager.shared._didUpdateLocations.eraseToAnyPublisher()
     }
@@ -67,7 +75,6 @@ extension CLLocationManager {
 
     var didExitRegion: AnyPublisher<CLRegion, Error> {
         CombineLocationManager.shared._didExitRegion.eraseToAnyPublisher()
-
     }
 
 }
