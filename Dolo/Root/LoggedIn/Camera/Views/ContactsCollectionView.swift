@@ -16,10 +16,10 @@ class ContactsCollectionView: UICollectionView {
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                   heightDimension: .fractionalWidth(1.0))
             let contactItem = NSCollectionLayoutItem(layoutSize: itemSize)
-            contactItem.contentInsets = NSDirectionalEdgeInsets(top: 1,
-                                                                leading: 1,
-                                                                bottom: 1,
-                                                                trailing: 1)
+            contactItem.contentInsets = NSDirectionalEdgeInsets(top: 0.5,
+                                                                leading: 0.5,
+                                                                bottom: 0.5,
+                                                                trailing: 0.5)
             
             let containerGroup = NSCollectionLayoutGroup
                 .vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25),
@@ -36,7 +36,7 @@ class ContactsCollectionView: UICollectionView {
         
         super.init(frame: .zero, collectionViewLayout: contactLayout)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .systemBackground
+        backgroundColor = .magenta
     }
     
     required init?(coder: NSCoder) {
