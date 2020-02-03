@@ -18,6 +18,7 @@
 		ED37CB5C23E7530300D2C2BE /* ContactCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB5B23E7530300D2C2BE /* ContactCollectionViewCell.swift */; };
 		ED37CB5E23E7538E00D2C2BE /* CameraViewController+UICollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB5D23E7538E00D2C2BE /* CameraViewController+UICollectionViewDataSource.swift */; };
 		ED37CB6223E75E9D00D2C2BE /* ContactEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB6123E75E9D00D2C2BE /* ContactEditorView.swift */; };
+		ED37CB6623E7908800D2C2BE /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB6523E7908800D2C2BE /* World.swift */; };
 		ED500D4023E5465200330C79 /* LoggedInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED500D3F23E5465200330C79 /* LoggedInViewController.swift */; };
 		ED500D4223E5483800330C79 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED500D4123E5483800330C79 /* RootViewController.swift */; };
 		EDB014F323E53FAC001B61C2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB014F223E53FAC001B61C2 /* AppDelegate.swift */; };
@@ -52,6 +53,7 @@
 		ED37CB5B23E7530300D2C2BE /* ContactCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCollectionViewCell.swift; sourceTree = "<group>"; };
 		ED37CB5D23E7538E00D2C2BE /* CameraViewController+UICollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDataSource.swift"; sourceTree = "<group>"; };
 		ED37CB6123E75E9D00D2C2BE /* ContactEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactEditorView.swift; sourceTree = "<group>"; };
+		ED37CB6523E7908800D2C2BE /* World.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		ED500D3F23E5465200330C79 /* LoggedInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInViewController.swift; sourceTree = "<group>"; };
 		ED500D4123E5483800330C79 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		EDB014EF23E53FAC001B61C2 /* Dolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +146,7 @@
 				EDB0150023E53FAD001B61C2 /* LaunchScreen.storyboard */,
 				EDB0150323E53FAD001B61C2 /* Info.plist */,
 				EDB014FB23E53FAC001B61C2 /* Dolo.xcdatamodeld */,
+				ED37CB6523E7908800D2C2BE /* World.swift */,
 			);
 			path = Dolo;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				ED37CB5E23E7538E00D2C2BE /* CameraViewController+UICollectionViewDataSource.swift in Sources */,
 				ED37CB5123E6ABCC00D2C2BE /* AccessoryView.swift in Sources */,
 				ED37CB5523E719CD00D2C2BE /* DrawingToolsView.swift in Sources */,
+				ED37CB6623E7908800D2C2BE /* World.swift in Sources */,
 				ED37CB5A23E7507E00D2C2BE /* ContactsCollectionView.swift in Sources */,
 				ED37CB6223E75E9D00D2C2BE /* ContactEditorView.swift in Sources */,
 				EDB014F323E53FAC001B61C2 /* AppDelegate.swift in Sources */,

@@ -7,19 +7,20 @@
 //
 
 import UIKit
+import Combine
 
 class RecordProgressView: UIView {
 
-    let progressView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterial))
+    var progressView: UIVisualEffectView?
     var widthConstraint: NSLayoutConstraint!
+    var cancellables = Set<AnyCancellable>()
     
     override init(frame: CGRect) {
-        progressView.translatesAutoresizingMaskIntoConstraints = false
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .blue
         
         configureViews()
+        subscribeToStreams()
     }
     
     required init?(coder: NSCoder) {
@@ -28,25 +29,34 @@ class RecordProgressView: UIView {
     
     // MARK: - Configure Views
     
-    private func configureViews() {
-        addSubview(progressView)
-        progressView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        progressView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        progressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        widthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0.0)
-        widthConstraint.isActive = true
-    }
+    private func configureViews() {}
     
-    public func staart() {
-        UIView.animate(withDuration: 10) {
-            self.widthConstraint.constant = UIScreen.main.bounds.width
-        }
-    }
+    // MARK: - Subscribe To Streams
     
-    public func reset() {
-        UIView.animate(withDuration: 0.3) {
-            self.widthConstraint.constant = 0
-        }
+    private func subscribeToStreams() {
+        Current.recordingSubject.sink { action in
+            switch action {
+            case .start:
+                self.widthConstraint.constant = UIScreen.main.bounds.width
+                UIView.animate(withDuration: 10.0,
+                               delay: 0.0,
+                               options: .curveLinear, animations: {
+                                self.layoutIfNeeded()
+                }, completion: nil)
+            case .stop:
+                self.progressView?.removeFromSuperview()
+                self.progressView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+                self.progressView?.translatesAutoresizingMaskIntoConstraints = false
+
+                self.addSubview(self.progressView!)
+                self.progressView?.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+                self.progressView?.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+                self.progressView?.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+                self.widthConstraint = self.progressView?.widthAnchor.constraint(equalToConstant: 0)
+                self.widthConstraint.isActive = true
+            }
+        
+        }.store(in: &cancellables)
     }
     
 }
