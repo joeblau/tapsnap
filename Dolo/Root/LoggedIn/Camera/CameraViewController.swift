@@ -38,6 +38,7 @@ class CameraViewController: UIViewController {
         contactsCollectionView.isPagingEnabled = true
         contactsCollectionView.dataSource = self
         
+        configureStreams()
         sessionQueue.async {
             self.configureSession()
         }
@@ -72,6 +73,18 @@ class CameraViewController: UIViewController {
         previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
+    private func configureStreams() {
+        Current.activeCameraSubject
+            .sink { position in
+                if position != .front {
+                    
+                    self.sessionQueue.async {
+                        self.configureSessionUpdate()
+                    }
+                }
+        }.store(in: &cancellables)
+    }
+    
     // MARK: - Actions
     
     @objc func editContacts() {
@@ -83,6 +96,8 @@ class CameraViewController: UIViewController {
     }
     
     // MARK: - Private
+    private let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera, .builtInTrueDepthCamera],
+                                                                               mediaType: .video, position: .unspecified)
     
     private func configureSession() {
         session.beginConfiguration()
@@ -91,8 +106,9 @@ class CameraViewController: UIViewController {
         session.inputs.forEach { captureInnput in
             session.removeInput(captureInnput)
         }
-        
-        addCaptureDeviceInput()
+        if let videoDevice = initailzeCamera() {
+            addCaptureDeviceInput(videoDevice: videoDevice)
+        }
         addMetadataOutput()
         addPhotoOutput()
         addVideoDataOutput()
@@ -100,20 +116,19 @@ class CameraViewController: UIViewController {
         session.commitConfiguration()
     }
     
-    private func addCaptureDeviceInput() {
+    private func configureSessionUpdate() {
+        self.session.beginConfiguration()
+        if let videoDevice = changeCamera() {
+            addCaptureDeviceInput(videoDevice: videoDevice)
+        }
+        self.session.commitConfiguration()
+    }
+    
+    
+    
+    private func addCaptureDeviceInput(videoDevice: AVCaptureDevice) {
          do {
-             let types: [AVCaptureDevice.DeviceType] = [.builtInDualCamera,
-                                                        .builtInTelephotoCamera,
-                                                        .builtInWideAngleCamera]
-             guard let videoDevice = AVCaptureDevice.DiscoverySession(deviceTypes: types,
-                                                                      mediaType: .video,
-                                                                      position: .back)
-                 .devices
-                 .first else {
-                     return
-             }
-             
-             let captureInput = try AVCaptureDeviceInput(device: videoDevice)
+            let captureInput = try AVCaptureDeviceInput(device: videoDevice)
              if session.canAddInput(captureInput) {
                  session.addInput(captureInput)
              }
@@ -153,5 +168,64 @@ class CameraViewController: UIViewController {
          }
      }
     
+    // MARK: - Helpers
+    
+    private func initailzeCamera() -> AVCaptureDevice? {
+        var defaultVideoDevice: AVCaptureDevice?
+        
+        // Choose the back dual camera, if available, otherwise default to a wide angle camera.
+        
+        if let dualCameraDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
+            defaultVideoDevice = dualCameraDevice
+        } else if let backCameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
+            // If a rear dual camera is not available, default to the rear wide angle camera.
+            defaultVideoDevice = backCameraDevice
+        } else if let frontCameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) {
+            // If the rear wide angle camera isn't available, default to the front wide angle camera.
+            defaultVideoDevice = frontCameraDevice
+        }
+        
+        return defaultVideoDevice
+    }
+    
+    private func changeCamera() -> AVCaptureDevice? {
+            guard let captureDeviceInput = self.session.inputs.first(where: { $0 is AVCaptureDeviceInput}) as? AVCaptureDeviceInput else {
+                    return nil
+            }
+            let currentVideoDevice = captureDeviceInput.device
+            let currentPosition = currentVideoDevice.position
+            
+            let preferredPosition: AVCaptureDevice.Position
+            let preferredDeviceType: AVCaptureDevice.DeviceType
+            
+            switch currentPosition {
+            case .unspecified, .front:
+                preferredPosition = .back
+                preferredDeviceType = .builtInDualCamera
+                
+            case .back:
+                preferredPosition = .front
+                preferredDeviceType = .builtInTrueDepthCamera
+                
+            @unknown default:
+                print("Unknown capture position. Defaulting to back, dual-camera.")
+                preferredPosition = .back
+                preferredDeviceType = .builtInDualCamera
+            }
+            
+            let devices = self.videoDeviceDiscoverySession.devices
+            var newVideoDevice: AVCaptureDevice? = nil
+            
+            // First, seek a device with both the preferred position and device type. Otherwise, seek a device with only the preferred position.
+            if let device = devices.first(where: { $0.position == preferredPosition && $0.deviceType == preferredDeviceType }) {
+                newVideoDevice = device
+            } else if let device = devices.first(where: { $0.position == preferredPosition }) {
+                newVideoDevice = device
+            }
+            
+            self.session.removeInput(captureDeviceInput)
+           
+            return newVideoDevice
+    }
     
 }

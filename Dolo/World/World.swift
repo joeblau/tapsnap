@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import CoreLocation
+import AVFoundation
 
 enum RecordAction {
     case start
@@ -35,7 +36,7 @@ struct World {
     
     let recordingSubject = CurrentValueSubject<RecordAction, Never>(.stop)
     let editingSubject = CurrentValueSubject<EditState, Never>(.none)
-
+    let activeCameraSubject = CurrentValueSubject<AVCaptureDevice.Position, Never>(.back)
 }
 
 let Current = World()

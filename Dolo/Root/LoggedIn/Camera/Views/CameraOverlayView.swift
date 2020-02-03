@@ -81,6 +81,9 @@ class CameraOverlayView: UIView {
         locationButton.addTarget(self, action: #selector(showLocationAction), for: .touchUpInside)
         textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
         clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
+        flipButton.addTarget(self, action: #selector(flipCameraAction), for: .touchUpInside)
+
+        
         
         configureViews()
         configureGestureRecoginzers()
@@ -166,7 +169,6 @@ class CameraOverlayView: UIView {
 
     }
     
-    
     private func configureStreams() {
             Current.editingSubject.sink { editState in
                 switch editState {
@@ -211,6 +213,7 @@ class CameraOverlayView: UIView {
     // MARK: - Actions
     
     @objc private func showTextbox() {
+        processClearButton()
         annotationTextView.inputAccessoryView = KeyboardAccessoryView()
         annotationTextView.becomeFirstResponder()
         annotationTextView.delegate = self
@@ -225,7 +228,9 @@ class CameraOverlayView: UIView {
         Current.locationManager.requestWhenInUseAuthorization()
     }
     
-    @objc private func flipCameraAction() {}
+    @objc private func flipCameraAction() {
+        Current.activeCameraSubject.value = .back
+    }
     
     @objc private func showMenuAction() {}
     
@@ -243,6 +248,7 @@ class CameraOverlayView: UIView {
     }
     
     // MARK: - Helpers
+    
     private func process(authorization status: CLAuthorizationStatus) {
         switch status {
         case .denied, .notDetermined, .restricted:
@@ -253,11 +259,15 @@ class CameraOverlayView: UIView {
             fatalError("Unknown CLLocationManager.authorizationStatus")
         }
     }
+    
+    private func processClearButton() {
+        clearButton.isHidden = (canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty)
+    }
 }
 
 extension CameraOverlayView: PKCanvasViewDelegate {
     func canvasViewDidBeginUsingTool(_ canvasView: PKCanvasView) {
-        clearButton.isHidden = false
+        processClearButton()
     }
 }
 
@@ -265,9 +275,7 @@ extension CameraOverlayView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         annotationTextViewWidth.constant = textView.contentSize.width
         annotationTextViewHeight.constant = textView.contentSize.height
-        if !textView.text.isEmpty {
-            clearButton.isHidden = false
-        }
+        processClearButton()
     }
 }
 
