@@ -10,9 +10,6 @@ import UIKit
 
 class LoggedInViewController: UIViewController {
 
-    weak var playback: PlaybackViewController? {
-        return PlaybackViewController()
-    }
     weak var camera: CameraViewController? {
         return CameraViewController()
     }
@@ -27,13 +24,11 @@ class LoggedInViewController: UIViewController {
         
         // Show camera
         if let camera = camera {
-            present(camera, animated: false) {
-                // Log analytic event
-            }
+            present(camera, animated: false) {}
         }
         // show settings
-        
     }
+
 
 
 }

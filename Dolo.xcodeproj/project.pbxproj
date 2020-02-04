@@ -215,7 +215,6 @@
 		EDB0151923E540AA001B61C2 /* LoggedIn */ = {
 			isa = PBXGroup;
 			children = (
-				ED37CB6C23E7E2AA00D2C2BE /* PlaybackViewController */,
 				ED37CB4523E6985900D2C2BE /* Onboarding */,
 				EDB0151B23E540B8001B61C2 /* Camera */,
 				EDB0151A23E540AE001B61C2 /* Settings */,
@@ -234,6 +233,7 @@
 		EDB0151B23E540B8001B61C2 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				ED37CB6C23E7E2AA00D2C2BE /* PlaybackViewController */,
 				ED37CB4A23E6988400D2C2BE /* Views */,
 				ED37CB4823E6988100D2C2BE /* CameraViewController.swift */,
 				ED37CB5D23E7538E00D2C2BE /* CameraViewController+UICollectionViewDataSource.swift */,

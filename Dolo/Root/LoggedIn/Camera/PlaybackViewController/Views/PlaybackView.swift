@@ -44,7 +44,11 @@ final class PlaybackView: UIView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         layer.addSublayer(playerLayer)
-        configureViews()
+        
+        do {
+            configureViews()
+            configureButtonTargets()
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -66,7 +70,25 @@ final class PlaybackView: UIView {
         navigationStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
     }
     
-    //
+    private func configureButtonTargets() {
+        backButton.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
+        groupNameButton.addTarget(self, action: #selector(groupSettingsAction), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
+    }
+    
+    @objc func dismissAction() {
+        Current.presentViewContollersSubject.value = .none
+    }
+    
+    @objc func groupSettingsAction() {
+        
+    }
+    
+    @objc func nextAction() {
+        
+    }
+
+    
     
     public func play() {
         player.play()

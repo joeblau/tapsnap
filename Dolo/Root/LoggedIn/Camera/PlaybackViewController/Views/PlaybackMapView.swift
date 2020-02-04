@@ -19,6 +19,8 @@ class PlaybackMapView: MKMapView {
         df.unitStyle = .abbreviated
         return df
     }
+    let kButtonSize: CGFloat = 48
+    let kButtonPadding: CGFloat = 8
     
     init() {
         distanceLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -69,10 +71,10 @@ class PlaybackMapView: MKMapView {
     
     private func configureViews() {
         addSubview(distanceLabel)
-        distanceLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8).isActive = true
-        distanceLabel.heightAnchor.constraint(equalToConstant: 56).isActive = true
-        distanceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8).isActive = true
-        distanceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive = true
+        distanceLabel.topAnchor.constraint(equalTo: topAnchor, constant: kButtonPadding).isActive = true
+        distanceLabel.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        distanceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
+        distanceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
     }
     
 }

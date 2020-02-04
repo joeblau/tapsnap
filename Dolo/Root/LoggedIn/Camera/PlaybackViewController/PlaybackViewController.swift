@@ -30,7 +30,7 @@ class PlaybackViewController: UIViewController {
         playbackStack.distribution = .fillEqually
         
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .overFullScreen
+        modalPresentationStyle = .overCurrentContext
         view.backgroundColor = .systemBackground
         
         do {

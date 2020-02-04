@@ -23,6 +23,12 @@ enum EditState {
     case clear
 }
 
+enum ShowViewController {
+    case none
+    case playback
+    case menu
+    case search
+}
 struct World {
     let locationManager = CLLocationManager()
     let networkSession: URLSession = {
@@ -37,6 +43,7 @@ struct World {
     let recordingSubject = CurrentValueSubject<RecordAction, Never>(.stop)
     let editingSubject = CurrentValueSubject<EditState, Never>(.none)
     let activeCameraSubject = CurrentValueSubject<AVCaptureDevice.Position, Never>(.back)
+    let presentViewContollersSubject = CurrentValueSubject<ShowViewController, Never>(.none)
 }
 
 let Current = World()

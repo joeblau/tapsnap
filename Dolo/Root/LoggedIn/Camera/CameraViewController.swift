@@ -21,9 +21,13 @@ class CameraViewController: UIViewController {
     let contactEditorView = ContactEditorView()
     var cancellables = Set<AnyCancellable>()
     
+    weak var playback: PlaybackViewController? {
+        return PlaybackViewController()
+    }
+    
     init() {
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .overFullScreen
+        modalPresentationStyle = .currentContext
         view.backgroundColor = .systemBackground
     }
     
@@ -88,6 +92,21 @@ class CameraViewController: UIViewController {
                     }
                 }
         }.store(in: &cancellables)
+        
+        Current.presentViewContollersSubject
+            .sink { present in
+                switch present {
+                case .none:
+                    self.dismiss(animated: true)
+                case .menu, .search: break
+                    
+                case .playback:
+                    guard let playback = self.playback else { return }
+                    self.present(playback, animated: true) {}
+                }
+        }
+        .store(in: &cancellables)
+        
     }
     
     // MARK: - Actions

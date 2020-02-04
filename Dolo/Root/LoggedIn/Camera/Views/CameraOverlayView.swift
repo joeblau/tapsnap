@@ -13,14 +13,14 @@ import CoreLocation
 
 class CameraOverlayView: UIView {
     var cancellables = Set<AnyCancellable>()
-
-    let kButtonSize: CGFloat = 56
+    
+    let kButtonSize: CGFloat = 48
     let kButtonPadding: CGFloat = 8
     
     // Top left
     let menuButton = UIButton(type: .system)
     let clearButton = UIButton(type: .system)
-    let zoomOutButton = UIButton(type: .system)
+    
     // Top right
     let notifictionsButton = UIButton(type: .system)
     
@@ -31,14 +31,16 @@ class CameraOverlayView: UIView {
     
     
     let canvasView = PKCanvasView(frame: .zero)
-    let editActionStackView: UIStackView
     let annotationTextView = UITextView()
     var annotationTextViewWidth: NSLayoutConstraint!
     var annotationTextViewHeight: NSLayoutConstraint!
-
-    let recordingProgressView = RecordProgressView()
     
+    let recordingProgressView = RecordProgressView()
     var drawingToolsViewHeight: CGFloat = 340
+    
+    let topLeftStackView: UIStackView
+    let topRightStackView: UIStackView
+    let bottomRightStackView: UIStackView
     
     override init(frame: CGRect) {
         menuButton.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
@@ -48,24 +50,34 @@ class CameraOverlayView: UIView {
         clearButton.floatButton()
         clearButton.isHidden = true
         
-        
-        zoomOutButton.setImage(UIImage(systemName: "clear"), for: .normal)
-        zoomOutButton.floatButton()
-        zoomOutButton.isHidden = true
+        notifictionsButton.setTitle("3", for: .normal)
+        notifictionsButton.notification(diameter: kButtonSize)
         
         locationButton.setImage(UIImage(systemName: "location.slash.fill"), for: .normal)
         locationButton.floatButton()
-            
-        textboxButton.setImage(UIImage(systemName: "wand.and.stars.inverse"), for: .normal)
+        
+        textboxButton.setImage(UIImage(systemName: "keyboard"), for: .normal)
         textboxButton.floatButton()
         
         flipButton.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
         flipButton.floatButton()
         
-        editActionStackView = UIStackView(arrangedSubviews: [locationButton, textboxButton, flipButton])
-        editActionStackView.translatesAutoresizingMaskIntoConstraints = false
-        editActionStackView.distribution = .fillEqually
-        editActionStackView.spacing = UIStackView.spacingUseSystem
+        do {
+            topLeftStackView = UIStackView(arrangedSubviews: [menuButton, clearButton])
+            topLeftStackView.translatesAutoresizingMaskIntoConstraints = false
+            topLeftStackView.distribution = .fillEqually
+            topLeftStackView.spacing = UIStackView.spacingUseSystem
+            
+            topRightStackView = UIStackView(arrangedSubviews: [notifictionsButton])
+            topRightStackView.translatesAutoresizingMaskIntoConstraints = false
+            topRightStackView.distribution = .fillEqually
+            topRightStackView.spacing = UIStackView.spacingUseSystem
+            
+            bottomRightStackView = UIStackView(arrangedSubviews: [locationButton, textboxButton, flipButton])
+            bottomRightStackView.translatesAutoresizingMaskIntoConstraints = false
+            bottomRightStackView.distribution = .fillEqually
+            bottomRightStackView.spacing = UIStackView.spacingUseSystem
+        }
         
         annotationTextView.translatesAutoresizingMaskIntoConstraints = false
         annotationTextView.textAlignment = .center
@@ -82,9 +94,9 @@ class CameraOverlayView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         canvasView.delegate = self
         self.process(authorization: CLLocationManager.authorizationStatus())
-
-
-
+        
+        
+        
         do {
             configureButtonTargets()
             configureViews()
@@ -109,6 +121,7 @@ class CameraOverlayView: UIView {
     private func configureButtonTargets() {
         menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
         locationButton.addTarget(self, action: #selector(showLocationAction), for: .touchUpInside)
+        notifictionsButton.addTarget(self, action: #selector(showPlayback), for: .touchUpInside)
         textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
         clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
         flipButton.addTarget(self, action: #selector(flipCameraAction), for: .touchUpInside)
@@ -117,10 +130,18 @@ class CameraOverlayView: UIView {
     // MARK: - Configure Views
     
     private func configureViews() {
-
+        menuButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        menuButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        
+        clearButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        clearButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        
+        notifictionsButton.widthAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
+        notifictionsButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        
         locationButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         locationButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-
+        
         textboxButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         textboxButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         
@@ -132,7 +153,7 @@ class CameraOverlayView: UIView {
         recordingProgressView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
         recordingProgressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         recordingProgressView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-
+        
         self.addSubview(annotationTextView)
         annotationTextView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         annotationTextView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -147,24 +168,23 @@ class CameraOverlayView: UIView {
         canvasView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         canvasView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
-        self.addSubview(menuButton)
-        menuButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        menuButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        menuButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
-        menuButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
+        self.addSubview(topLeftStackView)
+        topLeftStackView.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        topLeftStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        topLeftStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
+        topLeftStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
         
-        self.addSubview(clearButton)
-        clearButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        clearButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        clearButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
-        clearButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
+        self.addSubview(topRightStackView)
+        topRightStackView.widthAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
+        topRightStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        topRightStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
+        topRightStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
         
-        self.addSubview(editActionStackView)
-        let width = kButtonSize * CGFloat(editActionStackView.arrangedSubviews.count)
-        editActionStackView.widthAnchor.constraint(lessThanOrEqualToConstant: width).isActive = true
-        editActionStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        editActionStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
-        editActionStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
+        self.addSubview(bottomRightStackView)
+        bottomRightStackView.widthAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
+        bottomRightStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        bottomRightStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
+        bottomRightStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
     }
     
     private func configureGestureRecoginzers() {
@@ -176,50 +196,50 @@ class CameraOverlayView: UIView {
         flipCameraDoubleTap.numberOfTapsRequired = 2
         addGestureRecognizer(flipCameraDoubleTap)
         
-//        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomAction))
-//        zoomInOutPan.maximumNumberOfTouches = 1
-//        addGestureRecognizer(zoomInOutPan)
-
+        //        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomAction))
+        //        zoomInOutPan.maximumNumberOfTouches = 1
+        //        addGestureRecognizer(zoomInOutPan)
+        
     }
     
     private func configureStreams() {
-            Current.editingSubject.sink { editState in
-                switch editState {
-                case .none:
-                    self.menuButton.isHidden = false
-                    self.clearButton.isHidden = true
-                    self.canvasView.isUserInteractionEnabled = false
-                    self.annotationTextView.resignFirstResponder()
-                case .drawing:
-                    self.menuButton.isHidden = true
-                    
-                    self.canvasView.isUserInteractionEnabled = true
-                    
-                    self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight,
-                                                                 selectedColor: { color in
-                                                                    self.canvasView.tool = PKInkingTool(.pen, color: color, width: 10)
-                    })
-                    self.annotationTextView.reloadInputViews()
-                case .keyboard:
-                    self.menuButton.isHidden = true
-                    
-                    self.canvasView.isUserInteractionEnabled = false
-
-                    self.annotationTextView.inputView?.removeFromSuperview()
-                    self.annotationTextView.inputView = nil
-                    self.annotationTextView.reloadInputViews()
-                case .clear:
-                    self.clearButton.isHidden = true
-                    self.annotationTextView.text = ""
-                    self.canvasView.drawing = PKDrawing()
-                }
+        Current.editingSubject.sink { editState in
+            switch editState {
+            case .none:
+                self.menuButton.isHidden = false
+                self.clearButton.isHidden = true
+                self.canvasView.isUserInteractionEnabled = false
+                self.annotationTextView.resignFirstResponder()
+            case .drawing:
+                self.menuButton.isHidden = true
+                
+                self.canvasView.isUserInteractionEnabled = true
+                
+                self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight,
+                                                                     selectedColor: { color in
+                                                                        self.canvasView.tool = PKInkingTool(.pen, color: color, width: 10)
+                })
+                self.annotationTextView.reloadInputViews()
+            case .keyboard:
+                self.menuButton.isHidden = true
+                
+                self.canvasView.isUserInteractionEnabled = false
+                
+                self.annotationTextView.inputView?.removeFromSuperview()
+                self.annotationTextView.inputView = nil
+                self.annotationTextView.reloadInputViews()
+            case .clear:
+                self.clearButton.isHidden = true
+                self.annotationTextView.text = ""
+                self.canvasView.drawing = PKDrawing()
             }
+        }
         .store(in: &cancellables)
         
         Current.locationManager
             .didChangeAuthorization
             .sink { status in
-            self.process(authorization: status)
+                self.process(authorization: status)
         }
         .store(in: &cancellables)
     }
@@ -245,7 +265,13 @@ class CameraOverlayView: UIView {
         Current.activeCameraSubject.value = .back
     }
     
-    @objc private func showMenuAction() {}
+    @objc private func showPlayback() {
+        Current.presentViewContollersSubject.value = .playback
+    }
+    
+    @objc private func showMenuAction() {
+         Current.presentViewContollersSubject.value = .menu
+    }
     
     @objc private func zoomAction() {}
     
