@@ -9,58 +9,69 @@
 import UIKit
 import MapKit
 import Combine
+import CoreLocation
+import Contacts
 
 class PlaybackMapView: MKMapView {
-
-    let distanceLabel = UILabel()
+    
+    let timeDistanceLocation = UILabel()
     var cancellables = Set<AnyCancellable>()
-    var distanceFormatter: MKDistanceFormatter {
-        let df = MKDistanceFormatter()
-        df.unitStyle = .abbreviated
-        return df
-    }
+    
     let kButtonSize: CGFloat = 48
     let kButtonPadding: CGFloat = 8
     
-    init() {
-        distanceLabel.translatesAutoresizingMaskIntoConstraints = false
-        distanceLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        distanceLabel.adjustsFontSizeToFitWidth = true
-        distanceLabel.textAlignment = .center
-        distanceLabel.minimumScaleFactor = 0.6
-        distanceLabel.textColor = .label
+    
+    init(myLocation: CLLocation = CLLocation(latitude: 37.759580, longitude: -122.391850),
+         theirLocatoin: CLLocation = CLLocation(latitude: 33.996890, longitude: -84.428710),
+         theirAddresss: CNPostalAddress? = nil,
+         theirDate: Date = Date(timeIntervalSince1970: 1579947732)) {
+        
+        let distance = myLocation.distance(from: theirLocatoin)
+        
+        let pa = CNMutablePostalAddress()
+        pa.street = "1884 Wood Acres Lane"
+        pa.city = "Marieta"
+        pa.state = "Georga"
+        pa.postalCode = "30062"
+        pa.country = "United States"
 
+        
+        timeDistanceLocation.translatesAutoresizingMaskIntoConstraints = false
+        timeDistanceLocation.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        timeDistanceLocation.adjustsFontSizeToFitWidth = true
+        timeDistanceLocation.minimumScaleFactor = 0.6
+        timeDistanceLocation.numberOfLines = 0
+        timeDistanceLocation.textColor = .label
+        
         super.init(frame: .zero)
         delegate = self
         translatesAutoresizingMaskIntoConstraints = false
+        isUserInteractionEnabled = false
         register(PersonAnnotationView.self, forAnnotationViewWithReuseIdentifier: PersonAnnotationView.id)
         
         do {
             configureViews()
         }
         
-        let JOE = CLLocation(latitude: 37.759580, longitude: -122.391850)
-        let SHANE = CLLocation(latitude: 33.996890, longitude: -84.428710)
-        var coordinates = [JOE.coordinate, SHANE.coordinate]
+        var coordinates = [myLocation.coordinate, theirLocatoin.coordinate]
         let geodesicPolyline = MKGeodesicPolyline(coordinates: &coordinates, count: coordinates.count)
         addOverlay(geodesicPolyline)
         
-        let distance = JOE.distance(from: SHANE)
-        let formattedDistance = distanceFormatter.string(fromDistance: distance)
-        distanceLabel.text = "\(formattedDistance) between you and Shane"
-
         let me = MKPointAnnotation()
-        me.coordinate = JOE.coordinate
+        me.coordinate = myLocation.coordinate
         me.title = "You"
         addAnnotation(me)
         
         
         let them = MKPointAnnotation()
-        them.coordinate = SHANE.coordinate
+        them.coordinate = theirLocatoin.coordinate
         them.title = "Shane"
         addAnnotation(them)
-
-        showAnnotations(annotations, animated: true)
+        
+        showAnnotations([annotations.first!], animated: true)
+        timeDistanceLocation.attributedText = formatMetadata(address: pa,
+                                                             date: theirDate,
+                                                             distance: distance)
     }
     
     required init?(coder: NSCoder) {
@@ -70,11 +81,55 @@ class PlaybackMapView: MKMapView {
     // MARK: - Configure Views
     
     private func configureViews() {
-        addSubview(distanceLabel)
-        distanceLabel.topAnchor.constraint(equalTo: topAnchor, constant: kButtonPadding).isActive = true
-        distanceLabel.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        distanceLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
-        distanceLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
+        addSubview(timeDistanceLocation)
+        timeDistanceLocation.topAnchor.constraint(equalTo: topAnchor, constant: kButtonPadding).isActive = true
+        timeDistanceLocation.heightAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
+        timeDistanceLocation.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
+        timeDistanceLocation.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
+    }
+    
+    private func formatMetadata(address: CNPostalAddress?,
+                                date: Date,
+                                distance: CLLocationDistance) -> NSAttributedString {
+        let attributedMetadataString = NSMutableAttributedString()
+        
+        if let formattedAddress = address?.streetCity {
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = UIImage(systemName: "mappin.and.ellipse",
+                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
+                .withTintColor(.white, renderingMode: .alwaysOriginal)
+            
+            attributedMetadataString.append(NSAttributedString(attachment: imageAttachment))
+            attributedMetadataString.append(NSAttributedString(string: " \(formattedAddress)\n"))
+        }
+
+        do { // distance
+             let formattedDistance = Current.formatter.distance.string(fromDistance: distance)
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = UIImage(systemName: "map",
+                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
+                .withTintColor(.white, renderingMode: .alwaysOriginal)
+            
+            attributedMetadataString.append(NSAttributedString(attachment: imageAttachment))
+            attributedMetadataString.append(NSAttributedString(string: " \(formattedDistance) away\n"))
+        }
+        
+        do { // Time Ago
+            let formattedTimeAgo = Current.formatter.timeAgo.localizedString(for: date, relativeTo: Date())
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = UIImage(systemName: "clock",
+                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
+                .withTintColor(.white, renderingMode: .alwaysOriginal)
+            
+            attributedMetadataString.append(NSAttributedString(attachment: imageAttachment))
+            attributedMetadataString.append(NSAttributedString(string: " \(formattedTimeAgo)\n"))
+        }
+        
+
+        
+        
+        return attributedMetadataString
+        
     }
     
 }
@@ -97,9 +152,9 @@ extension PlaybackMapView: MKMapViewDelegate {
         guard let annotation = annotation as? MKPointAnnotation,
             let view = dequeueReusableAnnotationView(withIdentifier: PersonAnnotationView.id,
                                                      for: annotation) as? PersonAnnotationView else {
-            return nil
+                                                        return nil
         }
-
+        
         let idx = Int.random(in: 0 ... 10)
         let url = URL(string: "https://i.pravatar.cc/150?img=\(idx)")!
         URLSession.shared.dataTaskPublisher(for: url)
@@ -107,11 +162,11 @@ extension PlaybackMapView: MKMapViewDelegate {
             .eraseToAnyPublisher()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { completion in
-//                print(completion)
+                //                print(completion)
             }) { image in
                 view.configure(image: image)
-            }
-            .store(in: &self.cancellables)
+        }
+        .store(in: &self.cancellables)
         
         return view
     }

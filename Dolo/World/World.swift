@@ -30,6 +30,7 @@ enum ShowViewController {
     case search
 }
 struct World {
+    // Sensors
     let locationManager = CLLocationManager()
     let networkSession: URLSession = {
         let configuraiton = URLSessionConfiguration.background(withIdentifier: "tapsnap_url_session_config")
@@ -40,6 +41,10 @@ struct World {
         return URLSession(configuration: configuraiton)
     }()
     
+    // Constants
+    let formatter = Formatter()
+    
+    // Reactive
     let recordingSubject = CurrentValueSubject<RecordAction, Never>(.stop)
     let editingSubject = CurrentValueSubject<EditState, Never>(.none)
     let activeCameraSubject = CurrentValueSubject<AVCaptureDevice.Position, Never>(.back)
