@@ -8,11 +8,12 @@
 
 import UIKit
 
-class DrawingToolsView: UIVisualEffectView {
+final class DrawingToolsView: UIVisualEffectView {
 
-    let intrinsicHeight: CGFloat
-    let colorButtons: [UIButton]
-    let colorPickerStackView: UIStackView
+    private let intrinsicHeight: CGFloat
+    private let colorButtons: [UIButton]
+    private let colorPickerStackView: UIStackView
+    private let selected = UIView()
     
     var selectColorClosure: ((_ color: UIColor) -> Void)?
 
@@ -21,28 +22,36 @@ class DrawingToolsView: UIVisualEffectView {
          selectedColor: ((_ color: UIColor) -> Void)? = nil) {
         selectColorClosure = selectedColor
         
+        selected.translatesAutoresizingMaskIntoConstraints = false
+        selected.layer.cornerRadius = 26
+        selected.layer.borderWidth = 3
+        selected.layer.borderColor = UIColor.white.cgColor
+        selected.widthAnchor.constraint(equalToConstant: 52).isActive = true
+        selected.heightAnchor.constraint(equalToConstant: 52).isActive = true
+        
         intrinsicHeight = height - 48.0
-        colorButtons = [UIColor.white,
-                        UIColor.red,
-                        UIColor.orange,
-                        UIColor.yellow,
-                        UIColor.green,
-                        UIColor.blue,
-                        UIColor.magenta,
-                        UIColor.cyan]
+        colorButtons = [UIColor.label,
+                        UIColor.systemRed,
+                        UIColor.systemOrange,
+                        UIColor.systemYellow,
+                        UIColor.systemGreen,
+                        UIColor.systemBlue]
             .enumerated()
             .map { (offset: Int, color: UIColor) -> UIButton in
                 let button = UIButton(type: .system)
+                button.translatesAutoresizingMaskIntoConstraints = false
                 button.layer.cornerRadius = 20
                 button.backgroundColor = color
                 button.tag = offset
+                button.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                button.heightAnchor.constraint(equalToConstant: 40).isActive = true
                 return button
         }
 
+        
         colorPickerStackView = UIStackView(arrangedSubviews: colorButtons)
         colorPickerStackView.translatesAutoresizingMaskIntoConstraints = false
-        colorPickerStackView.distribution = .fillEqually
-        colorPickerStackView.spacing = UIStackView.spacingUseSystem
+        colorPickerStackView.distribution = .equalSpacing
         
         super.init(effect: UIBlurEffect(style: .systemUltraThinMaterial))
         translatesAutoresizingMaskIntoConstraints = false
@@ -65,6 +74,9 @@ class DrawingToolsView: UIVisualEffectView {
         }
     }
     
+    override func draw(_ rect: CGRect) {
+        selected.center = colorButtons.first?.center ?? .zero
+    }
     // MARK: - Configure Views
     
     private func configureViews() {
@@ -73,6 +85,8 @@ class DrawingToolsView: UIVisualEffectView {
         colorPickerStackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         colorPickerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
         colorPickerStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
+        
+        colorPickerStackView.addSubview(selected)
     }
     
     override var intrinsicContentSize: CGSize {
@@ -86,10 +100,11 @@ class DrawingToolsView: UIVisualEffectView {
         guard let color = sender.backgroundColor else {
             return
         }
+        
         selectColorClosure?(color)
-        self.colorButtons.forEach { button in
-            button.layer.borderWidth = 0
+
+        UIView.animate(withDuration: 0.3) {
+            self.selected.center = sender.center
         }
-        sender.layer.borderWidth = 4
     }
 }

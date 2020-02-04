@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         // Global Settings
         UIView.appearance().overrideUserInterfaceStyle = .dark
-        
+
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = RootViewController()
         self.window = window

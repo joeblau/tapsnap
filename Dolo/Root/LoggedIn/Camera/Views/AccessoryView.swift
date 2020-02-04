@@ -14,28 +14,23 @@ final class KeyboardAccessoryView: UIVisualEffectView {
     let accessoryStack: UIStackView
     let textKeyboard = UIButton(type: .system)
     let drawToolPicker = UIButton(type: .system)
+    let musicSetup = UIButton(type: .system)
     let doneButton = UIButton(type: .system)
     
     init() {
-        textKeyboard.translatesAutoresizingMaskIntoConstraints = false
-        textKeyboard.setImage(UIImage(systemName: "keyboard"), for: .normal)
-        textKeyboard.tintColor = .label
-        textKeyboard.backgroundColor = UIColor.label.withAlphaComponent(0.3)
-        textKeyboard.layer.cornerRadius = 8
+        textKeyboard.setImage(UIImage(systemName: "textbox"), for: .normal)
+        textKeyboard.keyboardAccessory()
         
-        drawToolPicker.translatesAutoresizingMaskIntoConstraints = false
-        drawToolPicker.setImage(UIImage(systemName: "pencil.and.outline"), for: .normal)
-        drawToolPicker.tintColor = .label
-        drawToolPicker.backgroundColor = UIColor.label.withAlphaComponent(0.3)
-        drawToolPicker.layer.cornerRadius = 8
+        drawToolPicker.setImage(UIImage(systemName: "scribble"), for: .normal)
+        drawToolPicker.keyboardAccessory()
         
-        doneButton.translatesAutoresizingMaskIntoConstraints = false
+        musicSetup.setImage(UIImage(systemName: "music.note"), for: .normal)
+        musicSetup.keyboardAccessory()
+        
         doneButton.setTitle("Done", for: .normal)
-        doneButton.tintColor = .label
-        doneButton.backgroundColor = UIColor.label.withAlphaComponent(0.15)
-        doneButton.layer.cornerRadius = 8
+        doneButton.keyboardAccessory(alpha: 0.15)
         
-        accessoryStack = UIStackView(arrangedSubviews: [textKeyboard, drawToolPicker, doneButton])
+        accessoryStack = UIStackView(arrangedSubviews: [textKeyboard, drawToolPicker, musicSetup, doneButton])
         accessoryStack.translatesAutoresizingMaskIntoConstraints = false
         accessoryStack.distribution = .fillEqually
         accessoryStack.isLayoutMarginsRelativeArrangement = true

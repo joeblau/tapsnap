@@ -21,7 +21,8 @@ class PlaybackViewController: UIViewController {
         guard let url = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8") else {
             fatalError("can't get url")
         }
-        playbackView = PlaybackView(url: url)
+        playbackView = PlaybackView(url: url,
+        groupName: "us")
         
         playbackStack = UIStackView(arrangedSubviews: [playbackView, mapView])
         playbackStack.translatesAutoresizingMaskIntoConstraints = false

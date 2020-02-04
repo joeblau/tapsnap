@@ -19,7 +19,6 @@ class LoggedInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        camera?.modalPresentationStyle = .overFullScreen
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -27,8 +26,8 @@ class LoggedInViewController: UIViewController {
         // Show onboarding
         
         // Show camera
-        if let playback = playback {
-            present(playback, animated: false) {
+        if let camera = camera {
+            present(camera, animated: false) {
                 // Log analytic event
             }
         }

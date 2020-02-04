@@ -21,7 +21,6 @@ class PlaybackMapView: MKMapView {
     }
     
     init() {
-        
         distanceLabel.translatesAutoresizingMaskIntoConstraints = false
         distanceLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         distanceLabel.adjustsFontSizeToFitWidth = true

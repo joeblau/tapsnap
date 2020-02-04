@@ -20,7 +20,7 @@ class CameraOverlayView: UIView {
     // Top left
     let menuButton = UIButton(type: .system)
     let clearButton = UIButton(type: .system)
-    
+    let zoomOutButton = UIButton(type: .system)
     // Top right
     let notifictionsButton = UIButton(type: .system)
     
@@ -41,26 +41,26 @@ class CameraOverlayView: UIView {
     var drawingToolsViewHeight: CGFloat = 340
     
     override init(frame: CGRect) {
-        menuButton.translatesAutoresizingMaskIntoConstraints = false
         menuButton.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
-        menuButton.tintColor = .label
+        menuButton.floatButton()
         
-        clearButton.translatesAutoresizingMaskIntoConstraints = false
         clearButton.setImage(UIImage(systemName: "clear"), for: .normal)
-        clearButton.tintColor = .label
+        clearButton.floatButton()
         clearButton.isHidden = true
         
-        locationButton.translatesAutoresizingMaskIntoConstraints = false
-        locationButton.setImage(UIImage(systemName: "location.slash.fill"), for: .normal)
-        locationButton.tintColor = .label
-            
-        textboxButton.translatesAutoresizingMaskIntoConstraints = false
-        textboxButton.setImage(UIImage(systemName: "textbox"), for: .normal)
-        textboxButton.tintColor = .label
         
-        flipButton.translatesAutoresizingMaskIntoConstraints = false
+        zoomOutButton.setImage(UIImage(systemName: "clear"), for: .normal)
+        zoomOutButton.floatButton()
+        zoomOutButton.isHidden = true
+        
+        locationButton.setImage(UIImage(systemName: "location.slash.fill"), for: .normal)
+        locationButton.floatButton()
+            
+        textboxButton.setImage(UIImage(systemName: "wand.and.stars.inverse"), for: .normal)
+        textboxButton.floatButton()
+        
         flipButton.setImage(UIImage(systemName: "arrow.2.circlepath"), for: .normal)
-        flipButton.tintColor = .label
+        flipButton.floatButton()
         
         editActionStackView = UIStackView(arrangedSubviews: [locationButton, textboxButton, flipButton])
         editActionStackView.translatesAutoresizingMaskIntoConstraints = false
