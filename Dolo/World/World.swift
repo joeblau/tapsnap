@@ -29,6 +29,17 @@ enum ShowViewController {
     case menu
     case search
 }
+
+enum MapDimension {
+    case two
+    case three
+}
+
+enum AnnotationGroup {
+    case them
+    case all
+}
+
 struct World {
     // Sensors
     let locationManager = CLLocationManager()
@@ -49,6 +60,8 @@ struct World {
     let editingSubject = CurrentValueSubject<EditState, Never>(.none)
     let activeCameraSubject = CurrentValueSubject<AVCaptureDevice.Position, Never>(.back)
     let presentViewContollersSubject = CurrentValueSubject<ShowViewController, Never>(.none)
+    let mapDimensionSubject = CurrentValueSubject<MapDimension, Never>(.two)
+    let mapAnnotationsSubject = CurrentValueSubject<AnnotationGroup, Never>(.them)
 }
 
 let Current = World()

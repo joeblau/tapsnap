@@ -8,6 +8,12 @@
 
 import UIKit
 
+enum SegmentPosition {
+    case top
+    case middle
+    case bottom
+}
+
 extension UIButton {
     func floatButton() {
         translatesAutoresizingMaskIntoConstraints = false
@@ -35,5 +41,25 @@ extension UIButton {
         layer.cornerRadius = diameter/2.0
         layer.borderWidth = 3
         layer.borderColor = UIColor.white.cgColor
+    }
+    
+    func segmentButton(position: SegmentPosition) {
+        translatesAutoresizingMaskIntoConstraints = false
+        backgroundColor = .secondarySystemBackground
+        tintColor = .label
+        layer.shadowOffset = .zero
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowRadius = 4
+        layer.shadowOpacity = 1.0
+        
+        switch position {
+        case .top:
+            layer.cornerRadius = 8
+            layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        case .bottom:
+            layer.cornerRadius = 8
+            layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        case .middle: break
+        }
     }
 }

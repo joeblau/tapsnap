@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		ED2180A823E9AA4300C6F5DC /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180A723E9AA4300C6F5DC /* Formatter.swift */; };
+		ED2180AA23E9BD7000C6F5DC /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180A923E9BD7000C6F5DC /* UILabel+Extension.swift */; };
 		ED37CB4723E6986700D2C2BE /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4623E6986700D2C2BE /* OnboardingViewController.swift */; };
 		ED37CB4923E6988100D2C2BE /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4823E6988100D2C2BE /* CameraViewController.swift */; };
 		ED37CB4D23E69DE800D2C2BE /* CameraOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4C23E69DE800D2C2BE /* CameraOverlayView.swift */; };
@@ -49,6 +50,7 @@
 
 /* Begin PBXFileReference section */
 		ED2180A723E9AA4300C6F5DC /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
+		ED2180A923E9BD7000C6F5DC /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		ED37CB4423E54A3B00D2C2BE /* Dolo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dolo.entitlements; sourceTree = "<group>"; };
 		ED37CB4623E6986700D2C2BE /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		ED37CB4823E6988100D2C2BE /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				ED37CB6523E7908800D2C2BE /* World.swift */,
 				ED53B16523E91F0B00B75839 /* UIButton+Extension.swift */,
 				ED2180A723E9AA4300C6F5DC /* Formatter.swift */,
+				ED2180A923E9BD7000C6F5DC /* UILabel+Extension.swift */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				ED37CB5C23E7530300D2C2BE /* ContactCollectionViewCell.swift in Sources */,
 				ED37CB4923E6988100D2C2BE /* CameraViewController.swift in Sources */,
 				EDB014F523E53FAC001B61C2 /* SceneDelegate.swift in Sources */,
+				ED2180AA23E9BD7000C6F5DC /* UILabel+Extension.swift in Sources */,
 				EDB014FD23E53FAC001B61C2 /* Dolo.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

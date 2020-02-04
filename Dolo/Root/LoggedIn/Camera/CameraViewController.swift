@@ -82,6 +82,8 @@ class CameraViewController: UIViewController {
         previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
+    // MARK: - Configure Streams
+    
     private func configureStreams() {
         Current.activeCameraSubject
             .sink { position in
