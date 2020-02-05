@@ -7,30 +7,35 @@
 //
 
 import UIKit
+import Combine
 
 final class KeyboardAccessoryView: UIVisualEffectView {
-    
+    private var cancellables = Set<AnyCancellable>()
     let kAccessoryPadding: CGFloat = 4
     let accessoryStack: UIStackView
-    let textKeyboard = UIButton(type: .system)
-    let drawToolPicker = UIButton(type: .system)
-    let musicSetup = UIButton(type: .system)
-    let doneButton = UIButton(type: .system)
+    let textKeyboard = UIButton(type: .custom)
+    let drawToolPicker = UIButton(type: .custom)
+    let musicPlayback = UIButton(type: .custom)
+    let doneButton = UIButton(type: .custom)
+    var currentSelected: UIButton?
     
     init() {
         textKeyboard.setImage(UIImage(systemName: "textbox"), for: .normal)
+        textKeyboard.setBackgroundColor(color: .label, for: .selected)
         textKeyboard.keyboardAccessory()
         
         drawToolPicker.setImage(UIImage(systemName: "scribble"), for: .normal)
+        drawToolPicker.setBackgroundColor(color: .label, for: .selected)
         drawToolPicker.keyboardAccessory()
         
-        musicSetup.setImage(UIImage(systemName: "music.note"), for: .normal)
-        musicSetup.keyboardAccessory()
+        musicPlayback.setImage(UIImage(systemName: "music.note"), for: .normal)
+        musicPlayback.setBackgroundColor(color: .label, for: .selected)
+        musicPlayback.keyboardAccessory()
         
         doneButton.setTitle("Done", for: .normal)
         doneButton.keyboardAccessory(alpha: 0.15)
         
-        accessoryStack = UIStackView(arrangedSubviews: [textKeyboard, drawToolPicker, musicSetup, doneButton])
+        accessoryStack = UIStackView(arrangedSubviews: [textKeyboard, drawToolPicker, musicPlayback, doneButton])
         accessoryStack.translatesAutoresizingMaskIntoConstraints = false
         accessoryStack.distribution = .fillEqually
         accessoryStack.isLayoutMarginsRelativeArrangement = true
@@ -43,6 +48,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         do {
             configureButtonTargets()
             configureViews()
+            configureStreams()
         }
     }
     
@@ -59,6 +65,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
     private func configureButtonTargets() {
         textKeyboard.addTarget(self, action: #selector(pressKeyboardAction), for: .touchUpInside)
         drawToolPicker.addTarget(self, action: #selector(pressDrawingAction), for: .touchUpInside)
+        musicPlayback.addTarget(self, action: #selector(musicPlaybackAction), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)
     }
     
@@ -72,6 +79,33 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         accessoryStack.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
     
+    // MARK: - Configure Streams
+    
+    private func configureStreams() {
+        Current.editingSubject
+            .sink { editState in
+
+                self.currentSelected?.isSelected = false
+                switch editState {
+                case .keyboard:
+                    self.textKeyboard.isSelected = true
+                    self.currentSelected = self.textKeyboard
+                case .drawing:
+                    self.drawToolPicker.isSelected = true
+                    self.currentSelected = self.drawToolPicker
+                case .music:
+                    self.musicPlayback.isSelected = true
+                    self.currentSelected = self.musicPlayback
+                case  .none, .clear:
+                    return
+                }
+                self.textKeyboard.tintColor = self.textKeyboard.isSelected ? .systemBackground : .label
+                self.drawToolPicker.tintColor = self.drawToolPicker.isSelected ? .systemBackground : .label
+                self.musicPlayback.tintColor = self.musicPlayback.isSelected ? .systemBackground : .label
+        }
+        .store(in: &cancellables)
+    }
+    
     // MARK: - Actions
     
     @objc private func pressKeyboardAction() {
@@ -80,6 +114,10 @@ final class KeyboardAccessoryView: UIVisualEffectView {
     
     @objc private func pressDrawingAction() {
         Current.editingSubject.value = .drawing
+    }
+    
+    @objc private func musicPlaybackAction() {
+        Current.editingSubject.value = .music
     }
     
     @objc private func pressDoneAction() {

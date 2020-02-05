@@ -20,6 +20,7 @@ enum EditState {
     case none
     case keyboard
     case drawing
+    case music
     case clear
 }
 

@@ -10,11 +10,12 @@
 		ED2180A823E9AA4300C6F5DC /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180A723E9AA4300C6F5DC /* Formatter.swift */; };
 		ED2180AA23E9BD7000C6F5DC /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180A923E9BD7000C6F5DC /* UILabel+Extension.swift */; };
 		ED2180AC23EA5CF200C6F5DC /* MusicPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180AB23EA5CF200C6F5DC /* MusicPlaybackView.swift */; };
+		ED2180AE23EA6BFE00C6F5DC /* TextOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180AD23EA6BFE00C6F5DC /* TextOverlayView.swift */; };
 		ED37CB4723E6986700D2C2BE /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4623E6986700D2C2BE /* OnboardingViewController.swift */; };
 		ED37CB4923E6988100D2C2BE /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4823E6988100D2C2BE /* CameraViewController.swift */; };
 		ED37CB4D23E69DE800D2C2BE /* CameraOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4C23E69DE800D2C2BE /* CameraOverlayView.swift */; };
 		ED37CB4F23E69F8100D2C2BE /* CameraPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4E23E69F8100D2C2BE /* CameraPreviewView.swift */; };
-		ED37CB5123E6ABCC00D2C2BE /* AccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB5023E6ABCC00D2C2BE /* AccessoryView.swift */; };
+		ED37CB5123E6ABCC00D2C2BE /* KeyboardAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB5023E6ABCC00D2C2BE /* KeyboardAccessoryView.swift */; };
 		ED37CB5523E719CD00D2C2BE /* DrawingToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB5423E719CD00D2C2BE /* DrawingToolsView.swift */; };
 		ED37CB5723E7496F00D2C2BE /* RecordProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB5623E7496F00D2C2BE /* RecordProgressView.swift */; };
 		ED37CB5A23E7507E00D2C2BE /* ContactsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB5923E7507E00D2C2BE /* ContactsCollectionView.swift */; };
@@ -53,12 +54,13 @@
 		ED2180A723E9AA4300C6F5DC /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		ED2180A923E9BD7000C6F5DC /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		ED2180AB23EA5CF200C6F5DC /* MusicPlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlaybackView.swift; sourceTree = "<group>"; };
+		ED2180AD23EA6BFE00C6F5DC /* TextOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOverlayView.swift; sourceTree = "<group>"; };
 		ED37CB4423E54A3B00D2C2BE /* Dolo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dolo.entitlements; sourceTree = "<group>"; };
 		ED37CB4623E6986700D2C2BE /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		ED37CB4823E6988100D2C2BE /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		ED37CB4C23E69DE800D2C2BE /* CameraOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOverlayView.swift; sourceTree = "<group>"; };
 		ED37CB4E23E69F8100D2C2BE /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
-		ED37CB5023E6ABCC00D2C2BE /* AccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessoryView.swift; sourceTree = "<group>"; };
+		ED37CB5023E6ABCC00D2C2BE /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
 		ED37CB5423E719CD00D2C2BE /* DrawingToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolsView.swift; sourceTree = "<group>"; };
 		ED37CB5623E7496F00D2C2BE /* RecordProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordProgressView.swift; sourceTree = "<group>"; };
 		ED37CB5923E7507E00D2C2BE /* ContactsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
@@ -121,10 +123,11 @@
 				ED37CB6123E75E9D00D2C2BE /* ContactEditorView.swift */,
 				ED37CB4C23E69DE800D2C2BE /* CameraOverlayView.swift */,
 				ED37CB4E23E69F8100D2C2BE /* CameraPreviewView.swift */,
-				ED37CB5023E6ABCC00D2C2BE /* AccessoryView.swift */,
+				ED37CB5023E6ABCC00D2C2BE /* KeyboardAccessoryView.swift */,
 				ED37CB5423E719CD00D2C2BE /* DrawingToolsView.swift */,
 				ED2180AB23EA5CF200C6F5DC /* MusicPlaybackView.swift */,
 				ED37CB5623E7496F00D2C2BE /* RecordProgressView.swift */,
+				ED2180AD23EA6BFE00C6F5DC /* TextOverlayView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -362,7 +365,7 @@
 				ED37CB5E23E7538E00D2C2BE /* CameraViewController+UICollectionViewDataSource.swift in Sources */,
 				ED48F48D23E85CBD009790E4 /* PlaybackView.swift in Sources */,
 				ED48F49123E86E78009790E4 /* PersonAnnotationView.swift in Sources */,
-				ED37CB5123E6ABCC00D2C2BE /* AccessoryView.swift in Sources */,
+				ED37CB5123E6ABCC00D2C2BE /* KeyboardAccessoryView.swift in Sources */,
 				ED37CB5523E719CD00D2C2BE /* DrawingToolsView.swift in Sources */,
 				ED37CB6623E7908800D2C2BE /* World.swift in Sources */,
 				ED37CB5A23E7507E00D2C2BE /* ContactsCollectionView.swift in Sources */,
@@ -372,6 +375,7 @@
 				ED37CB6E23E855E400D2C2BE /* PlaybackViewController.swift in Sources */,
 				ED37CB4D23E69DE800D2C2BE /* CameraOverlayView.swift in Sources */,
 				ED37CB5C23E7530300D2C2BE /* ContactCollectionViewCell.swift in Sources */,
+				ED2180AE23EA6BFE00C6F5DC /* TextOverlayView.swift in Sources */,
 				ED2180AC23EA5CF200C6F5DC /* MusicPlaybackView.swift in Sources */,
 				ED37CB4923E6988100D2C2BE /* CameraViewController.swift in Sources */,
 				EDB014F523E53FAC001B61C2 /* SceneDelegate.swift in Sources */,

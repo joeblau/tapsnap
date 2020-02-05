@@ -30,15 +30,17 @@ class CameraOverlayView: UIView {
     let locationButton = UIButton(type: .custom)
     let textboxButton = UIButton(type: .custom)
     let flipButton = UIButton(type: .custom)
-    
+
     
     let canvasView = PKCanvasView(frame: .zero)
-    let annotationTextView = UITextView()
+    let annotationTextView = TextOverlayView()
     var annotationTextViewWidth: NSLayoutConstraint!
     var annotationTextViewHeight: NSLayoutConstraint!
     
     let recordingProgressView = RecordProgressView()
     var drawingToolsViewHeight: CGFloat = 340
+
+    var zoomScale: CGFloat = 1.0
     
     let topLeftStackView: UIStackView
     let topRightStackView: UIStackView
@@ -90,12 +92,6 @@ class CameraOverlayView: UIView {
             bottomRightStackView.spacing = UIStackView.spacingUseSystem
         }
         
-        annotationTextView.translatesAutoresizingMaskIntoConstraints = false
-        annotationTextView.textAlignment = .center
-        annotationTextView.backgroundColor = .clear
-        annotationTextView.sizeToFit()
-        annotationTextView.font = UIFont.systemFont(ofSize: 44, weight: .heavy)
-        
         canvasView.translatesAutoresizingMaskIntoConstraints = false
         canvasView.isOpaque = false
         canvasView.backgroundColor = .clear
@@ -105,8 +101,6 @@ class CameraOverlayView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         canvasView.delegate = self
         self.process(authorization: CLLocationManager.authorizationStatus())
-        
-        
         
         do {
             configureButtonTargets()
@@ -196,6 +190,9 @@ class CameraOverlayView: UIView {
         flipCameraDoubleTap.numberOfTapsRequired = 2
         addGestureRecognizer(flipCameraDoubleTap)
         
+        let zoomTextRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(zoomText(gesture:)))
+        addGestureRecognizer(zoomTextRecognizer)
+        
         //        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomAction))
         //        zoomInOutPan.maximumNumberOfTouches = 1
         //        addGestureRecognizer(zoomInOutPan)
@@ -209,14 +206,8 @@ class CameraOverlayView: UIView {
                 self.menuButton.isHidden = false
                 self.clearButton.isHidden = true
                 self.canvasView.isUserInteractionEnabled = false
+                self.annotationTextView.inputView = nil
                 self.annotationTextView.resignFirstResponder()
-            case .drawing:
-                self.menuButton.isHidden = true
-                
-                self.canvasView.isUserInteractionEnabled = true
-                
-                self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
-                self.annotationTextView.reloadInputViews()                
             case .keyboard:
                 self.menuButton.isHidden = true
                 
@@ -225,6 +216,21 @@ class CameraOverlayView: UIView {
                 self.annotationTextView.inputView?.removeFromSuperview()
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.reloadInputViews()
+            case .drawing:
+                self.menuButton.isHidden = true
+                
+                self.canvasView.isUserInteractionEnabled = true
+                
+                self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
+                self.annotationTextView.reloadInputViews()                
+
+            case .music:
+                self.menuButton.isHidden = true
+                 
+                 self.canvasView.isUserInteractionEnabled = true
+                 
+                 self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
+                 self.annotationTextView.reloadInputViews()   
             case .clear:
                 self.clearButton.isHidden = true
                 self.annotationTextView.text = ""
@@ -242,7 +248,7 @@ class CameraOverlayView: UIView {
         
         Current.drawingColorSubject
             .sink { color in
-                self.canvasView.tool = PKInkingTool(.pen, color: color.withAlphaComponent(0.8), width: 10)
+                self.canvasView.tool = PKInkingTool(.pen, color: color.withAlphaComponent(0.8), width: 16)
         }
         .store(in: &cancellables)
     }
@@ -256,10 +262,6 @@ class CameraOverlayView: UIView {
         Current.editingSubject.value = .keyboard
     }
     
-    @objc private func dismissKeyboardAction() {
-        annotationTextView.resignFirstResponder()
-    }
-    
     @objc private func toggleMusicAction() {
         musicButton.isSelected.toggle()
     }
@@ -270,10 +272,6 @@ class CameraOverlayView: UIView {
         
     @objc private func toggleLocationAction() {
         Current.locationManager.requestWhenInUseAuthorization()
-    }
-    
-    @objc private func flipCameraAction() {
-        Current.activeCameraSubject.value = .back
     }
     
     @objc private func showPlayback() {
@@ -294,6 +292,26 @@ class CameraOverlayView: UIView {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             self.drawingToolsViewHeight = keyboardRectangle.height
+        }
+    }
+    
+    // MARK: - Gesture Recoginzers
+    
+    @objc private func dismissKeyboardAction() {
+        annotationTextView.resignFirstResponder()
+    }
+    
+    @objc private func flipCameraAction() {
+        Current.activeCameraSubject.value = .back
+    }
+    
+    @objc func zoomText(gesture: UIPinchGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            zoomScale = gesture.scale
+        case .changed:
+            print("chagne")
+        default: break
         }
     }
     
