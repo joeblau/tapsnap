@@ -18,16 +18,18 @@ class CameraOverlayView: UIView {
     let kButtonPadding: CGFloat = 8
     
     // Top left
-    let menuButton = UIButton(type: .system)
-    let clearButton = UIButton(type: .system)
+    let menuButton = UIButton(type: .custom)
+    let clearButton = UIButton(type: .custom)
     
     // Top right
-    let notifictionsButton = UIButton(type: .system)
+    let notifictionsButton = UIButton(type: .custom)
     
     // Bottom right
-    let locationButton = UIButton(type: .system)
-    let textboxButton = UIButton(type: .system)
-    let flipButton = UIButton(type: .system)
+    let musicButton = UIButton(type: .custom)
+    let persistButton = UIButton(type: .custom)
+    let locationButton = UIButton(type: .custom)
+    let textboxButton = UIButton(type: .custom)
+    let flipButton = UIButton(type: .custom)
     
     
     let canvasView = PKCanvasView(frame: .zero)
@@ -52,8 +54,17 @@ class CameraOverlayView: UIView {
         
         notifictionsButton.setTitle("3", for: .normal)
         notifictionsButton.notification(diameter: kButtonSize)
+
+        musicButton.setImage(UIImage(systemName: "speaker.slash.fill"), for: .normal)
+        musicButton.setImage(UIImage(systemName: "speaker.fill"), for: .selected)
+        musicButton.floatButton()
+        
+        persistButton.setImage(UIImage(systemName: "lock.slash.fill"), for: .normal)
+        persistButton.setImage(UIImage(systemName: "lock.fill"), for: .selected)
+        persistButton.floatButton()
         
         locationButton.setImage(UIImage(systemName: "location.slash.fill"), for: .normal)
+        locationButton.setImage(UIImage(systemName: "location.fill"), for: .selected)
         locationButton.floatButton()
         
         textboxButton.setImage(UIImage(systemName: "keyboard"), for: .normal)
@@ -73,7 +84,7 @@ class CameraOverlayView: UIView {
             topRightStackView.distribution = .fillEqually
             topRightStackView.spacing = UIStackView.spacingUseSystem
             
-            bottomRightStackView = UIStackView(arrangedSubviews: [locationButton, textboxButton, flipButton])
+            bottomRightStackView = UIStackView(arrangedSubviews: [musicButton, persistButton, locationButton, textboxButton, flipButton])
             bottomRightStackView.translatesAutoresizingMaskIntoConstraints = false
             bottomRightStackView.distribution = .fillEqually
             bottomRightStackView.spacing = UIStackView.spacingUseSystem
@@ -120,7 +131,9 @@ class CameraOverlayView: UIView {
     
     private func configureButtonTargets() {
         menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
-        locationButton.addTarget(self, action: #selector(showLocationAction), for: .touchUpInside)
+        musicButton.addTarget(self, action: #selector(toggleMusicAction), for: .touchUpInside)
+        persistButton.addTarget(self, action: #selector(togglePersistAction), for: .touchUpInside)
+        locationButton.addTarget(self, action: #selector(toggleLocationAction), for: .touchUpInside)
         notifictionsButton.addTarget(self, action: #selector(showPlayback), for: .touchUpInside)
         textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
         clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
@@ -130,23 +143,10 @@ class CameraOverlayView: UIView {
     // MARK: - Configure Views
     
     private func configureViews() {
-        menuButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        menuButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        
-        clearButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        clearButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        
-        notifictionsButton.widthAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
-        notifictionsButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        
-        locationButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        locationButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        
-        textboxButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        textboxButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        
-        flipButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        flipButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        [menuButton, clearButton, musicButton, persistButton, locationButton, textboxButton, flipButton].forEach { button in
+            button.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+            button.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        }
         
         self.addSubview(recordingProgressView)
         recordingProgressView.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -257,7 +257,15 @@ class CameraOverlayView: UIView {
         annotationTextView.resignFirstResponder()
     }
     
-    @objc private func showLocationAction() {
+    @objc private func toggleMusicAction() {
+        musicButton.isSelected.toggle()
+    }
+    
+    @objc private func togglePersistAction() {
+        persistButton.isSelected.toggle()
+    }
+        
+    @objc private func toggleLocationAction() {
         Current.locationManager.requestWhenInUseAuthorization()
     }
     
@@ -291,9 +299,9 @@ class CameraOverlayView: UIView {
     private func process(authorization status: CLAuthorizationStatus) {
         switch status {
         case .denied, .notDetermined, .restricted:
-            locationButton.isHidden = false
+            locationButton.isSelected = false
         case .authorizedAlways, .authorizedWhenInUse:
-            locationButton.isHidden = true
+            locationButton.isSelected = true
         @unknown default:
             fatalError("Unknown CLLocationManager.authorizationStatus")
         }
