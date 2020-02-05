@@ -15,12 +15,7 @@ final class DrawingToolsView: UIVisualEffectView {
     private let colorPickerStackView: UIStackView
     private let selected = UIView()
     
-    var selectColorClosure: ((_ color: UIColor) -> Void)?
-
-    
-    init(height: CGFloat,
-         selectedColor: ((_ color: UIColor) -> Void)? = nil) {
-        selectColorClosure = selectedColor
+    init(height: CGFloat) {
         
         selected.translatesAutoresizingMaskIntoConstraints = false
         selected.layer.cornerRadius = 26
@@ -30,7 +25,7 @@ final class DrawingToolsView: UIVisualEffectView {
         selected.heightAnchor.constraint(equalToConstant: 52).isActive = true
         
         intrinsicHeight = height - 48.0
-        colorButtons = [UIColor.label,
+        colorButtons = [UIColor.white,
                         UIColor.systemRed,
                         UIColor.systemOrange,
                         UIColor.systemYellow,
@@ -101,8 +96,7 @@ final class DrawingToolsView: UIVisualEffectView {
             return
         }
         
-        selectColorClosure?(color)
-
+        Current.drawingColorSubject.send(color)
         UIView.animate(withDuration: 0.3) {
             self.selected.center = sender.center
         }

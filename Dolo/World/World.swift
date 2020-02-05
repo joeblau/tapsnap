@@ -6,7 +6,7 @@
 //  Copyright © 2020 Joe Blau. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Combine
 import CoreLocation
 import AVFoundation
@@ -62,6 +62,7 @@ struct World {
     let presentViewContollersSubject = CurrentValueSubject<ShowViewController, Never>(.none)
     let mapDimensionSubject = CurrentValueSubject<MapDimension, Never>(.two)
     let mapAnnotationsSubject = CurrentValueSubject<AnnotationGroup, Never>(.them)
+    let drawingColorSubject = CurrentValueSubject<UIColor, Never>(.white)
 }
 
 let Current = World()

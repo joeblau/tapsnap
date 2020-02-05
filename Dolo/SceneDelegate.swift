@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import PencilKit
+import MapKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -18,7 +20,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         // Global Settings
         UIView.appearance().overrideUserInterfaceStyle = .dark
-
+        UIView.appearance(whenContainedInInstancesOf: [PKCanvasView.self]).overrideUserInterfaceStyle = .light
+        
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = RootViewController()
         self.window = window

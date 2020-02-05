@@ -99,7 +99,7 @@ class CameraOverlayView: UIView {
         canvasView.translatesAutoresizingMaskIntoConstraints = false
         canvasView.isOpaque = false
         canvasView.backgroundColor = .clear
-        canvasView.overrideUserInterfaceStyle = .dark
+        canvasView.overrideUserInterfaceStyle = .light
         
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
@@ -154,6 +154,12 @@ class CameraOverlayView: UIView {
         recordingProgressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         recordingProgressView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
+        self.addSubview(canvasView)
+        canvasView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        canvasView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        canvasView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        canvasView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
         self.addSubview(annotationTextView)
         annotationTextView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         annotationTextView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -161,12 +167,6 @@ class CameraOverlayView: UIView {
         annotationTextViewWidth.isActive = true
         annotationTextViewHeight = annotationTextView.heightAnchor.constraint(equalToConstant: 50)
         annotationTextViewHeight.isActive = true
-        
-        self.addSubview(canvasView)
-        canvasView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        canvasView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        canvasView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        canvasView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
         self.addSubview(topLeftStackView)
         topLeftStackView.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
@@ -215,11 +215,8 @@ class CameraOverlayView: UIView {
                 
                 self.canvasView.isUserInteractionEnabled = true
                 
-                self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight,
-                                                                     selectedColor: { color in
-                                                                        self.canvasView.tool = PKInkingTool(.pen, color: color, width: 10)
-                })
-                self.annotationTextView.reloadInputViews()
+                self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
+                self.annotationTextView.reloadInputViews()                
             case .keyboard:
                 self.menuButton.isHidden = true
                 
@@ -240,6 +237,12 @@ class CameraOverlayView: UIView {
             .didChangeAuthorization
             .sink { status in
                 self.process(authorization: status)
+        }
+        .store(in: &cancellables)
+        
+        Current.drawingColorSubject
+            .sink { color in
+                self.canvasView.tool = PKInkingTool(.pen, color: color.withAlphaComponent(0.8), width: 10)
         }
         .store(in: &cancellables)
     }
