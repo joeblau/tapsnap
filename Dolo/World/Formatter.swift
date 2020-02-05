@@ -21,6 +21,13 @@ struct Formatter {
        let f = RelativeDateTimeFormatter()
         return f
     }()
+    
+    let progress: DateComponentsFormatter = {
+        let f = DateComponentsFormatter()
+        f.allowedUnits = [.hour, .minute, .second]
+        f.unitsStyle = .full
+        return f
+    }()
 }
 
 extension CNPostalAddress {

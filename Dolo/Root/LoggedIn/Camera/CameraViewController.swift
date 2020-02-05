@@ -69,7 +69,7 @@ class CameraViewController: UIViewController {
         contactEditorView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         view.addSubview(contactsCollectionView)
-        contactsCollectionView.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        contactsCollectionView.heightAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2)).isActive = true
         contactsCollectionView.bottomAnchor.constraint(equalTo: contactEditorView.topAnchor).isActive = true
         contactsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         contactsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true

@@ -11,6 +11,7 @@
 		ED2180AA23E9BD7000C6F5DC /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180A923E9BD7000C6F5DC /* UILabel+Extension.swift */; };
 		ED2180AC23EA5CF200C6F5DC /* MusicPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180AB23EA5CF200C6F5DC /* MusicPlaybackView.swift */; };
 		ED2180AE23EA6BFE00C6F5DC /* TextOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180AD23EA6BFE00C6F5DC /* TextOverlayView.swift */; };
+		ED2180B023EB0FEC00C6F5DC /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2180AF23EB0FEC00C6F5DC /* NowPlayingPreviewTableViewCell.swift */; };
 		ED37CB4723E6986700D2C2BE /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4623E6986700D2C2BE /* OnboardingViewController.swift */; };
 		ED37CB4923E6988100D2C2BE /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4823E6988100D2C2BE /* CameraViewController.swift */; };
 		ED37CB4D23E69DE800D2C2BE /* CameraOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED37CB4C23E69DE800D2C2BE /* CameraOverlayView.swift */; };
@@ -55,6 +56,7 @@
 		ED2180A923E9BD7000C6F5DC /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		ED2180AB23EA5CF200C6F5DC /* MusicPlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlaybackView.swift; sourceTree = "<group>"; };
 		ED2180AD23EA6BFE00C6F5DC /* TextOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOverlayView.swift; sourceTree = "<group>"; };
+		ED2180AF23EB0FEC00C6F5DC /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		ED37CB4423E54A3B00D2C2BE /* Dolo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dolo.entitlements; sourceTree = "<group>"; };
 		ED37CB4623E6986700D2C2BE /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		ED37CB4823E6988100D2C2BE /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				ED2180AB23EA5CF200C6F5DC /* MusicPlaybackView.swift */,
 				ED37CB5623E7496F00D2C2BE /* RecordProgressView.swift */,
 				ED2180AD23EA6BFE00C6F5DC /* TextOverlayView.swift */,
+				ED2180AF23EB0FEC00C6F5DC /* NowPlayingPreviewTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -373,6 +376,7 @@
 				EDB014F323E53FAC001B61C2 /* AppDelegate.swift in Sources */,
 				ED37CB4723E6986700D2C2BE /* OnboardingViewController.swift in Sources */,
 				ED37CB6E23E855E400D2C2BE /* PlaybackViewController.swift in Sources */,
+				ED2180B023EB0FEC00C6F5DC /* NowPlayingPreviewTableViewCell.swift in Sources */,
 				ED37CB4D23E69DE800D2C2BE /* CameraOverlayView.swift in Sources */,
 				ED37CB5C23E7530300D2C2BE /* ContactCollectionViewCell.swift in Sources */,
 				ED2180AE23EA6BFE00C6F5DC /* TextOverlayView.swift in Sources */,

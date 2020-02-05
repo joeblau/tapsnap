@@ -8,6 +8,8 @@
 	<string>Tap Snap uses your location to show your friends where you are</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Tap Snap uses apple music to enhance your messages</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

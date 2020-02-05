@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class DrawingToolsView: UIVisualEffectView {
+final class DrawingToolsView: UIView {
 
     private let intrinsicHeight: CGFloat
     private let colorButtons: [UIButton]
@@ -48,7 +48,7 @@ final class DrawingToolsView: UIVisualEffectView {
         colorPickerStackView.translatesAutoresizingMaskIntoConstraints = false
         colorPickerStackView.distribution = .equalSpacing
         
-        super.init(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+        super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         
         do {
@@ -75,7 +75,7 @@ final class DrawingToolsView: UIVisualEffectView {
     // MARK: - Configure Views
     
     private func configureViews() {
-        contentView.addSubview(colorPickerStackView)
+        addSubview(colorPickerStackView)
         colorPickerStackView.topAnchor.constraint(equalTo: topAnchor, constant: 32).isActive = true
         colorPickerStackView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         colorPickerStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true

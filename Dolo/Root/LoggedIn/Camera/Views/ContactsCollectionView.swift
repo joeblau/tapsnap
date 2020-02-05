@@ -22,7 +22,7 @@ class ContactsCollectionView: UICollectionView {
             
             let containerGroup = NSCollectionLayoutGroup
                 .vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25),
-                                                             heightDimension: .absolute(200)),
+                                                             heightDimension: .absolute(UIScreen.main.bounds.width / 2)),
                           subitems: [contactItem])
             
             let section = NSCollectionLayoutSection(group: containerGroup)

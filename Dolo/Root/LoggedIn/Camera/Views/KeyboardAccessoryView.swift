@@ -21,15 +21,15 @@ final class KeyboardAccessoryView: UIVisualEffectView {
     
     init() {
         textKeyboard.setImage(UIImage(systemName: "textbox"), for: .normal)
-        textKeyboard.setBackgroundColor(color: .label, for: .selected)
+        textKeyboard.setBackgroundColor(color: .init(white: 1.0, alpha: 0.7), for: .selected)
         textKeyboard.keyboardAccessory()
         
         drawToolPicker.setImage(UIImage(systemName: "scribble"), for: .normal)
-        drawToolPicker.setBackgroundColor(color: .label, for: .selected)
+        drawToolPicker.setBackgroundColor(color: .init(white: 1.0, alpha: 0.7), for: .selected)
         drawToolPicker.keyboardAccessory()
         
         musicPlayback.setImage(UIImage(systemName: "music.note"), for: .normal)
-        musicPlayback.setBackgroundColor(color: .label, for: .selected)
+        musicPlayback.setBackgroundColor(color: .init(white: 1.0, alpha: 0.7), for: .selected)
         musicPlayback.keyboardAccessory()
         
         doneButton.setTitle("Done", for: .normal)
