@@ -17,13 +17,6 @@ class CameraOverlayView: UIView {
     let kButtonSize: CGFloat = 48
     let kButtonPadding: CGFloat = 8
     
-    // Top left
-    let menuButton = UIButton(type: .custom)
-    let clearButton = UIButton(type: .custom)
-    
-    // Top right
-    let notifictionsButton = UIButton(type: .custom)
-    
     // Bottom right
     let musicButton = UIButton(type: .custom)
     let persistButton = UIButton(type: .custom)
@@ -43,21 +36,9 @@ class CameraOverlayView: UIView {
 
     var zoomScale: CGFloat = 1.0
     
-    let topLeftStackView: UIStackView
-    let topRightStackView: UIStackView
     let bottomRightStackView: UIStackView
     
     override init(frame: CGRect) {
-        menuButton.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
-        menuButton.floatButton()
-        
-        clearButton.setImage(UIImage(systemName: "clear"), for: .normal)
-        clearButton.floatButton()
-        clearButton.isHidden = true
-        
-        notifictionsButton.setTitle("3", for: .normal)
-        notifictionsButton.notification(diameter: kButtonSize)
-
         musicButton.setImage(UIImage(systemName: "speaker.slash"), for: .normal)
         musicButton.setImage(UIImage(systemName: "speaker"), for: .selected)
         musicButton.floatButton()
@@ -77,16 +58,6 @@ class CameraOverlayView: UIView {
         flipButton.floatButton()
         
         do {
-            topLeftStackView = UIStackView(arrangedSubviews: [menuButton, clearButton])
-            topLeftStackView.translatesAutoresizingMaskIntoConstraints = false
-            topLeftStackView.distribution = .fillEqually
-            topLeftStackView.spacing = UIStackView.spacingUseSystem
-            
-            topRightStackView = UIStackView(arrangedSubviews: [notifictionsButton])
-            topRightStackView.translatesAutoresizingMaskIntoConstraints = false
-            topRightStackView.distribution = .fillEqually
-            topRightStackView.spacing = UIStackView.spacingUseSystem
-            
             bottomRightStackView = UIStackView(arrangedSubviews: [musicButton, persistButton, locationButton, textboxButton, flipButton])
             bottomRightStackView.translatesAutoresizingMaskIntoConstraints = false
             bottomRightStackView.distribution = .fillEqually
@@ -126,31 +97,28 @@ class CameraOverlayView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Configure Button Targets
     
     private func configureButtonTargets() {
-        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
         musicButton.addTarget(self, action: #selector(toggleMusicAction), for: .touchUpInside)
         persistButton.addTarget(self, action: #selector(togglePersistAction), for: .touchUpInside)
         locationButton.addTarget(self, action: #selector(toggleLocationAction), for: .touchUpInside)
-        notifictionsButton.addTarget(self, action: #selector(showPlayback), for: .touchUpInside)
         textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
-        clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
         flipButton.addTarget(self, action: #selector(flipCameraAction), for: .touchUpInside)
     }
     
     // MARK: - Configure Views
     
     private func configureViews() {
-        [menuButton, clearButton, musicButton, persistButton, locationButton, textboxButton, flipButton].forEach { button in
+        [musicButton, persistButton, locationButton, textboxButton, flipButton].forEach { button in
             button.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
             button.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         }
         
         self.addSubview(recordingProgressView)
         recordingProgressView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        recordingProgressView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+        recordingProgressView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
         recordingProgressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         recordingProgressView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
@@ -167,18 +135,6 @@ class CameraOverlayView: UIView {
         annotationTextViewWidth.isActive = true
         annotationTextViewHeight = annotationTextView.heightAnchor.constraint(equalToConstant: 50)
         annotationTextViewHeight.isActive = true
-        
-        self.addSubview(topLeftStackView)
-        topLeftStackView.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        topLeftStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        topLeftStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
-        topLeftStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
-        
-        self.addSubview(topRightStackView)
-        topRightStackView.widthAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
-        topRightStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-        topRightStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
-        topRightStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: kButtonPadding).isActive = true
         
         self.addSubview(bottomRightStackView)
         bottomRightStackView.widthAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
@@ -215,36 +171,27 @@ class CameraOverlayView: UIView {
         Current.editingSubject.sink { editState in
             switch editState {
             case .none:
-                self.menuButton.isHidden = false
-                self.clearButton.isHidden = true
                 self.canvasView.isUserInteractionEnabled = false
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.resignFirstResponder()
             case .keyboard:
-                self.menuButton.isHidden = true
-                
                 self.canvasView.isUserInteractionEnabled = false
                 
                 self.annotationTextView.inputView?.removeFromSuperview()
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.reloadInputViews()
             case .drawing:
-                self.menuButton.isHidden = true
-                
                 self.canvasView.isUserInteractionEnabled = true
                 
                 self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
                 self.annotationTextView.reloadInputViews()                
 
             case .music:
-                self.menuButton.isHidden = true
-                 
                  self.canvasView.isUserInteractionEnabled = true
                  
                  self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
                  self.annotationTextView.reloadInputViews()   
             case .clear:
-                self.clearButton.isHidden = true
                 self.annotationTextView.text = ""
                 self.canvasView.drawing = PKDrawing()
             }
@@ -286,19 +233,7 @@ class CameraOverlayView: UIView {
         Current.locationManager.requestWhenInUseAuthorization()
     }
     
-    @objc private func showPlayback() {
-        Current.presentViewContollersSubject.value = .playback
-    }
-    
-    @objc private func showMenuAction() {
-         Current.presentViewContollersSubject.value = .menu
-    }
-    
     @objc private func zoomAction() {}
-    
-    @objc private func clearEditingAction() {
-        Current.editingSubject.value = .clear
-    }
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -341,7 +276,8 @@ class CameraOverlayView: UIView {
     }
     
     private func processClearButton() {
-        clearButton.isHidden = (canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty)
+        // Stream
+//        clearButton.isHidden = (canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty)
     }
 }
 

@@ -10,8 +10,8 @@ import UIKit
 
 class LoggedInViewController: UIViewController {
 
-    weak var camera: CameraViewController? {
-        return CameraViewController()
+    weak var camera: UINavigationController? {
+        return UINavigationController(rootViewController: CameraViewController())
     }
     
     override func viewDidLoad() {
@@ -24,6 +24,7 @@ class LoggedInViewController: UIViewController {
         
         // Show camera
         if let camera = camera {
+            camera.modalPresentationStyle = .fullScreen
             present(camera, animated: false) {}
         }
         // show settings

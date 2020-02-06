@@ -11,7 +11,15 @@ import Combine
 import AVFoundation
 
 class CameraViewController: UIViewController {
-
+    let kButtonSize: CGFloat = 48
+    
+    // Top left
+    let menuButton = UIButton(type: .custom)
+    let clearButton = UIButton(type: .custom)
+    
+    // Top right
+    let notifictionsButton = UIButton(type: .custom)
+    
     let itemsInSection = [15]
     var previewView: CameraPreviewView?
     let session = AVCaptureSession()
@@ -21,13 +29,22 @@ class CameraViewController: UIViewController {
     let contactEditorView = ContactEditorView()
     var cancellables = Set<AnyCancellable>()
     
-    weak var playback: PlaybackViewController? {
-        return PlaybackViewController()
+    weak var playback: UINavigationController? {
+        return UINavigationController(rootViewController: PlaybackViewController())
     }
     
     init() {
+        menuButton.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
+        menuButton.floatButton()
+        
+        clearButton.setImage(UIImage(systemName: "clear"), for: .normal)
+        clearButton.floatButton()
+        clearButton.isHidden = true
+        
+        notifictionsButton.setTitle("3", for: .normal)
+        notifictionsButton.notification(diameter: 20)
+        
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .currentContext
         view.backgroundColor = .systemBackground
     }
     
@@ -37,6 +54,9 @@ class CameraViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: menuButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notifictionsButton)
         previewView = CameraPreviewView(session: session)
         
         contactsCollectionView.register(ContactCollectionViewCell.self,
@@ -45,7 +65,9 @@ class CameraViewController: UIViewController {
         contactsCollectionView.dataSource = self
         
         do {
+            configureButtonTargets()
             configureStreams()
+            
         }
         
         sessionQueue.async {
@@ -81,10 +103,36 @@ class CameraViewController: UIViewController {
         previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
+    // MARK: - Configure Views
     
+    private func configureViews() {
+        [menuButton, clearButton].forEach { button in
+            button.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+            button.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
+        }
+    }
     // MARK: - Configure Streams
     
     private func configureStreams() {
+        
+        Current.editingSubject.sink { editState in
+            switch editState {
+            case .none:
+                self.menuButton.isHidden = false
+                self.clearButton.isHidden = true
+            case .keyboard:
+//                self.navigationItem.leftBarButtonItem = nil
+                self.menuButton.isHidden = true
+            case .drawing:
+                self.menuButton.isHidden = true
+            case .music:
+                self.menuButton.isHidden = true
+            case .clear:
+                self.clearButton.isHidden = true
+            }
+        }
+        .store(in: &cancellables)
+        
         Current.activeCameraSubject
             .sink { position in
                 if position != .front {
@@ -110,16 +158,32 @@ class CameraViewController: UIViewController {
         .store(in: &cancellables)
         
     }
+    // MARK: - Configure Button Targets
+    
+    private func configureButtonTargets() {
+        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
+        notifictionsButton.addTarget(self, action: #selector(showPlaybackAction), for: .touchUpInside)
+        clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
+    }
+    
     
     // MARK: - Actions
     
-    @objc func editContacts() {
-        
+    @objc private func showPlaybackAction() {
+        Current.presentViewContollersSubject.value = .playback
     }
     
-    @objc func searchContacts() {
-        
+    @objc private func showMenuAction() {
+         Current.presentViewContollersSubject.value = .menu
     }
+    
+    @objc private func clearEditingAction() {
+        Current.editingSubject.value = .clear
+    }
+    
+    @objc func editContacts() {}
+    
+    @objc func searchContacts() {}
     
     // MARK: - Private
     private let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera, .builtInTrueDepthCamera],
