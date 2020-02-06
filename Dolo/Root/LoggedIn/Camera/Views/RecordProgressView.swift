@@ -11,7 +11,7 @@ import Combine
 
 class RecordProgressView: UIView {
 
-    var progressView: UIVisualEffectView?
+    var progressView: UIView?
     var widthConstraint: NSLayoutConstraint!
     var cancellables = Set<AnyCancellable>()
     
@@ -42,7 +42,8 @@ class RecordProgressView: UIView {
                 }, completion: nil)
             case .stop:
                 self.progressView?.removeFromSuperview()
-                self.progressView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+                self.progressView = UIView()
+                self.progressView?.backgroundColor = .systemRed
                 self.progressView?.translatesAutoresizingMaskIntoConstraints = false
 
                 self.addSubview(self.progressView!)
