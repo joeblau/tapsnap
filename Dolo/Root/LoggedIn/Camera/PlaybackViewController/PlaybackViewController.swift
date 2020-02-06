@@ -7,32 +7,18 @@
 //
 
 import UIKit
-import AVKit
-import MapKit
 
 class PlaybackViewController: UIViewController {
 
-    let playbackView: PlaybackView
-    let mapView = PlaybackMapView()
-    
-    let playbackStack: UIStackView
+    var swipeableView: ZLSwipeableView = ZLSwipeableView()
+
     
     init() {
-        guard let url = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8") else {
-            fatalError("can't get url")
-        }
-        playbackView = PlaybackView(url: url,
-        groupName: "us")
-        
-        playbackStack = UIStackView(arrangedSubviews: [playbackView, mapView])
-        playbackStack.translatesAutoresizingMaskIntoConstraints = false
-        playbackStack.axis = .vertical
-        playbackStack.distribution = .fillEqually
-        
+        swipeableView.translatesAutoresizingMaskIntoConstraints = false
+        swipeableView.allowedDirection = .All
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overCurrentContext
-        view.backgroundColor = .systemBackground
-        
+        view.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.5)
         do {
             configureViews()
         }
@@ -45,15 +31,22 @@ class PlaybackViewController: UIViewController {
     // MARK: - Configure Views
     
     private func configureViews() {
-        view.addSubview(playbackStack)
-        playbackStack.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        playbackStack.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        playbackStack.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        playbackStack.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        view.addSubview(swipeableView)
+        swipeableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        swipeableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        swipeableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        swipeableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        playbackView.play()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        swipeableView.nextView = {
+            return self.nextTapSnapPlaybackView()
+        }
     }
+    
+    func nextTapSnapPlaybackView() -> UIView? {
+        return TapSnapPlaybackView()
+    }
+
 }

@@ -69,7 +69,6 @@ class NowPlayingPreviewTableViewCell: UITableViewCell {
         
         do {
             artworkImageView.translatesAutoresizingMaskIntoConstraints = false
-            artworkImageView.image = UIImage(systemName: "music.mic")
             artworkImageView.layer.masksToBounds = true
             artworkImageView.layer.cornerRadius = 8
             artworkImageView.translatesAutoresizingMaskIntoConstraints = false

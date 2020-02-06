@@ -58,16 +58,16 @@ class CameraOverlayView: UIView {
         notifictionsButton.setTitle("3", for: .normal)
         notifictionsButton.notification(diameter: kButtonSize)
 
-        musicButton.setImage(UIImage(systemName: "speaker.slash.fill"), for: .normal)
-        musicButton.setImage(UIImage(systemName: "speaker.fill"), for: .selected)
+        musicButton.setImage(UIImage(systemName: "speaker.slash"), for: .normal)
+        musicButton.setImage(UIImage(systemName: "speaker"), for: .selected)
         musicButton.floatButton()
         
-        persistButton.setImage(UIImage(systemName: "lock.slash.fill"), for: .normal)
-        persistButton.setImage(UIImage(systemName: "lock.fill"), for: .selected)
+        persistButton.setImage(UIImage(systemName: "lock.slash"), for: .normal)
+        persistButton.setImage(UIImage(systemName: "lock"), for: .selected)
         persistButton.floatButton()
         
-        locationButton.setImage(UIImage(systemName: "location.slash.fill"), for: .normal)
-        locationButton.setImage(UIImage(systemName: "location.fill"), for: .selected)
+        locationButton.setImage(UIImage(systemName: "location.slash"), for: .normal)
+        locationButton.setImage(UIImage(systemName: "location"), for: .selected)
         locationButton.floatButton()
         
         textboxButton.setImage(UIImage(systemName: "keyboard"), for: .normal)

@@ -67,6 +67,7 @@ class PlaybackMapView: MKMapView {
         showsCompass = false
         showsScale = false
         showsBuildings = true
+        isUserInteractionEnabled = false
         translatesAutoresizingMaskIntoConstraints = false
         register(PersonAnnotationView.self, forAnnotationViewWithReuseIdentifier: PersonAnnotationView.id)
         
@@ -99,6 +100,8 @@ class PlaybackMapView: MKMapView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit { removeFromSuperview() }
     
     // MARK: - Configure Button Targets
     

@@ -60,6 +60,8 @@ final class PlaybackView: UIView {
         playerLayer.frame = bounds
     }
     
+    deinit { removeFromSuperview() }
+    
     // MARK: - Configure Views
     
     private func configureViews() {
