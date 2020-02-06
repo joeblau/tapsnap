@@ -67,7 +67,6 @@ class PlaybackMapView: MKMapView {
         showsCompass = false
         showsScale = false
         showsBuildings = true
-        isUserInteractionEnabled = false
         translatesAutoresizingMaskIntoConstraints = false
         register(PersonAnnotationView.self, forAnnotationViewWithReuseIdentifier: PersonAnnotationView.id)
         
@@ -131,8 +130,6 @@ class PlaybackMapView: MKMapView {
         timeDistanceLocation.heightAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
         timeDistanceLocation.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
         timeDistanceLocation.trailingAnchor.constraint(equalTo: mapActionsStack.leadingAnchor, constant: -kButtonPadding).isActive = true
-        
-
     }
     
     // MARK: - Configure Streams

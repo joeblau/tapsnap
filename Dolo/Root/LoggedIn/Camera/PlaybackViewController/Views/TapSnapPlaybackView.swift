@@ -15,18 +15,16 @@ import MapKit
 class TapSnapPlaybackView: UIView {
 
     let playbackView: PlaybackView
-//    let mapView = PlaybackMapView()
+    let mapView = PlaybackMapView()
     let playbackStack: UIStackView
     
     override init(frame: CGRect) {
         guard let url = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8") else {
             fatalError("can't get url")
         }
-        playbackView = PlaybackView(url: url, groupName: "us")
+        playbackView = PlaybackView(url: url)
         
-//        playbackStack = UIStackView(arrangedSubviews: [playbackView, mapView])
-//        playbackStack = UIStackView(arrangedSubviews: [mapView])
-        playbackStack = UIStackView(arrangedSubviews: [playbackView])
+        playbackStack = UIStackView(arrangedSubviews: [playbackView, mapView])
         playbackStack.translatesAutoresizingMaskIntoConstraints = false
         playbackStack.axis = .vertical
         playbackStack.distribution = .fillEqually
@@ -44,7 +42,6 @@ class TapSnapPlaybackView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     // MARK: - Configure Views
     

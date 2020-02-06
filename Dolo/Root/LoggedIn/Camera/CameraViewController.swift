@@ -30,7 +30,10 @@ class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
     
     weak var playback: UINavigationController? {
-        return UINavigationController(rootViewController: PlaybackViewController())
+        let playback = UINavigationController(rootViewController: PlaybackViewController())
+        playback.modalPresentationStyle = .overCurrentContext
+        
+        return playback
     }
     
     init() {
@@ -41,7 +44,7 @@ class CameraViewController: UIViewController {
         clearButton.floatButton()
         clearButton.isHidden = true
         
-        notifictionsButton.setTitle("3", for: .normal)
+        notifictionsButton.setTitle("8", for: .normal)
         notifictionsButton.notification(diameter: 20)
         
         super.init(nibName: nil, bundle: nil)
@@ -67,7 +70,6 @@ class CameraViewController: UIViewController {
         do {
             configureButtonTargets()
             configureStreams()
-            
         }
         
         sessionQueue.async {
@@ -213,8 +215,6 @@ class CameraViewController: UIViewController {
         }
         self.session.commitConfiguration()
     }
-    
-    
     
     private func addCaptureDeviceInput(videoDevice: AVCaptureDevice) {
          do {

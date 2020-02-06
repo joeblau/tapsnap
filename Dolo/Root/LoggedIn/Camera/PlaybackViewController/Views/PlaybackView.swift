@@ -10,45 +10,18 @@ import UIKit
 import AVKit
 
 final class PlaybackView: UIView {
-    private let backButton = UIButton(type: .system)
-    private let groupNameButton = UIButton(type: .system)
-    private let nextButton = UIButton(type: .system)
-    private let navigationStackView: UIStackView
     private let player: AVPlayer
     private let playerLayer: AVPlayerLayer
     
-    init(url: URL, groupName: String) {
+    init(url: URL) {
         
         player = AVPlayer(url: url)
         playerLayer = AVPlayerLayer(player: player)
         playerLayer.videoGravity = .resizeAspectFill
         
-        do {
-            backButton.setImage(UIImage(systemName: "chevron.left"), for: .normal)
-            backButton.floatButton()
-        }
-        
-        do {
-            groupNameButton.setTitle(groupName, for: .normal)
-            groupNameButton.floatButton()
-        }
-        
-        do {
-            nextButton.setImage(UIImage(systemName: "forward.end"), for: .normal)
-            nextButton.floatButton()
-        }
-        
-        navigationStackView = UIStackView(arrangedSubviews: [backButton, groupNameButton, nextButton])
-        navigationStackView.translatesAutoresizingMaskIntoConstraints = false
-        navigationStackView.distribution = .equalSpacing
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         layer.addSublayer(playerLayer)
-        
-        do {
-            configureViews()
-            configureButtonTargets()
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -61,35 +34,6 @@ final class PlaybackView: UIView {
     }
     
     deinit { removeFromSuperview() }
-    
-    // MARK: - Configure Views
-    
-    private func configureViews() {
-        addSubview(navigationStackView)
-        navigationStackView.heightAnchor.constraint(equalToConstant: 56).isActive = true
-        navigationStackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
-        navigationStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16).isActive = true
-        navigationStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16).isActive = true
-    }
-    
-    private func configureButtonTargets() {
-        backButton.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
-        groupNameButton.addTarget(self, action: #selector(groupSettingsAction), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
-    }
-    
-    @objc func dismissAction() {
-        Current.presentViewContollersSubject.value = .none
-    }
-    
-    @objc func groupSettingsAction() {
-        
-    }
-    
-    @objc func nextAction() {
-        
-    }
-
     
     
     public func play() {
