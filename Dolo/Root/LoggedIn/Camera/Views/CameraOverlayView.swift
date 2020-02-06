@@ -37,6 +37,7 @@ class CameraOverlayView: UIView {
     var annotationTextViewWidth: NSLayoutConstraint!
     var annotationTextViewHeight: NSLayoutConstraint!
     
+    let indeterminateProgressView = IndeterminateProgressView()
     let recordingProgressView = RecordProgressView()
     var drawingToolsViewHeight: CGFloat = 340
 
@@ -115,6 +116,11 @@ class CameraOverlayView: UIView {
             name: UIResponder.keyboardWillShowNotification,
             object: nil
         )
+        
+        indeterminateProgressView.startAnimating()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            self.indeterminateProgressView.stopAnimating(withExitTransition: true, completion: nil)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -179,6 +185,12 @@ class CameraOverlayView: UIView {
         bottomRightStackView.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         bottomRightStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
         bottomRightStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -kButtonPadding).isActive = true
+        
+        addSubview(indeterminateProgressView)
+        indeterminateProgressView.heightAnchor.constraint(equalToConstant: 4).isActive = true
+        indeterminateProgressView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        indeterminateProgressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        indeterminateProgressView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
     
     private func configureGestureRecoginzers() {
