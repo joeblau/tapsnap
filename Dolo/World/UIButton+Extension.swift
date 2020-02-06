@@ -39,7 +39,7 @@ extension UIButton {
         backgroundColor = .systemRed
         tintColor = .label
         layer.cornerRadius = diameter/2.0
-        layer.borderWidth = 3
+        layer.borderWidth = 2
         layer.borderColor = UIColor.white.cgColor
     }
     

@@ -87,11 +87,6 @@ class CameraOverlayView: UIView {
             name: UIResponder.keyboardWillShowNotification,
             object: nil
         )
-        
-        indeterminateProgressView.startAnimating()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            self.indeterminateProgressView.stopAnimating(withExitTransition: true, completion: nil)
-        }
     }
     
     required init?(coder: NSCoder) {
@@ -208,6 +203,18 @@ class CameraOverlayView: UIView {
         Current.drawingColorSubject
             .sink { color in
                 self.canvasView.tool = PKInkingTool(.pen, color: color.withAlphaComponent(0.8), width: 16)
+        }
+        .store(in: &cancellables)
+        
+        Current.recordingSubject.sink { action in
+            switch action {
+            case .start: break
+            case .stop:
+                self.indeterminateProgressView.startAnimating()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    self.indeterminateProgressView.stopAnimating(withExitTransition: true, completion: nil)
+                }
+            }
         }
         .store(in: &cancellables)
     }
