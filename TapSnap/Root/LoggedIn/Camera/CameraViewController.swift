@@ -27,13 +27,19 @@ class CameraViewController: UIViewController {
     
     let contactPageControl = UIPageControl()
     let contactsCollectionView = ContactsCollectionView()
+    
+    weak var search: UINavigationController? {
+        let nav = UINavigationController(rootViewController: SearchContactsViewController())
+        return nav
+    }
+    
     var cancellables = Set<AnyCancellable>()
     
     weak var playback: UINavigationController? {
-        let playback = UINavigationController(rootViewController: PlaybackViewController())
-        playback.modalPresentationStyle = .overCurrentContext
+        let nav = UINavigationController(rootViewController: PlaybackViewController())
+        nav.modalPresentationStyle = .overCurrentContext
         
-        return playback
+        return nav
     }
     
     init() {
@@ -73,7 +79,7 @@ class CameraViewController: UIViewController {
             let pageControlButton = UIBarButtonItem(customView: contactPageControl)
             contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))
             
-            let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: nil)
+            let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction))
             searchButton.tintColor = .label
 
             let smallSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
@@ -197,7 +203,10 @@ class CameraViewController: UIViewController {
     
     @objc func editContacts() {}
     
-    @objc func searchContacts() {}
+    @objc func searchContactsAction() {
+        guard let search = search else { return }
+        present(search, animated: true, completion: nil)
+    }
     
     // MARK: - Private
     private let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera, .builtInTrueDepthCamera],
