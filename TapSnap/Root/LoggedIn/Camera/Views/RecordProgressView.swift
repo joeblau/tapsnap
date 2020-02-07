@@ -40,6 +40,18 @@ class RecordProgressView: UIView {
                                options: .curveLinear, animations: {
                                 self.layoutIfNeeded()
                 }, completion: nil)
+                
+                UIView.animate(withDuration: 1,
+                               delay: 0.0,
+                               options: [.repeat, .autoreverse],
+                               animations: {
+                                                            
+                                self.progressView?.backgroundColor = UIColor(displayP3Red: 0.500,
+                                                                             green: 0.134,
+                                                                             blue: 0.115,
+                                                                             alpha: 1.0)
+                            },
+                               completion: nil)
             case .stop:
                 self.progressView?.removeFromSuperview()
                 self.progressView = UIView()
