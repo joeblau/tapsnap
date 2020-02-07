@@ -25,8 +25,8 @@ class CameraViewController: UIViewController {
     let session = AVCaptureSession()
     let sessionQueue = DispatchQueue(label: "session queue")
     
+    let contactPageControl = UIPageControl()
     let contactsCollectionView = ContactsCollectionView()
-    let contactEditorView = ContactEditorView()
     var cancellables = Set<AnyCancellable>()
     
     weak var playback: UINavigationController? {
@@ -61,10 +61,32 @@ class CameraViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notifictionsButton)
         previewView = CameraPreviewView(session: session)
         
+        
+        do {
+            let editButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: nil)
+            editButton.tintColor = .label
+            let recentsButton = UIBarButtonItem(image: UIImage(systemName: "clock", withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
+                                                style: .plain,
+                                                target: nil, action: nil)
+            recentsButton.tintColor = .white
+            
+            let pageControlButton = UIBarButtonItem(customView: contactPageControl)
+            contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))
+            
+            let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: nil)
+            searchButton.tintColor = .label
+
+            let smallSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+            smallSpacer.width = 40
+            
+            let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+            toolbarItems = [editButton, spacer, pageControlButton, spacer,  searchButton]
+        }
         contactsCollectionView.register(ContactCollectionViewCell.self,
                                              forCellWithReuseIdentifier: ContactCollectionViewCell.id)
         contactsCollectionView.isPagingEnabled = true
         contactsCollectionView.dataSource = self
+        contactsCollectionView.delegate = self
         contactsCollectionView.bounces = false
         
         do {
@@ -86,15 +108,15 @@ class CameraViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        view.addSubview(contactEditorView)
-        contactEditorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
-        contactEditorView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        contactEditorView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        contactEditorView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//        view.addSubview(contactEditorView)
+//        contactEditorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50).isActive = true
+//        contactEditorView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+//        contactEditorView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+//        contactEditorView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         view.addSubview(contactsCollectionView)
         contactsCollectionView.heightAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2)).isActive = true
-        contactsCollectionView.bottomAnchor.constraint(equalTo: contactEditorView.topAnchor).isActive = true
+        contactsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         contactsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         contactsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         

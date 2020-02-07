@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0878B7206A715DBEFEADAB7C /* ContactEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D22122A2BDFE7B2992BB791 /* ContactEditorView.swift */; };
 		0BB7CAA9C661FCDBC279BEFD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769C4D077B7CFCA8544D1A3E /* SceneDelegate.swift */; };
 		155FD04BF3EA39EBD754BDD6 /* ContactsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973CEDB8780E17647226ACC0 /* ContactsCollectionView.swift */; };
 		18DFAD298AD224C785C85011 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7052B4CE08D672F73ECB0E2C /* OnboardingViewController.swift */; };
@@ -40,6 +39,7 @@
 		E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
 		EC8B85F3F9C2875B29FE41D8 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F420A6109186EC43F0536C28 /* Scheduler.swift */; };
+		ED22A29623ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED22A29523ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift */; };
 		F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */; };
 		F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
@@ -81,10 +81,9 @@
 		71FF49A0D75D26D4417F1887 /* PlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
 		75B33AE9F232CA872F98978A /* DrawingToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolsView.swift; sourceTree = "<group>"; };
 		769C4D077B7CFCA8544D1A3E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		780A8DC04979D988BFBE6D14 /* Web */ = {isa = PBXFileReference; includeInIndex = 0; path = Web; sourceTree = BUILT_PRODUCTS_DIR; };
+		780A8DC04979D988BFBE6D14 /* Web */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = text; path = Web; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOverlayView.swift; sourceTree = "<group>"; };
 		880AA06728253910B5D1F81A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		8D22122A2BDFE7B2992BB791 /* ContactEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactEditorView.swift; sourceTree = "<group>"; };
 		935656CC9CE2FB280661178F /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		94344FC87696F3296346CA01 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		973CEDB8780E17647226ACC0 /* ContactsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
@@ -99,6 +98,7 @@
 		D092867E340FFAEA0055EC8C /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		DCDFADC8F3B83B1B23893107 /* PlaybackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackMapView.swift; sourceTree = "<group>"; };
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
+		ED22A29523ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDelegate.swift"; sourceTree = "<group>"; };
 		F420A6109186EC43F0536C28 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TapsnapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5A2FC5490E9793C4E6270D8 /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -194,7 +194,6 @@
 				7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */,
 				94344FC87696F3296346CA01 /* CameraPreviewView.swift */,
 				B70F817896C777AFB3FC0433 /* ContactCollectionViewCell.swift */,
-				8D22122A2BDFE7B2992BB791 /* ContactEditorView.swift */,
 				973CEDB8780E17647226ACC0 /* ContactsCollectionView.swift */,
 				75B33AE9F232CA872F98978A /* DrawingToolsView.swift */,
 				F9EEDD1D28EB6874C497953C /* IndeterminateProgressView.swift */,
@@ -284,6 +283,7 @@
 			children = (
 				69EE72D052B3BCCB27DDDBC4 /* CameraViewController.swift */,
 				B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */,
+				ED22A29523ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift */,
 				0FC695A1287DAB74F0380D59 /* PlaybackViewController */,
 				6217B4B7FA2175C2D4D28CFF /* Views */,
 			);
@@ -369,6 +369,7 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				en,
 				Base,
 			);
 			mainGroup = 6803BFD8A97340E540815774;
@@ -409,7 +410,6 @@
 				78FD54943CAFF8C9035664DE /* CameraViewController+UICollectionViewDataSource.swift in Sources */,
 				4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */,
 				4296ABD2EB34055CB28AA8D5 /* ContactCollectionViewCell.swift in Sources */,
-				0878B7206A715DBEFEADAB7C /* ContactEditorView.swift in Sources */,
 				155FD04BF3EA39EBD754BDD6 /* ContactsCollectionView.swift in Sources */,
 				391FCAFB147C76F900B93BCE /* Direction.swift in Sources */,
 				FBDB59DE7FE0369A08F6E6C8 /* Dolo.xcdatamodeld in Sources */,
@@ -431,6 +431,7 @@
 				0BB7CAA9C661FCDBC279BEFD /* SceneDelegate.swift in Sources */,
 				EC8B85F3F9C2875B29FE41D8 /* Scheduler.swift in Sources */,
 				FA7382475E6686911F0C7470 /* TapSnapPlaybackView.swift in Sources */,
+				ED22A29623ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
 				3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */,
 				BE7021A6E63D3B1B771DE218 /* UIButton+Extension.swift in Sources */,
 				F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */,

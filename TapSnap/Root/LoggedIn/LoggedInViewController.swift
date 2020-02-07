@@ -25,10 +25,13 @@ class LoggedInViewController: UIViewController {
         // Show camera
         if let camera = camera {
             camera.modalPresentationStyle = .fullScreen
+            camera.isToolbarHidden = false
             present(camera, animated: false) {}
         }
         // show settings
     }
+    
+    @objc func test() {}
 
 
 
