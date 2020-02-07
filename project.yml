@@ -1,0 +1,25 @@
+
+name: TapSnap
+settings:
+  DEVELOPMENT_TEAM: K78G42H4U2
+options:
+  createIntermediateGroups: true
+  bundleIdPrefix: app.tapsnap
+  transitivelyLinkDependencies: true
+targets:
+  TapSnap:
+    type: application
+    platform: iOS
+    scheme:
+      testTargets:
+        - TapSnapTests
+      gatherCoverageData: true
+    sources:
+      - TapSnap
+  TapSnapTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - TapSnapTests
+    dependencies:
+      - target: TapSnap

@@ -66,6 +66,7 @@ class CameraViewController: UIViewController {
                                              forCellWithReuseIdentifier: ContactCollectionViewCell.id)
         contactsCollectionView.isPagingEnabled = true
         contactsCollectionView.dataSource = self
+        contactsCollectionView.bounces = false
         
         do {
             configureButtonTargets()
