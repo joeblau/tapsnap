@@ -45,6 +45,13 @@
 		EDE04CAA23EDA9D90099941B /* MenuViewController+UITableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CA923EDA9D90099941B /* MenuViewController+UITableViewDataSource.swift */; };
 		EDE04CAD23EDAACC0099941B /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CAC23EDAACC0099941B /* MenuCellTableViewCell.swift */; };
 		EDE04CB123EDB1610099941B /* MenuModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CB023EDB1610099941B /* MenuModels.swift */; };
+		EDE04CB323EDB6020099941B /* SearchContactsViewController+UISearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CB223EDB6020099941B /* SearchContactsViewController+UISearchControllerDelegate.swift */; };
+		EDE04CB523EDB6260099941B /* SearchContactsViewController+UISearchResultsUpdating.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CB423EDB6260099941B /* SearchContactsViewController+UISearchResultsUpdating.swift */; };
+		EDE04CB723EDB6530099941B /* SearchContactsViewController+UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CB623EDB6530099941B /* SearchContactsViewController+UISearchBarDelegate.swift */; };
+		EDE04CBA23EDB91B0099941B /* SavedTapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CB923EDB91B0099941B /* SavedTapsViewController.swift */; };
+		EDE04CBC23EDB9540099941B /* SavedTapsViewController+UISearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CBB23EDB9540099941B /* SavedTapsViewController+UISearchControllerDelegate.swift */; };
+		EDE04CBE23EDB95F0099941B /* SavedTapsViewController+UISearchResultsUpdating.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CBD23EDB95F0099941B /* SavedTapsViewController+UISearchResultsUpdating.swift.swift */; };
+		EDE04CC023EDB9640099941B /* SavedTapsViewController+UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CBF23EDB9640099941B /* SavedTapsViewController+UISearchBarDelegate.swift */; };
 		F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */; };
 		F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
@@ -109,6 +116,13 @@
 		EDE04CA923EDA9D90099941B /* MenuViewController+UITableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuViewController+UITableViewDataSource.swift"; sourceTree = "<group>"; };
 		EDE04CAC23EDAACC0099941B /* MenuCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellTableViewCell.swift; sourceTree = "<group>"; };
 		EDE04CB023EDB1610099941B /* MenuModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuModels.swift; sourceTree = "<group>"; };
+		EDE04CB223EDB6020099941B /* SearchContactsViewController+UISearchControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchControllerDelegate.swift"; sourceTree = "<group>"; };
+		EDE04CB423EDB6260099941B /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
+		EDE04CB623EDB6530099941B /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
+		EDE04CB923EDB91B0099941B /* SavedTapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedTapsViewController.swift; sourceTree = "<group>"; };
+		EDE04CBB23EDB9540099941B /* SavedTapsViewController+UISearchControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchControllerDelegate.swift"; sourceTree = "<group>"; };
+		EDE04CBD23EDB95F0099941B /* SavedTapsViewController+UISearchResultsUpdating.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchResultsUpdating.swift.swift"; sourceTree = "<group>"; };
+		EDE04CBF23EDB9640099941B /* SavedTapsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
 		F420A6109186EC43F0536C28 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TapsnapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5A2FC5490E9793C4E6270D8 /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -306,6 +320,9 @@
 			isa = PBXGroup;
 			children = (
 				EDE04CA423ED5C4B0099941B /* SearchContactsViewController.swift */,
+				EDE04CB223EDB6020099941B /* SearchContactsViewController+UISearchControllerDelegate.swift */,
+				EDE04CB423EDB6260099941B /* SearchContactsViewController+UISearchResultsUpdating.swift */,
+				EDE04CB623EDB6530099941B /* SearchContactsViewController+UISearchBarDelegate.swift */,
 			);
 			path = SearchContacts;
 			sourceTree = "<group>";
@@ -313,6 +330,7 @@
 		EDE04CA623EDA8850099941B /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				EDE04CB823EDB9080099941B /* Saved */,
 				EDE04CAF23EDB1530099941B /* Models */,
 				EDE04CAB23EDAAB90099941B /* Views */,
 				EDE04CA723EDA8940099941B /* MenuViewController.swift */,
@@ -335,6 +353,17 @@
 				EDE04CB023EDB1610099941B /* MenuModels.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		EDE04CB823EDB9080099941B /* Saved */ = {
+			isa = PBXGroup;
+			children = (
+				EDE04CB923EDB91B0099941B /* SavedTapsViewController.swift */,
+				EDE04CBB23EDB9540099941B /* SavedTapsViewController+UISearchControllerDelegate.swift */,
+				EDE04CBD23EDB95F0099941B /* SavedTapsViewController+UISearchResultsUpdating.swift.swift */,
+				EDE04CBF23EDB9640099941B /* SavedTapsViewController+UISearchBarDelegate.swift */,
+			);
+			path = Saved;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -452,8 +481,11 @@
 			files = (
 				5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */,
 				F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */,
+				EDE04CC023EDB9640099941B /* SavedTapsViewController+UISearchBarDelegate.swift in Sources */,
 				E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */,
 				22441ACCFD9F673D8EC70B23 /* CameraPreviewView.swift in Sources */,
+				EDE04CB323EDB6020099941B /* SearchContactsViewController+UISearchControllerDelegate.swift in Sources */,
+				EDE04CBC23EDB9540099941B /* SavedTapsViewController+UISearchControllerDelegate.swift in Sources */,
 				78FD54943CAFF8C9035664DE /* CameraViewController+UICollectionViewDataSource.swift in Sources */,
 				EDE04CA523ED5C4B0099941B /* SearchContactsViewController.swift in Sources */,
 				4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */,
@@ -462,6 +494,7 @@
 				391FCAFB147C76F900B93BCE /* Direction.swift in Sources */,
 				FBDB59DE7FE0369A08F6E6C8 /* Tapsnap.xcdatamodeld in Sources */,
 				6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */,
+				EDE04CB523EDB6260099941B /* SearchContactsViewController+UISearchResultsUpdating.swift in Sources */,
 				C1839759E1E3E4E4F07F9D07 /* Formatter.swift in Sources */,
 				23CEA16D7F7985D61172B946 /* IndeterminateProgressView.swift in Sources */,
 				A58531E42B3285C125B4BC14 /* KeyboardAccessoryView.swift in Sources */,
@@ -474,10 +507,12 @@
 				18DFAD298AD224C785C85011 /* OnboardingViewController.swift in Sources */,
 				711A66EB68F6D20551F7D3CC /* PersonAnnotationView.swift in Sources */,
 				72DE457420D6DE86133F43CE /* PlaybackMapView.swift in Sources */,
+				EDE04CBE23EDB95F0099941B /* SavedTapsViewController+UISearchResultsUpdating.swift.swift in Sources */,
 				1F60586B1B3A60BDAB8E39F2 /* PlaybackView.swift in Sources */,
 				1D10ED47FDB74B11F116E212 /* PlaybackViewController.swift in Sources */,
 				FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */,
 				E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */,
+				EDE04CB723EDB6530099941B /* SearchContactsViewController+UISearchBarDelegate.swift in Sources */,
 				EDE04CA823EDA8940099941B /* MenuViewController.swift in Sources */,
 				EDE04CAD23EDAACC0099941B /* MenuCellTableViewCell.swift in Sources */,
 				0BB7CAA9C661FCDBC279BEFD /* SceneDelegate.swift in Sources */,
@@ -485,6 +520,7 @@
 				FA7382475E6686911F0C7470 /* TapSnapPlaybackView.swift in Sources */,
 				ED22A29623ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
 				3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */,
+				EDE04CBA23EDB91B0099941B /* SavedTapsViewController.swift in Sources */,
 				BE7021A6E63D3B1B771DE218 /* UIButton+Extension.swift in Sources */,
 				F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */,
 				5B84AF0202D17083508868D5 /* ViewManager.swift in Sources */,
