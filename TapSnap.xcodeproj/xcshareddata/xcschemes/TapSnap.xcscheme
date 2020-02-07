@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CFE3820DFA3EDFB94690097C"
-               BuildableName = "TapSnap.app"
-               BlueprintName = "TapSnap"
-               ReferencedContainer = "container:TapSnap.xcodeproj">
+               BlueprintIdentifier = "9495FDBD704DC879B6B218A9"
+               BuildableName = "Tapsnap.app"
+               BlueprintName = "Tapsnap"
+               ReferencedContainer = "container:Tapsnap.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,20 +34,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "392D00905ABCB8B20F6858BB"
-               BuildableName = "TapSnapTests.xctest"
-               BlueprintName = "TapSnapTests"
-               ReferencedContainer = "container:TapSnap.xcodeproj">
+               BlueprintIdentifier = "D714C02D509E7AC733447861"
+               BuildableName = "TapsnapTests.xctest"
+               BlueprintName = "TapsnapTests"
+               ReferencedContainer = "container:Tapsnap.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CFE3820DFA3EDFB94690097C"
-            BuildableName = "TapSnap.app"
-            BlueprintName = "TapSnap"
-            ReferencedContainer = "container:TapSnap.xcodeproj">
+            BlueprintIdentifier = "9495FDBD704DC879B6B218A9"
+            BuildableName = "Tapsnap.app"
+            BlueprintName = "Tapsnap"
+            ReferencedContainer = "container:Tapsnap.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <CommandLineArguments>
@@ -71,10 +71,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CFE3820DFA3EDFB94690097C"
-            BuildableName = "TapSnap.app"
-            BlueprintName = "TapSnap"
-            ReferencedContainer = "container:TapSnap.xcodeproj">
+            BlueprintIdentifier = "9495FDBD704DC879B6B218A9"
+            BuildableName = "Tapsnap.app"
+            BlueprintName = "Tapsnap"
+            ReferencedContainer = "container:Tapsnap.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -92,10 +92,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CFE3820DFA3EDFB94690097C"
-            BuildableName = "TapSnap.app"
-            BlueprintName = "TapSnap"
-            ReferencedContainer = "container:TapSnap.xcodeproj">
+            BlueprintIdentifier = "9495FDBD704DC879B6B218A9"
+            BuildableName = "Tapsnap.app"
+            BlueprintName = "Tapsnap"
+            ReferencedContainer = "container:Tapsnap.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>

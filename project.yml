@@ -1,5 +1,5 @@
 
-name: TapSnap
+name: Tapsnap
 settings:
   DEVELOPMENT_TEAM: K78G42H4U2
 options:
@@ -7,19 +7,19 @@ options:
   bundleIdPrefix: app.tapsnap
   transitivelyLinkDependencies: true
 targets:
-  TapSnap:
+  Tapsnap:
     type: application
     platform: iOS
     scheme:
       testTargets:
-        - TapSnapTests
+        - TapsnapTests
       gatherCoverageData: true
     sources:
-      - TapSnap
-  TapSnapTests:
+      - Tapsnap
+  TapsnapTests:
     type: bundle.unit-test
     platform: iOS
     sources:
-      - TapSnapTests
+      - TapsnapTests
     dependencies:
-      - target: TapSnap
+      - target: Tapsnap
