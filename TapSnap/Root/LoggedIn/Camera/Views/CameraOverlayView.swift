@@ -166,16 +166,23 @@ class CameraOverlayView: UIView {
         Current.editingSubject.sink { editState in
             switch editState {
             case .none:
+                Current.topLeftNavBarSubject.value = .menu
                 self.canvasView.isUserInteractionEnabled = false
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.resignFirstResponder()
             case .keyboard:
+                if !self.isCanvasClean {
+                    Current.topLeftNavBarSubject.value = .clear
+                }
                 self.canvasView.isUserInteractionEnabled = false
                 
                 self.annotationTextView.inputView?.removeFromSuperview()
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.reloadInputViews()
             case .drawing:
+                if !self.isCanvasClean {
+                    Current.topLeftNavBarSubject.value = .clear
+                }
                 self.canvasView.isUserInteractionEnabled = true
                 
                 self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
@@ -187,6 +194,9 @@ class CameraOverlayView: UIView {
                  self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
                  self.annotationTextView.reloadInputViews()   
             case .clear:
+                if !self.isCanvasClean {
+                    Current.topLeftNavBarSubject.value = .none
+                }
                 self.annotationTextView.text = ""
                 self.canvasView.drawing = PKDrawing()
             }
@@ -221,7 +231,7 @@ class CameraOverlayView: UIView {
     // MARK: - Actions
     
     @objc private func showTextbox() {
-        processClearButton()
+//        processClearButton()
         annotationTextView.inputAccessoryView = KeyboardAccessoryView()
         annotationTextView.becomeFirstResponder()
         annotationTextView.delegate = self
@@ -282,15 +292,16 @@ class CameraOverlayView: UIView {
         }
     }
     
-    private func processClearButton() {
-        // Stream
-//        clearButton.isHidden = (canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty)
+    var isCanvasClean: Bool {
+        canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty
     }
 }
 
 extension CameraOverlayView: PKCanvasViewDelegate {
     func canvasViewDidBeginUsingTool(_ canvasView: PKCanvasView) {
-        processClearButton()
+        if !isCanvasClean {
+            Current.topLeftNavBarSubject.value = .clear
+        }
     }
 }
 
@@ -298,7 +309,9 @@ extension CameraOverlayView: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         annotationTextViewWidth.constant = textView.contentSize.width
         annotationTextViewHeight.constant = textView.contentSize.height
-        processClearButton()
+        if !isCanvasClean {
+            Current.topLeftNavBarSubject.value = .clear
+        }
     }
 }
 

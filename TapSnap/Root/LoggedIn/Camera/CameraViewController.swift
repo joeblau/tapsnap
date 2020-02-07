@@ -42,7 +42,6 @@ class CameraViewController: UIViewController {
         
         clearButton.setImage(UIImage(systemName: "clear"), for: .normal)
         clearButton.floatButton()
-        clearButton.isHidden = true
         
         notifictionsButton.setTitle("8", for: .normal)
         notifictionsButton.notification(diameter: 20)
@@ -117,25 +116,6 @@ class CameraViewController: UIViewController {
     // MARK: - Configure Streams
     
     private func configureStreams() {
-        
-        Current.editingSubject.sink { editState in
-            switch editState {
-            case .none:
-                self.menuButton.isHidden = false
-                self.clearButton.isHidden = true
-            case .keyboard:
-//                self.navigationItem.leftBarButtonItem = nil
-                self.menuButton.isHidden = true
-            case .drawing:
-                self.menuButton.isHidden = true
-            case .music:
-                self.menuButton.isHidden = true
-            case .clear:
-                self.clearButton.isHidden = true
-            }
-        }
-        .store(in: &cancellables)
-        
         Current.activeCameraSubject
             .sink { position in
                 if position != .front {
@@ -159,6 +139,21 @@ class CameraViewController: UIViewController {
                 }
         }
         .store(in: &cancellables)
+        
+        Current.topLeftNavBarSubject
+            .sink { leftNavBarItem in
+                switch leftNavBarItem {
+                case .none:
+                    self.navigationItem.leftBarButtonItem = nil
+                case .menu:
+                    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.menuButton)
+                case .clear:
+                    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.clearButton)
+                }
+        }
+        .store(in: &cancellables)
+        
+        
         
     }
     // MARK: - Configure Button Targets

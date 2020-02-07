@@ -41,6 +41,12 @@ enum AnnotationGroup {
     case all
 }
 
+enum LeftNavBarItem {
+    case none
+    case menu
+    case clear
+}
+
 struct World {
     // Sensors
     let locationManager = CLLocationManager()
@@ -64,6 +70,7 @@ struct World {
     let mapDimensionSubject = CurrentValueSubject<MapDimension, Never>(.two)
     let mapAnnotationsSubject = CurrentValueSubject<AnnotationGroup, Never>(.them)
     let drawingColorSubject = CurrentValueSubject<UIColor, Never>(.white)
+    let topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
 }
 
 let Current = World()
