@@ -15,7 +15,6 @@ extension CameraViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
        Current.recordingSubject.value = .start
-        let cell = collectionView.cellForItem(at: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {

@@ -11,6 +11,9 @@ import Combine
 import AVFoundation
 
 class CameraViewController: UIViewController {
+
+    var cancellables = Set<AnyCancellable>()
+
     let kButtonSize: CGFloat = 48
     
     // Top left
@@ -28,19 +31,21 @@ class CameraViewController: UIViewController {
     let contactPageControl = UIPageControl()
     let contactsCollectionView = ContactsCollectionView()
     
-    weak var search: UINavigationController? {
+    lazy var menuViewController: UINavigationController = {
+        let nav =  UINavigationController(rootViewController: MenuViewController())
+        return nav
+    }()
+    
+    lazy var searchViewController: UINavigationController = {
         let nav = UINavigationController(rootViewController: SearchContactsViewController())
         return nav
-    }
-    
-    var cancellables = Set<AnyCancellable>()
-    
-    weak var playback: UINavigationController? {
+    }()
+
+    lazy var playbackViewController: UINavigationController = {
         let nav = UINavigationController(rootViewController: PlaybackViewController())
         nav.modalPresentationStyle = .overCurrentContext
-        
         return nav
-    }
+    }()
     
     init() {
         menuButton.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
@@ -156,8 +161,7 @@ class CameraViewController: UIViewController {
                 case .menu, .search: break
                     
                 case .playback:
-                    guard let playback = self.playback else { return }
-                    self.present(playback, animated: true) {}
+                    self.present(self.playbackViewController, animated: true) {}
                 }
         }
         .store(in: &cancellables)
@@ -195,6 +199,7 @@ class CameraViewController: UIViewController {
     
     @objc private func showMenuAction() {
          Current.presentViewContollersSubject.value = .menu
+        present(menuViewController, animated: true, completion: nil)
     }
     
     @objc private func clearEditingAction() {
@@ -204,8 +209,7 @@ class CameraViewController: UIViewController {
     @objc func editContacts() {}
     
     @objc func searchContactsAction() {
-        guard let search = search else { return }
-        present(search, animated: true, completion: nil)
+        present(searchViewController, animated: true, completion: nil)
     }
     
     // MARK: - Private

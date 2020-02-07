@@ -41,6 +41,10 @@
 		EC8B85F3F9C2875B29FE41D8 /* Scheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F420A6109186EC43F0536C28 /* Scheduler.swift */; };
 		ED22A29623ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED22A29523ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift */; };
 		EDE04CA523ED5C4B0099941B /* SearchContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CA423ED5C4B0099941B /* SearchContactsViewController.swift */; };
+		EDE04CA823EDA8940099941B /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CA723EDA8940099941B /* MenuViewController.swift */; };
+		EDE04CAA23EDA9D90099941B /* MenuViewController+UITableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CA923EDA9D90099941B /* MenuViewController+UITableViewDataSource.swift */; };
+		EDE04CAD23EDAACC0099941B /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CAC23EDAACC0099941B /* MenuCellTableViewCell.swift */; };
+		EDE04CB123EDB1610099941B /* MenuModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CB023EDB1610099941B /* MenuModels.swift */; };
 		F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */; };
 		F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
@@ -101,6 +105,10 @@
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		ED22A29523ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDelegate.swift"; sourceTree = "<group>"; };
 		EDE04CA423ED5C4B0099941B /* SearchContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsViewController.swift; sourceTree = "<group>"; };
+		EDE04CA723EDA8940099941B /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		EDE04CA923EDA9D90099941B /* MenuViewController+UITableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuViewController+UITableViewDataSource.swift"; sourceTree = "<group>"; };
+		EDE04CAC23EDAACC0099941B /* MenuCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellTableViewCell.swift; sourceTree = "<group>"; };
+		EDE04CB023EDB1610099941B /* MenuModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuModels.swift; sourceTree = "<group>"; };
 		F420A6109186EC43F0536C28 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TapsnapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5A2FC5490E9793C4E6270D8 /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -124,6 +132,7 @@
 		003C2EC4C962B79E42490DBD /* LoggedIn */ = {
 			isa = PBXGroup;
 			children = (
+				EDE04CA623EDA8850099941B /* Menu */,
 				EDE04CA323ED5C2B0099941B /* SearchContacts */,
 				0FC695A1287DAB74F0380D59 /* Playback */,
 				5E6DAA497C51E06D884C0B2C /* LoggedInViewController.swift */,
@@ -301,6 +310,33 @@
 			path = SearchContacts;
 			sourceTree = "<group>";
 		};
+		EDE04CA623EDA8850099941B /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				EDE04CAF23EDB1530099941B /* Models */,
+				EDE04CAB23EDAAB90099941B /* Views */,
+				EDE04CA723EDA8940099941B /* MenuViewController.swift */,
+				EDE04CA923EDA9D90099941B /* MenuViewController+UITableViewDataSource.swift */,
+			);
+			path = Menu;
+			sourceTree = "<group>";
+		};
+		EDE04CAB23EDAAB90099941B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EDE04CAC23EDAACC0099941B /* MenuCellTableViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		EDE04CAF23EDB1530099941B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EDE04CB023EDB1610099941B /* MenuModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -431,8 +467,10 @@
 				A58531E42B3285C125B4BC14 /* KeyboardAccessoryView.swift in Sources */,
 				AFA4B5B9C3DE95B8CCEE172D /* LoggedInViewController.swift in Sources */,
 				DD6A04D0AC022CB627DB36AE /* LoggedOutViewController.swift in Sources */,
+				EDE04CAA23EDA9D90099941B /* MenuViewController+UITableViewDataSource.swift in Sources */,
 				1ACADBCC58A1D7F2300EC556 /* MusicPlaybackView.swift in Sources */,
 				FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */,
+				EDE04CB123EDB1610099941B /* MenuModels.swift in Sources */,
 				18DFAD298AD224C785C85011 /* OnboardingViewController.swift in Sources */,
 				711A66EB68F6D20551F7D3CC /* PersonAnnotationView.swift in Sources */,
 				72DE457420D6DE86133F43CE /* PlaybackMapView.swift in Sources */,
@@ -440,6 +478,8 @@
 				1D10ED47FDB74B11F116E212 /* PlaybackViewController.swift in Sources */,
 				FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */,
 				E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */,
+				EDE04CA823EDA8940099941B /* MenuViewController.swift in Sources */,
+				EDE04CAD23EDAACC0099941B /* MenuCellTableViewCell.swift in Sources */,
 				0BB7CAA9C661FCDBC279BEFD /* SceneDelegate.swift in Sources */,
 				EC8B85F3F9C2875B29FE41D8 /* Scheduler.swift in Sources */,
 				FA7382475E6686911F0C7470 /* TapSnapPlaybackView.swift in Sources */,

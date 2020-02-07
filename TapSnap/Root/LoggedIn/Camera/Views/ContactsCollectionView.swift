@@ -12,7 +12,7 @@ class ContactsCollectionView: UICollectionView {
     
     init() {
         let flowLayout = UICollectionViewFlowLayout()
-        let width = (UIScreen.main.bounds.width/4) - 1
+        let width = (UIScreen.main.bounds.width/4)
         let height = (UIScreen.main.bounds.width/4) - 1
         flowLayout.itemSize = CGSize(width: width, height: height)
         flowLayout.minimumLineSpacing = 1
