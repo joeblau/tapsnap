@@ -37,4 +37,5 @@ extension CameraViewController: UICollectionViewDataSource {
         
         return cell
     }
+    
 }

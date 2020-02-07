@@ -11,29 +11,14 @@ import UIKit
 class ContactsCollectionView: UICollectionView {
     
     init() {
-        var contactLayout: UICollectionViewCompositionalLayout {
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                  heightDimension: .fractionalWidth(1.0))
-            let contactItem = NSCollectionLayoutItem(layoutSize: itemSize)
-            contactItem.contentInsets = NSDirectionalEdgeInsets(top: 0.5,
-                                                                leading: 0.5,
-                                                                bottom: 0.5,
-                                                                trailing: 0.5)
-            
-            let containerGroup = NSCollectionLayoutGroup
-                .vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25),
-                                                             heightDimension: .absolute(UIScreen.main.bounds.width / 2)),
-                          subitems: [contactItem])
-            
-            let section = NSCollectionLayoutSection(group: containerGroup)
-            
-            let config = UICollectionViewCompositionalLayoutConfiguration()
-            config.scrollDirection = .horizontal
-            
-            return UICollectionViewCompositionalLayout(section: section, configuration: config)
-        }
-        
-        super.init(frame: .zero, collectionViewLayout: contactLayout)
+        let flowLayout = UICollectionViewFlowLayout()
+        let width = (UIScreen.main.bounds.width/4) - 1
+        let height = (UIScreen.main.bounds.width/4) - 1
+        flowLayout.itemSize = CGSize(width: width, height: height)
+        flowLayout.minimumLineSpacing = 1
+        flowLayout.minimumInteritemSpacing = 1
+        flowLayout.scrollDirection = .horizontal
+        super.init(frame: .zero, collectionViewLayout: flowLayout)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemBackground
     }

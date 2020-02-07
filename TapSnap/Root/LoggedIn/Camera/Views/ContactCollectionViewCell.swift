@@ -10,7 +10,6 @@ import UIKit
 
 class ContactCollectionViewCell: UICollectionViewCell {
     
-    let recordLongPress = UILongPressGestureRecognizer()
     let contactImageView = UIImageView()
     let titleLabel = UILabel()
     
@@ -32,7 +31,6 @@ class ContactCollectionViewCell: UICollectionViewCell {
         titleLabel.textAlignment = .center
         
         configureViews()
-        configureGestureRecoginzers()
     }
     
     required init?(coder: NSCoder) {
@@ -53,12 +51,6 @@ class ContactCollectionViewCell: UICollectionViewCell {
         titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2).isActive = true
         titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2).isActive = true
         titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2).isActive = true
-    }
-    
-    private func configureGestureRecoginzers() {
-        recordLongPress.addTarget(self, action: #selector(startRecordingAction))
-        recordLongPress.minimumPressDuration = 0.1
-        addGestureRecognizer(recordLongPress)
     }
     
     func configure(image: UIImage,
@@ -83,18 +75,6 @@ class ContactCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         contactImageView.image = nil
-    }
-    
-    // MARK: - Actions
-    
-    @objc func startRecordingAction(recoginzer: UILongPressGestureRecognizer) {
-        switch recoginzer.state {
-        case .began:
-            Current.recordingSubject.value = .start
-        case .cancelled, .ended:
-            Current.recordingSubject.value = .stop
-        default: break
-        }
     }
 
     // MARK: - Resuse Identifier

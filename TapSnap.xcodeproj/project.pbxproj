@@ -44,7 +44,7 @@
 		F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
 		FA7382475E6686911F0C7470 /* TapSnapPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196BBAC397E578AAF1AD22F1 /* TapSnapPlaybackView.swift */; };
-		FBDB59DE7FE0369A08F6E6C8 /* Dolo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37D7E1423382747C55E8DD96 /* Dolo.xcdatamodeld */; };
+		FBDB59DE7FE0369A08F6E6C8 /* Tapsnap.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37D7E1423382747C55E8DD96 /* Tapsnap.xcdatamodeld */; };
 		FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */; };
 		FF320E97C50A9B334BA51547 /* Publish in Frameworks */ = {isa = PBXBuildFile; productRef = 1242DD598088F38154B6B61B /* Publish */; };
 /* End PBXBuildFile section */
@@ -69,7 +69,7 @@
 		1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E519411855163D974866C78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Combine.swift"; sourceTree = "<group>"; };
-		299B7D623FC871E263F21AE6 /* Dolo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dolo.entitlements; sourceTree = "<group>"; };
+		299B7D623FC871E263F21AE6 /* Tapsnap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tapsnap.entitlements; sourceTree = "<group>"; };
 		2FCE2621E3412630A639A0E9 /* World.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordProgressView.swift; sourceTree = "<group>"; };
 		3A03D34D5EFD9078502D2B3D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -164,8 +164,8 @@
 			children = (
 				1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */,
 				4D03047C2E3CD982E5D1E38E /* Assets.xcassets */,
-				299B7D623FC871E263F21AE6 /* Dolo.entitlements */,
-				37D7E1423382747C55E8DD96 /* Dolo.xcdatamodeld */,
+				299B7D623FC871E263F21AE6 /* Tapsnap.entitlements */,
+				37D7E1423382747C55E8DD96 /* Tapsnap.xcdatamodeld */,
 				880AA06728253910B5D1F81A /* Info.plist */,
 				CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */,
 				769C4D077B7CFCA8544D1A3E /* SceneDelegate.swift */,
@@ -412,7 +412,7 @@
 				4296ABD2EB34055CB28AA8D5 /* ContactCollectionViewCell.swift in Sources */,
 				155FD04BF3EA39EBD754BDD6 /* ContactsCollectionView.swift in Sources */,
 				391FCAFB147C76F900B93BCE /* Direction.swift in Sources */,
-				FBDB59DE7FE0369A08F6E6C8 /* Dolo.xcdatamodeld in Sources */,
+				FBDB59DE7FE0369A08F6E6C8 /* Tapsnap.xcdatamodeld in Sources */,
 				6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */,
 				C1839759E1E3E4E4F07F9D07 /* Formatter.swift in Sources */,
 				23CEA16D7F7985D61172B946 /* IndeterminateProgressView.swift in Sources */,
@@ -744,13 +744,13 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		37D7E1423382747C55E8DD96 /* Dolo.xcdatamodeld */ = {
+		37D7E1423382747C55E8DD96 /* Tapsnap.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				F5A2FC5490E9793C4E6270D8 /* Dolo.xcdatamodel */,
 			);
 			currentVersion = F5A2FC5490E9793C4E6270D8 /* Dolo.xcdatamodel */;
-			path = Dolo.xcdatamodeld;
+			path = Tapsnap.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
