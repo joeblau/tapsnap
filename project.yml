@@ -6,6 +6,10 @@ options:
   createIntermediateGroups: true
   bundleIdPrefix: app.tapsnap
   transitivelyLinkDependencies: true
+packages:
+  Publish:
+    url: https://github.com/johnsundell/publish
+    from: 0.1.0
 targets:
   Tapsnap:
     type: application
@@ -23,3 +27,10 @@ targets:
       - TapsnapTests
     dependencies:
       - target: Tapsnap
+  Web:
+    type: tool
+    platform: macOS
+    sources:
+      - Website/Sources/
+    dependencies:
+      - package: Publish

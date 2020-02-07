@@ -26,6 +26,7 @@
 		711A66EB68F6D20551F7D3CC /* PersonAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8064F228DD6AC60BF5A5ED /* PersonAnnotationView.swift */; };
 		72DE457420D6DE86133F43CE /* PlaybackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCDFADC8F3B83B1B23893107 /* PlaybackMapView.swift */; };
 		78FD54943CAFF8C9035664DE /* CameraViewController+UICollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */; };
+		9459D858A99F4EE793F37E92 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A03D34D5EFD9078502D2B3D /* main.swift */; };
 		9E45F15C27283EA75A95FDA8 /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCE2621E3412630A639A0E9 /* World.swift */; };
 		A58531E42B3285C125B4BC14 /* KeyboardAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE23D3372831A7B685FA94F /* KeyboardAccessoryView.swift */; };
 		A82CDC252A3653C4519C16FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D03047C2E3CD982E5D1E38E /* Assets.xcassets */; };
@@ -45,6 +46,7 @@
 		FA7382475E6686911F0C7470 /* TapSnapPlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196BBAC397E578AAF1AD22F1 /* TapSnapPlaybackView.swift */; };
 		FBDB59DE7FE0369A08F6E6C8 /* Dolo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37D7E1423382747C55E8DD96 /* Dolo.xcdatamodeld */; };
 		FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */; };
+		FF320E97C50A9B334BA51547 /* Publish in Frameworks */ = {isa = PBXBuildFile; productRef = 1242DD598088F38154B6B61B /* Publish */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,7 @@
 		299B7D623FC871E263F21AE6 /* Dolo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dolo.entitlements; sourceTree = "<group>"; };
 		2FCE2621E3412630A639A0E9 /* World.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = World.swift; sourceTree = "<group>"; };
 		324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordProgressView.swift; sourceTree = "<group>"; };
+		3A03D34D5EFD9078502D2B3D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3C1467F72AA8D65FAA4A825D /* Direction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Direction.swift; sourceTree = "<group>"; };
 		4D03047C2E3CD982E5D1E38E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5E6DAA497C51E06D884C0B2C /* LoggedInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +81,7 @@
 		71FF49A0D75D26D4417F1887 /* PlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
 		75B33AE9F232CA872F98978A /* DrawingToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolsView.swift; sourceTree = "<group>"; };
 		769C4D077B7CFCA8544D1A3E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		780A8DC04979D988BFBE6D14 /* Web */ = {isa = PBXFileReference; includeInIndex = 0; path = Web; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOverlayView.swift; sourceTree = "<group>"; };
 		880AA06728253910B5D1F81A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D22122A2BDFE7B2992BB791 /* ContactEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactEditorView.swift; sourceTree = "<group>"; };
@@ -102,6 +106,17 @@
 		F9F5D6BFE34CF3CA503D8669 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FE7EBA8689CADC6D750F9940 /* DoloTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoloTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A7680B0A566555AB996C8BB6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF320E97C50A9B334BA51547 /* Publish in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		003C2EC4C962B79E42490DBD /* LoggedIn */ = {
@@ -205,6 +220,7 @@
 			children = (
 				5A6F49659D49014364C59390 /* Tapsnap */,
 				9E56A6D23262E00CCE7B79AF /* TapsnapTests */,
+				E1B2AE3E0FB821DDCE822F59 /* Website */,
 				832B0EE083BC0F4BCBBF460A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -214,8 +230,17 @@
 			children = (
 				1C91A7E84958BFD9517292B6 /* Tapsnap.app */,
 				F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */,
+				780A8DC04979D988BFBE6D14 /* Web */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		9AE5B963D6795C0FE8D3CEAC /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				3A03D34D5EFD9078502D2B3D /* main.swift */,
+			);
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		9E56A6D23262E00CCE7B79AF /* TapsnapTests */ = {
@@ -244,6 +269,14 @@
 				7052B4CE08D672F73ECB0E2C /* OnboardingViewController.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		E1B2AE3E0FB821DDCE822F59 /* Website */ = {
+			isa = PBXGroup;
+			children = (
+				9AE5B963D6795C0FE8D3CEAC /* Sources */,
+			);
+			path = Website;
 			sourceTree = "<group>";
 		};
 		E406814D34DFE8CB910BF391 /* Camera */ = {
@@ -292,6 +325,25 @@
 			productReference = F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		F689F375F906563163F97FE2 /* Web */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1750E1695EB0B17EA31581B9 /* Build configuration list for PBXNativeTarget "Web" */;
+			buildPhases = (
+				D2ACC401F85B895B0733B2AD /* Sources */,
+				A7680B0A566555AB996C8BB6 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Web;
+			packageProductDependencies = (
+				1242DD598088F38154B6B61B /* Publish */,
+			);
+			productName = Web;
+			productReference = 780A8DC04979D988BFBE6D14 /* Web */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -307,6 +359,9 @@
 						DevelopmentTeam = K78G42H4U2;
 						TestTargetID = 9495FDBD704DC879B6B218A9;
 					};
+					F689F375F906563163F97FE2 = {
+						DevelopmentTeam = K78G42H4U2;
+					};
 				};
 			};
 			buildConfigurationList = 3F19EA590F165979C250B682 /* Build configuration list for PBXProject "Tapsnap" */;
@@ -317,11 +372,15 @@
 				Base,
 			);
 			mainGroup = 6803BFD8A97340E540815774;
+			packageReferences = (
+				D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				9495FDBD704DC879B6B218A9 /* Tapsnap */,
 				D714C02D509E7AC733447861 /* TapsnapTests */,
+				F689F375F906563163F97FE2 /* Web */,
 			);
 		};
 /* End PBXProject section */
@@ -381,6 +440,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D2ACC401F85B895B0733B2AD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9459D858A99F4EE793F37E92 /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E9A9408A342C0376C79C6099 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -411,6 +478,19 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		33CAEE5B1542828C20BC16B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Web;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
 		54672B290182A5E889F0158F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -472,7 +552,6 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
@@ -532,7 +611,6 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -591,9 +669,31 @@
 			};
 			name = Release;
 		};
+		D62C7AAE3EDBB81EC48D4AE0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Web;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1750E1695EB0B17EA31581B9 /* Build configuration list for PBXNativeTarget "Web" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				33CAEE5B1542828C20BC16B0 /* Debug */,
+				D62C7AAE3EDBB81EC48D4AE0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = "";
+		};
 		3F19EA590F165979C250B682 /* Build configuration list for PBXProject "Tapsnap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -622,6 +722,25 @@
 			defaultConfigurationName = "";
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/johnsundell/publish";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1242DD598088F38154B6B61B /* Publish */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */;
+			productName = Publish;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		37D7E1423382747C55E8DD96 /* Dolo.xcdatamodeld */ = {
