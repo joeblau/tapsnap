@@ -49,8 +49,8 @@ enum LeftNavBarItem {
 
 struct World {
     // Sensors
-    let locationManager = CLLocationManager()
-    let networkSession: URLSession = {
+    var locationManager = CLLocationManager()
+    var networkSession: URLSession = {
         let configuraiton = URLSessionConfiguration.background(withIdentifier: "tapsnap_url_session_config")
         configuraiton.allowsCellularAccess = true
         configuraiton.requestCachePolicy = .returnCacheDataElseLoad
@@ -60,17 +60,17 @@ struct World {
     }()
     
     // Constants
-    let formatter = Formatter()
+    var formatter = Formatter()
     
     // Reactive
-    let recordingSubject = CurrentValueSubject<RecordAction, Never>(.stop)
-    let editingSubject = CurrentValueSubject<EditState, Never>(.none)
-    let activeCameraSubject = CurrentValueSubject<AVCaptureDevice.Position, Never>(.back)
-    let presentViewContollersSubject = CurrentValueSubject<ShowViewController, Never>(.none)
-    let mapDimensionSubject = CurrentValueSubject<MapDimension, Never>(.two)
-    let mapAnnotationsSubject = CurrentValueSubject<AnnotationGroup, Never>(.them)
-    let drawingColorSubject = CurrentValueSubject<UIColor, Never>(.white)
-    let topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
+    var recordingSubject = CurrentValueSubject<RecordAction, Never>(.stop)
+    var editingSubject = CurrentValueSubject<EditState, Never>(.none)
+    var activeCameraSubject = CurrentValueSubject<AVCaptureDevice.Position, Never>(.back)
+    var presentViewContollersSubject = CurrentValueSubject<ShowViewController, Never>(.none)
+    var mapDimensionSubject = CurrentValueSubject<MapDimension, Never>(.two)
+    var mapAnnotationsSubject = CurrentValueSubject<AnnotationGroup, Never>(.them)
+    var drawingColorSubject = CurrentValueSubject<UIColor, Never>(.white)
+    var topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
 }
 
-let Current = World()
+var Current = World()

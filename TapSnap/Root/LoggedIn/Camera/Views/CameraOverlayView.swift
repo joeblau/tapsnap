@@ -14,7 +14,7 @@ import CoreLocation
 final class CameraOverlayView: UIView {
     var cancellables = Set<AnyCancellable>()
     
-    private let kButtonSize: CGFloat = 48
+    private let kButtonSize: CGFloat = 56
     private let kButtonPadding: CGFloat = 8
     
     // Bottom right
@@ -69,7 +69,7 @@ final class CameraOverlayView: UIView {
     private let indeterminateProgressView = IndeterminateProgressView()
     private let recordingProgressView = RecordProgressView()
     private var drawingToolsViewHeight: CGFloat = 340
-
+    
     private var zoomScale: CGFloat = 1.0
     
     private lazy var bottomRightStackView: UIStackView = {
@@ -114,7 +114,7 @@ final class CameraOverlayView: UIView {
     @objc private func togglePersistAction() {
         persistButton.isSelected.toggle()
     }
-        
+    
     @objc private func toggleLocationAction() {
         Current.locationManager.requestWhenInUseAuthorization()
     }
@@ -164,8 +164,8 @@ final class CameraOverlayView: UIView {
     func isCanvasClean() {
         let isclean = canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty
         switch isclean {
-            case true: Current.topLeftNavBarSubject.value = .none
-            case false: Current.topLeftNavBarSubject.value = .clear
+        case true: Current.topLeftNavBarSubject.value = .none
+        case false: Current.topLeftNavBarSubject.value = .clear
         }
     }
 }
@@ -250,27 +250,23 @@ extension CameraOverlayView: ViewBootstrappable {
             case .keyboard:
                 self.isCanvasClean()
                 self.canvasView.isUserInteractionEnabled = false
-                
                 self.annotationTextView.inputView?.removeFromSuperview()
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.reloadInputViews()
             case .drawing:
                 self.isCanvasClean()
                 self.canvasView.isUserInteractionEnabled = true
-                
                 self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
                 self.annotationTextView.reloadInputViews()
-
+                
             case .music:
-                 self.canvasView.isUserInteractionEnabled = true
-                 
-                 self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
-                 self.annotationTextView.reloadInputViews()
+                self.canvasView.isUserInteractionEnabled = true
+                self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
+                self.annotationTextView.reloadInputViews()
             case .clear:
                 self.annotationTextView.text = ""
                 self.canvasView.drawing = PKDrawing()
                 self.isCanvasClean()
-                
             }
         }
         .store(in: &cancellables)

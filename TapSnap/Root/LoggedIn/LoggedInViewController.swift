@@ -11,14 +11,15 @@ import UIKit
 final class LoggedInViewController: UIViewController {
 
     private lazy var camera: UINavigationController = {
-        return UINavigationController(rootViewController: CameraViewController())
+        let nc =  UINavigationController(rootViewController: CameraViewController())
+        nc.modalPresentationStyle = .fullScreen
+        nc.isToolbarHidden = false
+        return nc
     }()
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        camera.modalPresentationStyle = .fullScreen
-        camera.isToolbarHidden = false
+
         present(camera, animated: false) {}
     }
     

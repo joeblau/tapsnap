@@ -59,19 +59,20 @@ final class CameraViewController: UIViewController {
     }()
     
     private lazy var menuViewController: UINavigationController = {
-        let nav =  UINavigationController(rootViewController: MenuViewController())
-        return nav
+        let nc =  UINavigationController(rootViewController: MenuViewController())
+        return nc
     }()
     
     private lazy var searchViewController: UINavigationController = {
-        let nav = UINavigationController(rootViewController: SearchContactsViewController())
-        return nav
+        let nc = UINavigationController(rootViewController: SearchContactsViewController())
+        return nc
     }()
     
     private lazy var playbackViewController: UINavigationController = {
-        let nav = UINavigationController()
-        nav.modalPresentationStyle = .overCurrentContext
-        return nav
+        let nc = UINavigationController()
+        nc.modalPresentationStyle = .overCurrentContext
+        nc.isToolbarHidden = false
+        return nc
     }()
     
     // MARK: - Lifecycle
@@ -94,19 +95,12 @@ final class CameraViewController: UIViewController {
         do {
             let editButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: nil)
             editButton.tintColor = .label
-            let recentsButton = UIBarButtonItem(image: UIImage(systemName: "clock", withConfiguration: UIImage.SymbolConfiguration(scale: .small)),
-                                                style: .plain,
-                                                target: nil, action: nil)
-            recentsButton.tintColor = .white
-            
+
             let pageControlButton = UIBarButtonItem(customView: contactPageControl)
             contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))
             
             let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction))
             searchButton.tintColor = .label
-            
-            let smallSpacer = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-            smallSpacer.width = 40
             
             let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
             toolbarItems = [editButton, spacer, pageControlButton, spacer,  searchButton]

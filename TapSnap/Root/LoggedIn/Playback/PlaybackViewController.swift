@@ -8,9 +8,12 @@
 
 import UIKit
 import AVKit
-import MapKit
+import Combine
+
 
 final class PlaybackViewController: UIViewController {
+
+//    var cancellables = Set<AnyCancellable>()
     
     private lazy var backButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
@@ -18,14 +21,6 @@ final class PlaybackViewController: UIViewController {
                                 target: self,
                                 action: #selector(dismissAction))
         b.tintColor = .label
-        return b
-    }()
-    
-    private lazy var groupNameButton: UIButton = {
-        let b = UIButton(type: .custom)
-        b.setTitle("Pop That", for: .normal)
-        b.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-        b.floatButton()
         return b
     }()
     
@@ -49,6 +44,39 @@ final class PlaybackViewController: UIViewController {
         return v
     }()
     
+    private lazy var saveButton: UIBarButtonItem = {
+        let bbi = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"),
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(saveTapAction))
+        bbi.tintColor = .label
+        return bbi
+    }()
+    
+    private lazy var heartButton: UIBarButtonItem = {
+        let bbi = UIBarButtonItem(image: UIImage(systemName: "heart"),
+                                            style: .plain,
+                                            target: self,
+                                            action: #selector(heartTapAction))
+        bbi.tintColor = .label
+        return bbi
+    }()
+    
+    var isHearted: Bool = false {
+        didSet {
+            switch isHearted {
+            case true:
+                heartButton.image = UIImage(systemName: "heart.fill")
+                heartButton.tintColor = .systemPink
+            case false:
+                heartButton.image = UIImage(systemName: "heart")
+                heartButton.tintColor = .label
+            }
+        }
+    }
+    
+    var cancellableMap: AnyCancellable?
+    
     // MARK: - Lifecycle
     
     init(url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8")!) {
@@ -62,7 +90,13 @@ final class PlaybackViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Pop That"
         view.backgroundColor = .systemBackground
+        
+        do {
+            let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+            toolbarItems = [saveButton, spacer, heartButton]
+        }
         bootstrap()
     }
     
@@ -73,6 +107,7 @@ final class PlaybackViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        cancellableMap?.cancel()
         playbackView.player?.pause()
         playbackView.player = nil
     }
@@ -92,12 +127,19 @@ final class PlaybackViewController: UIViewController {
         }
         dismiss(animated: true, completion: nil)
     }
+    
+    @objc func saveTapAction() {
+
+    }
+    
+    @objc func heartTapAction() {
+        isHearted.toggle()
+    }
 }
 
 
 extension PlaybackViewController: ViewBootstrappable {
     func configureViews() {
-        navigationItem.titleView = groupNameButton
         navigationItem.leftBarButtonItem = backButton
         navigationItem.rightBarButtonItem = nextButton
         
@@ -115,7 +157,63 @@ extension PlaybackViewController: ViewBootstrappable {
         mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
 
-    internal func configureButtonTargets() {
-        groupNameButton.addTarget(self, action: #selector(groupSettingsAction), for: .touchUpInside)
+    internal func configureStreams() {
+//        Current.mapDimensionSubject.sink(receiveValue: { dimension in
+//            self.mapCamera.centerCoordinate = self.theirccAnnotation.coordinate
+//
+//            switch dimension {
+//            case .two:
+//                self.toggle3DButton.setImage(UIImage(systemName: "view.3d"), for: .normal)
+//                self.toggle3DButton.accessibilityIdentifier = "3d"
+//
+//                self.mapType = .mutedStandard
+//
+//                self.mapCamera.pitch = 0
+//                self.mapCamera.altitude = 500
+//                self.mapCamera.heading = 0
+//
+//            case .three:
+//                self.toggle3DButton.setImage(UIImage(systemName: "view.2d"), for: .normal)
+//                self.toggle3DButton.accessibilityIdentifier = "2d"
+//
+//                self.mapType = .satelliteFlyover
+//
+//                self.mapCamera.pitch = 45
+//                self.mapCamera.altitude = 500
+//                self.mapCamera.heading = 45
+//            }
+//            UIView.animate(withDuration: 0.5) {
+//                self.camera = self.mapCamera
+//            }
+//        })
+//            .store(in: &cancellables)
+//
+//
+//        Current.mapAnnotationsSubject.sink(receiveValue: { annotationsGroup in
+
+//            switch annotationsGroup {
+//            case .them:
+//                self.toggle3DButton.isEnabled = true
+//                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person.2"), for: .normal)
+//                self.toggleAnnotationsButton.accessibilityIdentifier = "all"
+//
+//                self.mapType = .mutedStandard
+//
+//                self.mapCamera.pitch = 0
+//                self.mapCamera.altitude = 500
+//                self.mapCamera.heading = 0
+//
+//                UIView.animate(withDuration: 0.5) {
+//                     self.camera = self.mapCamera
+//                 }
+//            case .all:
+//                self.toggle3DButton.isEnabled = false
+//                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person"), for: .normal)
+//                self.toggleAnnotationsButton.accessibilityIdentifier = "them"
+//
+//                self.showAnnotations(self.annotations, animated: true)
+//            }
+//        })
+//        .store(in: &cancellables)
     }
 }

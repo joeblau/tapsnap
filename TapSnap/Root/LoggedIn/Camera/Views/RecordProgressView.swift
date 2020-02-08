@@ -30,7 +30,7 @@ final class RecordProgressView: UIView {
 // MARK: - ViewBootstrappable
 
 extension RecordProgressView: ViewBootstrappable {
-    private func subscribeToStreams() {
+    internal func configureStreams() {
         Current.recordingSubject.sink { action in
             switch action {
             case .start:
