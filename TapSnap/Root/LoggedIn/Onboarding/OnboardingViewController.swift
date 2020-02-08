@@ -10,6 +10,8 @@ import UIKit
 
 final class OnboardingViewController: UIViewController {
 
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }

@@ -21,6 +21,8 @@ final class SavedTapsViewController: UIViewController {
         return s
     }()
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Saved Taps"

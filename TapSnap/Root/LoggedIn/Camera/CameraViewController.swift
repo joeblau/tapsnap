@@ -70,18 +70,11 @@ final class CameraViewController: UIViewController {
         return nav
     }()
     
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        view.backgroundColor = .systemBackground
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        view.backgroundColor = .systemBackground
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: menuButton)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notifictionsButton)
         
@@ -119,23 +112,6 @@ final class CameraViewController: UIViewController {
             self.session.startRunning()
         }
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        view.addSubview(contactsCollectionView)
-        contactsCollectionView.heightAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2)).isActive = true
-        contactsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        contactsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        contactsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        
-        view.addSubview(previewView)
-        previewView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        previewView.bottomAnchor.constraint(equalTo: contactsCollectionView.topAnchor).isActive = true
-        previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-    }
-    
     
     // MARK: - Actions
     
@@ -295,14 +271,29 @@ final class CameraViewController: UIViewController {
 
 extension CameraViewController: ViewBootstrappable {
     
+    func configureViews() {
+        view.addSubview(contactsCollectionView)
+        contactsCollectionView.heightAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2)).isActive = true
+        contactsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        contactsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        contactsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        view.addSubview(previewView)
+        previewView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        previewView.bottomAnchor.constraint(equalTo: contactsCollectionView.topAnchor).isActive = true
+        previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    }
+    
     internal func configureStreams() {
         Current.activeCameraSubject
             .sink { position in
-                if position != .front {
-                    
+                switch position {
+                case .front:
                     self.sessionQueue.async {
                         self.configureSessionUpdate()
                     }
+                default: break
                 }
         }.store(in: &cancellables)
         

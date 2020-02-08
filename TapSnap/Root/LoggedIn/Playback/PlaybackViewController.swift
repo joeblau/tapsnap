@@ -36,17 +36,12 @@ final class PlaybackViewController: UIViewController {
     }()
     var tapsRemaining = 8
     
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        bootstrap()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        bootstrap()
+
         swipeableView.didDisappear = { view in
             if self.tapsRemaining <= 0 {
                 self.dismiss(animated: false, completion: nil)

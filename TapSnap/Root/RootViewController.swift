@@ -11,12 +11,9 @@ import AuthenticationServices
 
 class RootViewController: UIViewController {
     let provider = ASAuthorizationAppleIDProvider()
+    
+    // MARK: - Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         

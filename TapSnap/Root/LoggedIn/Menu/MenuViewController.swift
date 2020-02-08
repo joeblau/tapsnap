@@ -48,6 +48,8 @@ final class MenuViewController: UIViewController {
         return b
     }()
     
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground

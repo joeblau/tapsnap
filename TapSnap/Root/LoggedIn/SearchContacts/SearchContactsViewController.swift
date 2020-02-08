@@ -18,7 +18,9 @@ final class SearchContactsViewController: UIViewController {
         s.searchResultsUpdater = self
         return s
     }()
-    
+
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Search"
