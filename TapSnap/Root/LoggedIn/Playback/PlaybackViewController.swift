@@ -7,91 +7,113 @@
 //
 
 import UIKit
+import AVKit
+import MapKit
 
 final class PlaybackViewController: UIViewController {
     
-    private lazy var backButton: UIButton = {
-        let b = UIButton(type: .custom)
-        b.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        b.floatButton()
+    private lazy var backButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
+                                style: .plain,
+                                target: self,
+                                action: #selector(dismissAction))
+        b.tintColor = .label
         return b
     }()
     private lazy var groupNameButton: UIButton = {
         let b = UIButton(type: .custom)
         b.setTitle("Pop That", for: .normal)
+        b.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         b.floatButton()
         return b
     }()
-    private lazy var nextButton: UIButton = {
-        let b = UIButton(type: .custom)
-        b.setImage(UIImage(systemName: "forward.end"), for: .normal)
-        b.floatButton()
+    private lazy var nextButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(image: UIImage(systemName: "forward.end"),
+                                style: .plain,
+                                target: self,
+                                action: #selector(nextAction))
+        b.tintColor = .label
         return b
     }()
-    private lazy var swipeableView: ZLSwipeableView = {
-        let sv = ZLSwipeableView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        sv.allowedDirection = .All
-        return sv
+    
+    private lazy var mapView: PlaybackMapView = {
+        PlaybackMapView()
     }()
-    var tapsRemaining = 8
+    
+    private lazy var playbackView: PlayerView = {
+        let v = PlayerView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.playerLayer.videoGravity = .resizeAspectFill
+        return v
+    }()
     
     // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        bootstrap()
-
-        swipeableView.didDisappear = { view in
-            if self.tapsRemaining <= 0 {
-                self.dismiss(animated: false, completion: nil)
-            }
-            self.tapsRemaining -= 1
-        }
+    
+    init(url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8")!) {
+        super.init(nibName: nil, bundle: nil)
+        playbackView.player = AVPlayer(url: url)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        swipeableView.nextView = {
-            return self.nextTapSnapPlaybackView()
-        }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemBackground
+        bootstrap()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        playbackView.player?.play()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        playbackView.player?.pause()
+        playbackView.player = nil
     }
     
     // MARK: - Actions
     
     @objc func dismissAction() {
-        Current.presentViewContollersSubject.value = .none
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func groupSettingsAction() {}
     
     @objc func nextAction() {
-        swipeableView.swipeTopView(inDirection: .Right)
-    }
-    
-    func nextTapSnapPlaybackView() -> UIView? {
-        guard self.tapsRemaining > 1 else { return nil }
-        return TapSnapPlaybackView()
+        guard self == navigationController?.viewControllers.first else {
+            navigationController?.popViewController(animated: true)
+            return
+        }
+        dismiss(animated: true, completion: nil)
     }
 }
 
 
 extension PlaybackViewController: ViewBootstrappable {
-    internal func configureViews() {
+    func configureViews() {
         navigationItem.titleView = groupNameButton
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: nextButton)
+        navigationItem.leftBarButtonItem = backButton
+        navigationItem.rightBarButtonItem = nextButton
         
-        view.addSubview(swipeableView)
-        swipeableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        swipeableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        swipeableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        swipeableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        view.addSubview(playbackView)
+        playbackView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        playbackView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height/2).isActive = true
+        playbackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        playbackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+
+
+        view.addSubview(mapView)
+        mapView.topAnchor.constraint(equalTo: playbackView.bottomAnchor).isActive = true
+        mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
-    
+
     internal func configureButtonTargets() {
-        backButton.addTarget(self, action: #selector(dismissAction), for: .touchUpInside)
         groupNameButton.addTarget(self, action: #selector(groupSettingsAction), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
     }
 }

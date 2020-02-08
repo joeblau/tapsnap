@@ -12,25 +12,29 @@ import AVFoundation
 
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
-    
+    private let tapNotificationCount = 8
     // Top left
-    private lazy var menuButton: UIButton = {
-        let b = UIButton(type: .custom)
-        b.setImage(UIImage(systemName: "line.horizontal.3"), for: .normal)
-        b.floatButton()
+    private lazy var menuButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
+                                style: .plain,
+                                target: self,
+                                action: #selector(showMenuAction))
+        b.tintColor = .label
         return b
     }()
-    private lazy var clearButton: UIButton = {
-        let b = UIButton(type: .custom)
-        b.setImage(UIImage(systemName: "clear"), for: .normal)
-        b.floatButton()
+    private lazy var clearButton: UIBarButtonItem = {
+        let b = UIBarButtonItem(image: UIImage(systemName: "clear"),
+                                style: .plain,
+                                target: self,
+                                action: #selector(showMenuAction))
+        b.tintColor = .label
         return b
     }()
     
     // Top right
     lazy var notifictionsButton: UIButton = {
         let b = UIButton(type: .custom)
-        b.setTitle("8", for: .normal)
+        b.setTitle("\(tapNotificationCount)", for: .normal)
         b.notification(diameter: 20)
         return b
     }()
@@ -65,17 +69,26 @@ final class CameraViewController: UIViewController {
     }()
     
     private lazy var playbackViewController: UINavigationController = {
-        let nav = UINavigationController(rootViewController: PlaybackViewController())
+        let nav = UINavigationController()
         nav.modalPresentationStyle = .overCurrentContext
         return nav
     }()
     
     // MARK: - Lifecycle
     
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        bootstrap()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: menuButton)
+        navigationItem.leftBarButtonItem = menuButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notifictionsButton)
         
         do {
@@ -98,8 +111,6 @@ final class CameraViewController: UIViewController {
             let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
             toolbarItems = [editButton, spacer, pageControlButton, spacer,  searchButton]
         }
-
-        bootstrap()
         
         sessionQueue.async {
             self.configureSession()
@@ -264,7 +275,6 @@ final class CameraViewController: UIViewController {
         
         return newVideoDevice
     }
-    
 }
 
 // MARK: - ViewBootstrappable
@@ -301,10 +311,14 @@ extension CameraViewController: ViewBootstrappable {
             .sink { present in
                 switch present {
                 case .none:
+                    
                     self.dismiss(animated: true)
                 case .menu, .search: break
                     
                 case .playback:
+                    (0 ..< self.tapNotificationCount).forEach { _ in
+                        self.playbackViewController.pushViewController(PlaybackViewController(), animated: false)
+                    }
                     self.present(self.playbackViewController, animated: true) {}
                 }
         }
@@ -316,17 +330,15 @@ extension CameraViewController: ViewBootstrappable {
                 case .none:
                     self.navigationItem.leftBarButtonItem = nil
                 case .menu:
-                    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.menuButton)
+                    self.navigationItem.leftBarButtonItem = self.menuButton
                 case .clear:
-                    self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: self.clearButton)
+                    self.navigationItem.leftBarButtonItem = self.clearButton
                 }
         }
         .store(in: &cancellables)
     }
     
     internal func configureButtonTargets() {
-        menuButton.addTarget(self, action: #selector(showMenuAction), for: .touchUpInside)
         notifictionsButton.addTarget(self, action: #selector(showPlaybackAction), for: .touchUpInside)
-        clearButton.addTarget(self, action: #selector(clearEditingAction), for: .touchUpInside)
     }
 }

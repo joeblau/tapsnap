@@ -13,7 +13,7 @@ import CoreLocation
 import Contacts
 
 final class PlaybackMapView: MKMapView {
-    private var cancellables = Set<AnyCancellable>()
+//    private var cancellables = Set<AnyCancellable>()
     private let myLocation: CLLocation
     private let theirLocation: CLLocation
     let kButtonSize: CGFloat = 48
@@ -210,65 +210,65 @@ extension PlaybackMapView: ViewBootstrappable {
         timeDistanceLocation.trailingAnchor.constraint(equalTo: mapActionsStack.leadingAnchor, constant: -kButtonPadding).isActive = true
     }
         
-    internal func configureStreams() {
-        Current.mapDimensionSubject.sink(receiveValue: { dimension in
-            self.mapCamera.centerCoordinate = self.theirAnnotation.coordinate
-
-            switch dimension {
-            case .two:
-                self.toggle3DButton.setImage(UIImage(systemName: "view.3d"), for: .normal)
-                self.toggle3DButton.accessibilityIdentifier = "3d"
-
-                self.mapType = .mutedStandard
-
-                self.mapCamera.pitch = 0
-                self.mapCamera.altitude = 500
-                self.mapCamera.heading = 0
-                
-            case .three:
-                self.toggle3DButton.setImage(UIImage(systemName: "view.2d"), for: .normal)
-                self.toggle3DButton.accessibilityIdentifier = "2d"
-
-                self.mapType = .satelliteFlyover
-        
-                self.mapCamera.pitch = 45
-                self.mapCamera.altitude = 500
-                self.mapCamera.heading = 45
-            }
-            UIView.animate(withDuration: 0.5) {
-                self.camera = self.mapCamera
-            }
-        })
-        .store(in: &cancellables)
-        
-        
-        Current.mapAnnotationsSubject.sink(receiveValue: { annotationsGroup in
-
-            switch annotationsGroup {
-            case .them:
-                self.toggle3DButton.isEnabled = true
-                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person.2"), for: .normal)
-                self.toggleAnnotationsButton.accessibilityIdentifier = "all"
-                
-                self.mapType = .mutedStandard
-                
-                self.mapCamera.pitch = 0
-                self.mapCamera.altitude = 500
-                self.mapCamera.heading = 0
-                
-                UIView.animate(withDuration: 0.5) {
-                     self.camera = self.mapCamera
-                 }
-            case .all:
-                self.toggle3DButton.isEnabled = false
-                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person"), for: .normal)
-                self.toggleAnnotationsButton.accessibilityIdentifier = "them"
-                
-                self.showAnnotations(self.annotations, animated: true)
-            }
-        })
-        .store(in: &cancellables)
-    }
+//    internal func configureStreams() {
+//        Current.mapDimensionSubject.sink(receiveValue: { dimension in
+//            self.mapCamera.centerCoordinate = self.theirAnnotation.coordinate
+//
+//            switch dimension {
+//            case .two:
+//                self.toggle3DButton.setImage(UIImage(systemName: "view.3d"), for: .normal)
+//                self.toggle3DButton.accessibilityIdentifier = "3d"
+//
+//                self.mapType = .mutedStandard
+//
+//                self.mapCamera.pitch = 0
+//                self.mapCamera.altitude = 500
+//                self.mapCamera.heading = 0
+//
+//            case .three:
+//                self.toggle3DButton.setImage(UIImage(systemName: "view.2d"), for: .normal)
+//                self.toggle3DButton.accessibilityIdentifier = "2d"
+//
+//                self.mapType = .satelliteFlyover
+//
+//                self.mapCamera.pitch = 45
+//                self.mapCamera.altitude = 500
+//                self.mapCamera.heading = 45
+//            }
+//            UIView.animate(withDuration: 0.5) {
+//                self.camera = self.mapCamera
+//            }
+//        })
+//        .store(in: &cancellables)
+//
+//
+//        Current.mapAnnotationsSubject.sink(receiveValue: { annotationsGroup in
+//
+//            switch annotationsGroup {
+//            case .them:
+//                self.toggle3DButton.isEnabled = true
+//                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person.2"), for: .normal)
+//                self.toggleAnnotationsButton.accessibilityIdentifier = "all"
+//
+//                self.mapType = .mutedStandard
+//
+//                self.mapCamera.pitch = 0
+//                self.mapCamera.altitude = 500
+//                self.mapCamera.heading = 0
+//
+//                UIView.animate(withDuration: 0.5) {
+//                     self.camera = self.mapCamera
+//                 }
+//            case .all:
+//                self.toggle3DButton.isEnabled = false
+//                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person"), for: .normal)
+//                self.toggleAnnotationsButton.accessibilityIdentifier = "them"
+//
+//                self.showAnnotations(self.annotations, animated: true)
+//            }
+//        })
+//        .store(in: &cancellables)
+//    }
 }
 
 // MARK: - MKMapViewDelegate
@@ -294,18 +294,18 @@ extension PlaybackMapView: MKMapViewDelegate {
                                                         return nil
         }
         
-        let idx = Int.random(in: 0 ... 10)
-        let url = URL(string: "https://i.pravatar.cc/150?img=\(idx)")!
-        URLSession.shared.dataTaskPublisher(for: url)
-            .map { UIImage(data: $0.data)! }
-            .eraseToAnyPublisher()
-            .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
-                //                print(completion)
-            }) { image in
-                view.configure(image: image)
-        }
-        .store(in: &self.cancellables)
+//        let idx = Int.random(in: 0 ... 10)
+//        let url = URL(string: "https://i.pravatar.cc/150?img=\(idx)")!
+//        URLSession.shared.dataTaskPublisher(for: url)
+//            .map { UIImage(data: $0.data)! }
+//            .eraseToAnyPublisher()
+//            .receive(on: DispatchQueue.main)
+//            .sink(receiveCompletion: { completion in
+//                //                print(completion)
+//            }) { image in
+//                view.configure(image: image)
+//        }
+//        .store(in: &self.cancellables)
         
         return view
     }
