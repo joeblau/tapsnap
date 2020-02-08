@@ -26,7 +26,7 @@ final class CameraViewController: UIViewController {
         let b = UIBarButtonItem(image: UIImage(systemName: "clear"),
                                 style: .plain,
                                 target: self,
-                                action: #selector(showMenuAction))
+                                action: #selector(clearEditingAction))
         b.tintColor = .label
         return b
     }()

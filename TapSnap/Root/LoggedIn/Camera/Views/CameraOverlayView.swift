@@ -161,8 +161,12 @@ final class CameraOverlayView: UIView {
         }
     }
     
-    var isCanvasClean: Bool {
-        canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty
+    func isCanvasClean() {
+        let isclean = canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty
+        switch isclean {
+            case true: Current.topLeftNavBarSubject.value = .none
+            case false: Current.topLeftNavBarSubject.value = .clear
+        }
     }
 }
 
@@ -244,18 +248,14 @@ extension CameraOverlayView: ViewBootstrappable {
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.resignFirstResponder()
             case .keyboard:
-                if !self.isCanvasClean {
-                    Current.topLeftNavBarSubject.value = .clear
-                }
+                self.isCanvasClean()
                 self.canvasView.isUserInteractionEnabled = false
                 
                 self.annotationTextView.inputView?.removeFromSuperview()
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.reloadInputViews()
             case .drawing:
-                if !self.isCanvasClean {
-                    Current.topLeftNavBarSubject.value = .clear
-                }
+                self.isCanvasClean()
                 self.canvasView.isUserInteractionEnabled = true
                 
                 self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
@@ -267,11 +267,10 @@ extension CameraOverlayView: ViewBootstrappable {
                  self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
                  self.annotationTextView.reloadInputViews()
             case .clear:
-                if !self.isCanvasClean {
-                    Current.topLeftNavBarSubject.value = .none
-                }
                 self.annotationTextView.text = ""
                 self.canvasView.drawing = PKDrawing()
+                self.isCanvasClean()
+                
             }
         }
         .store(in: &cancellables)

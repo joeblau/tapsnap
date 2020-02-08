@@ -20,6 +20,7 @@ final class PlaybackViewController: UIViewController {
         b.tintColor = .label
         return b
     }()
+    
     private lazy var groupNameButton: UIButton = {
         let b = UIButton(type: .custom)
         b.setTitle("Pop That", for: .normal)
@@ -27,6 +28,7 @@ final class PlaybackViewController: UIViewController {
         b.floatButton()
         return b
     }()
+    
     private lazy var nextButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "forward.end"),
                                 style: .plain,
