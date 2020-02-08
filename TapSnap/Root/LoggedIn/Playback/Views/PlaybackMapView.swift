@@ -88,13 +88,7 @@ final class PlaybackMapView: MKMapView {
         
         super.init(frame: .zero)
         delegate = self
-        isZoomEnabled = false
-        isScrollEnabled = false
-        isRotateEnabled = false
-        isPitchEnabled = false
-        showsCompass = false
-        showsScale = false
-        showsBuildings = true
+
         translatesAutoresizingMaskIntoConstraints = false
         register(PersonAnnotationView.self, forAnnotationViewWithReuseIdentifier: PersonAnnotationView.id)
         

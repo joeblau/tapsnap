@@ -10,6 +10,7 @@ import UIKit
 import Combine
 import CoreLocation
 import AVFoundation
+import MapKit
 
 enum RecordAction {
     case start
@@ -57,6 +58,19 @@ struct World {
         configuraiton.allowsExpensiveNetworkAccess = true
         
         return URLSession(configuration: configuraiton)
+    }()
+    
+    let mapView: MKMapView = {
+        let mv = MKMapView()
+        mv.translatesAutoresizingMaskIntoConstraints = false
+        mv.isZoomEnabled = false
+        mv.isScrollEnabled = false
+        mv.isRotateEnabled = false
+        mv.isPitchEnabled = false
+        mv.showsCompass = false
+        mv.showsScale = false
+        mv.showsBuildings = true
+        return mv
     }()
     
     // Constants

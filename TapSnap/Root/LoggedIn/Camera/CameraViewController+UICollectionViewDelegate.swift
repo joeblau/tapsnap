@@ -14,10 +14,10 @@ extension CameraViewController: UICollectionViewDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-       Current.recordingSubject.value = .start
+        Current.recordingSubject.send(.start)
     }
     
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
-        Current.recordingSubject.value = .stop
+        Current.recordingSubject.send(.stop)
     }
 }

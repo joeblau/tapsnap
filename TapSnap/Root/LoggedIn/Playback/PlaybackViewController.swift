@@ -8,12 +8,14 @@
 
 import UIKit
 import AVKit
+import MapKit
 import Combine
-
 
 final class PlaybackViewController: UIViewController {
 
-//    var cancellables = Set<AnyCancellable>()
+    private lazy var cancellables: Set<AnyCancellable> = {
+        Set<AnyCancellable>()
+    }()
     
     private lazy var backButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
@@ -31,17 +33,6 @@ final class PlaybackViewController: UIViewController {
                                 action: #selector(nextAction))
         b.tintColor = .label
         return b
-    }()
-    
-    private lazy var mapView: PlaybackMapView = {
-        PlaybackMapView()
-    }()
-    
-    private lazy var playbackView: PlayerView = {
-        let v = PlayerView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.playerLayer.videoGravity = .resizeAspectFill
-        return v
     }()
     
     private lazy var saveButton: UIBarButtonItem = {
@@ -62,6 +53,10 @@ final class PlaybackViewController: UIViewController {
         return bbi
     }()
     
+    private lazy var spacer: UIBarButtonItem = {
+        UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+    }()
+    
     var isHearted: Bool = false {
         didSet {
             switch isHearted {
@@ -75,41 +70,43 @@ final class PlaybackViewController: UIViewController {
         }
     }
     
-    var cancellableMap: AnyCancellable?
+    private lazy var playerView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    
+    private lazy var mapView: MKMapView = {
+        Current.mapView
+    }()
+
+    var looper: PlayerLooper?
     
     // MARK: - Lifecycle
-    
-    init(url: URL = URL(string: "https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8")!) {
-        super.init(nibName: nil, bundle: nil)
-        playbackView.player = AVPlayer(url: url)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Pop That"
         view.backgroundColor = .systemBackground
-        
-        do {
-            let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-            toolbarItems = [saveButton, spacer, heartButton]
-        }
+    
+         if let playerPath = Bundle.main.path(forResource: "ts1", ofType:"mov") {
+            looper = PlayerLooper(videoURL: URL(fileURLWithPath: playerPath), loopCount: 0)
+         }
+        toolbarItems = [saveButton, spacer, heartButton]
         bootstrap()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        playbackView.player?.play()
+        looper?.start(in: playerView.layer)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        cancellableMap?.cancel()
-        playbackView.player?.pause()
-        playbackView.player = nil
+        looper?.stop()
+        cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
     }
     
     // MARK: - Actions
@@ -128,9 +125,7 @@ final class PlaybackViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @objc func saveTapAction() {
-
-    }
+    @objc func saveTapAction() {}
     
     @objc func heartTapAction() {
         isHearted.toggle()
@@ -143,15 +138,15 @@ extension PlaybackViewController: ViewBootstrappable {
         navigationItem.leftBarButtonItem = backButton
         navigationItem.rightBarButtonItem = nextButton
         
-        view.addSubview(playbackView)
-        playbackView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        playbackView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height/2).isActive = true
-        playbackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        playbackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        view.addSubview(playerView)
+        playerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        playerView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height/2).isActive = true
+        playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 
 
         view.addSubview(mapView)
-        mapView.topAnchor.constraint(equalTo: playbackView.bottomAnchor).isActive = true
+        mapView.topAnchor.constraint(equalTo: playerView.bottomAnchor).isActive = true
         mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true

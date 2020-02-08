@@ -42,7 +42,6 @@
 		C29EE32C12F71E0B9F186304 /* SearchContactsViewController+UISearchResultsUpdating.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */; };
 		C8D06DFC8502753F611D62C0 /* MenuModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498458FBC2D4D55AE69522B1 /* MenuModels.swift */; };
 		CF316AB82F76159755C780BD /* SearchContactsViewController+UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */; };
-		D59421B3FE33363D8E81909A /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B573CFC277812B8A5F9B7BBE /* PlaybackView.swift */; };
 		DBC106F1029BFF5DD36907DA /* PersonAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CC607B90ABB2DC535F466F /* PersonAnnotationView.swift */; };
 		DD02C776E10CF87F7623060B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */; };
 		DD6A04D0AC022CB627DB36AE /* LoggedOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0481FEC9E55AB29A26B9238B /* LoggedOutViewController.swift */; };
@@ -51,6 +50,8 @@
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
 		E718FD70CBEF1713E161EC68 /* ViewBootstrappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F1B7785FF0DC5D68FD478D /* ViewBootstrappable.swift */; };
 		EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390017BF26255640A332187B /* MenuCellTableViewCell.swift */; };
+		ED2C483623EF3733004F7F52 /* ts1.mov in Resources */ = {isa = PBXBuildFile; fileRef = ED2C483523EF3733004F7F52 /* ts1.mov */; };
+		ED2C483A23EF40A2004F7F52 /* PlayerLooper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C483923EF40A2004F7F52 /* PlayerLooper.swift */; };
 		F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */; };
 		F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
@@ -109,13 +110,14 @@
 		9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tapsnap.entitlements; sourceTree = "<group>"; };
 		A86F521E8A3727658211B4A2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDataSource.swift"; sourceTree = "<group>"; };
-		B573CFC277812B8A5F9B7BBE /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
 		B70F817896C777AFB3FC0433 /* ContactCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCollectionViewCell.swift; sourceTree = "<group>"; };
 		B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		C4C8B897FDADE8980A430106 /* MusicPlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlaybackView.swift; sourceTree = "<group>"; };
 		D092867E340FFAEA0055EC8C /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		D0F1B7785FF0DC5D68FD478D /* ViewBootstrappable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewBootstrappable.swift; sourceTree = "<group>"; };
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
+		ED2C483523EF3733004F7F52 /* ts1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = ts1.mov; sourceTree = "<group>"; };
+		ED2C483923EF40A2004F7F52 /* PlayerLooper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerLooper.swift; sourceTree = "<group>"; };
 		EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
 		F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
 		F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 		5A6F49659D49014364C59390 /* Tapsnap */ = {
 			isa = PBXGroup;
 			children = (
+				ED2C483523EF3733004F7F52 /* ts1.mov */,
 				1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */,
 				4D03047C2E3CD982E5D1E38E /* Assets.xcassets */,
 				880AA06728253910B5D1F81A /* Info.plist */,
@@ -334,9 +337,9 @@
 		F833A6B6616A443E1FCE1C61 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				ED2C483923EF40A2004F7F52 /* PlayerLooper.swift */,
 				58CC607B90ABB2DC535F466F /* PersonAnnotationView.swift */,
 				9BA477EB369B1A0406BA33B4 /* PlaybackMapView.swift */,
-				B573CFC277812B8A5F9B7BBE /* PlaybackView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -450,6 +453,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED2C483623EF3733004F7F52 /* ts1.mov in Resources */,
 				A82CDC252A3653C4519C16FA /* Assets.xcassets in Resources */,
 				DD02C776E10CF87F7623060B /* LaunchScreen.storyboard in Resources */,
 			);
@@ -486,9 +490,9 @@
 				18DFAD298AD224C785C85011 /* OnboardingViewController.swift in Sources */,
 				DBC106F1029BFF5DD36907DA /* PersonAnnotationView.swift in Sources */,
 				54DEC2474D65342E4BAB5758 /* PlaybackMapView.swift in Sources */,
-				D59421B3FE33363D8E81909A /* PlaybackView.swift in Sources */,
 				1047116A40B5EE793B3B33B2 /* PlaybackViewController.swift in Sources */,
 				FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */,
+				ED2C483A23EF40A2004F7F52 /* PlayerLooper.swift in Sources */,
 				E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */,
 				500C9678CE94513205BEA4D0 /* SavedTapsViewController+UISearchBarDelegate.swift in Sources */,
 				B2B31D4CC31457910B010787 /* SavedTapsViewController+UISearchControllerDelegate.swift in Sources */,
