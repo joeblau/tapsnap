@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MenuCellTableViewCell: UITableViewCell {
+final class MenuCellTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class PersonAnnotationView: MKAnnotationView {
+final class PersonAnnotationView: MKAnnotationView {
     
     override init(annotation: MKAnnotation?, reuseIdentifier: String?) {
         super.init(annotation: annotation, reuseIdentifier: reuseIdentifier)

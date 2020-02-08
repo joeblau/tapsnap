@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchContactsViewController: UIViewController {
+final class SearchContactsViewController: UIViewController {
 
     lazy var searchController: UISearchController = {
         let s = UISearchController(searchResultsController: nil)
@@ -15,8 +15,6 @@ class SearchContactsViewController: UIViewController {
         s.obscuresBackgroundDuringPresentation = false
         s.delegate = self
         s.searchBar.delegate = self
-//        s.searchBar.showsScopeBar = true
-//        s.searchBar.scopeButtonTitles = ["List", "Map"]
         s.searchResultsUpdater = self
         return s
     }()

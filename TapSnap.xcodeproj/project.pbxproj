@@ -52,6 +52,8 @@
 		EDE04CBC23EDB9540099941B /* SavedTapsViewController+UISearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CBB23EDB9540099941B /* SavedTapsViewController+UISearchControllerDelegate.swift */; };
 		EDE04CBE23EDB95F0099941B /* SavedTapsViewController+UISearchResultsUpdating.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CBD23EDB95F0099941B /* SavedTapsViewController+UISearchResultsUpdating.swift.swift */; };
 		EDE04CC023EDB9640099941B /* SavedTapsViewController+UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CBF23EDB9640099941B /* SavedTapsViewController+UISearchBarDelegate.swift */; };
+		EDE04CC223EE5DAB0099941B /* ViewBootstrappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CC123EE5DAB0099941B /* ViewBootstrappable.swift */; };
+		EDE04CC423EE66E20099941B /* SyncTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE04CC323EE66E20099941B /* SyncTableViewCell.swift */; };
 		F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */; };
 		F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
@@ -123,6 +125,8 @@
 		EDE04CBB23EDB9540099941B /* SavedTapsViewController+UISearchControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchControllerDelegate.swift"; sourceTree = "<group>"; };
 		EDE04CBD23EDB95F0099941B /* SavedTapsViewController+UISearchResultsUpdating.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchResultsUpdating.swift.swift"; sourceTree = "<group>"; };
 		EDE04CBF23EDB9640099941B /* SavedTapsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
+		EDE04CC123EE5DAB0099941B /* ViewBootstrappable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewBootstrappable.swift; sourceTree = "<group>"; };
+		EDE04CC323EE66E20099941B /* SyncTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTableViewCell.swift; sourceTree = "<group>"; };
 		F420A6109186EC43F0536C28 /* Scheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scheduler.swift; sourceTree = "<group>"; };
 		F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TapsnapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5A2FC5490E9793C4E6270D8 /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -211,6 +215,7 @@
 				935656CC9CE2FB280661178F /* UIButton+Extension.swift */,
 				B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */,
 				2FCE2621E3412630A639A0E9 /* World.swift */,
+				EDE04CC123EE5DAB0099941B /* ViewBootstrappable.swift */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -229,6 +234,7 @@
 				E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */,
 				324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */,
 				136E453746FC1A56F9A261CA /* TextOverlayView.swift */,
+				EDE04CC323EE66E20099941B /* SyncTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -517,12 +523,14 @@
 				EDE04CAD23EDAACC0099941B /* MenuCellTableViewCell.swift in Sources */,
 				0BB7CAA9C661FCDBC279BEFD /* SceneDelegate.swift in Sources */,
 				EC8B85F3F9C2875B29FE41D8 /* Scheduler.swift in Sources */,
+				EDE04CC223EE5DAB0099941B /* ViewBootstrappable.swift in Sources */,
 				FA7382475E6686911F0C7470 /* TapSnapPlaybackView.swift in Sources */,
 				ED22A29623ED46EC001D8AD1 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
 				3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */,
 				EDE04CBA23EDB91B0099941B /* SavedTapsViewController.swift in Sources */,
 				BE7021A6E63D3B1B771DE218 /* UIButton+Extension.swift in Sources */,
 				F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */,
+				EDE04CC423EE66E20099941B /* SyncTableViewCell.swift in Sources */,
 				5B84AF0202D17083508868D5 /* ViewManager.swift in Sources */,
 				9E45F15C27283EA75A95FDA8 /* World.swift in Sources */,
 				B13C93A8F6FC4F9C05387E09 /* ZLSwipeableView.swift in Sources */,

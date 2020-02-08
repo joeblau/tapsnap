@@ -8,49 +8,38 @@
 
 import UIKit
 
-class ContactCollectionViewCell: UICollectionViewCell {
+final class ContactCollectionViewCell: UICollectionViewCell {
     
-    let contactImageView = UIImageView()
-    let titleLabel = UILabel()
+    private lazy var contactImageView: UIImageView  = {
+        let iv = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        return iv
+    }()
+    
+    private lazy var titleLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.adjustsFontSizeToFitWidth = true
+        l.minimumScaleFactor = 0.6
+        l.layer.shadowColor = UIColor.black.cgColor
+        l.layer.shadowOffset = .zero
+        l.layer.shadowRadius = 1
+        l.layer.shadowOpacity = 1.0
+        l.layer.masksToBounds = false
+        l.clipsToBounds = false
+        l.textAlignment = .center
+        return l
+    }()
     
     override init(frame: CGRect) {
-        contactImageView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .secondarySystemBackground
-        
-        titleLabel.adjustsFontSizeToFitWidth = true
-        titleLabel.minimumScaleFactor = 0.6
-        titleLabel.layer.shadowColor = UIColor.black.cgColor
-        titleLabel.layer.shadowOffset = .zero
-        titleLabel.layer.shadowRadius = 1
-        titleLabel.layer.shadowOpacity = 1.0
-        titleLabel.layer.masksToBounds = false
-        titleLabel.clipsToBounds = false
-        titleLabel.textAlignment = .center
-        
-        configureViews()
+        bootstrap()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - Configure Views
-    
-    private func configureViews() {
-        addSubview(contactImageView)
-        contactImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        contactImageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        contactImageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        contactImageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        
-        addSubview(titleLabel)
-        titleLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2).isActive = true
     }
     
     func configure(image: UIImage,
@@ -81,4 +70,23 @@ class ContactCollectionViewCell: UICollectionViewCell {
     
     static let id = String(describing: ContactCollectionViewCell.self)
 
+}
+
+// MARK: - ViewBootstrappable
+
+extension ContactCollectionViewCell: ViewBootstrappable {
+    internal func configureViews() {
+        addSubview(contactImageView)
+        contactImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        contactImageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        contactImageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        contactImageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        addSubview(titleLabel)
+        titleLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2).isActive = true
+    }
+    
 }

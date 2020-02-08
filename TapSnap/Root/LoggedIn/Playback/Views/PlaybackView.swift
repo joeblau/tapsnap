@@ -10,15 +10,18 @@ import UIKit
 import AVKit
 
 final class PlaybackView: UIView {
-    private let player: AVPlayer
-    private let playerLayer: AVPlayerLayer
+    private let url: URL
+    private lazy var player: AVPlayer = {
+        return AVPlayer(url: url)
+    }()
+    private lazy var playerLayer: AVPlayerLayer = {
+        let pl = AVPlayerLayer(player: player)
+        pl.videoGravity = .resizeAspectFill
+        return pl
+    }()
     
     init(url: URL) {
-        
-        player = AVPlayer(url: url)
-        playerLayer = AVPlayerLayer(player: player)
-        playerLayer.videoGravity = .resizeAspectFill
-        
+        self.url = url
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         layer.addSublayer(playerLayer)

@@ -13,60 +13,50 @@ final class MusicPlaybackView: UIView {
     
     private let intrinsicHeight: CGFloat
     private let musicPlayer = MPMusicPlayerController.systemMusicPlayer
-    
-    private let musicTableView = UITableView(frame: .zero, style: .insetGrouped)
-    
+    private lazy var musicTableView: UITableView = {
+        let tv = UITableView(frame: .zero, style: .insetGrouped)
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.alwaysBounceVertical = false
+        tv.estimatedRowHeight = 54
+        tv.rowHeight = UITableView.automaticDimension
+        tv.backgroundColor = .clear
+        tv.allowsSelection = false
+        tv.register(SyncTableViewCell.self, forCellReuseIdentifier: SyncTableViewCell.id)
+        tv.register(NowPlayingPreviewTableViewCell.self, forCellReuseIdentifier: NowPlayingPreviewTableViewCell.id)
+        tv.dataSource = self
+        return tv
+    }()
+
     init(height: CGFloat) {
-        musicTableView.translatesAutoresizingMaskIntoConstraints = false
-        musicTableView.alwaysBounceVertical = false
-        musicTableView.estimatedRowHeight = 54
-        musicTableView.rowHeight = UITableView.automaticDimension
-        musicTableView.backgroundColor = .clear
-        musicTableView.allowsSelection = false
-        
         intrinsicHeight = height - 48.0
-        
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        
-        do {
-            musicTableView.register(SyncTableViewCell.self, forCellReuseIdentifier: SyncTableViewCell.id)
-            musicTableView.register(NowPlayingPreviewTableViewCell.self, forCellReuseIdentifier: NowPlayingPreviewTableViewCell.id)
-            musicTableView.dataSource = self
-        }
-        
-        do {
-            configureButtonTargets()
-            configureViews()
-        }
+        bootstrap()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Configure Button Targets
-    
-    private func configureButtonTargets() {}
-    
-    // MARK: - Configure Views
-    
-    private func configureViews() {
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: UIWindow().screen.bounds.width,
+                      height: intrinsicHeight)
+    }
+}
+
+// MARK: - ViewBootstrappable
+
+extension MusicPlaybackView: ViewBootstrappable {
+    internal func configureViews() {
         addSubview(musicTableView)
         musicTableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         musicTableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
         musicTableView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         musicTableView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
-    
-    override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIWindow().screen.bounds.width,
-                      height: intrinsicHeight)
-    }
-    
-    // MARK: - Actions
-    
 }
+
+// MARK: - UITableViewDataSource
 
 extension MusicPlaybackView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int { 2 }
@@ -84,7 +74,6 @@ extension MusicPlaybackView: UITableViewDataSource {
         case 1:
             guard let mediaCell = tableView.dequeueReusableCell(withIdentifier: NowPlayingPreviewTableViewCell.id, for: indexPath) as? NowPlayingPreviewTableViewCell else {
                 fatalError("Undefined cell")
-                
             }
             if let nowPlaying = musicPlayer.nowPlayingItem {
                 mediaCell.configure(image: nowPlaying.artwork?.image(at: CGSize(width: 256, height: 256)),

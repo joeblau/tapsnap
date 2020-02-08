@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-class RecordProgressView: UIView {
+final class RecordProgressView: UIView {
 
     var progressView: UIView?
     var widthConstraint: NSLayoutConstraint!
@@ -18,18 +18,18 @@ class RecordProgressView: UIView {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        
-        do {
-            subscribeToStreams()
-        }
+        bootstrap()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Subscribe To Streams
-    
+}
+
+// MARK: - ViewBootstrappable
+
+extension RecordProgressView: ViewBootstrappable {
     private func subscribeToStreams() {
         Current.recordingSubject.sink { action in
             switch action {
@@ -69,5 +69,4 @@ class RecordProgressView: UIView {
         }
         .store(in: &cancellables)
     }
-    
 }

@@ -8,31 +8,18 @@
 
 import UIKit
 
-class LoggedInViewController: UIViewController {
+final class LoggedInViewController: UIViewController {
 
-    weak var camera: UINavigationController? {
+    private lazy var camera: UINavigationController = {
         return UINavigationController(rootViewController: CameraViewController())
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+    }()
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Show onboarding
         
-        // Show camera
-        if let camera = camera {
-            camera.modalPresentationStyle = .fullScreen
-            camera.isToolbarHidden = false
-            present(camera, animated: false) {}
-        }
-        // show settings
+        camera.modalPresentationStyle = .fullScreen
+        camera.isToolbarHidden = false
+        present(camera, animated: false) {}
     }
     
-    @objc func test() {}
-
-
-
 }

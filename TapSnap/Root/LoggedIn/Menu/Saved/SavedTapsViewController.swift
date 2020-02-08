@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SavedTapsViewController: UIViewController {
+final class SavedTapsViewController: UIViewController {
     
     lazy var searchController: UISearchController = {
         let s = UISearchController(searchResultsController: nil)

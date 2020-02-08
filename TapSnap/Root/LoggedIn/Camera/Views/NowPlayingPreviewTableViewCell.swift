@@ -8,88 +8,43 @@
 
 import UIKit
 
-class SyncTableViewCell: UITableViewCell {
-        private let playSwitch = UISwitch()
+final class NowPlayingPreviewTableViewCell: UITableViewCell {
+
+    private lazy var artworkImageView: UIImageView = {
+        let iv  = UIImageView()
+        iv.translatesAutoresizingMaskIntoConstraints = false
+        iv.layer.masksToBounds = true
+        iv.layer.cornerRadius = 8
+        return iv
+    }()
     
+    private lazy var titleLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.numberOfLines = 0
+        l.font = UIFont.preferredFont(forTextStyle: .headline)
+        return l
+    }()
+        
+    private lazy var artistLabel: UILabel = {
+        return UILabel()
+    }()
+
+    private lazy var contentStackView: UIStackView = {
+        let sv = UIStackView(arrangedSubviews: [titleLabel, artistLabel, UIView()])
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.axis = .vertical
+        sv.distribution = .fill
+        return sv
+    }()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+        bootstrap()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func configure(playbackTime: TimeInterval) {
-        imageView?.image = UIImage(systemName: "metronome")
-        imageView?.tintColor = .label
-        textLabel?.text = "Music Sync"
-        
-        do {
-            let attributedMetadataString = NSMutableAttributedString()
-
-            if let formatPlayback = Current.formatter.progress.string(from: playbackTime) {
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = UIImage(systemName: "play.fill",
-                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
-                .withTintColor(.white, renderingMode: .alwaysOriginal)
-            
-            attributedMetadataString.append(NSAttributedString(attachment: imageAttachment))
-            
-            attributedMetadataString.append(NSAttributedString(string: " \(formatPlayback)"))
-            detailTextLabel?.attributedText = attributedMetadataString
-            }
-        }
-                
-        accessoryView = playSwitch
-    }
-    
-    static let id = String(describing: SyncTableViewCell.self)
-}
-
-class NowPlayingPreviewTableViewCell: UITableViewCell {
-
-    let artworkImageView = UIImageView()
-    let titleLabel = UILabel()
-    let artistLabel = UILabel()
-    
-    let contentStackView: UIStackView
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        
-        do {
-            titleLabel.translatesAutoresizingMaskIntoConstraints = false
-            titleLabel.numberOfLines = 0
-            artistLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-        }
-        
-        do {
-            artistLabel.translatesAutoresizingMaskIntoConstraints = false
-            artistLabel.numberOfLines = 0
-            artistLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        }
-        
-        do {
-            artworkImageView.translatesAutoresizingMaskIntoConstraints = false
-            artworkImageView.layer.masksToBounds = true
-            artworkImageView.layer.cornerRadius = 8
-            artworkImageView.translatesAutoresizingMaskIntoConstraints = false
-        }
-        
-        contentStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel, UIView()])
-        contentStackView.translatesAutoresizingMaskIntoConstraints = false
-        contentStackView.axis = .vertical
-        contentStackView.distribution = .fill
-        
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-        do {
-            configureViews()
-        }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-
     
     func configure(image: UIImage?,
                    title: String?,
@@ -98,10 +53,14 @@ class NowPlayingPreviewTableViewCell: UITableViewCell {
         titleLabel.text = title
         artistLabel.text = artist
     }
-    
-    // MARK: - Configure Views
-    
-    private func configureViews() {
+
+    static let id = String(describing: NowPlayingPreviewTableViewCell.self)
+}
+
+// MARK: - ViewBootstrappable
+
+extension NowPlayingPreviewTableViewCell: ViewBootstrappable {
+    internal func configureViews() {
         contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 132).isActive = true
         
         contentView.addSubview(artworkImageView)
@@ -119,6 +78,4 @@ class NowPlayingPreviewTableViewCell: UITableViewCell {
         contentStackView.leadingAnchor.constraint(equalTo: artworkImageView.trailingAnchor, constant: 16).isActive = true
         contentStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
     }
-
-    static let id = String(describing: NowPlayingPreviewTableViewCell.self)
 }

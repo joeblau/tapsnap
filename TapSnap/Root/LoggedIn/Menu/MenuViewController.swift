@@ -7,9 +7,7 @@
 
 import UIKit
 
-
-
-class MenuViewController: UIViewController {
+final class MenuViewController: UIViewController {
 
     let menuSections: [SectionItem] = [
         SectionItem(menuItems: [
@@ -56,19 +54,7 @@ class MenuViewController: UIViewController {
         title = "Menu"
         navigationItem.leftBarButtonItem = closeButton
         
-        do {
-            configureViews()
-        }
-    }
-    
-    // MARK: - Configure Views
-    
-    private func configureViews() {
-        view.addSubview(tableView)
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        configureViews()
     }
     
     // MARK: - Actoins
@@ -77,4 +63,16 @@ class MenuViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
 
+}
+
+// MARK: - ViewBootstrappable
+
+extension MenuViewController: ViewBootstrappable {    
+    internal func configureViews() {
+        view.addSubview(tableView)
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    }
 }

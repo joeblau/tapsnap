@@ -9,11 +9,10 @@
 import UIKit
 import AVFoundation
 
-class CameraPreviewView: UIView {
+final class CameraPreviewView: UIView {
 
-    let cameraOverlay = CameraOverlayView()
-
-    var previewLayer: AVCaptureVideoPreviewLayer!
+    private let cameraOverlay = CameraOverlayView()
+    private var previewLayer: AVCaptureVideoPreviewLayer!
     
     init(session: AVCaptureSession) {
         super.init(frame: .zero)
@@ -21,10 +20,7 @@ class CameraPreviewView: UIView {
         previewLayer = AVCaptureVideoPreviewLayer(session: session)
         previewLayer.videoGravity = .resize
         layer.addSublayer(previewLayer)
-        
-        do {
-            configureViews()
-        }
+        bootstrap()
     }
 
     override func layoutSubviews() {
@@ -39,9 +35,12 @@ class CameraPreviewView: UIView {
     override var intrinsicContentSize: CGSize {
         return CGSize(width: 1, height: previewLayer.bounds.height)
     }
-    // MARK: - Configure Views
-    
-    private func configureViews() {
+}
+
+// MARK: - ViewBootstrappable
+
+extension CameraPreviewView:  ViewBootstrappable {
+    internal func configureViews() {
         addSubview(cameraOverlay)
         cameraOverlay.topAnchor.constraint(equalTo: topAnchor).isActive = true
         cameraOverlay.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
