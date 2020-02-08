@@ -1,24 +1,22 @@
 //
-//  PlaybackMapView.swift
-//  Dolo
+//  MapViewOverlay.swift
+//  Tapsnap
 //
-//  Created by Joe Blau on 2/3/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
+//  Created by Joe Blau on 2/8/20.
 //
 
 import UIKit
-import MapKit
 import CoreLocation
 import Contacts
+import Combine
 
-final class PlaybackMapView: MKMapView {
-    private let myLocation: CLLocation
-    private let theirLocation: CLLocation
-    let kButtonSize: CGFloat = 48
-    let kButtonPadding: CGFloat = 8
+final class MapViewOverlay: UIView {
+    var cancellables = Set<AnyCancellable>()
+    private let kButtonSize: CGFloat = 48
+    private let kButtonPadding: CGFloat = 8
     
     private lazy var timeDistanceLocation: UILabel = {
-       let l = UILabel()
+        let l = UILabel()
         l.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
         l.adjustsFontSizeToFitWidth = true
         l.minimumScaleFactor = 0.6
@@ -30,8 +28,8 @@ final class PlaybackMapView: MKMapView {
     private lazy var toggle3DButton: UIButton = {
         let b = UIButton(type: .system)
         b.setImage(UIImage(systemName: "view.3d"), for: .normal)
-         b.accessibilityIdentifier = "3d"
-         b.segmentButton(position: .top)
+        b.accessibilityIdentifier = "3d"
+        b.segmentButton(position: .top)
         return b
     }()
     
@@ -51,64 +49,25 @@ final class PlaybackMapView: MKMapView {
         return sv
     }()
     
-    private lazy var mapCamera: MKMapCamera = {
-       MKMapCamera()
-    }()
-    
-    private lazy var theirAnnotation : MKPointAnnotation = {
-        let pa = MKPointAnnotation()
-        pa.coordinate = theirLocation.coordinate
-        pa.title = "Shane"
-        addAnnotation(pa)
-        return pa
-    }()
-    
-    private lazy var myAnnotation: MKPointAnnotation = {
-        let pa = MKPointAnnotation()
-        pa.coordinate = myLocation.coordinate
-        pa.title = "You"
-        addAnnotation(pa)
-        return pa
-    }()
-
-    init(myLocation: CLLocation = CLLocation(latitude: 37.759580, longitude: -122.391850),
-         theirLocation: CLLocation = CLLocation(latitude: 33.996890, longitude: -84.428710),
-         theirAddresss: CNPostalAddress? = nil,
-         theirDate: Date = Date(timeIntervalSince1970: 1579947732)) {
-        
-        self.myLocation = myLocation
-        self.theirLocation = theirLocation
-        
-        let pa = CNMutablePostalAddress()
-        pa.street = "1884 Wood Acres Lane"
-        pa.city = "Marieta"
-        pa.state = "Georga"
-        pa.postalCode = "30062"
-        pa.country = "United States"
-        
+    init() {
         super.init(frame: .zero)
-        delegate = self
-
         translatesAutoresizingMaskIntoConstraints = false
-        register(PersonAnnotationView.self, forAnnotationViewWithReuseIdentifier: PersonAnnotationView.id)
-        
         bootstrap()
-        
-        var coordinates = [myLocation.coordinate, theirAnnotation.coordinate]
-        let geodesicPolyline = MKGeodesicPolyline(coordinates: &coordinates, count: coordinates.count)
-        addOverlay(geodesicPolyline)
-                
-        let distance = myLocation.distance(from: theirLocation)
-        timeDistanceLocation.attributedText = formatMetadata(address: pa,
-                                                             date: theirDate,
-                                                             distance: distance)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit { removeFromSuperview() }
+    public func configure(myLocation: CLLocation,
+                          theirLocation: CLLocation,
+                          theirAddresss: CNPostalAddress,
+                          theirDate: Date) {
+        let distance = myLocation.distance(from: theirLocation)
+        timeDistanceLocation.attributedText = formatMetadata(address: theirAddresss,
+                                                             date: theirDate,
+                                                             distance: distance)
+    }
     
     private func formatMetadata(address: CNPostalAddress?,
                                 date: Date,
@@ -124,9 +83,9 @@ final class PlaybackMapView: MKMapView {
             attributedMetadataString.append(NSAttributedString(attachment: imageAttachment))
             attributedMetadataString.append(NSAttributedString(string: " \(formattedAddress)\n"))
         }
-
+        
         do { // distance
-             let formattedDistance = Current.formatter.distance.string(fromDistance: distance)
+            let formattedDistance = Current.formatter.distance.string(fromDistance: distance)
             let imageAttachment = NSTextAttachment()
             imageAttachment.image = UIImage(systemName: "map",
                                             withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
@@ -150,7 +109,7 @@ final class PlaybackMapView: MKMapView {
         return attributedMetadataString
     }
     
-    // MARK: - Button Targets
+    // MARK: - Actions
     
     @objc func toggleMapPreviewModeAction(sender: UIButton) {
         switch sender.accessibilityIdentifier {
@@ -171,18 +130,11 @@ final class PlaybackMapView: MKMapView {
         default: break
         }
     }
-    
 }
 
-// MARK: - ViewBootstrappable
-
-extension PlaybackMapView: ViewBootstrappable {
-    internal func configureButtonTargets() {
-        toggle3DButton.addTarget(self, action: #selector(toggleMapPreviewModeAction), for: .touchUpInside)
-        toggleAnnotationsButton.addTarget(self, action: #selector(toggleAnnotationsGroupAction), for: .touchUpInside)
-    }
-        
-    internal func configureViews() {
+extension MapViewOverlay: ViewBootstrappable {
+    
+    func configureViews() {
         toggle3DButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         toggle3DButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         
@@ -201,44 +153,38 @@ extension PlaybackMapView: ViewBootstrappable {
         timeDistanceLocation.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
         timeDistanceLocation.trailingAnchor.constraint(equalTo: mapActionsStack.leadingAnchor, constant: -kButtonPadding).isActive = true
     }
-}
-
-// MARK: - MKMapViewDelegate
-
-extension PlaybackMapView: MKMapViewDelegate {
-    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        guard let polyline = overlay as? MKPolyline else {
-            return MKOverlayRenderer()
-        }
-        
-        let renderer = MKPolylineRenderer(polyline: polyline)
-        renderer.lineWidth = 6.0
-        renderer.alpha = 0.5
-        renderer.strokeColor = .systemYellow
-        
-        return renderer
+    
+    func configureButtonTargets() {
+        toggle3DButton.addTarget(self, action: #selector(toggleMapPreviewModeAction), for: .touchUpInside)
+        toggleAnnotationsButton.addTarget(self, action: #selector(toggleAnnotationsGroupAction), for: .touchUpInside)
     }
     
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        guard let annotation = annotation as? MKPointAnnotation,
-            let view = dequeueReusableAnnotationView(withIdentifier: PersonAnnotationView.id,
-                                                     for: annotation) as? PersonAnnotationView else {
-                                                        return nil
-        }
+    func configureStreams() {
+        Current.mapDimensionSubject.sink(receiveValue: { dimension in
+            switch dimension {
+            case .two:
+                self.toggle3DButton.setImage(UIImage(systemName: "view.3d"), for: .normal)
+                self.toggle3DButton.accessibilityIdentifier = "3d"
+                
+            case .three:
+                self.toggle3DButton.setImage(UIImage(systemName: "view.2d"), for: .normal)
+                self.toggle3DButton.accessibilityIdentifier = "2d"
+            }
+        })
+            .store(in: &cancellables)
         
-//        let idx = Int.random(in: 0 ... 10)
-//        let url = URL(string: "https://i.pravatar.cc/150?img=\(idx)")!
-//        URLSession.shared.dataTaskPublisher(for: url)
-//            .map { UIImage(data: $0.data)! }
-//            .eraseToAnyPublisher()
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveCompletion: { completion in
-//                //                print(completion)
-//            }) { image in
-//                view.configure(image: image)
-//        }
-//        .store(in: &self.cancellables)
-        
-        return view
+        Current.mapAnnotationsSubject.sink(receiveValue: { annotationsGroup in
+            switch annotationsGroup {
+            case .them:
+                self.toggle3DButton.isEnabled = true
+                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person.2"), for: .normal)
+                self.toggleAnnotationsButton.accessibilityIdentifier = "all"
+            case .all:
+                self.toggle3DButton.isEnabled = false
+                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person"), for: .normal)
+                self.toggleAnnotationsButton.accessibilityIdentifier = "them"
+            }
+        })
+            .store(in: &cancellables)
     }
 }

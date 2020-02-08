@@ -25,7 +25,6 @@
 		4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EE72D052B3BCCB27DDDBC4 /* CameraViewController.swift */; };
 		500C9678CE94513205BEA4D0 /* SavedTapsViewController+UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7804AD1BEDDF879B464AEA26 /* SavedTapsViewController+UISearchBarDelegate.swift */; };
 		5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */; };
-		54DEC2474D65342E4BAB5758 /* PlaybackMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA477EB369B1A0406BA33B4 /* PlaybackMapView.swift */; };
 		6006081149337EAE465CE208 /* SavedTapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407456196370DF88EC8AC28D /* SavedTapsViewController.swift */; };
 		6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B33AE9F232CA872F98978A /* DrawingToolsView.swift */; };
 		78FD54943CAFF8C9035664DE /* CameraViewController+UICollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */; };
@@ -52,6 +51,8 @@
 		EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390017BF26255640A332187B /* MenuCellTableViewCell.swift */; };
 		ED2C483623EF3733004F7F52 /* ts1.mov in Resources */ = {isa = PBXBuildFile; fileRef = ED2C483523EF3733004F7F52 /* ts1.mov */; };
 		ED2C483A23EF40A2004F7F52 /* PlayerLooper.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C483923EF40A2004F7F52 /* PlayerLooper.swift */; };
+		ED2C484D23EF6375004F7F52 /* PlaybackViewController+MKMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C484C23EF6375004F7F52 /* PlaybackViewController+MKMapViewDelegate.swift */; };
+		ED2C485023EF657C004F7F52 /* MapViewOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C484F23EF657C004F7F52 /* MapViewOverlay.swift */; };
 		F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */; };
 		F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
@@ -105,7 +106,6 @@
 		935656CC9CE2FB280661178F /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		94344FC87696F3296346CA01 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		973CEDB8780E17647226ACC0 /* ContactsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
-		9BA477EB369B1A0406BA33B4 /* PlaybackMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackMapView.swift; sourceTree = "<group>"; };
 		9CE23D3372831A7B685FA94F /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
 		9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tapsnap.entitlements; sourceTree = "<group>"; };
 		A86F521E8A3727658211B4A2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +118,8 @@
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		ED2C483523EF3733004F7F52 /* ts1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = ts1.mov; sourceTree = "<group>"; };
 		ED2C483923EF40A2004F7F52 /* PlayerLooper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerLooper.swift; sourceTree = "<group>"; };
+		ED2C484C23EF6375004F7F52 /* PlaybackViewController+MKMapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackViewController+MKMapViewDelegate.swift"; sourceTree = "<group>"; };
+		ED2C484F23EF657C004F7F52 /* MapViewOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewOverlay.swift; sourceTree = "<group>"; };
 		EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
 		F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
 		F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				363154E07C7BBF93B754F492 /* PlaybackViewController.swift */,
+				ED2C484C23EF6375004F7F52 /* PlaybackViewController+MKMapViewDelegate.swift */,
 				F833A6B6616A443E1FCE1C61 /* Views */,
 			);
 			path = Playback;
@@ -339,7 +342,7 @@
 			children = (
 				ED2C483923EF40A2004F7F52 /* PlayerLooper.swift */,
 				58CC607B90ABB2DC535F466F /* PersonAnnotationView.swift */,
-				9BA477EB369B1A0406BA33B4 /* PlaybackMapView.swift */,
+				ED2C484F23EF657C004F7F52 /* MapViewOverlay.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -466,6 +469,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED2C484D23EF6375004F7F52 /* PlaybackViewController+MKMapViewDelegate.swift in Sources */,
 				5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */,
 				F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */,
 				E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */,
@@ -489,7 +493,6 @@
 				FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */,
 				18DFAD298AD224C785C85011 /* OnboardingViewController.swift in Sources */,
 				DBC106F1029BFF5DD36907DA /* PersonAnnotationView.swift in Sources */,
-				54DEC2474D65342E4BAB5758 /* PlaybackMapView.swift in Sources */,
 				1047116A40B5EE793B3B33B2 /* PlaybackViewController.swift in Sources */,
 				FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */,
 				ED2C483A23EF40A2004F7F52 /* PlayerLooper.swift in Sources */,
@@ -504,6 +507,7 @@
 				C29EE32C12F71E0B9F186304 /* SearchContactsViewController+UISearchResultsUpdating.swift in Sources */,
 				1508AA5A76058B45B00A0930 /* SearchContactsViewController.swift in Sources */,
 				9F9E8C560DF38967EF1748CB /* SyncTableViewCell.swift in Sources */,
+				ED2C485023EF657C004F7F52 /* MapViewOverlay.swift in Sources */,
 				E0CC88252B80F4D873A8E1B4 /* Tapsnap.xcdatamodeld in Sources */,
 				3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */,
 				BE7021A6E63D3B1B771DE218 /* UIButton+Extension.swift in Sources */,

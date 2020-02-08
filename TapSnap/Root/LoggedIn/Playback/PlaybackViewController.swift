@@ -7,15 +7,13 @@
 //
 
 import UIKit
-import AVKit
-import MapKit
 import Combine
+import MapKit
+import CoreLocation
+import Contacts
 
 final class PlaybackViewController: UIViewController {
-
-    private lazy var cancellables: Set<AnyCancellable> = {
-        Set<AnyCancellable>()
-    }()
+    var cancellables = Set<AnyCancellable>()
     
     private lazy var backButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
@@ -37,24 +35,29 @@ final class PlaybackViewController: UIViewController {
     
     private lazy var saveButton: UIBarButtonItem = {
         let bbi = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.down"),
-                                            style: .plain,
-                                            target: self,
-                                            action: #selector(saveTapAction))
+                                  style: .plain,
+                                  target: self,
+                                  action: #selector(saveTapAction))
         bbi.tintColor = .label
         return bbi
     }()
     
     private lazy var heartButton: UIBarButtonItem = {
         let bbi = UIBarButtonItem(image: UIImage(systemName: "heart"),
-                                            style: .plain,
-                                            target: self,
-                                            action: #selector(heartTapAction))
+                                  style: .plain,
+                                  target: self,
+                                  action: #selector(heartTapAction))
         bbi.tintColor = .label
         return bbi
     }()
     
     private lazy var spacer: UIBarButtonItem = {
         UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+    }()
+    
+    
+    private lazy var mapCamera: MKMapCamera = {
+        MKMapCamera()
     }()
     
     var isHearted: Bool = false {
@@ -77,9 +80,17 @@ final class PlaybackViewController: UIViewController {
     }()
     
     private lazy var mapView: MKMapView = {
-        Current.mapView
+        let v = Current.mapView
+        v.register(PersonAnnotationView.self, forAnnotationViewWithReuseIdentifier: PersonAnnotationView.id)
+        v.delegate = self
+        return v
     }()
-
+    
+    private lazy var mapOverlayView: MapViewOverlay = {
+        return MapViewOverlay()
+    }()
+    
+    private var annotations = [MKPointAnnotation]()
     var looper: PlayerLooper?
     
     // MARK: - Lifecycle
@@ -88,11 +99,12 @@ final class PlaybackViewController: UIViewController {
         super.viewDidLoad()
         title = "Pop That"
         view.backgroundColor = .systemBackground
-    
-         if let playerPath = Bundle.main.path(forResource: "ts1", ofType:"mov") {
+        
+        if let playerPath = Bundle.main.path(forResource: "ts1", ofType:"mov") {
             looper = PlayerLooper(videoURL: URL(fileURLWithPath: playerPath), loopCount: 0)
-         }
+        }
         toolbarItems = [saveButton, spacer, heartButton]
+        populateMapAndMapOverlay()
         bootstrap()
     }
     
@@ -100,7 +112,7 @@ final class PlaybackViewController: UIViewController {
         super.viewDidAppear(animated)
         looper?.start(in: playerView.layer)
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         looper?.stop()
@@ -130,6 +142,41 @@ final class PlaybackViewController: UIViewController {
     @objc func heartTapAction() {
         isHearted.toggle()
     }
+    
+    private func populateMapAndMapOverlay() {
+        
+        let myLocation: CLLocation = CLLocation(latitude: 37.759580, longitude: -122.391850)
+        let theirLocation: CLLocation = CLLocation(latitude: 33.996890, longitude: -84.428710)
+        let theirAddresss: CNPostalAddress = Current.fakeContact
+        let theirDate: Date = Date(timeIntervalSince1970: 1579947732)
+        
+        let theirAnnotation : MKPointAnnotation = {
+            let pa = MKPointAnnotation()
+            pa.coordinate = theirLocation.coordinate
+            pa.title = "Shane"
+            mapView.addAnnotation(pa)
+            return pa
+        }()
+        
+        annotations.append(theirAnnotation)
+        let myAnnotation: MKPointAnnotation = {
+            let pa = MKPointAnnotation()
+            pa.coordinate = myLocation.coordinate
+            pa.title = "You"
+            mapView.addAnnotation(pa)
+            return pa
+        }()
+        annotations.append(myAnnotation)
+        
+        var coordinates = [myAnnotation.coordinate, theirAnnotation.coordinate]
+        let geodesicPolyline = MKGeodesicPolyline(coordinates: &coordinates, count: coordinates.count)
+        mapView.addOverlay(geodesicPolyline)
+        
+        mapOverlayView.configure(myLocation: myLocation,
+                                 theirLocation: theirLocation,
+                                 theirAddresss: theirAddresss,
+                                 theirDate: theirDate)
+    }
 }
 
 
@@ -143,72 +190,61 @@ extension PlaybackViewController: ViewBootstrappable {
         playerView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height/2).isActive = true
         playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-
-
+        
         view.addSubview(mapView)
         mapView.topAnchor.constraint(equalTo: playerView.bottomAnchor).isActive = true
         mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        mapView.addSubview(mapOverlayView)
+        mapOverlayView.topAnchor.constraint(equalTo: mapView.topAnchor).isActive = true
+        mapOverlayView.bottomAnchor.constraint(equalTo: mapView.bottomAnchor).isActive = true
+        mapOverlayView.leadingAnchor.constraint(equalTo: mapView.leadingAnchor).isActive = true
+        mapOverlayView.trailingAnchor.constraint(equalTo: mapView.trailingAnchor).isActive = true
     }
-
+    
     internal func configureStreams() {
-//        Current.mapDimensionSubject.sink(receiveValue: { dimension in
-//            self.mapCamera.centerCoordinate = self.theirccAnnotation.coordinate
-//
-//            switch dimension {
-//            case .two:
-//                self.toggle3DButton.setImage(UIImage(systemName: "view.3d"), for: .normal)
-//                self.toggle3DButton.accessibilityIdentifier = "3d"
-//
-//                self.mapType = .mutedStandard
-//
-//                self.mapCamera.pitch = 0
-//                self.mapCamera.altitude = 500
-//                self.mapCamera.heading = 0
-//
-//            case .three:
-//                self.toggle3DButton.setImage(UIImage(systemName: "view.2d"), for: .normal)
-//                self.toggle3DButton.accessibilityIdentifier = "2d"
-//
-//                self.mapType = .satelliteFlyover
-//
-//                self.mapCamera.pitch = 45
-//                self.mapCamera.altitude = 500
-//                self.mapCamera.heading = 45
-//            }
-//            UIView.animate(withDuration: 0.5) {
-//                self.camera = self.mapCamera
-//            }
-//        })
-//            .store(in: &cancellables)
-//
-//
-//        Current.mapAnnotationsSubject.sink(receiveValue: { annotationsGroup in
-
-//            switch annotationsGroup {
-//            case .them:
-//                self.toggle3DButton.isEnabled = true
-//                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person.2"), for: .normal)
-//                self.toggleAnnotationsButton.accessibilityIdentifier = "all"
-//
-//                self.mapType = .mutedStandard
-//
-//                self.mapCamera.pitch = 0
-//                self.mapCamera.altitude = 500
-//                self.mapCamera.heading = 0
-//
-//                UIView.animate(withDuration: 0.5) {
-//                     self.camera = self.mapCamera
-//                 }
-//            case .all:
-//                self.toggle3DButton.isEnabled = false
-//                self.toggleAnnotationsButton.setImage(UIImage(systemName: "person"), for: .normal)
-//                self.toggleAnnotationsButton.accessibilityIdentifier = "them"
-//
-//                self.showAnnotations(self.annotations, animated: true)
-//            }
-//        })
-//        .store(in: &cancellables)
+        Current.mapDimensionSubject.sink(receiveValue: { dimension in
+            self.mapCamera.centerCoordinate = self.annotations.last?.coordinate ?? CLLocation().coordinate
+            
+            switch dimension {
+            case .two:
+                self.mapView.mapType = .mutedStandard
+                
+                self.mapCamera.pitch = 0
+                self.mapCamera.altitude = 500
+                self.mapCamera.heading = 0
+                
+            case .three:
+                self.mapView.mapType = .satelliteFlyover
+                
+                self.mapCamera.pitch = 45
+                self.mapCamera.altitude = 500
+                self.mapCamera.heading = 45
+            }
+            UIView.animate(withDuration: 0.5) {
+                self.mapView.camera = self.mapCamera
+            }
+        })
+            .store(in: &cancellables)
+        
+        Current.mapAnnotationsSubject.sink(receiveValue: { annotationsGroup in
+            switch annotationsGroup {
+            case .them:
+                self.mapView.mapType = .mutedStandard
+                
+                self.mapCamera.pitch = 0
+                self.mapCamera.altitude = 500
+                self.mapCamera.heading = 0
+                
+                UIView.animate(withDuration: 0.5) {
+                    self.mapView.camera = self.mapCamera
+                }
+            case .all:
+                self.mapView.showAnnotations(self.annotations, animated: true)
+            }
+        })
+            .store(in: &cancellables)
     }
 }

@@ -49,8 +49,8 @@ extension UIButton {
         tintColor = .label
         layer.shadowOffset = .zero
         layer.shadowColor = UIColor.black.cgColor
-        layer.shadowRadius = 4
-        layer.shadowOpacity = 1.0
+        layer.shadowRadius = 3
+        layer.shadowOpacity = 0.3
         
         switch position {
         case .top:
