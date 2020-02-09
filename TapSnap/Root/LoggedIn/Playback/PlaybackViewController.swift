@@ -97,9 +97,10 @@ final class PlaybackViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.delegate = self
+
         title = "Pop That"
         view.backgroundColor = .systemBackground
-        
         if let playerPath = Bundle.main.path(forResource: "ts1", ofType:"mov") {
             looper = PlayerLooper(videoURL: URL(fileURLWithPath: playerPath), loopCount: 0)
         }
