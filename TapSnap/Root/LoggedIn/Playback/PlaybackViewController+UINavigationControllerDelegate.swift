@@ -18,6 +18,7 @@ extension PlaybackViewController: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController,
                               interactionControllerFor animationController: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+//        return SwippableTransitionController()
         return nil
     }
 }

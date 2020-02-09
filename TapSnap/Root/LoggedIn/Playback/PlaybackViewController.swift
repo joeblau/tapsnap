@@ -51,14 +51,7 @@ final class PlaybackViewController: UIViewController {
         return bbi
     }()
     
-    private lazy var spacer: UIBarButtonItem = {
-        UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-    }()
-    
-    
-    private lazy var mapCamera: MKMapCamera = {
-        MKMapCamera()
-    }()
+    private lazy var spacer: UIBarButtonItem = { UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)  }()
     
     var isHearted: Bool = false {
         didSet {
@@ -79,6 +72,16 @@ final class PlaybackViewController: UIViewController {
         return v
     }()
     
+    private lazy var mapCamera: MKMapCamera = { MKMapCamera() }()
+
+    
+    private lazy var mapViewContainer: UIImageView = {
+        let v = UIImageView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.isUserInteractionEnabled = true
+        return v
+    }()
+    
     private lazy var mapView: MKMapView = {
         let v = Current.mapView
         v.register(PersonAnnotationView.self, forAnnotationViewWithReuseIdentifier: PersonAnnotationView.id)
@@ -86,9 +89,7 @@ final class PlaybackViewController: UIViewController {
         return v
     }()
     
-    private lazy var mapOverlayView: MapViewOverlay = {
-        return MapViewOverlay()
-    }()
+    private lazy var mapOverlayView: MapViewOverlay = { MapViewOverlay() }()
     
     private var annotations = [MKPointAnnotation]()
     var looper: PlayerLooper?
@@ -101,6 +102,7 @@ final class PlaybackViewController: UIViewController {
 
         title = "Pop That"
         view.backgroundColor = .systemBackground
+        view.floatView()
         if let playerPath = Bundle.main.path(forResource: "ts1", ofType:"mov") {
             looper = PlayerLooper(videoURL: URL(fileURLWithPath: playerPath), loopCount: 0)
         }
@@ -108,10 +110,16 @@ final class PlaybackViewController: UIViewController {
         populateMapAndMapOverlay()
         bootstrap()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         looper?.start(in: playerView.layer)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Save imag eof map
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -192,17 +200,23 @@ extension PlaybackViewController: ViewBootstrappable {
         playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        view.addSubview(mapView)
-        mapView.topAnchor.constraint(equalTo: playerView.bottomAnchor).isActive = true
-        mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        view.addSubview(mapViewContainer)
+        mapViewContainer.topAnchor.constraint(equalTo: playerView.bottomAnchor).isActive = true
+        mapViewContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        mapViewContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        mapViewContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        mapView.addSubview(mapOverlayView)
-        mapOverlayView.topAnchor.constraint(equalTo: mapView.topAnchor).isActive = true
-        mapOverlayView.bottomAnchor.constraint(equalTo: mapView.bottomAnchor).isActive = true
-        mapOverlayView.leadingAnchor.constraint(equalTo: mapView.leadingAnchor).isActive = true
-        mapOverlayView.trailingAnchor.constraint(equalTo: mapView.trailingAnchor).isActive = true
+        mapViewContainer.addSubview(mapView)
+        mapView.topAnchor.constraint(equalTo: mapViewContainer.topAnchor).isActive = true
+        mapView.bottomAnchor.constraint(equalTo: mapViewContainer.bottomAnchor).isActive = true
+        mapView.leadingAnchor.constraint(equalTo: mapViewContainer.leadingAnchor).isActive = true
+        mapView.trailingAnchor.constraint(equalTo: mapViewContainer.trailingAnchor).isActive = true
+
+        mapViewContainer.addSubview(mapOverlayView)
+        mapOverlayView.topAnchor.constraint(equalTo: mapViewContainer.topAnchor).isActive = true
+        mapOverlayView.bottomAnchor.constraint(equalTo: mapViewContainer.bottomAnchor).isActive = true
+        mapOverlayView.leadingAnchor.constraint(equalTo: mapViewContainer.leadingAnchor).isActive = true
+        mapOverlayView.trailingAnchor.constraint(equalTo: mapViewContainer.trailingAnchor).isActive = true
     }
     
     internal func configureStreams() {
@@ -224,9 +238,8 @@ extension PlaybackViewController: ViewBootstrappable {
                 self.mapCamera.altitude = 500
                 self.mapCamera.heading = 45
             }
-            UIView.animate(withDuration: 0.5) {
-                self.mapView.camera = self.mapCamera
-            }
+            
+            self.updateMapSnapshot()
         })
             .store(in: &cancellables)
         
@@ -239,13 +252,30 @@ extension PlaybackViewController: ViewBootstrappable {
                 self.mapCamera.altitude = 500
                 self.mapCamera.heading = 0
                 
-                UIView.animate(withDuration: 0.5) {
-                    self.mapView.camera = self.mapCamera
-                }
+                self.updateMapSnapshot()
             case .all:
-                self.mapView.showAnnotations(self.annotations, animated: true)
+                self.mapView.showAnnotations(self.annotations, animated: false)
+                
             }
         })
             .store(in: &cancellables)
+    }
+
+    private func updateMapSnapshot() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.mapView.camera = self.mapCamera
+        }) { completed in
+            guard completed else { return }
+            
+            let options = MKMapSnapshotter.Options()
+            options.camera = self.mapCamera
+            options.scale = UIScreen.main.scale
+            options.size = self.mapView.frame.size
+            
+            let snapshot = MKMapSnapshotter(options: options)
+            snapshot.start { (snapshot, error) in
+                self.mapViewContainer.image = snapshot?.image
+            }
+        }
     }
 }
