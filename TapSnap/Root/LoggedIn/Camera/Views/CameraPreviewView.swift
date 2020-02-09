@@ -12,20 +12,27 @@ import AVFoundation
 final class CameraPreviewView: UIView {
 
     private let cameraOverlay = CameraOverlayView()
-    private var previewLayer: AVCaptureVideoPreviewLayer!
+    private var videoPreviewLayer: AVCaptureVideoPreviewLayer!
+    private lazy var flashView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.alpha = 0
+        v.backgroundColor = .white
+        return v
+    }()
     
     init(session: AVCaptureSession) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        previewLayer = AVCaptureVideoPreviewLayer(session: session)
-        previewLayer.videoGravity = .resize
-        layer.addSublayer(previewLayer)
+        videoPreviewLayer = AVCaptureVideoPreviewLayer(session: session)
+        videoPreviewLayer.videoGravity = .resize
+        layer.addSublayer(videoPreviewLayer)
         bootstrap()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        previewLayer.frame = bounds
+        videoPreviewLayer.frame = bounds
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -33,7 +40,16 @@ final class CameraPreviewView: UIView {
     }
 
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: 1, height: previewLayer.bounds.height)
+        return CGSize(width: 1, height: videoPreviewLayer.bounds.height)
+    }
+    
+    func flash() {
+        flashView.alpha = 1
+        UIView.animate(withDuration: 0.25,
+                       delay: 0, options: .curveEaseOut,
+                       animations: {
+                        self.flashView.alpha = 0
+        }, completion: nil)
     }
 }
 
@@ -46,5 +62,11 @@ extension CameraPreviewView:  ViewBootstrappable {
         cameraOverlay.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         cameraOverlay.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         cameraOverlay.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        addSubview(flashView)
+        flashView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        flashView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        flashView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        flashView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
 }

@@ -12,6 +12,22 @@ import AVFoundation
 
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
+    
+    private let photoOutput = AVCapturePhotoOutput()
+    let photoSettings: AVCapturePhotoSettings = {
+        let ps = AVCapturePhotoSettings()
+        ps.isHighResolutionPhotoEnabled = false
+        ps.photoQualityPrioritization = .speed
+        if !ps.__availablePreviewPhotoPixelFormatTypes.isEmpty {
+            ps.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: ps.__availablePreviewPhotoPixelFormatTypes.first!]
+        }
+        return ps
+    }()
+    private var movieFileOutput = AVCaptureMovieFileOutput()
+     var backgroundRecordingID: UIBackgroundTaskIdentifier?
+    
+    let movieCaputreQueue = DispatchQueue(label: "captured-movie")
+    
     private let tapNotificationCount = 8
     // Top left
     private lazy var menuButton: UIBarButtonItem = {
@@ -96,6 +112,34 @@ final class CameraViewController: UIViewController {
         navigationItem.leftBarButtonItem = menuButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notificationButton)
         
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            // The user has previously granted access to the camera.
+            break
+            
+        case .notDetermined:
+            /*
+             The user has not yet been presented with the option to grant
+             video access. Suspend the session queue to delay session
+             setup until the access request has completed.
+             
+             Note that audio access will be implicitly requested when we
+             create an AVCaptureDeviceInput for audio during session setup.
+             */
+            sessionQueue.suspend()
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
+//                if !granted {
+//                    self.setupResult = .notAuthorized
+//                }
+                self.sessionQueue.resume()
+            })
+            
+        default:
+            break
+//            // The user has previously denied access.
+//            setupResult = .notAuthorized
+        }
+        
         do {
             let editButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: nil)
             editButton.tintColor = .label
@@ -156,10 +200,8 @@ final class CameraViewController: UIViewController {
         if let videoDevice = initailzeCamera() {
             addCaptureDeviceInput(videoDevice: videoDevice)
         }
-        addMetadataOutput()
         addPhotoOutput()
-        addAudioDataOutput()
-        addVideoDataOutput()
+        addMovieOutput()
         
         session.commitConfiguration()
     }
@@ -183,17 +225,7 @@ final class CameraViewController: UIViewController {
         }
     }
     
-    private func addMetadataOutput() {
-        let metadataOutput = AVCaptureMetadataOutput()
-        if session.canAddOutput(metadataOutput) {
-            session.addOutput(metadataOutput)
-        } else {
-            fatalError("Could not add metadata output to the session")
-        }
-    }
-    
     private func addPhotoOutput() {
-        let photoOutput = AVCapturePhotoOutput()
         if session.canAddOutput(photoOutput) {
             photoOutput.isHighResolutionCaptureEnabled = true
             session.addOutput(photoOutput)
@@ -202,28 +234,18 @@ final class CameraViewController: UIViewController {
         }
     }
     
-    private func addAudioDataOutput() {
-        let audioDataOutput = AVCaptureAudioDataOutput()
-        if session.canAddOutput(audioDataOutput) {
-            
-            session.addOutput(audioDataOutput)
+    private func addMovieOutput() {
+        if session.canAddOutput(movieFileOutput) {
+            if let connection = movieFileOutput.connection(with: .video),
+                connection.isVideoStabilizationSupported  {
+                connection.preferredVideoStabilizationMode = .auto
+            }
+            session.addOutput(movieFileOutput)
         } else {
-            fatalError("Could not add audio output to the session")
+            fatalError("Could not add movie output to the session")
         }
     }
     
-    
-    private func addVideoDataOutput() {
-        let videoDataOutput = AVCaptureVideoDataOutput()
-        if session.canAddOutput(videoDataOutput) {
-            videoDataOutput.videoSettings = [String(kCVPixelBufferPixelFormatTypeKey) : Int(kCVPixelFormatType_32BGRA)]
-            videoDataOutput.alwaysDiscardsLateVideoFrames = true
-            //             videoDataOutput.setSampleBufferDelegate(videoDelegate, queue: sessionQueue)
-            session.addOutput(videoDataOutput)
-        } else {
-            fatalError("Could not add video output to session")
-        }
-    }
     
     // MARK: - Helpers
     
@@ -344,9 +366,29 @@ extension CameraViewController: ViewBootstrappable {
         Current.mediaActionSubject.sink { action in
             switch action {
             case .none: break
-            case .capturePhoto: print("photo")
-            case .captureVideoStart: print("start video")
-            case .captureVideoEnd: print("stop video")
+            case .capturePhoto:
+                self.previewView.flash()
+                self.photoOutput.capturePhoto(with: self.photoSettings, delegate: self)
+            case .captureVideoStart:
+                if UIDevice.current.isMultitaskingSupported {
+                    self.backgroundRecordingID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
+                }
+                
+                let movieFileOutputConnection = self.movieFileOutput.connection(with: .video)
+                movieFileOutputConnection?.videoOrientation = .portrait
+                
+                let availableVideoCodecTypes = self.movieFileOutput.availableVideoCodecTypes
+                
+                if availableVideoCodecTypes.contains(.hevc) {
+                    self.movieFileOutput.setOutputSettings([AVVideoCodecKey: AVVideoCodecType.hevc], for: movieFileOutputConnection!)
+                }
+                
+                
+                let outputFileName = NSUUID().uuidString
+                let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
+                self.movieFileOutput.startRecording(to: URL(fileURLWithPath: outputFilePath), recordingDelegate: self)
+            case .captureVideoEnd:
+                self.movieFileOutput.stopRecording()
             }
         }.store(in: &cancellables)
     }
