@@ -200,6 +200,7 @@ final class CameraViewController: UIViewController {
         if let videoDevice = initailzeCamera() {
             addCaptureDeviceInput(videoDevice: videoDevice)
         }
+        addAudioInput()
         addPhotoOutput()
         addMovieOutput()
         
@@ -216,14 +217,29 @@ final class CameraViewController: UIViewController {
     
     private func addCaptureDeviceInput(videoDevice: AVCaptureDevice) {
         do {
-            let captureInput = try AVCaptureDeviceInput(device: videoDevice)
-            if session.canAddInput(captureInput) {
-                session.addInput(captureInput)
+            let videoCaptureInput = try AVCaptureDeviceInput(device: videoDevice)
+            if session.canAddInput(videoCaptureInput) {
+                session.addInput(videoCaptureInput)
             }
         } catch {
             fatalError("Could not create video device input")
         }
     }
+    
+    
+    private func addAudioInput() {
+        do {
+            let audioDevice = AVCaptureDevice.default(for: .audio)
+            let audioDeviceInput = try AVCaptureDeviceInput(device: audioDevice!)
+            
+            if session.canAddInput(audioDeviceInput) {
+                session.addInput(audioDeviceInput)
+            }
+        } catch {
+            fatalError("Could not add audio input to session device input")
+        }
+    }
+    
     
     private func addPhotoOutput() {
         if session.canAddOutput(photoOutput) {
