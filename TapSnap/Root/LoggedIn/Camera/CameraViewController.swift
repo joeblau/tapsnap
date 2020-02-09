@@ -32,7 +32,7 @@ final class CameraViewController: UIViewController {
     }()
     
     // Top right
-    lazy var notifictionsButton: UIButton = {
+    lazy var notificationButton: UIButton = {
         let b = UIButton(type: .custom)
         b.setTitle("\(tapNotificationCount)", for: .normal)
         b.notification(diameter: 20)
@@ -75,6 +75,10 @@ final class CameraViewController: UIViewController {
         return nc
     }()
     
+    // MARK: - Photo Video
+    
+    var photoData: Data?
+    
     // MARK: - Lifecycle
     
     init() {
@@ -90,12 +94,12 @@ final class CameraViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navigationItem.leftBarButtonItem = menuButton
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notifictionsButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notificationButton)
         
         do {
             let editButton = UIBarButtonItem(title: "Edit", style: .plain, target: self, action: nil)
             editButton.tintColor = .label
-
+            
             let pageControlButton = UIBarButtonItem(customView: contactPageControl)
             contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))
             
@@ -145,7 +149,6 @@ final class CameraViewController: UIViewController {
     
     private func configureSession() {
         session.beginConfiguration()
-        session.sessionPreset = .vga640x480
         
         session.inputs.forEach { captureInnput in
             session.removeInput(captureInnput)
@@ -155,6 +158,7 @@ final class CameraViewController: UIViewController {
         }
         addMetadataOutput()
         addPhotoOutput()
+        addAudioDataOutput()
         addVideoDataOutput()
         
         session.commitConfiguration()
@@ -191,12 +195,23 @@ final class CameraViewController: UIViewController {
     private func addPhotoOutput() {
         let photoOutput = AVCapturePhotoOutput()
         if session.canAddOutput(photoOutput) {
-            session.addOutput(photoOutput)
             photoOutput.isHighResolutionCaptureEnabled = true
+            session.addOutput(photoOutput)
         } else {
             fatalError("Could not add photo output to the session")
         }
     }
+    
+    private func addAudioDataOutput() {
+        let audioDataOutput = AVCaptureAudioDataOutput()
+        if session.canAddOutput(audioDataOutput) {
+            
+            session.addOutput(audioDataOutput)
+        } else {
+            fatalError("Could not add audio output to the session")
+        }
+    }
+    
     
     private func addVideoDataOutput() {
         let videoDataOutput = AVCaptureVideoDataOutput()
@@ -290,8 +305,7 @@ extension CameraViewController: ViewBootstrappable {
     }
     
     internal func configureStreams() {
-        Current.activeCameraSubject
-            .sink { position in
+        Current.activeCameraSubject.sink { position in
                 switch position {
                 case .front:
                     self.sessionQueue.async {
@@ -301,8 +315,7 @@ extension CameraViewController: ViewBootstrappable {
                 }
         }.store(in: &cancellables)
         
-        Current.presentViewContollersSubject
-            .sink { present in
+        Current.presentViewContollersSubject.sink { present in
                 switch present {
                 case .none:
                     
@@ -315,11 +328,9 @@ extension CameraViewController: ViewBootstrappable {
                     }
                     self.present(self.playbackViewController, animated: true) {}
                 }
-        }
-        .store(in: &cancellables)
+        }.store(in: &cancellables)
         
-        Current.topLeftNavBarSubject
-            .sink { leftNavBarItem in
+        Current.topLeftNavBarSubject.sink { leftNavBarItem in
                 switch leftNavBarItem {
                 case .none:
                     self.navigationItem.leftBarButtonItem = nil
@@ -328,11 +339,19 @@ extension CameraViewController: ViewBootstrappable {
                 case .clear:
                     self.navigationItem.leftBarButtonItem = self.clearButton
                 }
-        }
-        .store(in: &cancellables)
+        }.store(in: &cancellables)
+        
+        Current.mediaActionSubject.sink { action in
+            switch action {
+            case .none: break
+            case .capturePhoto: print("photo")
+            case .captureVideoStart: print("start video")
+            case .captureVideoEnd: print("stop video")
+            }
+        }.store(in: &cancellables)
     }
     
     internal func configureButtonTargets() {
-        notifictionsButton.addTarget(self, action: #selector(showPlaybackAction), for: .touchUpInside)
+        notificationButton.addTarget(self, action: #selector(showPlaybackAction), for: .touchUpInside)
     }
 }

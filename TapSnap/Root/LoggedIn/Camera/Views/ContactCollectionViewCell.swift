@@ -31,6 +31,10 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         return l
     }()
     
+    
+    
+    // MARK: - Lifecycle
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +74,28 @@ final class ContactCollectionViewCell: UICollectionViewCell {
     
     static let id = String(describing: ContactCollectionViewCell.self)
 
+    // MARK: - Actions
+    
+    @objc func handleVideoAction(_ recognizer: UILongPressGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            Current.mediaActionSubject.send(.captureVideoStart)
+            Current.recordingSubject.send(.start)
+        case .changed: break // Handle Zoom
+        case .ended:
+            Current.mediaActionSubject.send(.captureVideoEnd)
+            Current.recordingSubject.send(.stop)
+        default: break
+        }
+    }
+    
+    @objc func handlePhotoAction(_ recognizer: UITapGestureRecognizer) {
+        switch recognizer.state {
+        case .ended: Current.mediaActionSubject.send(.capturePhoto)
+        default: break;
+        }
+    }
+
 }
 
 // MARK: - ViewBootstrappable
@@ -89,4 +115,12 @@ extension ContactCollectionViewCell: ViewBootstrappable {
         titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2).isActive = true
     }
     
+    func configureGestureRecoginzers() {        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleVideoAction(_:)))
+        longPress.minimumPressDuration = 0.2
+        contentView.addGestureRecognizer(longPress)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handlePhotoAction(_:)))
+        contentView.addGestureRecognizer(tap)
+    }
 }

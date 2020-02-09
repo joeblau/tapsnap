@@ -49,6 +49,13 @@ enum LeftNavBarItem {
     case clear
 }
 
+enum MediaAction {
+    case none
+    case capturePhoto
+    case captureVideoStart
+    case captureVideoEnd
+}
+
 struct World {
     // DELTE
     let fakeContact: CNMutablePostalAddress = {
@@ -74,13 +81,13 @@ struct World {
     let mapView: MKMapView = {
         let mv = MKMapView()
         mv.translatesAutoresizingMaskIntoConstraints = false
-//        mv.isZoomEnabled = false
-//        mv.isScrollEnabled = false
-//        mv.isRotateEnabled = false
-//        mv.isPitchEnabled = false
-//        mv.showsCompass = false
-//        mv.showsScale = false
-//        mv.showsBuildings = true
+        mv.isZoomEnabled = false
+        mv.isScrollEnabled = false
+        mv.isRotateEnabled = false
+        mv.isPitchEnabled = false
+        mv.showsCompass = false
+        mv.showsScale = false
+        mv.showsBuildings = true
         return mv
     }()
     
@@ -96,6 +103,7 @@ struct World {
     var mapAnnotationsSubject = CurrentValueSubject<AnnotationGroup, Never>(.them)
     var drawingColorSubject = CurrentValueSubject<UIColor, Never>(.white)
     var topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
+    var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
 }
 
 var Current = World()

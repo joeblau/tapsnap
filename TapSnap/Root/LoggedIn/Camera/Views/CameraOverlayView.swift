@@ -135,7 +135,7 @@ final class CameraOverlayView: UIView {
     }
     
     @objc private func flipCameraAction() {
-        Current.activeCameraSubject.value = .back
+        Current.activeCameraSubject.value = (Current.activeCameraSubject.value == .back) ? .front : .back
     }
     
     @objc func zoomText(gesture: UIPinchGestureRecognizer) {
