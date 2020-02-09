@@ -98,8 +98,6 @@ final class PlaybackViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.delegate = self
-
         title = "Pop That"
         view.backgroundColor = .systemBackground
         view.floatView()
@@ -114,12 +112,6 @@ final class PlaybackViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         looper?.start(in: playerView.layer)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Save imag eof map
-
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -255,7 +247,6 @@ extension PlaybackViewController: ViewBootstrappable {
                 self.updateMapSnapshot()
             case .all:
                 self.mapView.showAnnotations(self.annotations, animated: false)
-                
             }
         })
             .store(in: &cancellables)
