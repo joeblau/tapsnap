@@ -23,15 +23,6 @@ final class CameraViewController: UIViewController {
         return cs
     }()
     let sessionQueue = DispatchQueue(label: "session queue")
-    let photoSettings: AVCapturePhotoSettings = {
-        let ps = AVCapturePhotoSettings()
-        ps.isHighResolutionPhotoEnabled = false
-        ps.photoQualityPrioritization = .speed
-        if !ps.__availablePreviewPhotoPixelFormatTypes.isEmpty {
-            ps.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: ps.__availablePreviewPhotoPixelFormatTypes.first!]
-        }
-        return ps
-    }()
     var backgroundRecordingID: UIBackgroundTaskIdentifier?
     var photoData: Data?
     
@@ -164,11 +155,11 @@ final class CameraViewController: UIViewController {
         present(searchViewController, animated: true, completion: nil)
     }
     
-    @objc private func zoomCameraAction(_ gesture: UIPanGestureRecognizer) {
-        switch gesture.state {
+    @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
         case .changed:
-            let velocity = gesture.velocity(in: previewView)
-            session.zoom(with: Float(velocity.y))
+            let velocity = recognizer.velocity(in: previewView)
+            Current.zoomVeloictySubject.send(velocity)
         default: break
         }
     }
@@ -230,8 +221,13 @@ extension CameraViewController: ViewBootstrappable {
             case .none: break
             case .capturePhoto:
                 self.previewView.flash()
-                
-                AVCaptureSession.photoOutput.capturePhoto(with: self.photoSettings, delegate: self)
+                let photoSettings = AVCapturePhotoSettings()
+                photoSettings.isHighResolutionPhotoEnabled = false
+                photoSettings.photoQualityPrioritization = .speed
+                if !photoSettings.__availablePreviewPhotoPixelFormatTypes.isEmpty {
+                    photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: photoSettings.__availablePreviewPhotoPixelFormatTypes.first!]
+                }
+                AVCaptureSession.photoOutput.capturePhoto(with: photoSettings, delegate: self)
             case .captureVideoStart:
                 if UIDevice.current.isMultitaskingSupported {
                     self.backgroundRecordingID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
@@ -252,6 +248,10 @@ extension CameraViewController: ViewBootstrappable {
                 AVCaptureSession.movieFileOutput.stopRecording()
             }
         }.store(in: &cancellables)
+        
+        Current.zoomVeloictySubject.sink { zoomVelocity in
+            self.session.zoom(with: Float(zoomVelocity.y))
+        }.store(in: &cancellables)
     }
     
     internal func configureButtonTargets() {
@@ -260,7 +260,6 @@ extension CameraViewController: ViewBootstrappable {
     
     func configureGestureRecoginzers() {
         let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
-        zoomInOutPan.maximumNumberOfTouches = 1
         previewView.addGestureRecognizer(zoomInOutPan)
     }
 }

@@ -104,6 +104,7 @@ struct World {
     var drawingColorSubject = CurrentValueSubject<UIColor, Never>(.white)
     var topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
+    var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
 }
 
 var Current = World()

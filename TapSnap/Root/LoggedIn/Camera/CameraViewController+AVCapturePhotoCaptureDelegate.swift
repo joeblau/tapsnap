@@ -34,7 +34,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
                 PHPhotoLibrary.shared().performChanges({
                     let options = PHAssetResourceCreationOptions()
                     let creationRequest = PHAssetCreationRequest.forAsset()
-                    options.uniformTypeIdentifier = self.photoSettings.processedFileType.map { $0.rawValue }
+                    options.uniformTypeIdentifier = AVFileType.jpg.rawValue
                     creationRequest.addResource(with: .photo, data: photoData, options: options)
 
 

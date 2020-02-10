@@ -76,12 +76,11 @@ final class ContactCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Actions
     
-    @objc func handleVideoAction(_ recognizer: UILongPressGestureRecognizer) {
+    @objc func handleVideoAction(_ recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .began:
             Current.mediaActionSubject.send(.captureVideoStart)
             Current.recordingSubject.send(.start)
-        case .changed: break // Handle Zoom
         case .ended:
             Current.mediaActionSubject.send(.captureVideoEnd)
             Current.recordingSubject.send(.stop)
@@ -95,12 +94,20 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         default: break;
         }
     }
-
+    
+    @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .changed:
+            let velocity = recognizer.velocity(in: contentView)
+            Current.zoomVeloictySubject.send(velocity)
+        default: break
+        }
+    }
 }
 
 // MARK: - ViewBootstrappable
 
-extension ContactCollectionViewCell: ViewBootstrappable {
+extension ContactCollectionViewCell: ViewBootstrappable, UIGestureRecognizerDelegate {
     internal func configureViews() {
         addSubview(contactImageView)
         contactImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -116,11 +123,20 @@ extension ContactCollectionViewCell: ViewBootstrappable {
     }
     
     func configureGestureRecoginzers() {        
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleVideoAction(_:)))
-        longPress.minimumPressDuration = 0.2
-        contentView.addGestureRecognizer(longPress)
+        let panGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleVideoAction(_:)))
+        panGesture.delegate = self
+        contentView.addGestureRecognizer(panGesture)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handlePhotoAction(_:)))
         contentView.addGestureRecognizer(tap)
+        
+        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
+        zoomInOutPan.delegate = self
+        contentView.addGestureRecognizer(zoomInOutPan)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+         (gestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer is UIPanGestureRecognizer) ||
+            (otherGestureRecognizer is UILongPressGestureRecognizer && gestureRecognizer is UIPanGestureRecognizer)
     }
 }
