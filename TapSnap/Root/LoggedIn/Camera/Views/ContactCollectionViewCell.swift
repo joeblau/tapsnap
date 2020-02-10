@@ -80,10 +80,8 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         switch recognizer.state {
         case .began:
             Current.mediaActionSubject.send(.captureVideoStart)
-            Current.recordingSubject.send(.start)
         case .ended:
             Current.mediaActionSubject.send(.captureVideoEnd)
-            Current.recordingSubject.send(.stop)
         default: break
         }
     }

@@ -13,11 +13,6 @@ import AVFoundation
 import MapKit
 import Contacts
 
-enum RecordAction {
-    case start
-    case stop
-}
-
 enum EditState {
     case none
     case keyboard
@@ -95,7 +90,6 @@ struct World {
     var formatter = Formatter()
     
     // Reactive
-    var recordingSubject = CurrentValueSubject<RecordAction, Never>(.stop)
     var editingSubject = CurrentValueSubject<EditState, Never>(.none)
     var activeCameraSubject = CurrentValueSubject<AVCaptureDevice.Position, Never>(.back)
     var presentViewContollersSubject = CurrentValueSubject<ShowViewController, Never>(.none)

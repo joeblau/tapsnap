@@ -279,14 +279,14 @@ extension CameraOverlayView: ViewBootstrappable {
         }
         .store(in: &cancellables)
         
-        Current.recordingSubject.sink { action in
+        Current.mediaActionSubject.sink { action in
             switch action {
-            case .start: break
-            case .stop:
+            case .capturePhoto, .captureVideoEnd:
                 self.indeterminateProgressView.startAnimating()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                     self.indeterminateProgressView.stopAnimating(withExitTransition: true, completion: nil)
                 }
+            default: break
             }
         }
         .store(in: &cancellables)

@@ -9,6 +9,7 @@
 import UIKit
 import Combine
 import AVFoundation
+import MediaPlayer
 
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
@@ -25,6 +26,7 @@ final class CameraViewController: UIViewController {
     let sessionQueue = DispatchQueue(label: "session queue")
     var backgroundRecordingID: UIBackgroundTaskIdentifier?
     var photoData: Data?
+
     
     // Top left
     private lazy var menuButton: UIBarButtonItem = {
@@ -229,6 +231,11 @@ extension CameraViewController: ViewBootstrappable {
                 }
                 AVCaptureSession.photoOutput.capturePhoto(with: photoSettings, delegate: self)
             case .captureVideoStart:
+                // Start playing audio
+//                let item = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem
+//                MPMusicPlayerController.systemMusicPlayer.setQueue(with: [item])
+//                MPMusicPlayerController.systemMusicPlayer.play()
+                
                 if UIDevice.current.isMultitaskingSupported {
                     self.backgroundRecordingID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                 }
@@ -245,6 +252,8 @@ extension CameraViewController: ViewBootstrappable {
                 AVCaptureSession.movieFileOutput.startRecording(to: URL(fileURLWithPath: outputFilePath), recordingDelegate: self)
                 
             case .captureVideoEnd:
+                self.previewView.flash()
+//                MPMusicPlayerController.systemMusicPlayer.stop()
                 AVCaptureSession.movieFileOutput.stopRecording()
             }
         }.store(in: &cancellables)

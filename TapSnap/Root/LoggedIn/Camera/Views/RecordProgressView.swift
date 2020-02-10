@@ -31,9 +31,9 @@ final class RecordProgressView: UIView {
 
 extension RecordProgressView: ViewBootstrappable {
     internal func configureStreams() {
-        Current.recordingSubject.sink { action in
+        Current.mediaActionSubject.sink { action in
             switch action {
-            case .start:
+            case .captureVideoStart:
                 self.widthConstraint.constant = UIScreen.main.bounds.width
                 UIView.animate(withDuration: 10.0,
                                delay: 0.0,
@@ -52,7 +52,7 @@ extension RecordProgressView: ViewBootstrappable {
                                                                              alpha: 1.0)
                             },
                                completion: nil)
-            case .stop:
+            case .none, .captureVideoEnd:
                 self.progressView?.removeFromSuperview()
                 self.progressView = UIView()
                 self.progressView?.backgroundColor = .systemRed
@@ -64,6 +64,7 @@ extension RecordProgressView: ViewBootstrappable {
                 self.progressView?.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
                 self.widthConstraint = self.progressView?.widthAnchor.constraint(equalToConstant: 0)
                 self.widthConstraint.isActive = true
+            default: break
             }
         
         }
