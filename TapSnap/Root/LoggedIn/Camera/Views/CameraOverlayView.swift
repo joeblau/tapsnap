@@ -119,7 +119,7 @@ final class CameraOverlayView: UIView {
         Current.locationManager.requestWhenInUseAuthorization()
     }
     
-    @objc private func zoomAction() {}
+
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -138,12 +138,12 @@ final class CameraOverlayView: UIView {
         Current.activeCameraSubject.value = (Current.activeCameraSubject.value == .back) ? .front : .back
     }
     
-    @objc func zoomText(gesture: UIPinchGestureRecognizer) {
+    @objc func zoomText(_ gesture: UIPinchGestureRecognizer) {
         switch gesture.state {
         case .began:
             zoomScale = gesture.scale
         case .changed:
-            print("chagne")
+            print("change")
         default: break
         }
     }
@@ -230,13 +230,8 @@ extension CameraOverlayView: ViewBootstrappable {
         flipCameraDoubleTap.numberOfTapsRequired = 2
         addGestureRecognizer(flipCameraDoubleTap)
         
-        let zoomTextRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(zoomText(gesture:)))
+        let zoomTextRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(zoomText(_:)))
         addGestureRecognizer(zoomTextRecognizer)
-        
-        //        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomAction))
-        //        zoomInOutPan.maximumNumberOfTouches = 1
-        //        addGestureRecognizer(zoomInOutPan)
-        
     }
     
     internal func configureStreams() {

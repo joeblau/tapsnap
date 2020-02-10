@@ -17,7 +17,11 @@ final class CameraViewController: UIViewController {
     let itemsInSection = [15]
     
     // Photo Video
-    private let session = AVCaptureSession()
+    private let session: AVCaptureSession = {
+        let cs = AVCaptureSession()
+        cs.sessionPreset = .medium
+        return cs
+    }()
     let sessionQueue = DispatchQueue(label: "session queue")
     let photoSettings: AVCapturePhotoSettings = {
         let ps = AVCapturePhotoSettings()
@@ -154,10 +158,19 @@ final class CameraViewController: UIViewController {
         Current.editingSubject.value = .clear
     }
     
-    @objc func editContacts() {}
+    @objc private func editContacts() {}
     
-    @objc func searchContactsAction() {
+    @objc private func searchContactsAction() {
         present(searchViewController, animated: true, completion: nil)
+    }
+    
+    @objc private func zoomCameraAction(_ gesture: UIPanGestureRecognizer) {
+        switch gesture.state {
+        case .changed:
+            let velocity = gesture.velocity(in: previewView)
+            session.zoom(with: Float(velocity.y))
+        default: break
+        }
     }
 }
 
@@ -226,17 +239,15 @@ extension CameraViewController: ViewBootstrappable {
                 
                 let movieFileOutputConnection = AVCaptureSession.movieFileOutput.connection(with: .video)
                 movieFileOutputConnection?.videoOrientation = .portrait
-                
-                let availableVideoCodecTypes = AVCaptureSession.movieFileOutput.availableVideoCodecTypes
-                
-                if availableVideoCodecTypes.contains(.hevc) {
+
+                if  AVCaptureSession.movieFileOutput.availableVideoCodecTypes.contains(.hevc) {
                     AVCaptureSession.movieFileOutput.setOutputSettings([AVVideoCodecKey: AVVideoCodecType.hevc], for: movieFileOutputConnection!)
                 }
-                
                 
                 let outputFileName = NSUUID().uuidString
                 let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
                 AVCaptureSession.movieFileOutput.startRecording(to: URL(fileURLWithPath: outputFilePath), recordingDelegate: self)
+                
             case .captureVideoEnd:
                 AVCaptureSession.movieFileOutput.stopRecording()
             }
@@ -245,5 +256,11 @@ extension CameraViewController: ViewBootstrappable {
     
     internal func configureButtonTargets() {
         notificationButton.addTarget(self, action: #selector(showPlaybackAction), for: .touchUpInside)
+    }
+    
+    func configureGestureRecoginzers() {
+        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
+        zoomInOutPan.maximumNumberOfTouches = 1
+        previewView.addGestureRecognizer(zoomInOutPan)
     }
 }

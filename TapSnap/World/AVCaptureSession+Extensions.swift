@@ -11,6 +11,7 @@ extension AVCaptureSession {
     // Session output
     static var photoOutput = AVCapturePhotoOutput()
     static var movieFileOutput = AVCaptureMovieFileOutput()
+    static var captureDevice: AVCaptureDevice? = nil
     
     // MARK: - Public function
     
@@ -29,9 +30,7 @@ extension AVCaptureSession {
     func setCamera(to position: AVCaptureDevice.Position) {
         beginConfiguration()
         
-        // Remove current video capture device
-        inputs.first { ($0 as? AVCaptureDeviceInput)?.device.hasMediaType(.video) ?? false }
-            .map { removeInput($0) }
+        currentVideoCaptureDevice.map { removeInput($0) }
                 
         switch position {
         case .front:
@@ -42,12 +41,26 @@ extension AVCaptureSession {
         commitConfiguration()
     }
     
+    func zoom(with velocity: Float) {
+        guard let device = AVCaptureSession.captureDevice else { return }
+        do {
+            try device.lockForConfiguration()
+            let desiredZoomFactor = device.videoZoomFactor + CGFloat(atan2f(-velocity, 1337))
+            device.videoZoomFactor = max(1.0, min(desiredZoomFactor, device.activeFormat.videoMaxZoomFactor))
+            device.unlockForConfiguration()
+        } catch {
+            print("Can not lock capture device to zoom")
+        }
+    }
+    
     // MARK: - Cameras
     
     private func frontVideoDevice() -> AVCaptureDevice? {
         if let trueDepth = AVCaptureDevice.default(.builtInTrueDepthCamera, for: .video, position: .front) {
+            AVCaptureSession.captureDevice = trueDepth
             return trueDepth
         } else if let wide = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) {
+            AVCaptureSession.captureDevice = wide
             return wide
         } else {
             return nil
@@ -56,10 +69,13 @@ extension AVCaptureSession {
     
     private func backVideoDevice() -> AVCaptureDevice? {
         if let tripple = AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) {
+            AVCaptureSession.captureDevice = tripple
             return tripple
         } else if let dual = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
+            AVCaptureSession.captureDevice = dual
             return dual
         } else if let wide = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
+            AVCaptureSession.captureDevice = wide
             return wide
         } else {
             return nil
@@ -113,5 +129,11 @@ extension AVCaptureSession {
         } else {
             fatalError("Could not add movie output to the session")
         }
+    }
+    
+    // MARK: - Helpers
+    
+    private var currentVideoCaptureDevice: AVCaptureDeviceInput? {
+        inputs.first { ($0 as? AVCaptureDeviceInput)?.device.hasMediaType(.video) ?? false } as? AVCaptureDeviceInput
     }
 }
