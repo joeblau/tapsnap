@@ -56,6 +56,7 @@
 		EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390017BF26255640A332187B /* MenuCellTableViewCell.swift */; };
 		ED2C486023F09658004F7F52 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2C485F23F09658004F7F52 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift */; };
 		ED53E23923F0BED80059360F /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED53E23823F0BED80059360F /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */; };
+		ED53E23D23F0CEB20059360F /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED53E23C23F0CEB20059360F /* AVCaptureSession+Extensions.swift */; };
 		F706313D9D716BADCD569DB2 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B851F786DA4738BBC7ADDD13 /* UILabel+Extension.swift */; };
 		F8BC17E6DAD7EAD51C1DEE31 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2794F5FFE087FFD18DAD1F8A /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
@@ -126,6 +127,7 @@
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		ED2C485F23F09658004F7F52 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCapturePhotoCaptureDelegate.swift"; sourceTree = "<group>"; };
 		ED53E23823F0BED80059360F /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
+		ED53E23C23F0CEB20059360F /* AVCaptureSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureSession+Extensions.swift"; sourceTree = "<group>"; };
 		EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
 		F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
 		F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				BC0AEC0515C2B7D500F06F37 /* UIView+Extensions.swift */,
 				D0F1B7785FF0DC5D68FD478D /* ViewBootstrappable.swift */,
 				2FCE2621E3412630A639A0E9 /* World.swift */,
+				ED53E23C23F0CEB20059360F /* AVCaptureSession+Extensions.swift */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -483,6 +486,7 @@
 				E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */,
 				22441ACCFD9F673D8EC70B23 /* CameraPreviewView.swift in Sources */,
 				78FD54943CAFF8C9035664DE /* CameraViewController+UICollectionViewDataSource.swift in Sources */,
+				ED53E23D23F0CEB20059360F /* AVCaptureSession+Extensions.swift in Sources */,
 				29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
 				4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */,
 				4296ABD2EB34055CB28AA8D5 /* ContactCollectionViewCell.swift in Sources */,
