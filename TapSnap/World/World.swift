@@ -100,6 +100,7 @@ struct World {
     var topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
     var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
+    var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
 }
 
 var Current = World()

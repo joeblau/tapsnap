@@ -20,8 +20,7 @@ final class CameraOverlayView: UIView {
     // Bottom right
     private lazy var musicButton: UIButton = {
         let b = UIButton(type: .custom)
-        b.setImage(UIImage(systemName: "speaker.slash"), for: .normal)
-        b.setImage(UIImage(systemName: "speaker"), for: .selected)
+        b.setImage(UIImage(systemName: "metronome"), for: .normal)
         b.floatButton()
         return b
     }()
@@ -107,10 +106,6 @@ final class CameraOverlayView: UIView {
         Current.editingSubject.value = .keyboard
     }
     
-    @objc private func toggleMusicAction() {
-        musicButton.isSelected.toggle()
-    }
-    
     @objc private func togglePersistAction() {
         persistButton.isSelected.toggle()
     }
@@ -175,7 +170,6 @@ final class CameraOverlayView: UIView {
 extension CameraOverlayView: ViewBootstrappable {
     
     internal func configureButtonTargets() {
-        musicButton.addTarget(self, action: #selector(toggleMusicAction), for: .touchUpInside)
         persistButton.addTarget(self, action: #selector(togglePersistAction), for: .touchUpInside)
         locationButton.addTarget(self, action: #selector(toggleLocationAction), for: .touchUpInside)
         textboxButton.addTarget(self, action: #selector(showTextbox), for: .touchUpInside)
@@ -203,7 +197,7 @@ extension CameraOverlayView: ViewBootstrappable {
         self.addSubview(annotationTextView)
         annotationTextView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         annotationTextView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        annotationTextViewWidth  = annotationTextView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)
+        annotationTextViewWidth = annotationTextView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width)
         annotationTextViewWidth.isActive = true
         annotationTextViewHeight = annotationTextView.heightAnchor.constraint(equalToConstant: 50)
         annotationTextViewHeight.isActive = true
@@ -233,7 +227,7 @@ extension CameraOverlayView: ViewBootstrappable {
         let zoomTextRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(zoomText(_:)))
         addGestureRecognizer(zoomTextRecognizer)
     }
-    
+        
     internal func configureStreams() {
         Current.editingSubject.sink { editState in
             switch editState {
@@ -253,9 +247,8 @@ extension CameraOverlayView: ViewBootstrappable {
                 self.canvasView.isUserInteractionEnabled = true
                 self.annotationTextView.inputView = DrawingToolsView(height: self.drawingToolsViewHeight)
                 self.annotationTextView.reloadInputViews()
-                
             case .music:
-                self.canvasView.isUserInteractionEnabled = true
+                self.canvasView.isUserInteractionEnabled = false
                 self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
                 self.annotationTextView.reloadInputViews()
             case .clear:
@@ -263,21 +256,15 @@ extension CameraOverlayView: ViewBootstrappable {
                 self.canvasView.drawing = PKDrawing()
                 self.isCanvasClean()
             }
-        }
-        .store(in: &cancellables)
+        }.store(in: &cancellables)
         
-        Current.locationManager
-            .didChangeAuthorization
-            .sink { status in
+        Current.locationManager.didChangeAuthorization.sink { status in
                 self.process(authorization: status)
-        }
-        .store(in: &cancellables)
+        }.store(in: &cancellables)
         
-        Current.drawingColorSubject
-            .sink { color in
+        Current.drawingColorSubject.sink { color in
                 self.canvasView.tool = PKInkingTool(.pen, color: color.withAlphaComponent(0.8), width: 16)
-        }
-        .store(in: &cancellables)
+        }.store(in: &cancellables)
         
         Current.mediaActionSubject.sink { action in
             switch action {
@@ -288,8 +275,13 @@ extension CameraOverlayView: ViewBootstrappable {
                 }
             default: break
             }
-        }
-        .store(in: &cancellables)
+        }.store(in: &cancellables)
+        
+        Current.musicSyncSubject.sink { shouldSync in
+            self.musicButton.isEnabled = shouldSync
+
+            
+        }.store(in: &cancellables)
     }
 }
 

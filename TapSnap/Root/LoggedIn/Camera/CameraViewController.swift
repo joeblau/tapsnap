@@ -228,10 +228,11 @@ extension CameraViewController: ViewBootstrappable {
                 }
                 AVCaptureSession.photoOutput.capturePhoto(with: photoSettings, delegate: self)
             case .captureVideoStart:
-                // Start playing audio
-
-                MPMusicPlayerController.systemMusicPlayer.play()
-                
+                if Current.musicSyncSubject.value {
+                    MPMusicPlayerController.systemMusicPlayer.prepareToPlay { error in
+                        MPMusicPlayerController.systemMusicPlayer.play()
+                    }
+                }
                 if UIDevice.current.isMultitaskingSupported {
                     self.backgroundRecordingID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                 }
@@ -245,11 +246,13 @@ extension CameraViewController: ViewBootstrappable {
                 
                 let outputFileName = NSUUID().uuidString
                 let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
+
                 AVCaptureSession.movieFileOutput.startRecording(to: URL(fileURLWithPath: outputFilePath), recordingDelegate: self)
-                
             case .captureVideoEnd:
+                if Current.musicSyncSubject.value {
+                    MPMusicPlayerController.systemMusicPlayer.stop()
+                }
                 self.previewView.flash()
-                MPMusicPlayerController.systemMusicPlayer.stop()
                 AVCaptureSession.movieFileOutput.stopRecording()
             }
         }.store(in: &cancellables)

@@ -10,6 +10,8 @@ import UIKit
 final class SyncTableViewCell: UITableViewCell {
     private lazy var playSwitch: UISwitch = {
         let s = UISwitch()
+        s.addTarget(self, action: #selector(toggleAudioSyncAction(_:)), for: .valueChanged)
+        s.isOn = Current.musicSyncSubject.value
         return s
     }()
     
@@ -43,6 +45,10 @@ final class SyncTableViewCell: UITableViewCell {
         }
                 
         accessoryView = playSwitch
+    }
+    
+    @objc func toggleAudioSyncAction(_ sender: UISwitch) {
+        Current.musicSyncSubject.send(sender.isOn)
     }
     
     static let id = String(describing: SyncTableViewCell.self)
