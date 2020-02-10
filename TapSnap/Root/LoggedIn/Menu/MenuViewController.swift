@@ -1,35 +1,27 @@
-//
-//  MenuViewController.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/7/20.
-//
+// MenuViewController.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 final class MenuViewController: UIViewController {
-
     let menuSections: [SectionItem] = [
         SectionItem(menuItems: [
             MenuItem(systemName: "clock", titleText: "Activity"),
             MenuItem(systemName: "calendar", titleText: "Sent Today"),
-            MenuItem(systemName: "heart", titleText: "Saved Taps")
-            ]
-        ),
+            MenuItem(systemName: "heart", titleText: "Saved Taps"),
+        ]),
         SectionItem(menuItems: [
             MenuItem(systemName: "paperplane", titleText: "Invite A Friend"),
             MenuItem(systemName: "person", titleText: "My Friends"),
-            MenuItem(systemName: "person.2", titleText: "My Groups")
-            ]
-        ),
+            MenuItem(systemName: "person.2", titleText: "My Groups"),
+        ]),
         SectionItem(menuItems: [
             MenuItem(systemName: "person.crop.square", titleText: "Profile"),
             MenuItem(systemName: "questionmark", titleText: "Help"),
-            MenuItem(systemName: "gear", titleText: "Settings")
-            ]
-        )
+            MenuItem(systemName: "gear", titleText: "Settings"),
+        ]),
     ]
-    
+
     lazy var tableView: UITableView = {
         let t = UITableView(frame: .zero, style: .insetGrouped)
         t.register(MenuCellTableViewCell.self, forCellReuseIdentifier: MenuCellTableViewCell.id)
@@ -37,17 +29,17 @@ final class MenuViewController: UIViewController {
         t.dataSource = self
         return t
     }()
-    
+
     lazy var closeButton: UIBarButtonItem = {
-       let b =  UIBarButtonItem(image: UIImage(systemName: "xmark"),
-                                          landscapeImagePhone: UIImage(systemName: "xmark"),
-                                          style: .done,
-                                          target: self,
-                                          action: #selector(closeMenuAction))
+        let b = UIBarButtonItem(image: UIImage(systemName: "xmark"),
+                                landscapeImagePhone: UIImage(systemName: "xmark"),
+                                style: .done,
+                                target: self,
+                                action: #selector(closeMenuAction))
         b.tintColor = .white
         return b
     }()
-    
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -55,21 +47,20 @@ final class MenuViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "Menu"
         navigationItem.leftBarButtonItem = closeButton
-        
+
         configureViews()
     }
-    
-    // MARK: - Actoins
-    
-    @objc func closeMenuAction() {
-        self.dismiss(animated: true, completion: nil)
-    }
 
+    // MARK: - Actoins
+
+    @objc func closeMenuAction() {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
 // MARK: - ViewBootstrappable
 
-extension MenuViewController: ViewBootstrappable {    
+extension MenuViewController: ViewBootstrappable {
     internal func configureViews() {
         view.addSubview(tableView)
         tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true

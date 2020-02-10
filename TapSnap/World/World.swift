@@ -1,17 +1,12 @@
-//
-//  World.swift
-//  Dolo
-//
-//  Created by Joe Blau on 2/2/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// World.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
-import Combine
-import CoreLocation
 import AVFoundation
-import MapKit
+import Combine
 import Contacts
+import CoreLocation
+import MapKit
+import UIKit
 
 enum EditState {
     case none
@@ -63,6 +58,7 @@ struct World {
         pa.country = "United States"
         return pa
     }()
+
     // Sensors
     var locationManager = CLLocationManager()
     var networkSession: URLSession = {
@@ -70,10 +66,10 @@ struct World {
         configuraiton.allowsCellularAccess = true
         configuraiton.requestCachePolicy = .returnCacheDataElseLoad
         configuraiton.allowsExpensiveNetworkAccess = true
-        
+
         return URLSession(configuration: configuraiton)
     }()
-    
+
     let mapView: MKMapView = {
         let mv = MKMapView()
         mv.translatesAutoresizingMaskIntoConstraints = false
@@ -86,10 +82,10 @@ struct World {
         mv.showsBuildings = true
         return mv
     }()
-    
+
     // Constants
     var formatter = Formatter()
-    
+
     // Reactive
     var editingSubject = CurrentValueSubject<EditState, Never>(.none)
     var activeCameraSubject = CurrentValueSubject<AVCaptureDevice.Position, Never>(.back)
@@ -100,8 +96,7 @@ struct World {
     var topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
     var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
-    
-    
+
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
 }

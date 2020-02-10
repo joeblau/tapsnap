@@ -1,24 +1,19 @@
-//
-//  CameraViewController+AVCapturePhotoCaptureDelegate.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/9/20.
-//
+// CameraViewController+AVCapturePhotoCaptureDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import Photos
+import UIKit
 
 extension CameraViewController: AVCapturePhotoCaptureDelegate {
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {        
+    func photoOutput(_: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if let error = error {
             print("Error capturing photo: \(error)")
         } else {
             photoData = photo.fileDataRepresentation()
         }
     }
-    
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishCaptureFor resolvedSettings: AVCaptureResolvedPhotoSettings, error: Error?) {
+
+    func photoOutput(_: AVCapturePhotoOutput, didFinishCaptureFor _: AVCaptureResolvedPhotoSettings, error: Error?) {
         if let error = error {
             print("Error capturing photo: \(error)")
             return
@@ -34,16 +29,14 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
                 PHPhotoLibrary.shared().performChanges({
                     let options = PHAssetResourceCreationOptions()
                     let creationRequest = PHAssetCreationRequest.forAsset()
-                    options.uniformTypeIdentifier = AVFileType.jpg.rawValue
+                    options.uniformTypeIdentifier = self.photoSettings.processedFileType.map { $0.rawValue }
                     creationRequest.addResource(with: .photo, data: photoData, options: options)
-
 
                 }, completionHandler: { _, error in
                     if let error = error {
                         print("Error occurred while saving photo to photo library: \(error)")
                     }
-                }
-                )
+                })
             }
         }
     }

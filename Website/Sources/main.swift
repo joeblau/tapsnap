@@ -1,6 +1,9 @@
+// main.swift
+// Copyright (c) 2020 Tapsnap, LLC
+
 import Foundation
-import Publish
 import Plot
+import Publish
 
 // This type acts as the configuration for your website.
 struct Tapsnapsite: Website {

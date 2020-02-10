@@ -1,26 +1,21 @@
-/*
-	Copyright (C) 2016 Apple Inc. All Rights Reserved.
-	See LICENSE.txt for this sample’s licensing information
-	
-	Abstract:
-	An object that uses AVPlayerLooper to loop a video.
-*/
+// PlayerLooper.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import AVFoundation
+import UIKit
 
 class PlayerLooper: NSObject {
     // MARK: Types
 
     private struct ObserverContexts {
         static var isLooping = 0
-        
+
         static var isLoopingKey = "isLooping"
-        
+
         static var loopCount = 0
-        
+
         static var loopCountKey = "loopCount"
-        
+
         static var playerItemDurationKey = "duration"
     }
 
@@ -42,7 +37,7 @@ class PlayerLooper: NSObject {
 
     required init(videoURL: URL, loopCount: Int) {
         self.videoURL = videoURL
-        self.numberOfTimesToPlay = loopCount
+        numberOfTimesToPlay = loopCount
 
         super.init()
     }
@@ -57,18 +52,18 @@ class PlayerLooper: NSObject {
         parentLayer.addSublayer(playerLayer)
 
         let playerItem = AVPlayerItem(url: videoURL)
-        playerItem.asset.loadValuesAsynchronously(forKeys: [ObserverContexts.playerItemDurationKey], completionHandler: {()->Void in
-            DispatchQueue.main.async(execute: {
+        playerItem.asset.loadValuesAsynchronously(forKeys: [ObserverContexts.playerItemDurationKey], completionHandler: { () -> Void in
+            DispatchQueue.main.async {
                 guard let player = self.player else { return }
 
-                var durationError: NSError? = nil
+                var durationError: NSError?
                 let durationStatus = playerItem.asset.statusOfValue(forKey: ObserverContexts.playerItemDurationKey, error: &durationError)
                 guard durationStatus == .loaded else { fatalError("Failed to load duration property with error: \(durationError)") }
 
                 self.playerLooper = AVPlayerLooper(player: player, templateItem: playerItem)
                 self.startObserving()
                 player.play()
-            })
+            }
         })
     }
 
@@ -107,22 +102,20 @@ class PlayerLooper: NSObject {
 
     // MARK: KVO
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if context == &ObserverContexts.isLooping {
             if let loopingStatus = change?[.newKey] as? Bool, !loopingStatus {
                 print("Looping ended due to an error")
             }
-        }
-        else if context == &ObserverContexts.loopCount {
+        } else if context == &ObserverContexts.loopCount {
             guard let playerLooper = playerLooper else { return }
 
-            if numberOfTimesToPlay > 0 && playerLooper.loopCount >= numberOfTimesToPlay - 1 {
-                print("Exceeded loop limit of \(numberOfTimesToPlay) and disabling looping");
+            if numberOfTimesToPlay > 0, playerLooper.loopCount >= numberOfTimesToPlay - 1 {
+                print("Exceeded loop limit of \(numberOfTimesToPlay) and disabling looping")
                 stopObserving()
                 playerLooper.disableLooping()
             }
-        }
-        else {
+        } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
         }
     }

@@ -1,16 +1,10 @@
-//
-//  MusicPlaybackView.swift
-//  Dolo
-//
-//  Created by Joe Blau on 2/4/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// MusicPlaybackView.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import MediaPlayer
+import UIKit
 
 final class MusicPlaybackView: UIView {
-    
     private let intrinsicHeight: CGFloat
     private let musicPlayer = MPMusicPlayerController.systemMusicPlayer
     private lazy var musicTableView: UITableView = {
@@ -33,14 +27,14 @@ final class MusicPlaybackView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         bootstrap()
     }
-    
-    required init?(coder: NSCoder) {
+
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIWindow().screen.bounds.width,
-                      height: intrinsicHeight)
+        CGSize(width: UIWindow().screen.bounds.width,
+               height: intrinsicHeight)
     }
 }
 
@@ -59,10 +53,10 @@ extension MusicPlaybackView: ViewBootstrappable {
 // MARK: - UITableViewDataSource
 
 extension MusicPlaybackView: UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int { 2 }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { 1 }
-    
+    func numberOfSections(in _: UITableView) -> Int { 2 }
+
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int { 1 }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
@@ -81,17 +75,16 @@ extension MusicPlaybackView: UITableViewDataSource {
                                     artist: nowPlaying.artist)
             }
             return mediaCell
-            
+
         default: break
         }
         fatalError("Undefined cell")
     }
-    
-    func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+
+    func tableView(_: UITableView, titleForFooterInSection section: Int) -> String? {
         switch section {
         case 0: return "Play song from current position when video starts"
         default: return nil
         }
     }
-    
 }

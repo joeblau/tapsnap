@@ -1,9 +1,5 @@
-//
-//  ViewControllerBootstrappable.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/7/20.
-//
+// ViewBootstrappable.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import Foundation
 

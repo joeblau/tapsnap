@@ -1,10 +1,5 @@
-//
-//  UILabel+Extension.swift
-//  Dolo
-//
-//  Created by Joe Blau on 2/4/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// UILabel+Extension.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 

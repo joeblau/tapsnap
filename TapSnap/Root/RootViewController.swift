@@ -1,30 +1,25 @@
-//
-//  RootViewController.swift
-//  Dolo
-//
-//  Created by Joe Blau on 1/31/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// RootViewController.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import AuthenticationServices
+import UIKit
 
 class RootViewController: UIViewController {
     let provider = ASAuthorizationAppleIDProvider()
-    
+
     // MARK: - Lifecycle
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         #if DEBUG
             let loggedIn = LoggedInViewController()
             loggedIn.modalPresentationStyle = .fullScreen
-            self.present(loggedIn, animated: true, completion: nil)
+            present(loggedIn, animated: true, completion: nil)
         #else
             let doloUID = UserDefaults.standard.value(forKey: "doloUID") as? String ?? ""
 
-            provider.getCredentialState(forUserID: doloUID) { (credentialState, error) in
+            provider.getCredentialState(forUserID: doloUID) { credentialState, error in
                 DispatchQueue.main.async {
                     switch credentialState {
                     case .authorized:
@@ -45,5 +40,4 @@ class RootViewController: UIViewController {
             }
         #endif
     }
-
 }

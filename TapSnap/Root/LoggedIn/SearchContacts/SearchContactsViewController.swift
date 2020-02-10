@@ -1,14 +1,9 @@
-//
-//  SearchContactsViewController.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/7/20.
-//
+// SearchContactsViewController.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 final class SearchContactsViewController: UIViewController {
-
     lazy var searchController: UISearchController = {
         let s = UISearchController(searchResultsController: nil)
         s.searchBar.autocapitalizationType = .none

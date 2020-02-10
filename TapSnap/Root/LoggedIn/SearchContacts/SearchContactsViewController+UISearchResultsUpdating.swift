@@ -1,18 +1,10 @@
-//
-//  test.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/7/20.
-//
+// SearchContactsViewController+UISearchResultsUpdating.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 extension SearchContactsViewController: UISearchResultsUpdating {
+    func searchBar(_: UISearchBar, selectedScopeButtonIndexDidChange _: Int) {}
 
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-    }
-    
-    func updateSearchResults(for searchController: UISearchController) {
-    
-    }
+    func updateSearchResults(for _: UISearchController) {}
 }

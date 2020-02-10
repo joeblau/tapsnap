@@ -1,12 +1,6 @@
-//
-//  SearchContactsViewController+ UISearchControllerDelegate.swift.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/7/20.
-//
+// SearchContactsViewController+UISearchControllerDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
-extension SearchContactsViewController: UISearchControllerDelegate {
-    
-}
+extension SearchContactsViewController: UISearchControllerDelegate {}

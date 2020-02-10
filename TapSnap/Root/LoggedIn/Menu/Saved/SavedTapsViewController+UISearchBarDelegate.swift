@@ -1,12 +1,6 @@
-//
-//  SavedTapsViewController+c.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/7/20.
-//
+// SavedTapsViewController+UISearchBarDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
-extension SavedTapsViewController: UISearchBarDelegate {
-    
-}
+extension SavedTapsViewController: UISearchBarDelegate {}

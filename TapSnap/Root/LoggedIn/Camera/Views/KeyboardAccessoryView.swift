@@ -1,18 +1,13 @@
-//
-//  KeyboardAccessoryView.swift
-//  Dolo
-//
-//  Created by Joe Blau on 2/1/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// KeyboardAccessoryView.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import Combine
+import UIKit
 
 final class KeyboardAccessoryView: UIVisualEffectView {
     private var cancellables = Set<AnyCancellable>()
     private let kAccessoryPadding: CGFloat = 4
-    
+
     private lazy var accessoryStack: UIStackView = {
         let accessoryStack = UIStackView(arrangedSubviews: [textKeyboard, drawToolPicker, musicPlayback, doneButton])
         accessoryStack.translatesAutoresizingMaskIntoConstraints = false
@@ -22,7 +17,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         accessoryStack.spacing = kAccessoryPadding
         return accessoryStack
     }()
-    
+
     private lazy var textKeyboard: UIButton = {
         let b = UIButton(type: .custom)
         b.setImage(UIImage(systemName: "textbox"), for: .normal)
@@ -30,7 +25,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         b.keyboardAccessory()
         return b
     }()
-    
+
     private lazy var drawToolPicker: UIButton = {
         let b = UIButton(type: .custom)
         b.setImage(UIImage(systemName: "scribble"), for: .normal)
@@ -46,49 +41,47 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         b.keyboardAccessory()
         return b
     }()
-        
-        
+
     private lazy var doneButton: UIButton = {
-       let b = UIButton(type: .custom)
+        let b = UIButton(type: .custom)
         b.setTitle("Done", for: .normal)
         b.keyboardAccessory(alpha: 0.15)
         return b
     }()
-    
+
     private var currentSelected: UIButton?
-    
+
     init() {
         super.init(effect: UIBlurEffect(style: .systemMaterial))
         translatesAutoresizingMaskIntoConstraints = false
         bootstrap()
     }
-    
-    required init?(coder: NSCoder) {
+
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIWindow().screen.bounds.width, height: 48)
+        CGSize(width: UIWindow().screen.bounds.width, height: 48)
     }
-    
+
     // MARK: - Actions
-    
+
     @objc private func pressKeyboardAction() {
         Current.editingSubject.value = .keyboard
     }
-    
+
     @objc private func pressDrawingAction() {
         Current.editingSubject.value = .drawing
     }
-    
+
     @objc private func musicPlaybackAction() {
         Current.editingSubject.value = .music
     }
-    
+
     @objc private func pressDoneAction() {
         Current.editingSubject.value = .none
     }
-    
 }
 
 extension KeyboardAccessoryView: ViewBootstrappable {
@@ -98,7 +91,7 @@ extension KeyboardAccessoryView: ViewBootstrappable {
         musicPlayback.addTarget(self, action: #selector(musicPlaybackAction), for: .touchUpInside)
         doneButton.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)
     }
-    
+
     internal func configureViews() {
         contentView.addSubview(accessoryStack)
         accessoryStack.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -106,11 +99,11 @@ extension KeyboardAccessoryView: ViewBootstrappable {
         accessoryStack.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         accessoryStack.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
     }
-    
+
     internal func configureStreams() {
         Current.editingSubject
             .sink { editState in
-                
+
                 switch editState {
                 case .keyboard:
                     self.currentSelected?.isSelected = false
@@ -125,13 +118,13 @@ extension KeyboardAccessoryView: ViewBootstrappable {
 
                     self.musicPlayback.isSelected = true
                     self.currentSelected = self.musicPlayback
-                case  .none, .clear:
+                case .none, .clear:
                     return
                 }
                 self.textKeyboard.tintColor = self.textKeyboard.isSelected ? .systemBackground : .label
                 self.drawToolPicker.tintColor = self.drawToolPicker.isSelected ? .systemBackground : .label
                 self.musicPlayback.tintColor = self.musicPlayback.isSelected ? .systemBackground : .label
-        }
-        .store(in: &cancellables)
+            }
+            .store(in: &cancellables)
     }
 }

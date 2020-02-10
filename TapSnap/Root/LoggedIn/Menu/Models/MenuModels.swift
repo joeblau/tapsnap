@@ -1,9 +1,5 @@
-//
-//  MenuModels.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/7/20.
-//
+// MenuModels.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import Foundation
 

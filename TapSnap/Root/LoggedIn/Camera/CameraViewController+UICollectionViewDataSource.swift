@@ -1,41 +1,35 @@
-//
-//  CameraViewController+UIColl.swift
-//  Dolo
-//
-//  Created by Joe Blau on 2/2/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// CameraViewController+UICollectionViewDataSource.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 extension CameraViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return itemsInSection.count
+    func numberOfSections(in _: UICollectionView) -> Int {
+        itemsInSection.count
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return itemsInSection[section]
+
+    func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        itemsInSection[section]
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContactCollectionViewCell.id,
-                                                      for: indexPath) as? ContactCollectionViewCell else {
-                                                        fatalError("invalid cell converison")
+                                                            for: indexPath) as? ContactCollectionViewCell else {
+            fatalError("invalid cell converison")
         }
-        
+
         let url = URL(string: "https://i.pravatar.cc/150?img=\(indexPath.row)")!
         URLSession.shared.dataTaskPublisher(for: url)
             .map { UIImage(data: $0.data)! }
             .eraseToAnyPublisher()
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { _ in
 //                print(completion)
             }) { image in
                 cell.configure(image: image, title: "Joe", groupSize: indexPath.row)
             }
-            .store(in: &self.cancellables)
-        
+            .store(in: &cancellables)
+
         return cell
     }
-    
 }

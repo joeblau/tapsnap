@@ -1,20 +1,15 @@
-//
-//  UIView+Extensions.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/9/20.
-//
+// UIView+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 extension UIView {
-
-    func floatView()  {
+    func floatView() {
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowRadius = 2
         layer.shadowOpacity = 1.0
     }
-    
+
     func toImage() -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, 0.0)
         defer { UIGraphicsEndImageContext() }

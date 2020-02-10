@@ -1,14 +1,9 @@
-//
-//  Formatter.swift
-//  Dolo
-//
-//  Created by Joe Blau on 2/4/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// Formatter.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
-import MapKit
 import Contacts
+import MapKit
+import UIKit
 
 struct Formatter {
     let distance: MKDistanceFormatter = {
@@ -16,12 +11,12 @@ struct Formatter {
         f.unitStyle = .abbreviated
         return f
     }()
-    
+
     let timeAgo: RelativeDateTimeFormatter = {
-       let f = RelativeDateTimeFormatter()
+        let f = RelativeDateTimeFormatter()
         return f
     }()
-    
+
     let progress: DateComponentsFormatter = {
         let f = DateComponentsFormatter()
         f.allowedUnits = [.hour, .minute, .second]
@@ -32,6 +27,6 @@ struct Formatter {
 
 extension CNPostalAddress {
     var streetCity: String {
-        return "\(street.trimmingCharacters(in: CharacterSet.letters.inverted)), \(city)"
+        "\(street.trimmingCharacters(in: CharacterSet.letters.inverted)), \(city)"
     }
 }

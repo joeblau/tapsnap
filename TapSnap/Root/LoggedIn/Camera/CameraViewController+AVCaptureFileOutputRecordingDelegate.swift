@@ -1,17 +1,12 @@
-//
-//  CameraViewController+AVCaptureFileOutputRecordingDelegate.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/9/20.
-//
+// CameraViewController+AVCaptureFileOutputRecordingDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import AVFoundation
 import Photos
+import UIKit
 
 extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
-    func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
-        
+    func fileOutput(_: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from _: [AVCaptureConnection], error: Error?) {
         func cleanUp() {
             let path = outputFileURL.path
             if FileManager.default.fileExists(atPath: path) {
@@ -30,7 +25,7 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                 }
             }
         }
-        
+
         switch error {
         case let .some(error):
             print("Movie file finishing error: \(String(describing: error))")
@@ -54,7 +49,6 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                     cleanUp()
                 }
             }
-            
         }
     }
 }

@@ -1,16 +1,10 @@
-//
-//  DoloTests.swift
-//  DoloTests
-//
-//  Created by Joe Blau on 1/31/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// DoloTests.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import XCTest
 @testable import Dolo
 
 class DoloTests: XCTestCase {
-
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -26,9 +20,8 @@ class DoloTests: XCTestCase {
 
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measure {
+        measure {
             // Put the code you want to measure the time of here.
         }
     }
-
 }

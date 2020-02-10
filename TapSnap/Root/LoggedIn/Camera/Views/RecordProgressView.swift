@@ -1,30 +1,23 @@
-//
-//  RecordProgressView.swift
-//  Dolo
-//
-//  Created by Joe Blau on 2/2/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// RecordProgressView.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import Combine
+import UIKit
 
 final class RecordProgressView: UIView {
-
     var progressView: UIView?
     var widthConstraint: NSLayoutConstraint!
     var cancellables = Set<AnyCancellable>()
-    
-    override init(frame: CGRect) {
+
+    override init(frame _: CGRect) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         bootstrap()
     }
-    
-    required init?(coder: NSCoder) {
+
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 // MARK: - ViewBootstrappable
@@ -38,23 +31,22 @@ extension RecordProgressView: ViewBootstrappable {
                 UIView.animate(withDuration: 10.0,
                                delay: 0.0,
                                options: .curveLinear, animations: {
-                                self.layoutIfNeeded()
-                }, completion: { completed in
-                    guard !(Current.mediaActionSubject.value == .captureVideoEnd) else { return }
-                    
-                    Current.mediaActionSubject.send(.captureVideoEnd)
+                                   self.layoutIfNeeded()
+                               }, completion: { _ in
+                                   guard !(Current.mediaActionSubject.value == .captureVideoEnd) else { return }
+
+                                   Current.mediaActionSubject.send(.captureVideoEnd)
                 })
-                
+
                 UIView.animate(withDuration: 1,
                                delay: 0.0,
                                options: [.repeat, .autoreverse],
                                animations: {
-                                                            
-                                self.progressView?.backgroundColor = UIColor(displayP3Red: 0.500,
-                                                                             green: 0.134,
-                                                                             blue: 0.115,
-                                                                             alpha: 1.0)
-                            },
+                                   self.progressView?.backgroundColor = UIColor(displayP3Red: 0.500,
+                                                                                green: 0.134,
+                                                                                blue: 0.115,
+                                                                                alpha: 1.0)
+                               },
                                completion: nil)
             case .none, .captureVideoEnd:
                 self.progressView?.removeFromSuperview()
@@ -70,7 +62,6 @@ extension RecordProgressView: ViewBootstrappable {
                 self.widthConstraint.isActive = true
             default: break
             }
-        
         }
         .store(in: &cancellables)
     }

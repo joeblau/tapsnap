@@ -1,17 +1,11 @@
-//
-//  LoggedInViewController.swift
-//  Dolo
-//
-//  Created by Joe Blau on 1/31/20.
-//  Copyright © 2020 Joe Blau. All rights reserved.
-//
+// LoggedInViewController.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 final class LoggedInViewController: UIViewController {
-
     private lazy var camera: UINavigationController = {
-        let nc =  UINavigationController(rootViewController: CameraViewController())
+        let nc = UINavigationController(rootViewController: CameraViewController())
         nc.modalPresentationStyle = .fullScreen
         nc.isToolbarHidden = false
         return nc
@@ -22,5 +16,4 @@ final class LoggedInViewController: UIViewController {
 
         present(camera, animated: false) {}
     }
-    
 }

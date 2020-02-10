@@ -1,12 +1,6 @@
-//
-//  Test.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/7/20.
-//
+// SearchContactsViewController+UISearchBarDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
-extension SearchContactsViewController: UISearchBarDelegate {
-    
-}
+extension SearchContactsViewController: UISearchBarDelegate {}
