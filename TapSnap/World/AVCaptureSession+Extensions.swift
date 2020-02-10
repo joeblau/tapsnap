@@ -8,14 +8,15 @@
 import AVFoundation
 
 extension AVCaptureSession {
-    // Session output
     static var photoOutput = AVCapturePhotoOutput()
     static var movieFileOutput = AVCaptureMovieFileOutput()
-    static var captureDevice: AVCaptureDevice? = nil
+    private static var videoCaptureDevice: AVCaptureDevice? = nil
     
     // MARK: - Public function
     
     func bootstrap() {
+        sessionPreset = .medium
+
         beginConfiguration()
         inputs.forEach { removeInput($0) }
         
@@ -42,7 +43,7 @@ extension AVCaptureSession {
     }
     
     func zoom(with velocity: Float) {
-        guard let device = AVCaptureSession.captureDevice else { return }
+        guard let device = AVCaptureSession.videoCaptureDevice else { return }
         do {
             try device.lockForConfiguration()
             let desiredZoomFactor = device.videoZoomFactor + CGFloat(atan2f(-velocity, 1337))
@@ -53,14 +54,26 @@ extension AVCaptureSession {
         }
     }
     
+    func disableBackgroundAudio() {
+        beginConfiguration()
+        removeAudioInput()
+        commitConfiguration()
+    }
+    
+    func enableBackgroundAudio() {
+        beginConfiguration()
+        addAudioInput()
+        commitConfiguration()
+    }
+    
     // MARK: - Cameras
     
     private func frontVideoDevice() -> AVCaptureDevice? {
         if let trueDepth = AVCaptureDevice.default(.builtInTrueDepthCamera, for: .video, position: .front) {
-            AVCaptureSession.captureDevice = trueDepth
+            AVCaptureSession.videoCaptureDevice = trueDepth
             return trueDepth
         } else if let wide = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front) {
-            AVCaptureSession.captureDevice = wide
+            AVCaptureSession.videoCaptureDevice = wide
             return wide
         } else {
             return nil
@@ -69,13 +82,13 @@ extension AVCaptureSession {
     
     private func backVideoDevice() -> AVCaptureDevice? {
         if let tripple = AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) {
-            AVCaptureSession.captureDevice = tripple
+            AVCaptureSession.videoCaptureDevice = tripple
             return tripple
         } else if let dual = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
-            AVCaptureSession.captureDevice = dual
+            AVCaptureSession.videoCaptureDevice = dual
             return dual
         } else if let wide = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back) {
-            AVCaptureSession.captureDevice = wide
+            AVCaptureSession.videoCaptureDevice = wide
             return wide
         } else {
             return nil
@@ -96,9 +109,13 @@ extension AVCaptureSession {
     }
     
     private func addAudioInput() {
+        automaticallyConfiguresApplicationAudioSession = false
         do {
             let audioDevice = AVCaptureDevice.default(for: .audio)
             let audioDeviceInput = try AVCaptureDeviceInput(device: audioDevice!)
+            
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.mixWithOthers, .allowBluetooth, .defaultToSpeaker])
+            try AVAudioSession.sharedInstance().setActive(true)
             
             if canAddInput(audioDeviceInput) {
                 addInput(audioDeviceInput)
@@ -131,9 +148,27 @@ extension AVCaptureSession {
         }
     }
     
+    // MARK: - Remove Capture Devices
+    
+    private func removeAudioInput() {
+        guard let audioInput = currentAudioInputDevice else { return }
+        removeInput(audioInput)
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.ambient)
+            try AVAudioSession.sharedInstance().setActive(false)
+        } catch let error as NSError {
+            print(error)
+        }
+    }
+    
     // MARK: - Helpers
     
     private var currentVideoCaptureDevice: AVCaptureDeviceInput? {
         inputs.first { ($0 as? AVCaptureDeviceInput)?.device.hasMediaType(.video) ?? false } as? AVCaptureDeviceInput
+    }
+    
+    private var currentAudioInputDevice: AVCaptureDeviceInput? {
+        inputs.first { ($0 as? AVCaptureDeviceInput)?.device.hasMediaType(.audio) ?? false } as? AVCaptureDeviceInput
     }
 }

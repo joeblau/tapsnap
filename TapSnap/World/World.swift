@@ -23,6 +23,7 @@ enum EditState {
 
 enum ShowViewController {
     case none
+    case camera
     case playback
     case menu
     case search

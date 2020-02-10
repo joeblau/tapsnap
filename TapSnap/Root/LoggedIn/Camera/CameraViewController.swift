@@ -18,16 +18,11 @@ final class CameraViewController: UIViewController {
     let itemsInSection = [15]
     
     // Photo Video
-    private let session: AVCaptureSession = {
-        let cs = AVCaptureSession()
-        cs.sessionPreset = .medium
-        return cs
-    }()
+    private let session: AVCaptureSession = { AVCaptureSession() }()
     let sessionQueue = DispatchQueue(label: "session queue")
     var backgroundRecordingID: UIBackgroundTaskIdentifier?
     var photoData: Data?
 
-    
     // Top left
     private lazy var menuButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
@@ -194,16 +189,18 @@ extension CameraViewController: ViewBootstrappable {
         
         Current.presentViewContollersSubject.sink { present in
                 switch present {
-                case .none:
-                    
-                    self.dismiss(animated: true)
-                case .menu, .search: break
-                    
+                case .camera:
+                    self.dismiss(animated: true) {
+                        self.session.enableBackgroundAudio()
+                    }
                 case .playback:
                     (0 ..< self.tapNotificationCount).forEach { _ in
                         self.playbackViewController.pushViewController(PlaybackViewController(), animated: false)
                     }
-                    self.present(self.playbackViewController, animated: true) {}
+                    self.present(self.playbackViewController, animated: true) {
+                        self.session.disableBackgroundAudio()
+                    }
+                case .none, .menu, .search: break
                 }
         }.store(in: &cancellables)
         
@@ -232,9 +229,8 @@ extension CameraViewController: ViewBootstrappable {
                 AVCaptureSession.photoOutput.capturePhoto(with: photoSettings, delegate: self)
             case .captureVideoStart:
                 // Start playing audio
-//                let item = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem
-//                MPMusicPlayerController.systemMusicPlayer.setQueue(with: [item])
-//                MPMusicPlayerController.systemMusicPlayer.play()
+
+                MPMusicPlayerController.systemMusicPlayer.play()
                 
                 if UIDevice.current.isMultitaskingSupported {
                     self.backgroundRecordingID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
@@ -253,7 +249,7 @@ extension CameraViewController: ViewBootstrappable {
                 
             case .captureVideoEnd:
                 self.previewView.flash()
-//                MPMusicPlayerController.systemMusicPlayer.stop()
+                MPMusicPlayerController.systemMusicPlayer.stop()
                 AVCaptureSession.movieFileOutput.stopRecording()
             }
         }.store(in: &cancellables)

@@ -125,7 +125,7 @@ final class PlaybackViewController: UIViewController {
     // MARK: - Actions
     
     @objc func dismissAction() {
-        dismiss(animated: true, completion: nil)
+        Current.presentViewContollersSubject.send(.camera)
     }
     
     @objc func groupSettingsAction() {}
@@ -135,7 +135,7 @@ final class PlaybackViewController: UIViewController {
             navigationController?.popViewController(animated: true)
             return
         }
-        dismiss(animated: true, completion: nil)
+        Current.presentViewContollersSubject.send(.camera)
     }
     
     @objc func saveTapAction() {}
