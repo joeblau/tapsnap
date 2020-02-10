@@ -41,6 +41,10 @@ final class CameraViewController: UIViewController {
         return b
     }()
     
+    private lazy var zoomInOutPan: UIPanGestureRecognizer = {
+        UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
+    }()
+    
     // Top right
     lazy var notificationButton: UIButton = {
         let b = UIButton(type: .custom)
@@ -215,6 +219,15 @@ extension CameraViewController: ViewBootstrappable {
                 }
         }.store(in: &cancellables)
         
+        Current.editingSubject.sink { editState in
+            switch editState {
+            case .none:
+                self.zoomInOutPan.isEnabled = true
+            default:
+                self.zoomInOutPan.isEnabled = false
+            }
+        }.store(in: &cancellables)
+        
         Current.mediaActionSubject.sink { action in
             switch action {
             case .none: break
@@ -267,7 +280,6 @@ extension CameraViewController: ViewBootstrappable {
     }
     
     func configureGestureRecoginzers() {
-        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
         previewView.addGestureRecognizer(zoomInOutPan)
     }
 }

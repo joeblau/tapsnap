@@ -114,7 +114,7 @@ extension AVCaptureSession {
             let audioDevice = AVCaptureDevice.default(for: .audio)
             let audioDeviceInput = try AVCaptureDeviceInput(device: audioDevice!)
             
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.mixWithOthers, .allowBluetooth, .defaultToSpeaker])
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.mixWithOthers, .duckOthers, .allowBluetooth, .defaultToSpeaker])
             try AVAudioSession.sharedInstance().setActive(true)
             
             if canAddInput(audioDeviceInput) {

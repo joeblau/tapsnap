@@ -39,7 +39,11 @@ extension RecordProgressView: ViewBootstrappable {
                                delay: 0.0,
                                options: .curveLinear, animations: {
                                 self.layoutIfNeeded()
-                }, completion: nil)
+                }, completion: { completed in
+                    guard !(Current.mediaActionSubject.value == .captureVideoEnd) else { return }
+                    
+                    Current.mediaActionSubject.send(.captureVideoEnd)
+                })
                 
                 UIView.animate(withDuration: 1,
                                delay: 0.0,

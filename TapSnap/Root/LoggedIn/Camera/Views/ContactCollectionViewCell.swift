@@ -31,7 +31,8 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         return l
     }()
     
-    
+//    let zoom = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
+
     
     // MARK: - Lifecycle
     
@@ -81,6 +82,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         case .began:
             Current.mediaActionSubject.send(.captureVideoStart)
         case .ended:
+            guard !(Current.mediaActionSubject.value == .captureVideoEnd) else { return }
             Current.mediaActionSubject.send(.captureVideoEnd)
         default: break
         }
@@ -93,14 +95,14 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
-        switch recognizer.state {
-        case .changed:
-            let velocity = recognizer.velocity(in: contentView)
-            Current.zoomVeloictySubject.send(velocity)
-        default: break
-        }
-    }
+//    @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
+//        switch recognizer.state {
+//        case .changed:
+//            let velocity = recognizer.velocity(in: contentView)
+//            Current.zoomVeloictySubject.send(velocity)
+//        default: break
+//        }
+//    }
 }
 
 // MARK: - ViewBootstrappable
@@ -112,29 +114,23 @@ extension ContactCollectionViewCell: ViewBootstrappable, UIGestureRecognizerDele
         contactImageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         contactImageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         contactImageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        
-        addSubview(titleLabel)
-        titleLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2).isActive = true
+//
+//        addSubview(titleLabel)
+//        titleLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+//        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2).isActive = true
+//        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2).isActive = true
+//        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2).isActive = true
     }
     
-    func configureGestureRecoginzers() {        
-        let panGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleVideoAction(_:)))
-        panGesture.delegate = self
-        contentView.addGestureRecognizer(panGesture)
+    func configureGestureRecoginzers() {
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleVideoAction(_:)))
+        contentView.addGestureRecognizer(longPress)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handlePhotoAction(_:)))
         contentView.addGestureRecognizer(tap)
-        
-        let zoomInOutPan = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
-        zoomInOutPan.delegate = self
-        contentView.addGestureRecognizer(zoomInOutPan)
+
+//        let zoom = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
+//        contentView.addGestureRecognizer(zoom)
     }
     
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-         (gestureRecognizer is UILongPressGestureRecognizer && otherGestureRecognizer is UIPanGestureRecognizer) ||
-            (otherGestureRecognizer is UILongPressGestureRecognizer && gestureRecognizer is UIPanGestureRecognizer)
-    }
 }

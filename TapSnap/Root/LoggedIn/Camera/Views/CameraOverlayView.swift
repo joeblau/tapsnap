@@ -108,13 +108,14 @@ final class CameraOverlayView: UIView {
     
     @objc private func togglePersistAction() {
         persistButton.isSelected.toggle()
+        Current.lockMeidaBetweenSendSubject.send(persistButton.isSelected)
     }
     
     @objc private func toggleLocationAction() {
         Current.locationManager.requestWhenInUseAuthorization()
     }
     
-
+    
     
     @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -227,7 +228,7 @@ extension CameraOverlayView: ViewBootstrappable {
         let zoomTextRecognizer = UIPinchGestureRecognizer(target: self, action: #selector(zoomText(_:)))
         addGestureRecognizer(zoomTextRecognizer)
     }
-        
+    
     internal func configureStreams() {
         Current.editingSubject.sink { editState in
             switch editState {
@@ -259,11 +260,11 @@ extension CameraOverlayView: ViewBootstrappable {
         }.store(in: &cancellables)
         
         Current.locationManager.didChangeAuthorization.sink { status in
-                self.process(authorization: status)
+            self.process(authorization: status)
         }.store(in: &cancellables)
         
         Current.drawingColorSubject.sink { color in
-                self.canvasView.tool = PKInkingTool(.pen, color: color.withAlphaComponent(0.8), width: 16)
+            self.canvasView.tool = PKInkingTool(.pen, color: color.withAlphaComponent(0.8), width: 16)
         }.store(in: &cancellables)
         
         Current.mediaActionSubject.sink { action in
@@ -277,9 +278,21 @@ extension CameraOverlayView: ViewBootstrappable {
             }
         }.store(in: &cancellables)
         
+        Current.mediaActionSubject.sink { action in
+            guard !Current.lockMeidaBetweenSendSubject.value else { return }
+            
+            switch action {
+            case .capturePhoto, .captureVideoEnd:
+                self.annotationTextView.text = ""
+                self.canvasView.drawing = PKDrawing()
+                self.isCanvasClean()
+            case .captureVideoStart, .none: break
+            }
+        }.store(in: &cancellables)
+        
         Current.musicSyncSubject.sink { shouldSync in
             self.musicButton.isEnabled = shouldSync
-
+            
             
         }.store(in: &cancellables)
     }
