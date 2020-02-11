@@ -6,7 +6,6 @@ import UIKit
 
 final class MusicPlaybackView: UIView {
     private let intrinsicHeight: CGFloat
-    private let musicPlayer = MPMusicPlayerController.systemMusicPlayer
     private lazy var musicTableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .insetGrouped)
         tv.translatesAutoresizingMaskIntoConstraints = false
@@ -63,13 +62,13 @@ extension MusicPlaybackView: UITableViewDataSource {
             guard let settingCell = tableView.dequeueReusableCell(withIdentifier: SyncTableViewCell.id, for: indexPath) as? SyncTableViewCell else {
                 fatalError("Undefined cell")
             }
-            settingCell.configure(playbackTime: musicPlayer.currentPlaybackTime)
+            settingCell.configure(playbackTime: MPMusicPlayerController.systemMusicPlayer.currentPlaybackTime)
             return settingCell
         case 1:
             guard let mediaCell = tableView.dequeueReusableCell(withIdentifier: NowPlayingPreviewTableViewCell.id, for: indexPath) as? NowPlayingPreviewTableViewCell else {
                 fatalError("Undefined cell")
             }
-            if let nowPlaying = musicPlayer.nowPlayingItem {
+            if let nowPlaying = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem {
                 mediaCell.configure(image: nowPlaying.artwork?.image(at: CGSize(width: 256, height: 256)),
                                     title: nowPlaying.title,
                                     artist: nowPlaying.artist)

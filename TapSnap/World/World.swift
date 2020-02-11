@@ -48,6 +48,7 @@ enum MediaAction {
 }
 
 struct World {
+    let metadata = TapsnapMetadata()
     // DELTE
     let fakeContact: CNMutablePostalAddress = {
         let pa = CNMutablePostalAddress()
