@@ -429,9 +429,6 @@
 			attributes = {
 				LastUpgradeCheck = 1020;
 				TargetAttributes = {
-					9495FDBD704DC879B6B218A9 = {
-						DevelopmentTeam = K78G42H4U2;
-					};
 					D714C02D509E7AC733447861 = {
 						DevelopmentTeam = K78G42H4U2;
 						TestTargetID = 9495FDBD704DC879B6B218A9;
@@ -589,6 +586,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = K78G42H4U2;
 				INFOPLIST_FILE = Tapsnap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -751,6 +749,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = K78G42H4U2;
 				INFOPLIST_FILE = Tapsnap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
