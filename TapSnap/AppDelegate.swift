@@ -40,5 +40,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         Current.currentLocationSubject.send(locations.last)
+        guard let currentLocation = locations.last else { return }
+        Current.geocoding.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
+            guard error == nil, let mark = placemarks?.first else { return }
+            
+            if let sublocality = mark.subLocality, let subAdministrativeArea = mark.subAdministrativeArea {
+                let address = "\(sublocality), \(subAdministrativeArea)"
+                Current.currentAddressSubject.send(address)
+            } else if let city = mark.postalAddress?.city, let state = mark.postalAddress?.state {
+                let address = "\(city), \(state)"
+                Current.currentAddressSubject.send(address)
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
     }
 }

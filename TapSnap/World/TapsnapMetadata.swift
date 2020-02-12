@@ -93,9 +93,17 @@ class TapsnapMetadata {
                                     currentLocation.altitude) as NSString
         }
         
+        if let currentAddress = Current.currentAddressSubject.value {
+            address.value = currentAddress as NSString
+        }
+        
         if let nowPlaying = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem,
             Current.musicSyncSubject.value,
             mediaAction == .captureVideoStart {
+            
+            if let nowPlayingCoverArt = nowPlaying.artwork?.image(at: CGSize(width: 128, height: 128))?.pngData() {
+                coverArt.value = nowPlayingCoverArt as NSData
+            }
             
             if let nowPlayingTitle = nowPlaying.title as NSString? {
                 title.value = nowPlayingTitle
