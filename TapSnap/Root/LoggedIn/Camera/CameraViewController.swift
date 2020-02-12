@@ -232,6 +232,7 @@ extension CameraViewController: ViewBootstrappable {
             switch action {
             case .none: break
             case .capturePhoto:
+                Current.locationManager.requestLocation()
                 self.previewView.flash()
 
                 self.photoSettings.isHighResolutionPhotoEnabled = false
@@ -241,6 +242,7 @@ extension CameraViewController: ViewBootstrappable {
                 }
                 AVCaptureSession.photoOutput.capturePhoto(with: self.photoSettings, delegate: self)
             case .captureVideoStart:
+                Current.locationManager.requestLocation()
                 if Current.musicSyncSubject.value {
                     MPMusicPlayerController.systemMusicPlayer.prepareToPlay { _ in
                         MPMusicPlayerController.systemMusicPlayer.play()

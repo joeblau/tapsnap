@@ -86,6 +86,13 @@ class TapsnapMetadata {
     func currentMetadata(for mediaAction: MediaAction) -> [AVMetadataItem] {
         timestamp.value = String(format: "%f", Date().timeIntervalSince1970) as NSString
         
+        if let currentLocation = Current.currentLocationSubject.value {
+            location.value = String(format: "%+09.5f%+010.5f%+.0fCRSWGS_84",
+                                    currentLocation.coordinate.latitude,
+                                    currentLocation.coordinate.longitude,
+                                    currentLocation.altitude) as NSString
+        }
+        
         if let nowPlaying = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem,
             Current.musicSyncSubject.value,
             mediaAction == .captureVideoStart {
