@@ -1,7 +1,6 @@
 // AppDelegate.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import MapKit
 import PencilKit
 import UIKit
 import SensorVisualizerKit
@@ -22,7 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UIBarButtonItem.appearance().tintColor = .label
     
-        let window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
+        let window: UIWindow
+        switch UserDefaults.standard.bool(forKey: "enabled_sensor_visualizer") {
+        case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
+        case false: window = UIWindow(frame: UIScreen.main.bounds)
+        }
+         
         window.rootViewController = RootViewController()
         self.window = window
         window.makeKeyAndVisible()
