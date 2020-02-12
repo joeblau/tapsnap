@@ -12,6 +12,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            Current.locationManager.requestLocation()
+        }
+        
         UIView.appearance().overrideUserInterfaceStyle = .dark
         UIView.appearance(whenContainedInInstancesOf: [PKCanvasView.self]).overrideUserInterfaceStyle = .light
 
@@ -33,7 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        Current.locationManager.requestLocation()
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            Current.locationManager.requestLocation()
+        }
     }
 }
 
