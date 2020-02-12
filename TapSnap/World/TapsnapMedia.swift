@@ -1,13 +1,9 @@
-//
-//  MetadataController.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/11/20.
-//
+// TapsnapMedia.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import AVFoundation
 import CoreLocation
+import UIKit
 
 enum MediaType {
     case photo(URL)
@@ -26,4 +22,3 @@ struct TapsnapMedia {
     var artist: String?
     var songId: String?
 }
-

@@ -3,9 +3,9 @@
 
 import AVFoundation
 import Combine
+import CoreLocation
 import MediaPlayer
 import UIKit
-import CoreLocation
 
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()

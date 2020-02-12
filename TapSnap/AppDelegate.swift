@@ -1,21 +1,20 @@
 // AppDelegate.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import PencilKit
-import UIKit
-import SensorVisualizerKit
 import CoreLocation
+import PencilKit
+import SensorVisualizerKit
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             Current.locationManager.requestLocation()
         }
-        
+
         UIView.appearance().overrideUserInterfaceStyle = .dark
         UIView.appearance(whenContainedInInstancesOf: [PKCanvasView.self]).overrideUserInterfaceStyle = .light
 
@@ -25,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().isTranslucent = true
 
         UIBarButtonItem.appearance().tintColor = .label
-    
+
         Current.locationManager.delegate = self
         switch UserDefaults.standard.bool(forKey: "enabled_sensor_visualizer") {
         case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
@@ -36,7 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
+    func applicationWillEnterForeground(_: UIApplication) {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             Current.locationManager.requestLocation()
         }
@@ -44,12 +43,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         Current.currentLocationSubject.send(locations.last)
         guard let currentLocation = locations.last else { return }
-        Current.geocoding.reverseGeocodeLocation(currentLocation) { (placemarks, error) in
+        Current.geocoding.reverseGeocodeLocation(currentLocation) { placemarks, error in
             guard error == nil, let mark = placemarks?.first else { return }
-            
+
             if let sublocality = mark.subLocality, let subAdministrativeArea = mark.subAdministrativeArea {
                 let address = "\(sublocality), \(subAdministrativeArea)"
                 Current.currentAddressSubject.send(address)
@@ -59,8 +58,8 @@ extension AppDelegate: CLLocationManagerDelegate {
             }
         }
     }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+
+    func locationManager(_: CLLocationManager, didFailWithError error: Error) {
         print(error)
     }
 }

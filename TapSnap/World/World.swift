@@ -66,8 +66,9 @@ struct World {
         m.desiredAccuracy = kCLLocationAccuracyKilometer
         return m
     }()
+
     var geocoding = CLGeocoder()
-    
+
     var networkSession: URLSession = {
         let configuraiton = URLSessionConfiguration.background(withIdentifier: "tapsnap_url_session_config")
         configuraiton.allowsCellularAccess = true
