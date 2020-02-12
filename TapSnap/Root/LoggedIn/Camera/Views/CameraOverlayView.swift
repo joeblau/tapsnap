@@ -184,6 +184,7 @@ final class CameraOverlayView: UIView {
     }
     
     func isCanvasClean() {
+        guard Current.editingSubject.value != .none else { return }
         let isclean = canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty
         switch isclean {
         case true: Current.topLeftNavBarSubject.value = .none

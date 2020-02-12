@@ -1,19 +1,32 @@
 // AppDelegate.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import AVFoundation
-import CoreData
+import MapKit
+import PencilKit
 import UIKit
+import SensorVisualizerKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+    var window: UIWindow?
+
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        true
+        UIView.appearance().overrideUserInterfaceStyle = .dark
+        UIView.appearance(whenContainedInInstancesOf: [PKCanvasView.self]).overrideUserInterfaceStyle = .light
+
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().backgroundColor = .clear
+        UINavigationBar.appearance().isTranslucent = true
+
+        UIBarButtonItem.appearance().tintColor = .label
+    
+        let window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = RootViewController()
+        self.window = window
+        window.makeKeyAndVisible()
+        return true
     }
 
-    // MARK: UISceneSession Lifecycle
-
-    func application(_: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options _: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
 }

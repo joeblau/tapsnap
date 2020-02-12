@@ -10,6 +10,9 @@ packages:
   Publish:
     url: https://github.com/johnsundell/publish
     from: 0.1.0
+  SensorVisualizerKit:
+    url: https://github.com/joeblau/sensor-visualizer-kit
+    from: 0.2.0
 targets:
   Tapsnap:
     type: application
@@ -20,6 +23,8 @@ targets:
       gatherCoverageData: true
     sources:
       - Tapsnap
+    dependencies:
+      - package: SensorVisualizerKit
   TapsnapTests:
     type: bundle.unit-test
     platform: iOS
