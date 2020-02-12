@@ -61,7 +61,11 @@ struct World {
     }()
 
     // Sensors
-    var locationManager = CLLocationManager()
+    var locationManager: CLLocationManager = {
+        let m = CLLocationManager()
+        m.desiredAccuracy = kCLLocationAccuracyKilometer
+        return m
+    }()
     var networkSession: URLSession = {
         let configuraiton = URLSessionConfiguration.background(withIdentifier: "tapsnap_url_session_config")
         configuraiton.allowsCellularAccess = true
@@ -97,7 +101,8 @@ struct World {
     var topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
     var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
-
+    var currentLocationSubject = CurrentValueSubject<CLLocation?, Never>(nil)
+    
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
 }

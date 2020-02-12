@@ -50,13 +50,14 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         case 1 ... 50:
             let imageAttachment = NSTextAttachment()
             imageAttachment.image = UIImage(systemName: "\(groupSize).circle.fill",
-                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))?.withTintColor(.systemRed, renderingMode: .alwaysOriginal)
+                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))?.withTintColor(.white, renderingMode: .alwaysOriginal)
 
             attributedString.append(NSAttributedString(attachment: imageAttachment))
         default: break
         }
         attributedString.append(NSAttributedString(string: "\(title)"))
         titleLabel.attributedText = attributedString
+        titleLabel.floatLabel()
     }
 
     override func prepareForReuse() {

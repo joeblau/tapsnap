@@ -4,6 +4,7 @@
 import PencilKit
 import UIKit
 import SensorVisualizerKit
+import CoreLocation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,16 +22,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UIBarButtonItem.appearance().tintColor = .label
     
-        let window: UIWindow
+        Current.locationManager.delegate = self
         switch UserDefaults.standard.bool(forKey: "enabled_sensor_visualizer") {
         case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
         case false: window = UIWindow(frame: UIScreen.main.bounds)
         }
-         
-        window.rootViewController = RootViewController()
-        self.window = window
-        window.makeKeyAndVisible()
+        window?.rootViewController = RootViewController()
+        window?.makeKeyAndVisible()
         return true
     }
 
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        Current.locationManager.requestLocation()
+    }
+}
+
+extension AppDelegate: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        Current.currentLocationSubject.send(locations.last)
+    }
 }

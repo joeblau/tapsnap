@@ -206,6 +206,7 @@
 		5A6F49659D49014364C59390 /* Tapsnap */ = {
 			isa = PBXGroup;
 			children = (
+				ED8AE8FF23F3D34C0077AA0D /* Settings.bundle */,
 				1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */,
 				4D03047C2E3CD982E5D1E38E /* Assets.xcassets */,
 				880AA06728253910B5D1F81A /* Info.plist */,
@@ -262,7 +263,6 @@
 		6803BFD8A97340E540815774 = {
 			isa = PBXGroup;
 			children = (
-				ED8AE8FF23F3D34C0077AA0D /* Settings.bundle */,
 				5A6F49659D49014364C59390 /* Tapsnap */,
 				9E56A6D23262E00CCE7B79AF /* TapsnapTests */,
 				E1B2AE3E0FB821DDCE822F59 /* Website */,
