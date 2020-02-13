@@ -58,7 +58,10 @@ class PlayerLooper: NSObject {
 
                 var durationError: NSError?
                 let durationStatus = playerItem.asset.statusOfValue(forKey: ObserverContexts.playerItemDurationKey, error: &durationError)
-                guard durationStatus == .loaded else { fatalError("Failed to load duration property with error: \(durationError)") }
+                guard durationStatus == .loaded else {
+                    let durationString = durationError?.description ?? String()
+                    fatalError("Failed to load duration property with error: \(durationString)")
+                }
 
                 self.playerLooper = AVPlayerLooper(player: player, templateItem: playerItem)
                 self.startObserving()

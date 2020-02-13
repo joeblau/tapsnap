@@ -199,11 +199,10 @@ final class CameraOverlayView: UIView {
             zoomTextRecognizer.isEnabled = true
             rotateTextRecoinzer.isEnabled = true
             panTextRecogizner.isEnabled = true
-        case .clear, .drawing, .music:
+        case .none, .clear, .drawing, .music:
             zoomTextRecognizer.isEnabled = false
             rotateTextRecoinzer.isEnabled = false
             panTextRecogizner.isEnabled = false
-        case .none: break
         }
     }
 }
@@ -290,7 +289,9 @@ extension CameraOverlayView: ViewBootstrappable {
             case .none:
                 Current.topLeftNavBarSubject.value = .menu
                 self.isGestureStaackEnabled(for: editState)
-
+                Current.currentTextLayerSubject.send(self.annotationTextView)
+                Current.currentCanvasLayerSubject.send(self.canvasView)
+                
                 self.canvasView.isUserInteractionEnabled = false
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.resignFirstResponder()
@@ -316,6 +317,8 @@ extension CameraOverlayView: ViewBootstrappable {
                 self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
                 self.annotationTextView.reloadInputViews()
             case .clear:
+                Current.currentTextLayerSubject.send(nil)
+                Current.currentCanvasLayerSubject.send(nil)
                 self.annotationTextView.text = ""
                 self.canvasView.drawing = PKDrawing()
                 self.isCanvasClean()

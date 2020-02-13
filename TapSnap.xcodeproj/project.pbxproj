@@ -3,13 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		08B997478DA5620DC8E7B573 /* SavedTapsViewController+UISearchResultsUpdating.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44FE7CA40E65B9B892468463 /* SavedTapsViewController+UISearchResultsUpdating.swift.swift */; };
 		0C8A689BC97B6E0FA76866D2 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BED8D1DB10A6B057441C23C /* UIButton+Extension.swift */; };
 		1047116A40B5EE793B3B33B2 /* PlaybackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363154E07C7BBF93B754F492 /* PlaybackViewController.swift */; };
+		13ACD9B7ED5779C4B2366D79 /* SensorVisualizerKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1B790B5B3E9938CFD3E5543A /* SensorVisualizerKit */; };
 		1508AA5A76058B45B00A0930 /* SearchContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F42B1667B76CAFE6765BBD3 /* SearchContactsViewController.swift */; };
 		155FD04BF3EA39EBD754BDD6 /* ContactsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973CEDB8780E17647226ACC0 /* ContactsCollectionView.swift */; };
 		180CC59DBCBF2C5F6981762F /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3059A4AF94DCA0B1236599D8 /* MenuViewController.swift */; };
@@ -20,6 +21,7 @@
 		23CEA16D7F7985D61172B946 /* IndeterminateProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9EEDD1D28EB6874C497953C /* IndeterminateProgressView.swift */; };
 		29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC4CE62F7AC981B913F18E9 /* CameraViewController+UICollectionViewDelegate.swift */; };
 		2F4F7CB3B90C4A3A2D8B8F71 /* SearchContactsViewController+UISearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F9CF40B86DB40C15BFBC /* SearchContactsViewController+UISearchControllerDelegate.swift */; };
+		317CC529D4268A10BCEEF5AD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B2528AD68900F4499FB43418 /* Settings.bundle */; };
 		3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E453746FC1A56F9A261CA /* TextOverlayView.swift */; };
 		3F1A7E560EB467CABA3D8E36 /* MenuViewController+UITableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698527CF1BAF2A4AFBCED1FD /* MenuViewController+UITableViewDataSource.swift */; };
 		41887E30E56A03C962881E06 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46D5270D9E16B4F9812EF95 /* UIView+Extensions.swift */; };
@@ -27,6 +29,7 @@
 		4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EE72D052B3BCCB27DDDBC4 /* CameraViewController.swift */; };
 		500C9678CE94513205BEA4D0 /* SavedTapsViewController+UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7804AD1BEDDF879B464AEA26 /* SavedTapsViewController+UISearchBarDelegate.swift */; };
 		5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */; };
+		51BE63576BE02DED97ABC60D /* TapsnapMetadataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8D5FF98E7E6F8DABC0E3AB /* TapsnapMetadataManager.swift */; };
 		5369693BBCFA6A944EBF9190 /* ViewBootstrappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3228BAE858CB8C4BC7BEB9F8 /* ViewBootstrappable.swift */; };
 		6006081149337EAE465CE208 /* SavedTapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407456196370DF88EC8AC28D /* SavedTapsViewController.swift */; };
 		6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B33AE9F232CA872F98978A /* DrawingToolsView.swift */; };
@@ -57,10 +60,7 @@
 		E0CC88252B80F4D873A8E1B4 /* Tapsnap.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0F985F82AA8186B1FFB56A3A /* Tapsnap.xcdatamodeld */; };
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
-		E5FB4E78BF6B9500B5C415FF /* TapsnapMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105933EAF4D17DF3D26EB4D /* TapsnapMetadata.swift */; };
 		EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390017BF26255640A332187B /* MenuCellTableViewCell.swift */; };
-		ED8AE8FE23F3D2400077AA0D /* SensorVisualizerKit in Frameworks */ = {isa = PBXBuildFile; productRef = ED8AE8FD23F3D2400077AA0D /* SensorVisualizerKit */; };
-		ED8AE90023F3D34C0077AA0D /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ED8AE8FF23F3D34C0077AA0D /* Settings.bundle */; };
 		F1049AD0FAD3C79A3CE179D7 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
 		FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */; };
@@ -107,11 +107,11 @@
 		698527CF1BAF2A4AFBCED1FD /* MenuViewController+UITableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuViewController+UITableViewDataSource.swift"; sourceTree = "<group>"; };
 		69EE72D052B3BCCB27DDDBC4 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		7052B4CE08D672F73ECB0E2C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
-		7105933EAF4D17DF3D26EB4D /* TapsnapMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapsnapMetadata.swift; sourceTree = "<group>"; };
 		75B33AE9F232CA872F98978A /* DrawingToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolsView.swift; sourceTree = "<group>"; };
 		7804AD1BEDDF879B464AEA26 /* SavedTapsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
-		780A8DC04979D988BFBE6D14 /* Web */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = text; path = Web; sourceTree = BUILT_PRODUCTS_DIR; };
+		780A8DC04979D988BFBE6D14 /* Web */ = {isa = PBXFileReference; includeInIndex = 0; path = Web; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOverlayView.swift; sourceTree = "<group>"; };
+		7F8D5FF98E7E6F8DABC0E3AB /* TapsnapMetadataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapsnapMetadataManager.swift; sourceTree = "<group>"; };
 		880AA06728253910B5D1F81A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8BC4CE62F7AC981B913F18E9 /* CameraViewController+UICollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDelegate.swift"; sourceTree = "<group>"; };
 		93A257AF7C370ADE2E49D7AD /* TapsnapMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapsnapMedia.swift; sourceTree = "<group>"; };
@@ -124,6 +124,7 @@
 		A2F76C684C320050C50C7BB2 /* MapViewOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewOverlay.swift; sourceTree = "<group>"; };
 		A86F521E8A3727658211B4A2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureSession+Extensions.swift"; sourceTree = "<group>"; };
+		B2528AD68900F4499FB43418 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDataSource.swift"; sourceTree = "<group>"; };
 		B70F817896C777AFB3FC0433 /* ContactCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCollectionViewCell.swift; sourceTree = "<group>"; };
 		C4C8B897FDADE8980A430106 /* MusicPlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlaybackView.swift; sourceTree = "<group>"; };
@@ -131,7 +132,6 @@
 		D092867E340FFAEA0055EC8C /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
-		ED8AE8FF23F3D34C0077AA0D /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
 		F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
 		F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED8AE8FE23F3D2400077AA0D /* SensorVisualizerKit in Frameworks */,
+				13ACD9B7ED5779C4B2366D79 /* SensorVisualizerKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,11 +206,11 @@
 		5A6F49659D49014364C59390 /* Tapsnap */ = {
 			isa = PBXGroup;
 			children = (
-				ED8AE8FF23F3D34C0077AA0D /* Settings.bundle */,
 				1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */,
 				4D03047C2E3CD982E5D1E38E /* Assets.xcassets */,
 				880AA06728253910B5D1F81A /* Info.plist */,
 				CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */,
+				B2528AD68900F4499FB43418 /* Settings.bundle */,
 				9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */,
 				0F985F82AA8186B1FFB56A3A /* Tapsnap.xcdatamodeld */,
 				97BE037005EB3E030B1B3ED6 /* ts1.mov */,
@@ -225,8 +225,8 @@
 			children = (
 				D092867E340FFAEA0055EC8C /* Formatter.swift */,
 				93A257AF7C370ADE2E49D7AD /* TapsnapMedia.swift */,
-				7105933EAF4D17DF3D26EB4D /* TapsnapMetadata.swift */,
 				2FCE2621E3412630A639A0E9 /* World.swift */,
+				C35CCEAFDE7028C50D425B13 /* Controllers */,
 				81343ECC5DE5C427BB2D9208 /* Extensions */,
 				152654B219B2E035B464B9CB /* Protocols */,
 			);
@@ -340,6 +340,14 @@
 			path = Saved;
 			sourceTree = "<group>";
 		};
+		C35CCEAFDE7028C50D425B13 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7F8D5FF98E7E6F8DABC0E3AB /* TapsnapMetadataManager.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 		E08A2059AD9CE9BEA87BA865 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -415,7 +423,7 @@
 			);
 			name = Tapsnap;
 			packageProductDependencies = (
-				ED8AE8FD23F3D2400077AA0D /* SensorVisualizerKit */,
+				1B790B5B3E9938CFD3E5543A /* SensorVisualizerKit */,
 			);
 			productName = Tapsnap;
 			productReference = 1C91A7E84958BFD9517292B6 /* Tapsnap.app */;
@@ -481,13 +489,12 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 			);
 			mainGroup = 6803BFD8A97340E540815774;
 			packageReferences = (
 				D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */,
-				ED8AE8FC23F3D2400077AA0D /* XCRemoteSwiftPackageReference "sensor-visualizer-kit" */,
+				86754197344F6FCF58DE42CA /* XCRemoteSwiftPackageReference "sensor-visualizer-kit" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
@@ -504,9 +511,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ED8AE90023F3D34C0077AA0D /* Settings.bundle in Resources */,
 				A82CDC252A3653C4519C16FA /* Assets.xcassets in Resources */,
 				DD02C776E10CF87F7623060B /* LaunchScreen.storyboard in Resources */,
+				317CC529D4268A10BCEEF5AD /* Settings.bundle in Resources */,
 				91B75DB67B1F96B1929982AF /* ts1.mov in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -561,7 +568,7 @@
 				9F9E8C560DF38967EF1748CB /* SyncTableViewCell.swift in Sources */,
 				E0CC88252B80F4D873A8E1B4 /* Tapsnap.xcdatamodeld in Sources */,
 				8123FC4D326233B9EB882F29 /* TapsnapMedia.swift in Sources */,
-				E5FB4E78BF6B9500B5C415FF /* TapsnapMetadata.swift in Sources */,
+				51BE63576BE02DED97ABC60D /* TapsnapMetadataManager.swift in Sources */,
 				3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */,
 				0C8A689BC97B6E0FA76866D2 /* UIButton+Extension.swift in Sources */,
 				B01731BD3DB6387F41FFBC60 /* UILabel+Extension.swift in Sources */,
@@ -617,7 +624,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Web;
+				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.Web;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -632,7 +639,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Tapsnap;
+				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.Tapsnap;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -758,7 +765,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.TapsnapTests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.TapsnapTests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tapsnap.app/Tapsnap";
@@ -776,7 +783,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.TapsnapTests;
+				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.TapsnapTests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tapsnap.app/Tapsnap";
@@ -794,7 +801,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Tapsnap;
+				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.Tapsnap;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -808,7 +815,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Web;
+				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.Web;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -855,20 +862,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		86754197344F6FCF58DE42CA /* XCRemoteSwiftPackageReference "sensor-visualizer-kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/joeblau/sensor-visualizer-kit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.0;
+			};
+		};
 		D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/johnsundell/publish";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.1.0;
-			};
-		};
-		ED8AE8FC23F3D2400077AA0D /* XCRemoteSwiftPackageReference "sensor-visualizer-kit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/joeblau/sensor-visualizer-kit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -879,9 +886,9 @@
 			package = D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */;
 			productName = Publish;
 		};
-		ED8AE8FD23F3D2400077AA0D /* SensorVisualizerKit */ = {
+		1B790B5B3E9938CFD3E5543A /* SensorVisualizerKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = ED8AE8FC23F3D2400077AA0D /* XCRemoteSwiftPackageReference "sensor-visualizer-kit" */;
+			package = 86754197344F6FCF58DE42CA /* XCRemoteSwiftPackageReference "sensor-visualizer-kit" */;
 			productName = SensorVisualizerKit;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -7,6 +7,7 @@ import Contacts
 import CoreLocation
 import MapKit
 import UIKit
+import PencilKit
 
 enum EditState {
     case none
@@ -47,8 +48,13 @@ enum MediaAction {
     case captureVideoEnd
 }
 
+enum RawCapture {
+    case photo(URL)
+    case movie(URL)
+}
+
 struct World {
-    let metadata = TapsnapMetadata()
+    let metadata = TapsnapMetadataManager()
     // DELTE
     let fakeContact: CNMutablePostalAddress = {
         let pa = CNMutablePostalAddress()
@@ -69,6 +75,7 @@ struct World {
 
     var geocoding = CLGeocoder()
 
+    // Networking
     var networkSession: URLSession = {
         let configuraiton = URLSessionConfiguration.background(withIdentifier: "tapsnap_url_session_config")
         configuraiton.allowsCellularAccess = true
@@ -90,7 +97,7 @@ struct World {
         mv.showsBuildings = true
         return mv
     }()
-
+    
     // Constants
     var formatter = Formatter()
 
@@ -104,9 +111,13 @@ struct World {
     var topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
     var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
+
+
     var currentLocationSubject = CurrentValueSubject<CLLocation?, Never>(nil)
     var currentAddressSubject = CurrentValueSubject<String?, Never>(nil)
-
+    var currentTextLayerSubject = CurrentValueSubject<UITextView?, Never>(nil)
+    var currentCanvasLayerSubject = CurrentValueSubject<PKCanvasView?, Never>(nil)
+    
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
 }

@@ -5,7 +5,7 @@ import AVFoundation
 import MediaPlayer
 import UIKit
 
-class TapsnapMetadata {
+class TapsnapMetadataManager {
     private var group: AVMutableMetadataItem = {
         let i = AVMutableMetadataItem()
         i.keySpace = .quickTimeUserData

@@ -4,7 +4,7 @@ settings:
   DEVELOPMENT_TEAM: K78G42H4U2
 options:
   createIntermediateGroups: true
-  bundleIdPrefix: app.tapsnap
+  bundleIdPrefix: app.beta.tapsnap
   transitivelyLinkDependencies: true
 packages:
   Publish:
