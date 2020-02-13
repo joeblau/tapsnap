@@ -92,9 +92,9 @@ final class CameraOverlayView: UIView {
 
     override init(frame _: CGRect) {
         super.init(frame: .zero)
+        isOpaque = false
         translatesAutoresizingMaskIntoConstraints = false
         process(authorization: CLLocationManager.authorizationStatus())
-
         bootstrap()
         NotificationCenter.default.addObserver(
             self,
@@ -184,15 +184,18 @@ final class CameraOverlayView: UIView {
         }
     }
 
-    func isCanvasClean() {
+    func udpateOverlay() {
         guard Current.editingSubject.value != .none else { return }
-        let isclean = canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty
-        switch isclean {
+        switch isWatermarkClean() {
         case true: Current.topLeftNavBarSubject.value = .none
         case false: Current.topLeftNavBarSubject.value = .clear
         }
     }
 
+    func isWatermarkClean() -> Bool {
+        canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty
+    }
+    
     func isGestureStaackEnabled(for editState: EditState) {
         switch editState {
         case .keyboard:
@@ -289,22 +292,32 @@ extension CameraOverlayView: ViewBootstrappable {
             case .none:
                 Current.topLeftNavBarSubject.value = .menu
                 self.isGestureStaackEnabled(for: editState)
-                Current.currentTextLayerSubject.send(self.annotationTextView)
-                Current.currentCanvasLayerSubject.send(self.canvasView)
+                self.annotationTextView.resignFirstResponder()
+
+                if !self.isWatermarkClean() {
+                    Current.currentWatermarkSubject.send(self.toImage())
+                }
+                
+                self.recordingProgressView.isHidden = false
+                self.indeterminateProgressView.isHidden = false
+                self.bottomRightStackView.isHidden = false
                 
                 self.canvasView.isUserInteractionEnabled = false
                 self.annotationTextView.inputView = nil
-                self.annotationTextView.resignFirstResponder()
             case .keyboard:
-                self.isCanvasClean()
+                self.udpateOverlay()
                 self.isGestureStaackEnabled(for: editState)
 
+                self.recordingProgressView.isHidden = true
+                self.indeterminateProgressView.isHidden = true
+                self.bottomRightStackView.isHidden = true
+                
                 self.canvasView.isUserInteractionEnabled = false
                 self.annotationTextView.inputView?.removeFromSuperview()
                 self.annotationTextView.inputView = nil
                 self.annotationTextView.reloadInputViews()
             case .drawing:
-                self.isCanvasClean()
+                self.udpateOverlay()
                 self.isGestureStaackEnabled(for: editState)
 
                 self.canvasView.isUserInteractionEnabled = true
@@ -317,11 +330,10 @@ extension CameraOverlayView: ViewBootstrappable {
                 self.annotationTextView.inputView = MusicPlaybackView(height: self.drawingToolsViewHeight)
                 self.annotationTextView.reloadInputViews()
             case .clear:
-                Current.currentTextLayerSubject.send(nil)
-                Current.currentCanvasLayerSubject.send(nil)
+                Current.currentWatermarkSubject.send(nil)
                 self.annotationTextView.text = ""
                 self.canvasView.drawing = PKDrawing()
-                self.isCanvasClean()
+                self.udpateOverlay()
             }
         }.store(in: &cancellables)
 
@@ -351,7 +363,7 @@ extension CameraOverlayView: ViewBootstrappable {
             case .capturePhoto, .captureVideoEnd:
                 self.annotationTextView.text = ""
                 self.canvasView.drawing = PKDrawing()
-                self.isCanvasClean()
+                self.udpateOverlay()
             case .captureVideoStart, .none: break
             }
         }.store(in: &cancellables)

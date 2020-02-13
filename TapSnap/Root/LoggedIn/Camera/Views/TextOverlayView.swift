@@ -14,6 +14,7 @@ final class TextOverlayView: UITextView {
         textAlignment = .center
         backgroundColor = .clear
         tintColor = .label
+        isOpaque = false
         sizeToFit()
         font = UIFont.systemFont(ofSize: 44, weight: .heavy)
         bootstrap()

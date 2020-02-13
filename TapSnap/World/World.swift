@@ -115,8 +115,7 @@ struct World {
 
     var currentLocationSubject = CurrentValueSubject<CLLocation?, Never>(nil)
     var currentAddressSubject = CurrentValueSubject<String?, Never>(nil)
-    var currentTextLayerSubject = CurrentValueSubject<UITextView?, Never>(nil)
-    var currentCanvasLayerSubject = CurrentValueSubject<PKCanvasView?, Never>(nil)
+    var currentWatermarkSubject = CurrentValueSubject<UIImage?, Never>(nil)
     
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
