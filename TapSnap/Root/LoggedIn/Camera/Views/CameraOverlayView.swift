@@ -208,6 +208,12 @@ final class CameraOverlayView: UIView {
             panTextRecogizner.isEnabled = false
         }
     }
+    
+    func resetWatermark() {
+        self.annotationTextView.transform = .identity
+        self.annotationTextView.text = ""
+        self.canvasView.drawing = PKDrawing()
+    }
 }
 
 extension CameraOverlayView: UIGestureRecognizerDelegate {
@@ -331,8 +337,7 @@ extension CameraOverlayView: ViewBootstrappable {
                 self.annotationTextView.reloadInputViews()
             case .clear:
                 Current.currentWatermarkSubject.send(nil)
-                self.annotationTextView.text = ""
-                self.canvasView.drawing = PKDrawing()
+                self.resetWatermark()
                 self.udpateOverlay()
             }
         }.store(in: &cancellables)
@@ -361,8 +366,8 @@ extension CameraOverlayView: ViewBootstrappable {
 
             switch action {
             case .capturePhoto, .captureVideoEnd:
-                self.annotationTextView.text = ""
-                self.canvasView.drawing = PKDrawing()
+                self.resetWatermark()
+
                 self.udpateOverlay()
             case .captureVideoStart, .none: break
             }
