@@ -11,8 +11,6 @@ extension AVCaptureSession {
     // MARK: - Public function
 
     func bootstrap() {
-        sessionPreset = .medium
-
         beginConfiguration()
         inputs.forEach { removeInput($0) }
 

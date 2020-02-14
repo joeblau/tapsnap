@@ -301,7 +301,7 @@ extension CameraOverlayView: ViewBootstrappable {
                 self.annotationTextView.resignFirstResponder()
 
                 if !self.isWatermarkClean() {
-                    Current.currentWatermarkSubject.send(self.toImage())
+                    Current.currentWatermarkSubject.send(self.toImage(scale: 4.0))
                 }
                 
                 self.recordingProgressView.isHidden = false
