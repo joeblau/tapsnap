@@ -243,6 +243,7 @@ extension CameraViewController: ViewBootstrappable {
                 if !self.photoSettings.__availablePreviewPhotoPixelFormatTypes.isEmpty {
                     self.photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: self.photoSettings.__availablePreviewPhotoPixelFormatTypes.first!]
                 }
+
                 AVCaptureSession.photoOutput.capturePhoto(with: self.photoSettings, delegate: self)
             case .captureVideoStart:
                 if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
@@ -267,7 +268,7 @@ extension CameraViewController: ViewBootstrappable {
                 let outputFileName = NSUUID().uuidString
                 let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
 
-                AVCaptureSession.movieFileOutput.metadata = Current.metadata.currentMetadata(for: action)
+                AVCaptureSession.movieFileOutput.metadata = Current.metadata.movieMetadata()
                 AVCaptureSession.movieFileOutput.startRecording(to: URL(fileURLWithPath: outputFilePath), recordingDelegate: self)
             case .captureVideoEnd:
                 if Current.musicSyncSubject.value {

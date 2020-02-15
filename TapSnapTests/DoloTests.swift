@@ -2,7 +2,7 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import XCTest
-@testable import Dolo
+@testable import Tapsnap
 
 class DoloTests: XCTestCase {
     override func setUp() {

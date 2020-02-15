@@ -6,20 +6,21 @@ import UIKit
 
 extension CameraViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        if let error = error {
-            print("Error capturing photo: \(error)")
-        } else {
+        switch error {
+        case let .some(error): print("Error capturing photo: \(error)")
+        case .none:
+            guard let imageData = photo.fileDataRepresentation() else { return }
             
-            guard let imageData = photo.fileDataRepresentation(),
-                let originalImage = UIImage(data: imageData),
+            let imageWithMetadata = imageData.updateMetadata() ?? imageData
+
+            guard let originalImage = UIImage(data: imageWithMetadata),
                 let watermarkImage = Current.currentWatermarkSubject.value else {
-                    photoData = photo.fileDataRepresentation()
+                    photoData = imageWithMetadata
                     return
             }
-        
+            
             UIGraphicsBeginImageContext(originalImage.size)
             let area = CGRect(origin: .zero, size: originalImage.size)
-            
             
             originalImage.draw(in: area)
             
@@ -52,6 +53,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
             print("Error capturing photo: \(error)")
             return
         }
+        
         
         guard let photoData = photoData else {
             print("No photo data resource")

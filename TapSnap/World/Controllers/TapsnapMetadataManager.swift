@@ -77,8 +77,8 @@ class TapsnapMetadataManager {
         i.identifier = AVMetadataIdentifier.iTunesMetadataSongID
         return i
     }()
-
-    func currentMetadata(for mediaAction: MediaAction) -> [AVMetadataItem] {
+    
+    func movieMetadata() -> [AVMetadataItem] {
         timestamp.value = String(format: "%f", Date().timeIntervalSince1970) as NSString
 
         if let currentLocation = Current.currentLocationSubject.value {
@@ -93,8 +93,7 @@ class TapsnapMetadataManager {
         }
 
         if let nowPlaying = MPMusicPlayerController.systemMusicPlayer.nowPlayingItem,
-            Current.musicSyncSubject.value,
-            mediaAction == .captureVideoStart {
+            Current.musicSyncSubject.value {
             if let nowPlayingCoverArt = nowPlaying.artwork?.image(at: CGSize(width: 128, height: 128))?.pngData() {
                 coverArt.value = nowPlayingCoverArt as NSData
             }

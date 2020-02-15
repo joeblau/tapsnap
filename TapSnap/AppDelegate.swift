@@ -11,6 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        Current.locationManager.delegate = self
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             Current.locationManager.requestLocation()
         }
@@ -25,7 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UIBarButtonItem.appearance().tintColor = .label
 
-        Current.locationManager.delegate = self
         switch UserDefaults.standard.bool(forKey: "enabled_sensor_visualizer") {
         case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
         case false: window = UIWindow(frame: UIScreen.main.bounds)
