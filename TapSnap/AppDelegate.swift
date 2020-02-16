@@ -5,6 +5,8 @@ import CoreLocation
 import PencilKit
 import SensorVisualizerKit
 import UIKit
+import CloudKit
+import os.log
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -40,6 +42,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Current.locationManager.requestLocation()
         }
     }
+    
+    func subscribeToPushNotifications() {
+        guard !UserDefaults.standard.bool(forKey: "subscription-cached") else { return }
+        
+        let subscription = CKDatabaseSubscription(subscriptionID: "shared-messages-changed")
+        
+        let notificationInfo = CKSubscription.NotificationInfo()
+        notificationInfo.shouldSendContentAvailable = true
+        subscription.notificationInfo = notificationInfo
+
+        let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription],
+                                                       subscriptionIDsToDelete: [])
+        operation.modifySubscriptionsCompletionBlock = { (savedSubscriptions, deletedSubscriptionIDs, error) in
+            switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+            case .none: UserDefaults.standard.set(true, forKey: "subscription-cached")
+            }
+        }
+        operation.qualityOfService = .utility
+        CKContainer.default().sharedCloudDatabase.add(operation)
+    }
+     
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        guard let dictionary = userInfo as? [String: Any],
+            let notification = CKNotification(fromRemoteNotificationDictionary: dictionary) else { return }
+        
+        
+        switch notification.subscriptionID {
+        case "shared-messages-changed":
+            print("handle shared messages")
+            completionHandler(.newData)
+        default: break
+        }
+    }
 }
 
 extension AppDelegate: CLLocationManagerDelegate {
@@ -49,8 +88,8 @@ extension AppDelegate: CLLocationManagerDelegate {
         Current.geocoding.reverseGeocodeLocation(currentLocation) { placemarks, error in
             guard error == nil, let mark = placemarks?.first else { return }
 
-            if let sublocality = mark.subLocality, let subAdministrativeArea = mark.subAdministrativeArea {
-                let address = "\(sublocality), \(subAdministrativeArea)"
+            if let subLocality = mark.subLocality, let subAdministrativeArea = mark.subAdministrativeArea {
+                let address = "\(subLocality), \(subAdministrativeArea)"
                 Current.currentAddressSubject.send(address)
             } else if let city = mark.postalAddress?.city, let state = mark.postalAddress?.state {
                 let address = "\(city), \(state)"

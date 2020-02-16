@@ -65,6 +65,8 @@ struct World {
         pa.country = "United States"
         return pa
     }()
+    
+    var cloudKitManager = CloudKitManager()
 
     // Sensors
     var locationManager: CLLocationManager = {

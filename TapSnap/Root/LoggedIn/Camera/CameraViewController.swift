@@ -10,8 +10,8 @@ import UIKit
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
 
-    let tapNotificationCount = 8
-    let itemsInSection = [15]
+    let tapNotificationCount = 0
+    let itemsInSection = [1]
 
     // Photo Video
     private let session: AVCaptureSession = { AVCaptureSession() }()
@@ -53,6 +53,7 @@ final class CameraViewController: UIViewController {
         let b = UIButton(type: .custom)
         b.setTitle("\(tapNotificationCount)", for: .normal)
         b.notification(diameter: 20)
+        b.isHidden = tapNotificationCount == 0
         return b
     }()
 
@@ -66,6 +67,8 @@ final class CameraViewController: UIViewController {
         let vc = ContactsCollectionView()
         vc.register(ContactCollectionViewCell.self,
                     forCellWithReuseIdentifier: ContactCollectionViewCell.id)
+        vc.register(ContactAddCollectionViewCell.self,
+                    forCellWithReuseIdentifier: ContactAddCollectionViewCell.id)
         vc.isPagingEnabled = true
         vc.dataSource = self
         vc.delegate = self
