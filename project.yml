@@ -23,6 +23,8 @@ targets:
       gatherCoverageData: true
     sources:
       - Tapsnap
+    settings:
+      TARGETED_DEVICE_FAMILY: 1
     dependencies:
       - package: SensorVisualizerKit
   TapsnapTests:
