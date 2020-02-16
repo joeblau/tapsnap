@@ -1,74 +1,48 @@
 // LoggedOutViewController.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import AuthenticationServices
 import UIKit
 
 class LoggedOutViewController: UIViewController {
-    let stack: UIStackView
-    let logoView = UIImageView(image: UIImage(named: "video.fill"))
-    let signInButton = ASAuthorizationAppleIDButton()
-    let errorLabel = UILabel()
-
-    init() {
-        logoView.translatesAutoresizingMaskIntoConstraints = false
-        signInButton.translatesAutoresizingMaskIntoConstraints = false
-        errorLabel.translatesAutoresizingMaskIntoConstraints = false
-        stack = UIStackView(arrangedSubviews: [logoView, signInButton, errorLabel])
-        stack.axis = .vertical
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    lazy var stackView: UIStackView = {
+        let v = UIStackView(arrangedSubviews: [logoView, errorLabel])
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.axis = .vertical
+        return v
+    }()
+    
+    lazy var logoView: UIImageView = {
+        let v = UIImageView(image: UIImage(systemName: "video.fill"))
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.tintColor = .label
+        return v
+    }()
+    
+    lazy var errorLabel: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        return l
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .lightGray
-        signInButton.addTarget(self, action: #selector(handleAuthorizationAppleIDButtonPress), for: .touchUpInside)
-
-        view.addSubview(stack)
-        view.centerXAnchor.constraint(equalTo: stack.centerXAnchor).isActive = true
-        view.centerYAnchor.constraint(equalTo: stack.centerYAnchor).isActive = true
-        view.leadingAnchor.constraint(equalTo: stack.leadingAnchor, constant: -32).isActive = true
-        view.trailingAnchor.constraint(equalTo: stack.trailingAnchor, constant: 32).isActive = true
+        view.backgroundColor = .systemBackground
+        bootstrap()
     }
 
-    @objc func handleAuthorizationAppleIDButtonPress() {
-        let appleIDRequest = ASAuthorizationAppleIDProvider().createRequest()
-        appleIDRequest.requestedScopes = [.fullName]
+    @objc func handleAuthorizationAppleIDButtonPress() {}
+}
 
-        let requests = [appleIDRequest]
+extension LoggedOutViewController: ViewBootstrappable {
+    func configureViews() {
+        
+        logoView.widthAnchor.constraint(equalToConstant: 32).isActive = true
+        logoView.heightAnchor.constraint(equalToConstant: 32).isActive = true
 
-        let controller = ASAuthorizationController(authorizationRequests: requests)
-        controller.delegate = self
-        controller.presentationContextProvider = self
-        controller.performRequests()
+        
+        view.addSubview(stackView)
+        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }
 
-extension LoggedOutViewController: ASAuthorizationControllerDelegate {
-    func authorizationController(controller _: ASAuthorizationController,
-                                 didCompleteWithAuthorization authorization: ASAuthorization) {
-        switch authorization.credential {
-        case let credential as ASAuthorizationAppleIDCredential:
-            let userIdentifier = credential.user
-            UserDefaults.standard.set(userIdentifier, forKey: "doloUID")
-            dismiss(animated: true, completion: nil)
-        default: break
-        }
-    }
-
-    func authorizationController(controller _: ASAuthorizationController,
-                                 didCompleteWithError error: Error) {
-        errorLabel.text = error.localizedDescription
-    }
-}
-
-extension LoggedOutViewController: ASAuthorizationControllerPresentationContextProviding {
-    func presentationAnchor(for _: ASAuthorizationController) -> ASPresentationAnchor {
-        view.window!
-    }
-}

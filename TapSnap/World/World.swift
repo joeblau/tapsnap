@@ -8,6 +8,7 @@ import CoreLocation
 import MapKit
 import PencilKit
 import UIKit
+import CloudKit
 
 enum EditState {
     case none
@@ -117,6 +118,8 @@ struct World {
 
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
+    
+    var cloudKitUserSubject = CurrentValueSubject<CKUserIdentity?, Never>(nil)
 }
 
 var Current = World()

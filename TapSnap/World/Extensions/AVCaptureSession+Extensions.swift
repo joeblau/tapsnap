@@ -2,6 +2,7 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import AVFoundation
+import os.log
 
 extension AVCaptureSession {
     static var photoOutput = AVCapturePhotoOutput()
@@ -44,7 +45,7 @@ extension AVCaptureSession {
             device.videoZoomFactor = max(1.0, min(desiredZoomFactor, device.activeFormat.videoMaxZoomFactor))
             device.unlockForConfiguration()
         } catch {
-            print("Can not lock capture device to zoom")
+             os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
         }
     }
 
@@ -98,7 +99,7 @@ extension AVCaptureSession {
                 addInput(videoCaptureInput)
             }
         } catch {
-            fatalError("Could not create video device input")
+            os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
         }
     }
 
@@ -115,30 +116,32 @@ extension AVCaptureSession {
                 addInput(audioDeviceInput)
             }
         } catch {
-            fatalError("Could not add audio input to session device input")
+            os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
         }
     }
 
     // MARK: - Add Output Devices
 
     private func addPhotoOutput() {
-        if canAddOutput(AVCaptureSession.photoOutput) {
+        switch canAddOutput(AVCaptureSession.photoOutput) {
+        case true:
             AVCaptureSession.photoOutput.isHighResolutionCaptureEnabled = true
             addOutput(AVCaptureSession.photoOutput)
-        } else {
-            fatalError("Could not add photo output to the session")
+        case false:
+            os_log("%@", log: .avFoundation, type: .error, "Could not add photo output to the session")
         }
     }
 
     private func addMovieOutput() {
-        if canAddOutput(AVCaptureSession.movieFileOutput) {
+        switch canAddOutput(AVCaptureSession.movieFileOutput) {
+        case true:
             if let connection = AVCaptureSession.movieFileOutput.connection(with: .video),
                 connection.isVideoStabilizationSupported {
                 connection.preferredVideoStabilizationMode = .auto
             }
             addOutput(AVCaptureSession.movieFileOutput)
-        } else {
-            fatalError("Could not add movie output to the session")
+        case false:
+            os_log("%@", log: .avFoundation, type: .error, "Could not add movie output to the session")
         }
     }
 
@@ -152,7 +155,7 @@ extension AVCaptureSession {
             try AVAudioSession.sharedInstance().setCategory(.ambient)
             try AVAudioSession.sharedInstance().setActive(false)
         } catch let error as NSError {
-            print(error)
+            os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
         }
     }
 

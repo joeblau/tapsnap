@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -62,6 +62,8 @@
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
 		EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390017BF26255640A332187B /* MenuCellTableViewCell.swift */; };
+		EDF4BFE423F9AA0700B287F7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */; };
+		EDF4BFE623F9C72E00B287F7 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */; };
 		F1049AD0FAD3C79A3CE179D7 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */; };
 		FA66328C9E511CDB5F89FACD /* NowPlayingPreviewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */; };
 		FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */; };
@@ -82,7 +84,7 @@
 		0180F9CF40B86DB40C15BFBC /* SearchContactsViewController+UISearchControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchControllerDelegate.swift"; sourceTree = "<group>"; };
 		0481FEC9E55AB29A26B9238B /* LoggedOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedOutViewController.swift; sourceTree = "<group>"; };
 		136E453746FC1A56F9A261CA /* TextOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOverlayView.swift; sourceTree = "<group>"; };
-		1C91A7E84958BFD9517292B6 /* Tapsnap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tapsnap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C91A7E84958BFD9517292B6 /* Tapsnap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tapsnap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E519411855163D974866C78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1FACB115B1E5F1F0029A7940 /* SyncTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTableViewCell.swift; sourceTree = "<group>"; };
@@ -110,7 +112,7 @@
 		7052B4CE08D672F73ECB0E2C /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		75B33AE9F232CA872F98978A /* DrawingToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolsView.swift; sourceTree = "<group>"; };
 		7804AD1BEDDF879B464AEA26 /* SavedTapsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
-		780A8DC04979D988BFBE6D14 /* Web */ = {isa = PBXFileReference; includeInIndex = 0; path = Web; sourceTree = BUILT_PRODUCTS_DIR; };
+		780A8DC04979D988BFBE6D14 /* Web */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = text; path = Web; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOverlayView.swift; sourceTree = "<group>"; };
 		880AA06728253910B5D1F81A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8BC4CE62F7AC981B913F18E9 /* CameraViewController+UICollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDelegate.swift"; sourceTree = "<group>"; };
@@ -133,6 +135,8 @@
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		E67DD7438DFB355B5132D5E3 /* AVAssetTrack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAssetTrack+Extensions.swift"; sourceTree = "<group>"; };
 		E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
+		EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
+		EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
 		EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
 		F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
 		F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13ACD9B7ED5779C4B2366D79 /* SensorVisualizerKit in Frameworks */,
+				EDF4BFE423F9AA0700B287F7 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,6 +273,7 @@
 				9E56A6D23262E00CCE7B79AF /* TapsnapTests */,
 				E1B2AE3E0FB821DDCE822F59 /* Website */,
 				832B0EE083BC0F4BCBBF460A /* Products */,
+				EDF4BFE223F9AA0700B287F7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -301,6 +307,7 @@
 				4BED8D1DB10A6B057441C23C /* UIButton+Extension.swift */,
 				C938C741102596FD14058E88 /* UILabel+Extension.swift */,
 				F46D5270D9E16B4F9812EF95 /* UIView+Extensions.swift */,
+				EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -381,6 +388,14 @@
 				6217B4B7FA2175C2D4D28CFF /* Views */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		EDF4BFE223F9AA0700B287F7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		F833A6B6616A443E1FCE1C61 /* Views */ = {
@@ -484,6 +499,7 @@
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				en,
 				Base,
 			);
 			mainGroup = 6803BFD8A97340E540815774;
@@ -564,6 +580,7 @@
 				1508AA5A76058B45B00A0930 /* SearchContactsViewController.swift in Sources */,
 				9F9E8C560DF38967EF1748CB /* SyncTableViewCell.swift in Sources */,
 				E0CC88252B80F4D873A8E1B4 /* Tapsnap.xcdatamodeld in Sources */,
+				EDF4BFE623F9C72E00B287F7 /* OSLog+Extensions.swift in Sources */,
 				8123FC4D326233B9EB882F29 /* TapsnapMedia.swift in Sources */,
 				3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */,
 				0C8A689BC97B6E0FA76866D2 /* UIButton+Extension.swift in Sources */,
@@ -629,6 +646,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Tapsnap/Tapsnap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Tapsnap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -791,6 +809,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Tapsnap/Tapsnap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Tapsnap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
