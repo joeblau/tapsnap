@@ -54,7 +54,6 @@ enum RawCapture {
 }
 
 struct World {
-    let metadata = TapsnapMetadataManager()
     // DELTE
     let fakeContact: CNMutablePostalAddress = {
         let pa = CNMutablePostalAddress()

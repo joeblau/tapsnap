@@ -268,7 +268,7 @@ extension CameraViewController: ViewBootstrappable {
                 let outputFileName = NSUUID().uuidString
                 let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
 
-                AVCaptureSession.movieFileOutput.metadata = Current.metadata.movieMetadata()
+                AVCaptureSession.movieFileOutput.metadata = [AVMetadataItem].movieMetadata()
                 AVCaptureSession.movieFileOutput.startRecording(to: URL(fileURLWithPath: outputFilePath), recordingDelegate: self)
             case .captureVideoEnd:
                 if Current.musicSyncSubject.value {
