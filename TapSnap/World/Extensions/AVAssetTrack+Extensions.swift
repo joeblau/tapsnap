@@ -1,9 +1,5 @@
-//
-//  AVAssetTrack+Extensions.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/15/20.
-//
+// AVAssetTrack+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import AVFoundation
 

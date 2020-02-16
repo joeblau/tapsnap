@@ -195,7 +195,7 @@ final class CameraOverlayView: UIView {
     func isWatermarkClean() -> Bool {
         canvasView.drawing.bounds.isEmpty && annotationTextView.text.isEmpty
     }
-    
+
     func isGestureStaackEnabled(for editState: EditState) {
         switch editState {
         case .keyboard:
@@ -208,11 +208,11 @@ final class CameraOverlayView: UIView {
             panTextRecogizner.isEnabled = false
         }
     }
-    
+
     func resetWatermark() {
-        self.annotationTextView.transform = .identity
-        self.annotationTextView.text = ""
-        self.canvasView.drawing = PKDrawing()
+        annotationTextView.transform = .identity
+        annotationTextView.text = ""
+        canvasView.drawing = PKDrawing()
     }
 }
 
@@ -303,11 +303,11 @@ extension CameraOverlayView: ViewBootstrappable {
                 if !self.isWatermarkClean() {
                     Current.currentWatermarkSubject.send(self.toImage(scale: 4.0))
                 }
-                
+
                 self.recordingProgressView.isHidden = false
                 self.indeterminateProgressView.isHidden = false
                 self.bottomRightStackView.isHidden = false
-                
+
                 self.canvasView.isUserInteractionEnabled = false
                 self.annotationTextView.inputView = nil
             case .keyboard:
@@ -317,7 +317,7 @@ extension CameraOverlayView: ViewBootstrappable {
                 self.recordingProgressView.isHidden = true
                 self.indeterminateProgressView.isHidden = true
                 self.bottomRightStackView.isHidden = true
-                
+
                 self.canvasView.isUserInteractionEnabled = false
                 self.annotationTextView.inputView?.removeFromSuperview()
                 self.annotationTextView.inputView = nil

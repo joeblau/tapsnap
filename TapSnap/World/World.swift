@@ -6,8 +6,8 @@ import Combine
 import Contacts
 import CoreLocation
 import MapKit
-import UIKit
 import PencilKit
+import UIKit
 
 enum EditState {
     case none
@@ -96,7 +96,7 @@ struct World {
         mv.showsBuildings = true
         return mv
     }()
-    
+
     // Constants
     var formatter = Formatter()
 
@@ -111,11 +111,10 @@ struct World {
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
     var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
 
-
     var currentLocationSubject = CurrentValueSubject<CLLocation?, Never>(nil)
     var currentAddressSubject = CurrentValueSubject<String?, Never>(nil)
     var currentWatermarkSubject = CurrentValueSubject<UIImage?, Never>(nil)
-    
+
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
 }

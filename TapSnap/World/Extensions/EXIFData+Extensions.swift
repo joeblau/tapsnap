@@ -1,13 +1,9 @@
-//
-//  Data+Extensions.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/14/20.
-//
+// EXIFData+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import AVFoundation
 import MediaPlayer
+import UIKit
 
 // MARK: - Photo
 
@@ -16,14 +12,14 @@ extension Data {
         guard let source = CGImageSourceCreateWithData(self as CFData, nil),
             let ref = CGImageSourceGetType(source),
             let copiedMetadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return nil }
-        
+
         var metadata = copiedMetadata
-        
+
         if let currentAddress = Current.currentAddressSubject.value {
             metadata[kCGImagePropertyExifDictionary as String] = [kCGImagePropertyExifCameraOwnerName: "",
                                                                   kCGImagePropertyExifUserComment: currentAddress]
         }
-        
+
         if let currentLocation = Current.currentLocationSubject.value {
             metadata[kCGImagePropertyGPSDictionary as String] = [kCGImagePropertyGPSLatitudeRef: currentLocation.coordinate.latitude < 0 ? "S" : "N",
                                                                  kCGImagePropertyGPSLatitude: fabs(currentLocation.coordinate.latitude),
@@ -32,12 +28,12 @@ extension Data {
                                                                  kCGImagePropertyGPSAltitudeRef: currentLocation.altitude < 0 ? 1 : 0,
                                                                  kCGImagePropertyGPSAltitude: fabs(currentLocation.altitude)]
         }
-        
+
         let destinationData = NSMutableData(data: self)
         guard let destination = CGImageDestinationCreateWithData(destinationData, ref, 1, nil) else {
             return nil
         }
-        
+
         CGImageDestinationAddImageFromSource(destination, source, 0, metadata as CFDictionary)
         if !CGImageDestinationFinalize(destination) {
             return nil
@@ -81,7 +77,7 @@ extension Array where Element: AVMetadataItem {
 
         return [group, user, timestamp, location, address, coverArt, title, artist, songId]
     }
-    
+
     private static var group: AVMutableMetadataItem {
         let i = AVMutableMetadataItem()
         i.keySpace = .quickTimeUserData
