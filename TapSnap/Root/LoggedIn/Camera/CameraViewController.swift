@@ -11,7 +11,7 @@ final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
 
     let tapNotificationCount = 0
-    let itemsInSection = [1]
+    let itemsInSection = [0]
 
     // Photo Video
     private let session: AVCaptureSession = { AVCaptureSession() }()
@@ -67,8 +67,6 @@ final class CameraViewController: UIViewController {
         let vc = ContactsCollectionView()
         vc.register(ContactCollectionViewCell.self,
                     forCellWithReuseIdentifier: ContactCollectionViewCell.id)
-        vc.register(ContactAddCollectionViewCell.self,
-                    forCellWithReuseIdentifier: ContactAddCollectionViewCell.id)
         vc.isPagingEnabled = true
         vc.dataSource = self
         vc.delegate = self
@@ -124,7 +122,7 @@ final class CameraViewController: UIViewController {
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
             UIBarButtonItem(customView: contactPageControl),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction)),
+            UIBarButtonItem(image: UIImage(systemName: "person.badge.plus"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(searchContactsAction))
         ]
 
         contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))
@@ -158,7 +156,8 @@ final class CameraViewController: UIViewController {
     @objc private func editContacts() {}
 
     @objc private func searchContactsAction() {
-        present(searchViewController, animated: true, completion: nil)
+        Current.cloudKitManager.createNewGroup(sender: self)
+//        present(searchViewController, animated: true, completion: nil)
     }
 
     @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
@@ -176,7 +175,7 @@ final class CameraViewController: UIViewController {
 extension CameraViewController: ViewBootstrappable {
     func configureViews() {
         view.addSubview(contactsCollectionView)
-        contactsCollectionView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 2).isActive = true
+        contactsCollectionView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.width / 2.0).isActive = true
         contactsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         contactsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         contactsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
