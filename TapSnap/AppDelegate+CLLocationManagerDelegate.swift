@@ -1,9 +1,5 @@
-//
-//  AppDelegate+CLLocationManagerDelegate.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/16/20.
-//
+// AppDelegate+CLLocationManagerDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import CoreLocation
 import os.log
@@ -26,6 +22,6 @@ extension AppDelegate: CLLocationManagerDelegate {
     }
 
     func locationManager(_: CLLocationManager, didFailWithError error: Error) {
-         os_log("%@", log: .coreLocation, type: .error, error.localizedDescription)
+        os_log("%@", log: .coreLocation, type: .error, error.localizedDescription)
     }
 }

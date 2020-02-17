@@ -1,16 +1,16 @@
 // RootViewController.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
 import os.log
+import UIKit
 
 class RootViewController: UIViewController {
     // MARK: - Lifecycle
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        CKContainer.default().requestApplicationPermission(.userDiscoverability) { (status, error) in
+        CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: break
@@ -25,7 +25,7 @@ class RootViewController: UIViewController {
     }
 
     // MARK: - Private
-    
+
     private func cloudKitAccessNotGranted() {
         DispatchQueue.main.async {
             let loggedOut = LoggedOutViewController()
@@ -33,9 +33,9 @@ class RootViewController: UIViewController {
             self.present(loggedOut, animated: true, completion: nil)
         }
     }
-    
+
     private func cloudKitAccessGranted() {
-        CKContainer.default().fetchUserRecordID { (recordID, error) in
+        CKContainer.default().fetchUserRecordID { recordID, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: break
@@ -48,9 +48,9 @@ class RootViewController: UIViewController {
             self.discoverUserIdentity(with: recordID)
         }
     }
-    
+
     private func discoverUserIdentity(with recordId: CKRecord.ID) {
-        CKContainer.default().discoverUserIdentity(withUserRecordID: recordId, completionHandler: { (userID, error) in
+        CKContainer.default().discoverUserIdentity(withUserRecordID: recordId, completionHandler: { userID, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: break
@@ -60,7 +60,7 @@ class RootViewController: UIViewController {
                 os_log("Uninitialized user ID", log: .cloudKit, type: .error)
                 return
             }
-            
+
             Current.cloudKitUserSubject.send(userID)
             DispatchQueue.main.async {
                 let loggedIn = LoggedInViewController()

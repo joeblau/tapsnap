@@ -1,24 +1,20 @@
-//
-//  CloudKitManager+UICloudSharingControllerDelegate.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/16/20.
-//
+// CloudKitManager+UICloudSharingControllerDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
 import os.log
+import UIKit
 
 extension CloudKitManager: UICloudSharingControllerDelegate {
-    func cloudSharingController(_ csc: UICloudSharingController, failedToSaveShareWithError error: Error) {
-         os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+    func cloudSharingController(_: UICloudSharingController, failedToSaveShareWithError error: Error) {
+        os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
     }
-    
-    func itemTitle(for csc: UICloudSharingController) -> String? {
+
+    func itemTitle(for _: UICloudSharingController) -> String? {
         "Join Tapsnap Group"
     }
-    
-    func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
+
+    func itemThumbnailData(for _: UICloudSharingController) -> Data? {
         UIImage(systemName: "video.fill")?.pngData()
     }
 }

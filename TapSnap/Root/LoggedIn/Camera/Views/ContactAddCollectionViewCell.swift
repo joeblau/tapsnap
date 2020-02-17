@@ -1,14 +1,9 @@
-//
-//  ContactAddCollectionViewCell.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/16/20.
-//
+// ContactAddCollectionViewCell.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 class ContactAddCollectionViewCell: UICollectionViewCell {
-    
     lazy var addContactView: UIImageView = {
         let v = UIImageView(image: UIImage(systemName: "person.badge.plus"))
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -16,18 +11,18 @@ class ContactAddCollectionViewCell: UICollectionViewCell {
         v.tintColor = .label
         return v
     }()
-    
+
     override init(frame _: CGRect) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .tertiarySystemBackground
         bootstrap()
     }
-    
-    required init?(coder: NSCoder) {
+
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Resuse Identifier
 
     static let id = String(describing: ContactAddCollectionViewCell.self)
@@ -35,7 +30,6 @@ class ContactAddCollectionViewCell: UICollectionViewCell {
 
 extension ContactAddCollectionViewCell: ViewBootstrappable {
     func configureViews() {
-        
         addContactView.widthAnchor.constraint(equalToConstant: 32).isActive = true
         addContactView.heightAnchor.constraint(equalToConstant: 32).isActive = true
 

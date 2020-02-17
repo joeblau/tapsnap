@@ -45,7 +45,7 @@ extension AVCaptureSession {
             device.videoZoomFactor = max(1.0, min(desiredZoomFactor, device.activeFormat.videoMaxZoomFactor))
             device.unlockForConfiguration()
         } catch {
-             os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
+            os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
         }
     }
 

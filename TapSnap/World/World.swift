@@ -2,13 +2,13 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import AVFoundation
+import CloudKit
 import Combine
 import Contacts
 import CoreLocation
 import MapKit
 import PencilKit
 import UIKit
-import CloudKit
 
 enum EditState {
     case none
@@ -65,7 +65,7 @@ struct World {
         pa.country = "United States"
         return pa
     }()
-    
+
     var cloudKitManager = CloudKitManager()
 
     // Sensors
@@ -120,7 +120,7 @@ struct World {
 
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
-    
+
     var cloudKitUserSubject = CurrentValueSubject<CKUserIdentity?, Never>(nil)
 }
 

@@ -1,25 +1,21 @@
-//
-//  CloudKitManager.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/16/20.
-//
+// CloudKitManager.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
 import os.log
+import UIKit
 
 class CloudKitManager: NSObject {
     private let sharedMessageZone = CKRecordZone(zoneName: "SharedZone")
-    
+
     override init() {
         super.init()
         setupZones()
     }
-    
+
     func createNewGroup(sender: UIViewController) {
-        let sharingController = UICloudSharingController { [weak self] (controller, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
-            guard let `self` = self else { return }
+        let sharingController = UICloudSharingController { [weak self] (_, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+            guard let self = self else { return }
             self.createNewGroup(completion: completion)
         }
         sharingController.availablePermissions = [.allowPrivate, .allowReadWrite]
@@ -31,18 +27,18 @@ class CloudKitManager: NSObject {
         let sharingController = UICloudSharingController(share: share, container: CKContainer.default())
         sender.present(sharingController, animated: true) {}
     }
-    
+
     // MARK: - Private
-    
+
     private func setupZones() {
-        CKContainer.default().privateCloudDatabase.save(sharedMessageZone) { (zone, error) in
+        CKContainer.default().privateCloudDatabase.save(sharedMessageZone) { _, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: break
             }
         }
     }
-    
+
     private func createNewGroup(completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) {
         let zoneID = CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
         let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: zoneID)
@@ -53,22 +49,22 @@ class CloudKitManager: NSObject {
 
         let groupShareRecord = CKShare(rootRecord: groupRecord)
         let recordsToSave = [groupRecord, groupShareRecord]
-        
+
         let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: [])
-        operation.perRecordCompletionBlock = { (record, error) in
+        operation.perRecordCompletionBlock = { _, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: break
             }
         }
-        
-        operation.modifyRecordsCompletionBlock = { (savedRecords, deletedRecordIDs, error) in
+
+        operation.modifyRecordsCompletionBlock = { _, _, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: completion(groupShareRecord, CKContainer.default(), nil)
             }
         }
-        
+
         CKContainer.default().privateCloudDatabase.add(operation)
     }
 }
