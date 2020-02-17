@@ -15,7 +15,7 @@ extension CloudKitManager: UICloudSharingControllerDelegate {
     }
     
     func itemTitle(for csc: UICloudSharingController) -> String? {
-        "New Tapsnap Group"
+        "Join Tapsnap Group"
     }
     
     func itemThumbnailData(for csc: UICloudSharingController) -> Data? {
