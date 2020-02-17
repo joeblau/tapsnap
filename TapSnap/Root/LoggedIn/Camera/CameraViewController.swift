@@ -2,11 +2,11 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import AVFoundation
+import CloudKit
 import Combine
 import CoreLocation
 import MediaPlayer
 import UIKit
-import CloudKit
 
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
@@ -65,7 +65,7 @@ final class CameraViewController: UIViewController {
     let contactPageControl = UIPageControl()
 
     private var diffableDataSource: GroupsDiffableDataSource?
-    
+
     private lazy var contactsCollectionView: ContactsCollectionView = {
         let vc = ContactsCollectionView()
         vc.register(ContactCollectionViewCell.self,
@@ -126,7 +126,7 @@ final class CameraViewController: UIViewController {
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
             UIBarButtonItem(customView: contactPageControl),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(image: UIImage(systemName: "person.badge.plus"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(searchContactsAction))
+            UIBarButtonItem(image: UIImage(systemName: "person.badge.plus"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(searchContactsAction)),
         ]
 
         contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))
@@ -288,22 +288,21 @@ extension CameraViewController: ViewBootstrappable {
         Current.zoomVeloictySubject.sink { zoomVelocity in
             self.session.zoom(with: Float(zoomVelocity.y))
         }.store(in: &cancellables)
-        
+
         Current.cloudKitGroupsSubject.sink { groups in
-            
+
             guard let items = groups?.compactMap({ record -> GroupValue? in
                 guard let name = record["name"] as? String else { return nil }
                 return GroupValue(name: name)
             }) else {
                 return
             }
-            
-            
+
             var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
             snapshot.appendSections([.contacts])
             snapshot.appendItems(items, toSection: .contacts)
             self.diffableDataSource?.apply(snapshot)
-            
+
         }.store(in: &cancellables)
     }
 

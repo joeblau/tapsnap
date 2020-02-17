@@ -1,9 +1,5 @@
-//
-//  GroupSection.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/16/20.
-//
+// GroupSection.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import Foundation
 

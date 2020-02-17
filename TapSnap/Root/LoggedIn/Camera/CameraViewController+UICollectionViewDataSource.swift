@@ -4,7 +4,6 @@
 import UIKit
 
 extension CameraViewController: UICollectionViewDataSource {
-
     func collectionView(_: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         itemsInSection[section]
     }

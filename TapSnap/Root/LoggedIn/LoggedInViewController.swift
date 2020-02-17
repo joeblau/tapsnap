@@ -13,6 +13,6 @@ final class LoggedInViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        present(camera, animated: false) {}        
+        present(camera, animated: false) {}
     }
 }

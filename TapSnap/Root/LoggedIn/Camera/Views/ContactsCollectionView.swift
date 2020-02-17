@@ -13,17 +13,17 @@ class ContactsCollectionView: UICollectionView {
                                                      leading: hairline,
                                                      bottom: hairline,
                                                      trailing: hairline)
-        
+
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.25),
-                                              heightDimension: .fractionalWidth(0.5))
+                                               heightDimension: .fractionalWidth(0.5))
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize,
                                                      subitem: item,
-                                                       count: 2)
+                                                     count: 2)
 
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .paging
         let compositionalLayout = UICollectionViewCompositionalLayout(section: section)
-        
+
         super.init(frame: .zero, collectionViewLayout: compositionalLayout)
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .systemBackground

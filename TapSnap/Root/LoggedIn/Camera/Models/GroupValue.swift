@@ -1,9 +1,5 @@
-//
-//  GroupValue.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/16/20.
-//
+// GroupValue.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
@@ -13,11 +9,11 @@ struct GroupValue: Hashable {
     let participantCount: Int = 0
     let identifier = UUID()
 
-    func hash(into hasher: inout Hasher)  {
+    func hash(into hasher: inout Hasher) {
         hasher.combine(identifier)
     }
 
     static func == (lhs: GroupValue, rhs: GroupValue) -> Bool {
-        return lhs.identifier == rhs.identifier
+        lhs.identifier == rhs.identifier
     }
 }
