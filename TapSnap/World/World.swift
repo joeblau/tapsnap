@@ -124,6 +124,7 @@ struct World {
     // CloudKit
     var cloudKitUserSubject = CurrentValueSubject<CKUserIdentity?, Never>(nil)
     var cloudKitGroupsSubject = CurrentValueSubject<Set<CKRecord>?, Never>(nil)
+    var cloudKitFriendsSubject = CurrentValueSubject<[CKUserIdentity]?, Never>(nil)
 }
 
 var Current = World()

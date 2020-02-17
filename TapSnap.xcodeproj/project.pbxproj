@@ -64,6 +64,7 @@
 		EDD73D3523FA5680003382F7 /* GroupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3423FA5680003382F7 /* GroupSection.swift */; };
 		EDD73D3723FA56A9003382F7 /* GroupValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3623FA56A9003382F7 /* GroupValue.swift */; };
 		EDD73D3923FAD0FE003382F7 /* ContactAddCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3823FAD0FE003382F7 /* ContactAddCollectionViewCell.swift */; };
+		EDD73D3B23FAF063003382F7 /* EmptyDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3A23FAF063003382F7 /* EmptyDataView.swift */; };
 		EDF4BFE423F9AA0700B287F7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */; };
 		EDF4BFE623F9C72E00B287F7 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */; };
 		EDF4BFEA23FA00EB00B287F7 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4BFE923FA00EB00B287F7 /* CloudKitManager.swift */; };
@@ -142,6 +143,7 @@
 		EDD73D3423FA5680003382F7 /* GroupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSection.swift; sourceTree = "<group>"; };
 		EDD73D3623FA56A9003382F7 /* GroupValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupValue.swift; sourceTree = "<group>"; };
 		EDD73D3823FAD0FE003382F7 /* ContactAddCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAddCollectionViewCell.swift; sourceTree = "<group>"; };
+		EDD73D3A23FAF063003382F7 /* EmptyDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDataView.swift; sourceTree = "<group>"; };
 		EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
 		EDF4BFE923FA00EB00B287F7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 				2FCE2621E3412630A639A0E9 /* World.swift */,
 				81343ECC5DE5C427BB2D9208 /* Extensions */,
 				152654B219B2E035B464B9CB /* Protocols */,
+				EDD73D3A23FAF063003382F7 /* EmptyDataView.swift */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -569,6 +572,7 @@
 				82E8D57768BC08D80FE7CC89 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift in Sources */,
 				EDD73D3923FAD0FE003382F7 /* ContactAddCollectionViewCell.swift in Sources */,
 				29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
+				EDD73D3B23FAF063003382F7 /* EmptyDataView.swift in Sources */,
 				4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */,
 				4296ABD2EB34055CB28AA8D5 /* ContactCollectionViewCell.swift in Sources */,
 				155FD04BF3EA39EBD754BDD6 /* ContactsCollectionView.swift in Sources */,

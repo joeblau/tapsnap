@@ -31,10 +31,8 @@ class CloudKitManager: NSObject {
 
     func fetchAllZones() {
         CKContainer.default().sharedCloudDatabase.fetchAllRecordZones { zones, error in
-            switch error {
-            case let .some(error):
-                os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-                return
+             switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
             case .none: break
             }
 
@@ -53,11 +51,8 @@ class CloudKitManager: NSObject {
             .privateCloudDatabase
             .perform(query, inZoneWith: zone.zoneID) { groups, error in
                 switch error {
-                case let .some(error):
-                    os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-                    return
-                case .none:
-                    break
+                case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+                case .none: break
                 }
 
                 guard let newGroups = groups else { return }
@@ -75,11 +70,8 @@ class CloudKitManager: NSObject {
             .sharedCloudDatabase
             .perform(query, inZoneWith: zone.zoneID) { groups, error in
                 switch error {
-                case let .some(error):
-                    os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-                    return
-                case .none:
-                    break
+                case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+                case .none: break
                 }
 
                 guard let newGroups = groups else { return }
@@ -89,16 +81,25 @@ class CloudKitManager: NSObject {
             }
     }
 
+    func findAllFriendsWithApp() {
+        CKContainer.default()
+            .discoverAllIdentities { identities, error in
+                switch error {
+                case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+                case .none: break
+                }
+
+                Current.cloudKitFriendsSubject.send(identities)
+        }
+    }
+    
     // MARK: - Private
 
     private func setupZones() {
         CKContainer.default().privateCloudDatabase.save(sharedMessageZone) { _, error in
             switch error {
-            case let .some(error):
-                os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-                return
-            case .none:
-                break
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+            case .none: break
             }
         }
     }
@@ -127,11 +128,8 @@ class CloudKitManager: NSObject {
 
         operation.modifyRecordsCompletionBlock = { _, _, error in
             switch error {
-            case let .some(error):
-                os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-                return
-            case .none:
-                completion(groupShareRecord, CKContainer.default(), nil)
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+            case .none: completion(groupShareRecord, CKContainer.default(), nil)
             }
         }
 
