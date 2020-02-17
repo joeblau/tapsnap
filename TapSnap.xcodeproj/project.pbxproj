@@ -33,7 +33,6 @@
 		6006081149337EAE465CE208 /* SavedTapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407456196370DF88EC8AC28D /* SavedTapsViewController.swift */; };
 		66125828B36DB8CA801593E3 /* EXIFData+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D5A06F6B5145B89F4FE58B /* EXIFData+Extensions.swift */; };
 		6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B33AE9F232CA872F98978A /* DrawingToolsView.swift */; };
-		78FD54943CAFF8C9035664DE /* CameraViewController+UICollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */; };
 		82E8D57768BC08D80FE7CC89 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB14F5E9AD2042E5DFC76BE /* CameraViewController+AVCapturePhotoCaptureDelegate.swift */; };
 		8DCD4EBC5F1E0F9776A5A374 /* MapViewOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F76C684C320050C50C7BB2 /* MapViewOverlay.swift */; };
 		916F904C56D25570A3DA12B5 /* PlaybackViewController+MKMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5321E8A88101AC69230EB4AF /* PlaybackViewController+MKMapViewDelegate.swift */; };
@@ -64,6 +63,7 @@
 		EDD73D3223FA55D5003382F7 /* GroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3123FA55D5003382F7 /* GroupsDiffableDataSource.swift */; };
 		EDD73D3523FA5680003382F7 /* GroupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3423FA5680003382F7 /* GroupSection.swift */; };
 		EDD73D3723FA56A9003382F7 /* GroupValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3623FA56A9003382F7 /* GroupValue.swift */; };
+		EDD73D3923FAD0FE003382F7 /* ContactAddCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3823FAD0FE003382F7 /* ContactAddCollectionViewCell.swift */; };
 		EDF4BFE423F9AA0700B287F7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */; };
 		EDF4BFE623F9C72E00B287F7 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */; };
 		EDF4BFEA23FA00EB00B287F7 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4BFE923FA00EB00B287F7 /* CloudKitManager.swift */; };
@@ -131,7 +131,6 @@
 		A86F521E8A3727658211B4A2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureSession+Extensions.swift"; sourceTree = "<group>"; };
 		B2528AD68900F4499FB43418 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDataSource.swift"; sourceTree = "<group>"; };
 		B70F817896C777AFB3FC0433 /* ContactCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCollectionViewCell.swift; sourceTree = "<group>"; };
 		C4C8B897FDADE8980A430106 /* MusicPlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlaybackView.swift; sourceTree = "<group>"; };
 		C938C741102596FD14058E88 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
@@ -142,6 +141,7 @@
 		EDD73D3123FA55D5003382F7 /* GroupsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDiffableDataSource.swift; sourceTree = "<group>"; };
 		EDD73D3423FA5680003382F7 /* GroupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSection.swift; sourceTree = "<group>"; };
 		EDD73D3623FA56A9003382F7 /* GroupValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupValue.swift; sourceTree = "<group>"; };
+		EDD73D3823FAD0FE003382F7 /* ContactAddCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAddCollectionViewCell.swift; sourceTree = "<group>"; };
 		EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
 		EDF4BFE923FA00EB00B287F7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -266,6 +266,7 @@
 				324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */,
 				1FACB115B1E5F1F0029A7940 /* SyncTableViewCell.swift */,
 				136E453746FC1A56F9A261CA /* TextOverlayView.swift */,
+				EDD73D3823FAD0FE003382F7 /* ContactAddCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -397,7 +398,6 @@
 				EDD73D3123FA55D5003382F7 /* GroupsDiffableDataSource.swift */,
 				E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */,
 				9FB14F5E9AD2042E5DFC76BE /* CameraViewController+AVCapturePhotoCaptureDelegate.swift */,
-				B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */,
 				8BC4CE62F7AC981B913F18E9 /* CameraViewController+UICollectionViewDelegate.swift */,
 				6217B4B7FA2175C2D4D28CFF /* Views */,
 			);
@@ -567,7 +567,7 @@
 				22441ACCFD9F673D8EC70B23 /* CameraPreviewView.swift in Sources */,
 				20122B4E8B2E6B67C0B0979C /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift in Sources */,
 				82E8D57768BC08D80FE7CC89 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift in Sources */,
-				78FD54943CAFF8C9035664DE /* CameraViewController+UICollectionViewDataSource.swift in Sources */,
+				EDD73D3923FAD0FE003382F7 /* ContactAddCollectionViewCell.swift in Sources */,
 				29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
 				4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */,
 				4296ABD2EB34055CB28AA8D5 /* ContactCollectionViewCell.swift in Sources */,

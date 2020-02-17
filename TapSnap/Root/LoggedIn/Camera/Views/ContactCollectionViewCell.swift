@@ -7,22 +7,22 @@ final class ContactCollectionViewCell: UICollectionViewCell {
     private lazy var contactImageView: UIImageView = {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.contentMode = .scaleAspectFit
+        v.tintColor = .systemRed
+        v.contentMode = .center
         return v
     }()
 
-    private lazy var titleLabel: UILabel = {
+    private lazy var contactTitleLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.adjustsFontSizeToFitWidth = true
-        l.minimumScaleFactor = 0.6
+        l.minimumScaleFactor = 0.4
         l.layer.shadowColor = UIColor.black.cgColor
         l.layer.shadowOffset = .zero
         l.layer.shadowRadius = 1
         l.layer.shadowOpacity = 1.0
-        l.layer.masksToBounds = false
-        l.clipsToBounds = false
         l.textAlignment = .center
+        l.lineBreakMode = .byTruncatingTail
         return l
     }()
 
@@ -33,7 +33,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
     override init(frame _: CGRect) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        backgroundColor = .secondarySystemBackground
+        contentView.backgroundColor = .secondarySystemBackground
         bootstrap()
     }
 
@@ -51,14 +51,13 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         case 1 ... 50:
             let imageAttachment = NSTextAttachment()
             imageAttachment.image = UIImage(systemName: "\(groupSize).circle.fill",
-                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))?.withTintColor(.white, renderingMode: .alwaysOriginal)
-
+                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))
+            imageAttachment.image?.withTintColor(.white, renderingMode: .alwaysOriginal)
             attributedString.append(NSAttributedString(attachment: imageAttachment))
         default: break
         }
         attributedString.append(NSAttributedString(string: "\(title)"))
-        titleLabel.attributedText = attributedString
-        titleLabel.floatLabel()
+        contactTitleLabel.attributedText = attributedString
     }
 
     override func prepareForReuse() {
@@ -110,11 +109,11 @@ extension ContactCollectionViewCell: ViewBootstrappable, UIGestureRecognizerDele
         contactImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         contactImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
 
-        contentView.addSubview(titleLabel)
-        titleLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        contentView.addSubview(contactTitleLabel)
+        contactTitleLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
+        contactTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4).isActive = true
+        contactTitleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        contactTitleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
     }
 
     func configureGestureRecoginzers() {

@@ -5,4 +5,5 @@ import Foundation
 
 enum GroupSection: Int, CaseIterable {
     case contacts
+    case addContact
 }

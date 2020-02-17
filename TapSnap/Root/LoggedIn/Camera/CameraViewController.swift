@@ -64,26 +64,18 @@ final class CameraViewController: UIViewController {
 
     let contactPageControl = UIPageControl()
 
-    private var diffableDataSource: GroupsDiffableDataSource?
-
     private lazy var contactsCollectionView: ContactsCollectionView = {
-        let vc = ContactsCollectionView()
-        vc.register(ContactCollectionViewCell.self,
-                    forCellWithReuseIdentifier: ContactCollectionViewCell.id)
-        vc.isPagingEnabled = true
-        vc.delegate = self
-        vc.bounces = false
-        return vc
+        let cv = ContactsCollectionView()
+        cv.delegate = self
+        return cv
     }()
 
     private lazy var menuViewController: UINavigationController = {
-        let nc = UINavigationController(rootViewController: MenuViewController())
-        return nc
+        UINavigationController(rootViewController: MenuViewController())
     }()
 
     private lazy var searchViewController: UINavigationController = {
-        let nc = UINavigationController(rootViewController: SearchContactsViewController())
-        return nc
+        UINavigationController(rootViewController: SearchContactsViewController())
     }()
 
     private lazy var playbackViewController: UINavigationController = {
@@ -97,8 +89,6 @@ final class CameraViewController: UIViewController {
 
     init() {
         super.init(nibName: nil, bundle: nil)
-        diffableDataSource = GroupsDiffableDataSource(collectionView: contactsCollectionView)
-        contactsCollectionView.dataSource = diffableDataSource
         bootstrap()
     }
 
@@ -126,7 +116,7 @@ final class CameraViewController: UIViewController {
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
             UIBarButtonItem(customView: contactPageControl),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(image: UIImage(systemName: "person.badge.plus"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(searchContactsAction)),
+            UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction))
         ]
 
         contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))
@@ -160,7 +150,6 @@ final class CameraViewController: UIViewController {
     @objc private func editContacts() {}
 
     @objc private func searchContactsAction() {
-//        Current.cloudKitManager.createNewGroup(sender: self)
         present(searchViewController, animated: true, completion: nil)
     }
 
@@ -299,9 +288,10 @@ extension CameraViewController: ViewBootstrappable {
             }
 
             var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
-            snapshot.appendSections([.contacts])
+            snapshot.appendSections([.contacts, .addContact])
             snapshot.appendItems(items, toSection: .contacts)
-            self.diffableDataSource?.apply(snapshot)
+            snapshot.appendItems([GroupValue(name: "add")], toSection: .addContact)
+            self.contactsCollectionView.diffableDataSource?.apply(snapshot)
 
         }.store(in: &cancellables)
     }

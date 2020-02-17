@@ -8,4 +8,12 @@ extension CameraViewController: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         contactPageControl.currentPage = Int(scrollView.contentOffset.x / UIScreen.main.bounds.width)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath {
+        case IndexPath(row: 0, section: 1):  Current.cloudKitManager.createNewGroup(sender: self)
+        default: break
+        }
+    }
 }
+
