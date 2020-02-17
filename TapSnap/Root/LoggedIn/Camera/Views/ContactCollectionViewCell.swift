@@ -5,9 +5,10 @@ import UIKit
 
 final class ContactCollectionViewCell: UICollectionViewCell {
     private lazy var contactImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+        let v = UIImageView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentMode = .scaleAspectFit
+        return v
     }()
 
     private lazy var titleLabel: UILabel = {
@@ -103,17 +104,17 @@ final class ContactCollectionViewCell: UICollectionViewCell {
 
 extension ContactCollectionViewCell: ViewBootstrappable, UIGestureRecognizerDelegate {
     internal func configureViews() {
-        addSubview(contactImageView)
-        contactImageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        contactImageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
-        contactImageView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        contactImageView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        contentView.addSubview(contactImageView)
+        contactImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        contactImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        contactImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        contactImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
 
-        addSubview(titleLabel)
+        contentView.addSubview(titleLabel)
         titleLabel.heightAnchor.constraint(equalToConstant: 16).isActive = true
-        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2).isActive = true
-        titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 2).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -2).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+        titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
     }
 
     func configureGestureRecoginzers() {

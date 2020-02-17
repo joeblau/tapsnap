@@ -6,6 +6,7 @@ import Combine
 import CoreLocation
 import MediaPlayer
 import UIKit
+import CloudKit
 
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
@@ -63,12 +64,13 @@ final class CameraViewController: UIViewController {
 
     let contactPageControl = UIPageControl()
 
+    private var diffableDataSource: GroupsDiffableDataSource?
+    
     private lazy var contactsCollectionView: ContactsCollectionView = {
         let vc = ContactsCollectionView()
         vc.register(ContactCollectionViewCell.self,
                     forCellWithReuseIdentifier: ContactCollectionViewCell.id)
         vc.isPagingEnabled = true
-        vc.dataSource = self
         vc.delegate = self
         vc.bounces = false
         return vc
@@ -95,6 +97,8 @@ final class CameraViewController: UIViewController {
 
     init() {
         super.init(nibName: nil, bundle: nil)
+        diffableDataSource = GroupsDiffableDataSource(collectionView: contactsCollectionView)
+        contactsCollectionView.dataSource = diffableDataSource
         bootstrap()
     }
 
@@ -156,8 +160,8 @@ final class CameraViewController: UIViewController {
     @objc private func editContacts() {}
 
     @objc private func searchContactsAction() {
-        Current.cloudKitManager.createNewGroup(sender: self)
-//        present(searchViewController, animated: true, completion: nil)
+//        Current.cloudKitManager.createNewGroup(sender: self)
+        present(searchViewController, animated: true, completion: nil)
     }
 
     @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
@@ -283,6 +287,23 @@ extension CameraViewController: ViewBootstrappable {
 
         Current.zoomVeloictySubject.sink { zoomVelocity in
             self.session.zoom(with: Float(zoomVelocity.y))
+        }.store(in: &cancellables)
+        
+        Current.cloudKitGroupsSubject.sink { groups in
+            
+            guard let items = groups?.compactMap({ record -> GroupValue? in
+                guard let name = record["name"] as? String else { return nil }
+                return GroupValue(name: name)
+            }) else {
+                return
+            }
+            
+            
+            var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
+            snapshot.appendSections([.contacts])
+            snapshot.appendItems(items, toSection: .contacts)
+            self.diffableDataSource?.apply(snapshot)
+            
         }.store(in: &cancellables)
     }
 

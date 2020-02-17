@@ -61,6 +61,9 @@
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
 		EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390017BF26255640A332187B /* MenuCellTableViewCell.swift */; };
+		EDD73D3223FA55D5003382F7 /* GroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3123FA55D5003382F7 /* GroupsDiffableDataSource.swift */; };
+		EDD73D3523FA5680003382F7 /* GroupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3423FA5680003382F7 /* GroupSection.swift */; };
+		EDD73D3723FA56A9003382F7 /* GroupValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3623FA56A9003382F7 /* GroupValue.swift */; };
 		EDF4BFE423F9AA0700B287F7 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */; };
 		EDF4BFE623F9C72E00B287F7 /* OSLog+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */; };
 		EDF4BFEA23FA00EB00B287F7 /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF4BFE923FA00EB00B287F7 /* CloudKitManager.swift */; };
@@ -136,6 +139,9 @@
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		E67DD7438DFB355B5132D5E3 /* AVAssetTrack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAssetTrack+Extensions.swift"; sourceTree = "<group>"; };
 		E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
+		EDD73D3123FA55D5003382F7 /* GroupsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDiffableDataSource.swift; sourceTree = "<group>"; };
+		EDD73D3423FA5680003382F7 /* GroupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSection.swift; sourceTree = "<group>"; };
+		EDD73D3623FA56A9003382F7 /* GroupValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupValue.swift; sourceTree = "<group>"; };
 		EDF4BFE323F9AA0700B287F7 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		EDF4BFE523F9C72E00B287F7 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
 		EDF4BFE923FA00EB00B287F7 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
@@ -386,7 +392,9 @@
 		E406814D34DFE8CB910BF391 /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				EDD73D3323FA5676003382F7 /* Models */,
 				69EE72D052B3BCCB27DDDBC4 /* CameraViewController.swift */,
+				EDD73D3123FA55D5003382F7 /* GroupsDiffableDataSource.swift */,
 				E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */,
 				9FB14F5E9AD2042E5DFC76BE /* CameraViewController+AVCapturePhotoCaptureDelegate.swift */,
 				B31CE8A158843A25EB0DFC68 /* CameraViewController+UICollectionViewDataSource.swift */,
@@ -394,6 +402,15 @@
 				6217B4B7FA2175C2D4D28CFF /* Views */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		EDD73D3323FA5676003382F7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EDD73D3423FA5680003382F7 /* GroupSection.swift */,
+				EDD73D3623FA56A9003382F7 /* GroupValue.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		EDF4BFE223F9AA0700B287F7 /* Frameworks */ = {
@@ -564,9 +581,11 @@
 				AFA4B5B9C3DE95B8CCEE172D /* LoggedInViewController.swift in Sources */,
 				DD6A04D0AC022CB627DB36AE /* LoggedOutViewController.swift in Sources */,
 				8DCD4EBC5F1E0F9776A5A374 /* MapViewOverlay.swift in Sources */,
+				EDD73D3223FA55D5003382F7 /* GroupsDiffableDataSource.swift in Sources */,
 				EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */,
 				C8D06DFC8502753F611D62C0 /* MenuModels.swift in Sources */,
 				3F1A7E560EB467CABA3D8E36 /* MenuViewController+UITableViewDataSource.swift in Sources */,
+				EDD73D3723FA56A9003382F7 /* GroupValue.swift in Sources */,
 				180CC59DBCBF2C5F6981762F /* MenuViewController.swift in Sources */,
 				1ACADBCC58A1D7F2300EC556 /* MusicPlaybackView.swift in Sources */,
 				EDF4BFEA23FA00EB00B287F7 /* CloudKitManager.swift in Sources */,
@@ -596,6 +615,7 @@
 				41887E30E56A03C962881E06 /* UIView+Extensions.swift in Sources */,
 				5369693BBCFA6A944EBF9190 /* ViewBootstrappable.swift in Sources */,
 				9E45F15C27283EA75A95FDA8 /* World.swift in Sources */,
+				EDD73D3523FA5680003382F7 /* GroupSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
