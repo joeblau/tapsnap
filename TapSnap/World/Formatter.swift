@@ -13,8 +13,7 @@ struct Formatter {
     }()
 
     let timeAgo: RelativeDateTimeFormatter = {
-        let f = RelativeDateTimeFormatter()
-        return f
+        RelativeDateTimeFormatter()
     }()
 
     let progress: DateComponentsFormatter = {
@@ -22,6 +21,10 @@ struct Formatter {
         f.allowedUnits = [.hour, .minute, .second]
         f.unitsStyle = .full
         return f
+    }()
+    
+    let personName: PersonNameComponentsFormatter = {
+        PersonNameComponentsFormatter()
     }()
 }
 

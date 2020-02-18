@@ -3,7 +3,7 @@
 
 import UIKit
 
-class GroupsDiffableDataSource: UICollectionViewDiffableDataSource<GroupSection, GroupValue> {
+class CameraViewControllerDiffableDataSource: UICollectionViewDiffableDataSource<GroupSection, GroupValue> {
     init(collectionView: UICollectionView) {
         super.init(collectionView: collectionView) { (collectionView, indexPath, groupValue) -> UICollectionViewCell? in
             

@@ -4,7 +4,7 @@
 import UIKit
 
 class ContactsCollectionView: UICollectionView {
-    var diffableDataSource: GroupsDiffableDataSource?
+    var diffableDataSource: CameraViewControllerDiffableDataSource?
     init() {
         let hairline = 1.0 / UIScreen.main.scale
         let width = (UIScreen.main.bounds.width / 4) - hairline
@@ -17,7 +17,7 @@ class ContactsCollectionView: UICollectionView {
         flowLayout.itemSize = CGSize(width: width, height: height)
         
         super.init(frame: .zero, collectionViewLayout: flowLayout)
-        diffableDataSource = GroupsDiffableDataSource(collectionView: self)
+        diffableDataSource = CameraViewControllerDiffableDataSource(collectionView: self)
         dataSource = diffableDataSource
         
         translatesAutoresizingMaskIntoConstraints = false
