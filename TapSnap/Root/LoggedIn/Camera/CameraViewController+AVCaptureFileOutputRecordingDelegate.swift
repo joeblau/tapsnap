@@ -52,6 +52,8 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                 print("Movie file finishing error: \(String(describing: error))")
                 cleanUp(url: outputFileURL)
             case .none:
+                guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
+
                 PHPhotoLibrary.requestAuthorization { status in
                     switch status {
                     case .authorized:

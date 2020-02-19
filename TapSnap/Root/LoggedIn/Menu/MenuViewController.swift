@@ -16,15 +16,18 @@ final class MenuViewController: UIViewController {
             MenuItem(systemName: "person.2", titleText: "My Groups"),
         ]),
         SectionItem(menuItems: [
-            MenuItem(systemName: "person.crop.square", titleText: "Profile"),
-            MenuItem(systemName: "questionmark", titleText: "Help"),
+            MenuItem(systemName: "person.crop.square", titleText: "Porfile Photo"),
+            MenuItem(systemName: "square.and.arrow.down", titleText: "Auto-Save", subtitleText: "Automatically save sent taps"),
             MenuItem(systemName: "gear", titleText: "Settings"),
         ]),
     ]
 
     lazy var tableView: UITableView = {
         let t = UITableView(frame: .zero, style: .insetGrouped)
-        t.register(MenuCellTableViewCell.self, forCellReuseIdentifier: MenuCellTableViewCell.id)
+        t.register(MenuCellTableViewCell.self,
+                   forCellReuseIdentifier: MenuCellTableViewCell.id)
+        t.register(AutoSaveTapsTableViewCell.self,
+                   forCellReuseIdentifier: AutoSaveTapsTableViewCell.id)
         t.translatesAutoresizingMaskIntoConstraints = false
         t.dataSource = self
         return t

@@ -55,6 +55,7 @@ enum RawCapture {
 }
 
 struct World {
+    let k = Constants()
     // DELTE
     let fakeContact: CNMutablePostalAddress = {
         let pa = CNMutablePostalAddress()

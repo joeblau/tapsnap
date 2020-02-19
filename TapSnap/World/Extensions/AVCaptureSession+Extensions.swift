@@ -106,8 +106,8 @@ extension AVCaptureSession {
     private func addAudioInput() {
         automaticallyConfiguresApplicationAudioSession = false
         do {
-            let audioDevice = AVCaptureDevice.default(for: .audio)
-            let audioDeviceInput = try AVCaptureDeviceInput(device: audioDevice!)
+            guard let audioDevice = AVCaptureDevice.default(for: .audio) else { return }
+            let audioDeviceInput = try AVCaptureDeviceInput(device: audioDevice)
 
             try AVAudioSession.sharedInstance().setCategory(.playAndRecord, options: [.mixWithOthers, .allowBluetooth, .defaultToSpeaker])
             try AVAudioSession.sharedInstance().setActive(true)

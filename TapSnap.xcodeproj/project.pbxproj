@@ -60,6 +60,8 @@
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
 		EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 390017BF26255640A332187B /* MenuCellTableViewCell.swift */; };
+		ED26943923FCE26100C178A1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED26943823FCE26100C178A1 /* Constants.swift */; };
+		ED76FFE423FCDC1F00E521DD /* AutoSaveTapsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED76FFE323FCDC1F00E521DD /* AutoSaveTapsTableViewCell.swift */; };
 		EDD73D3223FA55D5003382F7 /* CameraViewControllerDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3123FA55D5003382F7 /* CameraViewControllerDiffableDataSource.swift */; };
 		EDD73D3523FA5680003382F7 /* GroupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3423FA5680003382F7 /* GroupSection.swift */; };
 		EDD73D3723FA56A9003382F7 /* GroupValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD73D3623FA56A9003382F7 /* GroupValue.swift */; };
@@ -144,6 +146,8 @@
 		E15951311BF34C9BB0FE3C2F /* NowPlayingPreviewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingPreviewTableViewCell.swift; sourceTree = "<group>"; };
 		E67DD7438DFB355B5132D5E3 /* AVAssetTrack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAssetTrack+Extensions.swift"; sourceTree = "<group>"; };
 		E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
+		ED26943823FCE26100C178A1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		ED76FFE323FCDC1F00E521DD /* AutoSaveTapsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSaveTapsTableViewCell.swift; sourceTree = "<group>"; };
 		EDD73D3123FA55D5003382F7 /* CameraViewControllerDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewControllerDiffableDataSource.swift; sourceTree = "<group>"; };
 		EDD73D3423FA5680003382F7 /* GroupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSection.swift; sourceTree = "<group>"; };
 		EDD73D3623FA56A9003382F7 /* GroupValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupValue.swift; sourceTree = "<group>"; };
@@ -260,6 +264,7 @@
 				81343ECC5DE5C427BB2D9208 /* Extensions */,
 				152654B219B2E035B464B9CB /* Protocols */,
 				EDD73D3A23FAF063003382F7 /* EmptyDataView.swift */,
+				ED26943823FCE26100C178A1 /* Constants.swift */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -299,22 +304,14 @@
 			);
 			sourceTree = "<group>";
 		};
-		75F258D118EBD8EA18589D7D /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				390017BF26255640A332187B /* MenuCellTableViewCell.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
 		7C5978959DFB0C415BC9A390 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				ED76FFE223FCDBF900E521DD /* Cells */,
 				3059A4AF94DCA0B1236599D8 /* MenuViewController.swift */,
 				698527CF1BAF2A4AFBCED1FD /* MenuViewController+UITableViewDataSource.swift */,
 				FEED53FF1A6FE82D2CE20A0E /* Models */,
 				AC8E376C67070B908DA41A49 /* Saved */,
-				75F258D118EBD8EA18589D7D /* Views */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -416,6 +413,15 @@
 				6217B4B7FA2175C2D4D28CFF /* Views */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		ED76FFE223FCDBF900E521DD /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				390017BF26255640A332187B /* MenuCellTableViewCell.swift */,
+				ED76FFE323FCDC1F00E521DD /* AutoSaveTapsTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		EDD73D3323FA5676003382F7 /* Models */ = {
@@ -629,11 +635,13 @@
 				EDF4BFEC23FA0B1400B287F7 /* CloudKitManager+UICloudSharingControllerDelegate.swift in Sources */,
 				66125828B36DB8CA801593E3 /* EXIFData+Extensions.swift in Sources */,
 				C1839759E1E3E4E4F07F9D07 /* Formatter.swift in Sources */,
+				ED26943923FCE26100C178A1 /* Constants.swift in Sources */,
 				23CEA16D7F7985D61172B946 /* IndeterminateProgressView.swift in Sources */,
 				A58531E42B3285C125B4BC14 /* KeyboardAccessoryView.swift in Sources */,
 				AFA4B5B9C3DE95B8CCEE172D /* LoggedInViewController.swift in Sources */,
 				DD6A04D0AC022CB627DB36AE /* LoggedOutViewController.swift in Sources */,
 				8DCD4EBC5F1E0F9776A5A374 /* MapViewOverlay.swift in Sources */,
+				ED76FFE423FCDC1F00E521DD /* AutoSaveTapsTableViewCell.swift in Sources */,
 				EDD73D3223FA55D5003382F7 /* CameraViewControllerDiffableDataSource.swift in Sources */,
 				EBB499194ECD7AB83548A673 /* MenuCellTableViewCell.swift in Sources */,
 				C8D06DFC8502753F611D62C0 /* MenuModels.swift in Sources */,

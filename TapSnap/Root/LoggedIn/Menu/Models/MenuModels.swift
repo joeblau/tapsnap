@@ -10,4 +10,13 @@ struct SectionItem {
 struct MenuItem {
     let systemName: String
     let titleText: String
+    let subtitleText: String?
+    
+    init(systemName: String,
+         titleText: String,
+         subtitleText: String? = nil) {
+        self.systemName = systemName
+        self.titleText = titleText
+        self.subtitleText = subtitleText
+    }
 }

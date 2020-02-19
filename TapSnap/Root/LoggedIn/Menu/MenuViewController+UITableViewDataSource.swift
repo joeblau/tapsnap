@@ -16,10 +16,22 @@ extension MenuViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)
-        let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
-        cell.imageView?.image = UIImage(systemName: menuItem.systemName)
-        cell.textLabel?.text = menuItem.titleText
-        return cell
+        switch indexPath {
+        case IndexPath(row: 1, section: 2):
+            let cell = tableView.dequeueReusableCell(withIdentifier: AutoSaveTapsTableViewCell.id, for: indexPath)
+            let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
+            cell.imageView?.image = UIImage(systemName: menuItem.systemName)
+            cell.textLabel?.text = menuItem.titleText
+            cell.detailTextLabel?.text = menuItem.subtitleText
+            return cell
+            
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)
+            let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
+            cell.imageView?.image = UIImage(systemName: menuItem.systemName)
+            cell.textLabel?.text = menuItem.titleText
+            return cell
+        }
+
     }
 }
