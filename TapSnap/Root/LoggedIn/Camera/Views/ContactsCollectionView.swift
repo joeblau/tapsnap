@@ -15,19 +15,19 @@ class ContactsCollectionView: UICollectionView {
         flowLayout.minimumLineSpacing = hairline
         flowLayout.minimumInteritemSpacing = hairline
         flowLayout.itemSize = CGSize(width: width, height: height)
-        
+
         super.init(frame: .zero, collectionViewLayout: flowLayout)
         diffableDataSource = CameraViewControllerDiffableDataSource(collectionView: self)
         dataSource = diffableDataSource
-        
+
         translatesAutoresizingMaskIntoConstraints = false
         showsHorizontalScrollIndicator = false
         backgroundColor = .systemBackground
         isPagingEnabled = true
         register(ContactCollectionViewCell.self,
-                    forCellWithReuseIdentifier: ContactCollectionViewCell.id)
+                 forCellWithReuseIdentifier: ContactCollectionViewCell.id)
         register(ContactAddCollectionViewCell.self,
-                    forCellWithReuseIdentifier: ContactAddCollectionViewCell.id)
+                 forCellWithReuseIdentifier: ContactAddCollectionViewCell.id)
     }
 
     required init?(coder _: NSCoder) {

@@ -1,9 +1,5 @@
-//
-//  Constants.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/18/20.
-//
+// Constants.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import Foundation
 

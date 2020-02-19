@@ -60,7 +60,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         }
 
         guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
-        
+
         PHPhotoLibrary.requestAuthorization { status in
             if status == .authorized {
                 PHPhotoLibrary.shared().performChanges({

@@ -11,7 +11,7 @@ struct MenuItem {
     let systemName: String
     let titleText: String
     let subtitleText: String?
-    
+
     init(systemName: String,
          titleText: String,
          subtitleText: String? = nil) {

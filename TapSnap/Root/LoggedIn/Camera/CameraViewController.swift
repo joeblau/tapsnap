@@ -116,7 +116,7 @@ final class CameraViewController: UIViewController {
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
             UIBarButtonItem(customView: contactPageControl),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction))
+            UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction)),
         ]
 
         contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))

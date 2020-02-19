@@ -1,9 +1,5 @@
-//
-//  SearchContactsValue.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/17/20.
-//
+// SearchContactsValue.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 

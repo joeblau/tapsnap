@@ -31,7 +31,7 @@ class CloudKitManager: NSObject {
 
     func fetchAllZones() {
         CKContainer.default().sharedCloudDatabase.fetchAllRecordZones { zones, error in
-             switch error {
+            switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
             case .none: break
             }
@@ -90,9 +90,9 @@ class CloudKitManager: NSObject {
                 }
 
                 Current.cloudKitFriendsSubject.send(identities)
-        }
+            }
     }
-    
+
     // MARK: - Private
 
     private func setupZones() {

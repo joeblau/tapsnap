@@ -1,4 +1,4 @@
-// GroupsDiffableDataSource.swift
+// CameraViewControllerDiffableDataSource.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
@@ -6,7 +6,7 @@ import UIKit
 class CameraViewControllerDiffableDataSource: UICollectionViewDiffableDataSource<GroupSection, GroupValue> {
     init(collectionView: UICollectionView) {
         super.init(collectionView: collectionView) { (collectionView, indexPath, groupValue) -> UICollectionViewCell? in
-            
+
             switch indexPath.section {
             case 0:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContactCollectionViewCell.id,
@@ -17,7 +17,7 @@ class CameraViewControllerDiffableDataSource: UICollectionViewDiffableDataSource
                 return cell
             case 1:
                 return collectionView.dequeueReusableCell(withReuseIdentifier: ContactAddCollectionViewCell.id,
-                                                   for: indexPath) as? ContactAddCollectionViewCell
+                                                          for: indexPath) as? ContactAddCollectionViewCell
             default:
                 return nil
             }

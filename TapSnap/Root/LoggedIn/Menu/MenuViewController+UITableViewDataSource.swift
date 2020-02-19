@@ -24,7 +24,7 @@ extension MenuViewController: UITableViewDataSource {
             cell.textLabel?.text = menuItem.titleText
             cell.detailTextLabel?.text = menuItem.subtitleText
             return cell
-            
+
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)
             let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
@@ -32,6 +32,5 @@ extension MenuViewController: UITableViewDataSource {
             cell.textLabel?.text = menuItem.titleText
             return cell
         }
-
     }
 }

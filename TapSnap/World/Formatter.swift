@@ -22,7 +22,7 @@ struct Formatter {
         f.unitsStyle = .full
         return f
     }()
-    
+
     let personName: PersonNameComponentsFormatter = {
         PersonNameComponentsFormatter()
     }()
