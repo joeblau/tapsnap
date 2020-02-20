@@ -6,6 +6,9 @@ import UIKit
 final class MenuViewController: UIViewController {
     let menuSections: [SectionItem] = [
         SectionItem(menuItems: [
+            MenuItem(systemName: "person.crop.square", titleText: "Profile")
+        ]),
+        SectionItem(menuItems: [
             MenuItem(systemName: "clock", titleText: "Activity"),
             MenuItem(systemName: "calendar", titleText: "Sent Today"),
             MenuItem(systemName: "heart", titleText: "Saved Taps"),
@@ -16,7 +19,6 @@ final class MenuViewController: UIViewController {
             MenuItem(systemName: "person.2", titleText: "My Groups"),
         ]),
         SectionItem(menuItems: [
-            MenuItem(systemName: "person.crop.square", titleText: "Porfile Photo"),
             MenuItem(systemName: "square.and.arrow.down", titleText: "Auto-Save", subtitleText: "Automatically save sent taps"),
             MenuItem(systemName: "gear", titleText: "Settings"),
         ]),
@@ -28,7 +30,12 @@ final class MenuViewController: UIViewController {
                    forCellReuseIdentifier: MenuCellTableViewCell.id)
         t.register(AutoSaveTapsTableViewCell.self,
                    forCellReuseIdentifier: AutoSaveTapsTableViewCell.id)
+        t.register(AvatarNameTableViewCell.self,
+                   forCellReuseIdentifier: AvatarNameTableViewCell.id)
         t.translatesAutoresizingMaskIntoConstraints = false
+        t.rowHeight = UITableView.automaticDimension
+        t.estimatedRowHeight = 44.0
+        t.allowsSelection = false
         t.dataSource = self
         return t
     }()
@@ -50,7 +57,6 @@ final class MenuViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "Menu"
         navigationItem.leftBarButtonItem = closeButton
-
         configureViews()
     }
 
@@ -58,6 +64,12 @@ final class MenuViewController: UIViewController {
 
     @objc func closeMenuAction() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func updateAvatar() {
+        let imagePickerViewController = UIImagePickerController()
+        imagePickerViewController.delegate = self
+        present(imagePickerViewController, animated: true, completion: nil)
     }
 }
 
@@ -70,5 +82,14 @@ extension MenuViewController: ViewBootstrappable {
         tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    }
+}
+
+extension MenuViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.originalImage] as? UIImage,
+            let scaledImage = image.scale(to: 256.0) else { return }
+        
     }
 }
