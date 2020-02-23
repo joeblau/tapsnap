@@ -1,9 +1,5 @@
-//
-//  User.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/20/20.
-//
+// CloudKitKeys.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import Foundation
 

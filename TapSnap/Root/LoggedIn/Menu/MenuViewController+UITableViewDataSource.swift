@@ -10,7 +10,7 @@ extension MenuViewController: UITableViewDataSource {
 
     func tableView(_: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0..<menuSections.count: return menuSections[section].menuItems.count
+        case 0 ..< menuSections.count: return menuSections[section].menuItems.count
         default: return 0
         }
     }

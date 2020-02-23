@@ -6,7 +6,7 @@ import UIKit
 final class MenuViewController: UIViewController {
     let menuSections: [SectionItem] = [
         SectionItem(menuItems: [
-            MenuItem(systemName: "person.crop.square", titleText: "Profile")
+            MenuItem(systemName: "person.crop.square", titleText: "Profile"),
         ]),
         SectionItem(menuItems: [
             MenuItem(systemName: "clock", titleText: "Activity"),
@@ -65,7 +65,7 @@ final class MenuViewController: UIViewController {
     @objc func closeMenuAction() {
         dismiss(animated: true, completion: nil)
     }
-    
+
     @objc func updateAvatar() {
         let imagePickerViewController = UIImagePickerController()
         imagePickerViewController.delegate = self
@@ -86,10 +86,9 @@ extension MenuViewController: ViewBootstrappable {
 }
 
 extension MenuViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let image = info[.originalImage] as? UIImage,
             let scaledImage = image.scale(to: 256.0) else { return }
-        
     }
 }

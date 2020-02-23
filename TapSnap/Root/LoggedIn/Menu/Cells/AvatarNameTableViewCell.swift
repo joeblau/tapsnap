@@ -1,14 +1,9 @@
-//
-//  AvatarNameTableViewCell.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/19/20.
-//
+// AvatarNameTableViewCell.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 class AvatarNameTableViewCell: UITableViewCell {
-    
     lazy var avatarView: UIButton = {
         let v = UIButton()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -17,7 +12,7 @@ class AvatarNameTableViewCell: UITableViewCell {
         v.layer.cornerRadius = 32
         return v
     }()
-    
+
     private lazy var nameView: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -25,8 +20,8 @@ class AvatarNameTableViewCell: UITableViewCell {
         l.textColor = .label
         return l
     }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+
+    override init(style _: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         translatesAutoresizingMaskIntoConstraints = false
         guard let userRecord = Current.cloudKitUserSubject.value else { return }
@@ -38,7 +33,7 @@ class AvatarNameTableViewCell: UITableViewCell {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Resuse Identifier
 
     static let id = String(describing: AvatarNameTableViewCell.self)
@@ -47,13 +42,13 @@ class AvatarNameTableViewCell: UITableViewCell {
 extension AvatarNameTableViewCell: ViewBootstrappable {
     func configureViews() {
         contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80).isActive = true
-        
+
         contentView.addSubview(avatarView)
         avatarView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         avatarView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true
         avatarView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
         avatarView.widthAnchor.constraint(equalToConstant: 64).isActive = true
-        
+
         contentView.addSubview(nameView)
         nameView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8).isActive = true
         nameView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8).isActive = true

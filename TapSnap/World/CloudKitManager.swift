@@ -14,44 +14,42 @@ class CloudKitManager: NSObject {
         fetchAllZones()
     }
 
-
-    
     func fetchCurrentUser() {
-        CKContainer.default().fetchUserRecordID { (recordID, error) in
+        CKContainer.default().fetchUserRecordID { recordID, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
             case .none: break
             }
-            
+
             guard let recordID = recordID else { return }
             self.fetchUserRecord(with: recordID)
         }
     }
-    
+
     private func fetchUserRecord(with recordID: CKRecord.ID) {
-        CKContainer.default().privateCloudDatabase.fetch(withRecordID: recordID) { (record, error) in
+        CKContainer.default().privateCloudDatabase.fetch(withRecordID: recordID) { record, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
             case .none: break
             }
-            
+
             guard let record = record,
                 let recordData = try? CKRecord.archive(record: record) else {
-                    self.discoverUserIdentity(with: recordID)
-                    return
+                self.discoverUserIdentity(with: recordID)
+                return
             }
             UserDefaults.standard.set(recordData, forKey: Current.k.userAccount)
             Current.cloudKitUserSubject.send(record)
         }
     }
-    
+
     private func discoverUserIdentity(with recordId: CKRecord.ID) {
         CKContainer.default().discoverUserIdentity(withUserRecordID: recordId, completionHandler: { userID, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: break
             }
-    
+
             guard let userID = userID else {
                 os_log("Uninitialized user ID", log: .cloudKit, type: .error)
                 return
@@ -59,31 +57,31 @@ class CloudKitManager: NSObject {
             self.createNewUser(from: userID)
         })
     }
-    
+
     func createNewUser(from identity: CKUserIdentity) {
         guard let identityComponents = identity.nameComponents else { return }
-        
+
         let name = Current.formatter.personName.string(from: identityComponents)
-    
+
         let userRecord = CKRecord(recordType: "User")
         userRecord[UserKey.name] = name
-        
+
         CKContainer.default()
             .privateCloudDatabase
-            .save(userRecord) { (record, error) in
+            .save(userRecord) { _, error in
                 switch error {
                 case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
                 case .none: break
                 }
-                
+
                 guard let recordData = try? CKRecord.archive(record: userRecord) else {
                     return
                 }
                 UserDefaults.standard.set(recordData, forKey: Current.k.userAccount)
                 Current.cloudKitUserSubject.send(userRecord)
-        }
+            }
     }
-    
+
     func createNewGroup(sender: UIViewController) {
         let sharingController = UICloudSharingController { [weak self] (_, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
             guard let self = self else { return }
