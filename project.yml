@@ -25,6 +25,7 @@ targets:
       - Tapsnap
     settings:
       TARGETED_DEVICE_FAMILY: 1
+      CODE_SIGN_ENTITLEMENTS: Tapsnap/Tapsnap.entitlements
     dependencies:
       - package: SensorVisualizerKit
   TapsnapTests:

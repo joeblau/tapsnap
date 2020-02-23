@@ -14,6 +14,7 @@ class LoggedOutViewController: UIViewController {
     lazy var logoView: UIImageView = {
         let v = UIImageView(image: UIImage(systemName: "video.fill"))
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentMode = .scaleAspectFit
         v.tintColor = .label
         return v
     }()
