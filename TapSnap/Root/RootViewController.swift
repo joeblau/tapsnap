@@ -4,68 +4,88 @@
 import CloudKit
 import os.log
 import UIKit
+import Combine
 
 class RootViewController: UIViewController {
+    private var cancellables = Set<AnyCancellable>()
+    
     // MARK: - Lifecycle
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
-            switch error {
-            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-            case .none: break
-            }
-
-            switch status {
-            case .granted: self.cloudKitAccessGranted()
-            case .couldNotComplete, .denied, .initialState: self.cloudKitAccessNotGranted()
-            @unknown default: os_log("Unknown applicatoin permissions", log: .cloudKit, type: .error)
+        switch UserDefaults.standard.data(forKey: Current.k.userAccount) {
+        case .some(_):
+            login()
+        case .none:
+            CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
+                switch error {
+                case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+                case .none: break
+                }
+                
+                switch status {
+                case .granted: Current.cloudKitManager.fetchCurrentUser()
+                case .couldNotComplete, .denied, .initialState: self.logout()
+                @unknown default: os_log("Unknown applicatoin permissions", log: .cloudKit, type: .error)
+                }
             }
         }
     }
-
+    
     // MARK: - Private
-
-    private func cloudKitAccessNotGranted() {
+    
+    private func login() {
         DispatchQueue.main.async {
-            let loggedOut = LoggedOutViewController()
-            loggedOut.modalPresentationStyle = .fullScreen
-            self.present(loggedOut, animated: true, completion: nil)
+            switch self.presentedViewController {
+            case let .some(presented):
+                switch presented {
+                case is LoggedInViewController: break
+                default: presented.dismiss(animated: true,
+                                           completion: { self.showLogin() })
+                }
+            case .none:
+                self.showLogin()
+            }
         }
     }
-
-    private func cloudKitAccessGranted() {
-        CKContainer.default().fetchUserRecordID { recordID, error in
-            switch error {
-            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-            case .none: break
+    
+    private func logout() {
+        DispatchQueue.main.async {
+            switch self.presentedViewController {
+            case let .some(presented):
+                switch presented {
+                case is LoggedOutViewController: break
+                default: presented.dismiss(animated: true,
+                                           completion: { self.showLogout() })
+                }
+            case .none:
+                self.showLogout()
             }
-
-            guard let recordID = recordID else {
-                os_log("Unknown record ID", log: .cloudKit, type: .error)
-                return
-            }
-            self.discoverUserIdentity(with: recordID)
         }
     }
+    
+    private func showLogin() {
+        let loggedIn = LoggedInViewController()
+        loggedIn.modalPresentationStyle = .fullScreen
+        self.present(loggedIn, animated: true, completion: nil)
+    }
+    
+    private func showLogout() {
+        let loggedOut = LoggedOutViewController()
+        loggedOut.modalPresentationStyle = .fullScreen
+        self.present(loggedOut, animated: true, completion: nil)
+    }
+}
 
-    private func discoverUserIdentity(with recordId: CKRecord.ID) {
-        CKContainer.default().discoverUserIdentity(withUserRecordID: recordId, completionHandler: { userID, error in
-            switch error {
-            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-            case .none: break
-            }
+// MARK: - ViewBootstrappable
 
-            guard let userID = userID else {
-                os_log("Uninitialized user ID", log: .cloudKit, type: .error)
-                return
+extension RootViewController: ViewBootstrappable {
+    func configureStreams() {
+        Current.cloudKitUserSubject.sink { record in
+            switch record {
+            case .some(_): self.login()
+            case .none: self.logout()
             }
-
-            DispatchQueue.main.async {
-                let loggedIn = LoggedInViewController()
-                loggedIn.modalPresentationStyle = .fullScreen
-                self.present(loggedIn, animated: true, completion: nil)
-            }
-        })
+        }.store(in: &cancellables)
     }
 }

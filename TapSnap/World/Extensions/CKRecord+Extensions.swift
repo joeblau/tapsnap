@@ -18,7 +18,11 @@ extension CKRecord {
         }
     }
     
+    static func archive(record: CKRecord) throws -> Data {
+        return try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
+    }
     
-    
-    
+    static func unarchive(data: Data) throws -> CKRecord? {
+        return try NSKeyedUnarchiver.unarchivedObject(ofClass: CKRecord.self, from: data)
+    }
 }
