@@ -29,10 +29,9 @@ class AvatarNameTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         translatesAutoresizingMaskIntoConstraints = false
-        guard let nameComponents = Current.cloudKitUserSubject
-            .value?
-            .nameComponents else { return }
-        nameView.text = Current.formatter.personName.string(from: nameComponents)
+        guard let userRecord = Current.cloudKitUserSubject.value else { return }
+        nameView.text = userRecord[UserKey.name] as? String
+        avatarView.imageView?.image = userRecord[UserKey.avatar] as? UIImage
         bootstrap()
     }
 

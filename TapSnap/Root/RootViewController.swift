@@ -61,7 +61,6 @@ class RootViewController: UIViewController {
                 return
             }
 
-            Current.cloudKitUserSubject.send(userID)
             DispatchQueue.main.async {
                 let loggedIn = LoggedInViewController()
                 loggedIn.modalPresentationStyle = .fullScreen

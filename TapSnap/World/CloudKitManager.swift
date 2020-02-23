@@ -14,6 +14,49 @@ class CloudKitManager: NSObject {
         fetchAllZones()
     }
 
+    func createNewUser(from identity: CKUserIdentity) {
+        guard let identityComponents = identity.nameComponents else { return }
+        
+        let name = Current.formatter.personName.string(from: identityComponents)
+    
+        let userRecord = CKRecord(recordType: "User")
+        userRecord[UserKey.name] = name
+        
+        CKContainer.default()
+            .privateCloudDatabase
+            .save(userRecord) { (record, error) in
+                switch error {
+                case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+                case .none: break
+                }
+        }
+    }
+    
+    func fetchCurrentUser() {
+        CKContainer.default().fetchUserRecordID { (recordID, error) in
+            switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+            case .none: break
+            }
+            
+            guard let recordID = recordID else { return }
+            self.fetchUserRecord(with: recordID)
+            
+        }
+    }
+    
+    private func fetchUserRecord(with recordID: CKRecord.ID) {
+        CKContainer.default().privateCloudDatabase.fetch(withRecordID: recordID) { (record, error) in
+            switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+            case .none: break
+            }
+            
+            guard let record = record else { return }
+            Current.cloudKitUserSubject.send(record)
+        }
+    }
+    
     func createNewGroup(sender: UIViewController) {
         let sharingController = UICloudSharingController { [weak self] (_, completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) in
             guard let self = self else { return }

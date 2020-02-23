@@ -123,7 +123,7 @@ struct World {
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
 
     // CloudKit
-    var cloudKitUserSubject = CurrentValueSubject<CKUserIdentity?, Never>(nil)
+    var cloudKitUserSubject = CurrentValueSubject<CKRecord?, Never>(nil)
     var cloudKitGroupsSubject = CurrentValueSubject<Set<CKRecord>?, Never>(nil)
     var cloudKitFriendsSubject = CurrentValueSubject<[CKUserIdentity]?, Never>(nil)
 }
