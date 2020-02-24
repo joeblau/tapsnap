@@ -21,3 +21,9 @@ extension CKRecord {
         try NSKeyedUnarchiver.unarchivedObject(ofClass: CKRecord.self, from: data)
     }
 }
+
+extension CKRecord.RecordType {
+    static var message = "Message"
+    static var group = "Group"
+    static var user = "User"
+}

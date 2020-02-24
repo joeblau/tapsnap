@@ -49,7 +49,7 @@ enum MediaAction {
     case captureVideoEnd
 }
 
-enum RawCapture {
+enum MediaCapture {
     case photo(URL)
     case movie(URL)
 }
@@ -125,6 +125,7 @@ struct World {
     var cloudKitUserSubject = CurrentValueSubject<CKRecord?, Never>(nil)
     var cloudKitGroupsSubject = CurrentValueSubject<Set<CKRecord>?, Never>(nil)
     var cloudKitFriendsSubject = CurrentValueSubject<[CKUserIdentity]?, Never>(nil)
+    var cloudKitSelectedGroupSubject = CurrentValueSubject<CKRecord?, Never>(nil)
 }
 
 var Current = World()

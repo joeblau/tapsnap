@@ -12,7 +12,7 @@ class CloudKitManager: NSObject {
         super.init()
         setupZones()
         fetchAllZones()
-        createSubscription()
+//        createSubscription()
     }
 
     func fetchCurrentUser() {
@@ -32,8 +32,8 @@ class CloudKitManager: NSObject {
 
         let name = Current.formatter.personName.string(from: identityComponents)
 
-        let userRecord = CKRecord(recordType: "User")
-        userRecord[UserKey.name] = name
+        let userRecord = CKRecord(recordType: .user)
+        userRecord[UserKey.name.rawValue] = name
 
         CKContainer.default()
             .privateCloudDatabase
@@ -49,6 +49,34 @@ class CloudKitManager: NSObject {
                 UserDefaults.standard.set(recordData, forKey: Current.k.userAccount)
                 Current.cloudKitUserSubject.send(userRecord)
             }
+    }
+    
+    func createNewMessage(for group: CKRecord, with media: MediaCapture, completion: @escaping (_ saved: Bool)->()) {
+        let zoneID = CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
+        let recordID = CKRecord.ID(recordName: "New Message", zoneID: zoneID)
+        let messageRecord = CKRecord(recordType: .message, recordID: recordID)
+        messageRecord.setParent(group)
+        
+        switch media {
+        case let .movie(url):
+            messageRecord[MessageKey.movie.rawValue] = CKAsset(fileURL: url)
+        case let .photo(url):
+            messageRecord[MessageKey.photo.rawValue] = CKAsset(fileURL: url)
+        }
+        
+        CKContainer.default()
+            .privateCloudDatabase
+            .save(messageRecord) { (record, error) in
+                switch error {
+                case let .some(error):
+                    os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+                    completion(false)
+                    return
+                case .none: break
+                }
+                
+                completion(true)
+        }
     }
 
     func createNewGroup(sender: UIViewController) {
@@ -66,11 +94,9 @@ class CloudKitManager: NSObject {
         sender.present(sharingController, animated: true) {}
     }
 
-
-
     func fetchMyGroups(in zone: CKRecordZone) {
         let predicate = NSPredicate(value: true)
-        let query = CKQuery(recordType: "Group", predicate: predicate)
+        let query = CKQuery(recordType: .group, predicate: predicate)
 
         CKContainer.default()
             .privateCloudDatabase
@@ -102,7 +128,7 @@ class CloudKitManager: NSObject {
     // MARK: - Private
     
     private func createSubscription() {
-        let subscription = CKQuerySubscription(recordType: "Message",
+        let subscription = CKQuerySubscription(recordType: .message,
                                                predicate: NSPredicate(value: true),
                                                options: [.firesOnRecordCreation])
         
@@ -142,7 +168,7 @@ class CloudKitManager: NSObject {
     
     private func fetchSharedGroups(in zone: CKRecordZone) {
         let predicate = NSPredicate(value: true)
-        let query = CKQuery(recordType: "Group", predicate: predicate)
+        let query = CKQuery(recordType: .group, predicate: predicate)
 
         CKContainer.default()
             .sharedCloudDatabase
@@ -203,10 +229,10 @@ class CloudKitManager: NSObject {
     private func createNewGroup(completion: @escaping (CKShare?, CKContainer?, Error?) -> Void) {
         let zoneID = CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
         let recordID = CKRecord.ID(recordName: "New Group", zoneID: zoneID)
-        let groupRecord = CKRecord(recordType: "Group", recordID: recordID)
+        let groupRecord = CKRecord(recordType: .group, recordID: recordID)
 
-        groupRecord["name"] = "" as CKRecordValue
-        groupRecord["users"] = 1 as CKRecordValue
+        groupRecord[GroupKey.name.rawValue] = "" as CKRecordValue
+        groupRecord[GroupKey.userCount.rawValue] = 1 as CKRecordValue
 
         let groupShareRecord = CKShare(rootRecord: groupRecord)
         let recordsToSave = [groupRecord, groupShareRecord]

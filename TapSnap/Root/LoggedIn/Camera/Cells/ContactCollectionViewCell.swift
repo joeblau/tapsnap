@@ -2,6 +2,7 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
+import CloudKit
 
 final class ContactCollectionViewCell: UICollectionViewCell {
     private lazy var contactImageView: UIImageView = {
@@ -25,6 +26,8 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         l.lineBreakMode = .byTruncatingTail
         return l
     }()
+    
+    private var record: CKRecord?
 
 //    let zoom = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
 
@@ -43,6 +46,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
 
     func configure(image: UIImage,
                    title: String,
+                   record: CKRecord?,
                    groupSize: Int = 0) {
         contactImageView.image = image
 
@@ -58,6 +62,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         }
         attributedString.append(NSAttributedString(string: "\(title)"))
         contactTitleLabel.attributedText = attributedString
+        self.record = record
     }
 
     override func prepareForReuse() {
@@ -74,6 +79,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
     @objc func handleVideoAction(_ recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .began:
+            Current.cloudKitSelectedGroupSubject.send(self.record)
             Current.mediaActionSubject.send(.captureVideoStart)
         case .ended:
             guard !(Current.mediaActionSubject.value == .captureVideoEnd) else { return }
@@ -84,7 +90,9 @@ final class ContactCollectionViewCell: UICollectionViewCell {
 
     @objc func handlePhotoAction(_ recognizer: UITapGestureRecognizer) {
         switch recognizer.state {
-        case .ended: Current.mediaActionSubject.send(.capturePhoto)
+        case .ended:
+            Current.cloudKitSelectedGroupSubject.send(self.record)
+            Current.mediaActionSubject.send(.capturePhoto)
         default: break
         }
     }

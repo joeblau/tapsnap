@@ -13,6 +13,7 @@ final class CameraViewController: UIViewController {
 
     let tapNotificationCount = 0
     let itemsInSection = [0]
+    var currentGroup: CKRecord? = nil
 
     // Photo Video
     private let session: AVCaptureSession = { AVCaptureSession() }()
@@ -282,7 +283,7 @@ extension CameraViewController: ViewBootstrappable {
 
             guard let items = groups?.compactMap({ record -> GroupValue? in
                 guard let name = record["name"] as? String else { return nil }
-                return GroupValue(name: name)
+                return GroupValue(name: name, record: record)
             }) else {
                 return
             }
@@ -290,9 +291,13 @@ extension CameraViewController: ViewBootstrappable {
             var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
             snapshot.appendSections([.contacts, .addContact])
             snapshot.appendItems(items, toSection: .contacts)
-            snapshot.appendItems([GroupValue(name: "add")], toSection: .addContact)
+            snapshot.appendItems([GroupValue(name: "add", record: nil)], toSection: .addContact)
             self.contactsCollectionView.diffableDataSource?.apply(snapshot)
 
+        }.store(in: &cancellables)
+        
+        Current.cloudKitSelectedGroupSubject.sink { currentGroup in
+            self.currentGroup = currentGroup
         }.store(in: &cancellables)
     }
 

@@ -13,6 +13,7 @@ class CameraViewControllerDiffableDataSource: UICollectionViewDiffableDataSource
                                                               for: indexPath) as? ContactCollectionViewCell
                 cell?.configure(image: groupValue.image,
                                 title: groupValue.name,
+                                record: groupValue.record,
                                 groupSize: groupValue.participantCount)
                 return cell
             case 1:

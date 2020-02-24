@@ -1,7 +1,7 @@
 // CloudKitKeys.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import Foundation
+import UIKit
 
 enum UserKey: String {
     case name
@@ -10,5 +10,11 @@ enum UserKey: String {
 
 enum GroupKey: String {
     case name
-    case avatars
+    case avatar
+    case userCount
+}
+
+enum MessageKey: String {
+    case photo
+    case movie
 }

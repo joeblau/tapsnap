@@ -2,12 +2,14 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
+import CloudKit
 
 struct GroupValue: Hashable {
     let image: UIImage = UIImage(systemName: "person.crop.circle.fill.badge.exclam",
                                  withConfiguration: UIImage.SymbolConfiguration(scale: .large))!
     let name: String
     let participantCount: Int = 0
+    let record: CKRecord?
     let identifier = UUID()
 
     func hash(into hasher: inout Hasher) {
