@@ -12,6 +12,7 @@ class CloudKitManager: NSObject {
         super.init()
         setupZones()
         fetchAllZones()
+        createSubscription()
     }
 
     func fetchCurrentUser() {
@@ -24,38 +25,6 @@ class CloudKitManager: NSObject {
             guard let recordID = recordID else { return }
             self.fetchUserRecord(with: recordID)
         }
-    }
-
-    private func fetchUserRecord(with recordID: CKRecord.ID) {
-        CKContainer.default().privateCloudDatabase.fetch(withRecordID: recordID) { record, error in
-            switch error {
-            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
-            case .none: break
-            }
-
-            guard let record = record,
-                let recordData = try? CKRecord.archive(record: record) else {
-                self.discoverUserIdentity(with: recordID)
-                return
-            }
-            UserDefaults.standard.set(recordData, forKey: Current.k.userAccount)
-            Current.cloudKitUserSubject.send(record)
-        }
-    }
-
-    private func discoverUserIdentity(with recordId: CKRecord.ID) {
-        CKContainer.default().discoverUserIdentity(withUserRecordID: recordId, completionHandler: { userID, error in
-            switch error {
-            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-            case .none: break
-            }
-
-            guard let userID = userID else {
-                os_log("Uninitialized user ID", log: .cloudKit, type: .error)
-                return
-            }
-            self.createNewUser(from: userID)
-        })
     }
 
     func createNewUser(from identity: CKUserIdentity) {
@@ -97,19 +66,7 @@ class CloudKitManager: NSObject {
         sender.present(sharingController, animated: true) {}
     }
 
-    func fetchAllZones() {
-        CKContainer.default().sharedCloudDatabase.fetchAllRecordZones { zones, error in
-            switch error {
-            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
-            case .none: break
-            }
 
-            self.fetchMyGroups(in: self.sharedMessageZone)
-
-            guard let zone = zones?.first else { return }
-            self.fetchSharedGroups(in: zone)
-        }
-    }
 
     func fetchMyGroups(in zone: CKRecordZone) {
         let predicate = NSPredicate(value: true)
@@ -117,25 +74,6 @@ class CloudKitManager: NSObject {
 
         CKContainer.default()
             .privateCloudDatabase
-            .perform(query, inZoneWith: zone.zoneID) { groups, error in
-                switch error {
-                case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
-                case .none: break
-                }
-
-                guard let newGroups = groups else { return }
-                let currentGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
-                let allGroups = currentGroups.union(newGroups)
-                Current.cloudKitGroupsSubject.send(allGroups)
-            }
-    }
-
-    func fetchSharedGroups(in zone: CKRecordZone) {
-        let predicate = NSPredicate(value: true)
-        let query = CKQuery(recordType: "Group", predicate: predicate)
-
-        CKContainer.default()
-            .sharedCloudDatabase
             .perform(query, inZoneWith: zone.zoneID) { groups, error in
                 switch error {
                 case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
@@ -160,13 +98,99 @@ class CloudKitManager: NSObject {
                 Current.cloudKitFriendsSubject.send(identities)
             }
     }
-    
-    func postMessageToGroup() {
-        CKContainer.default().sharedCloudDatabase
-    }
 
     // MARK: - Private
+    
+    private func createSubscription() {
+        let subscription = CKQuerySubscription(recordType: "Message",
+                                               predicate: NSPredicate(value: true),
+                                               options: [.firesOnRecordCreation])
+        
+        let messageInfo = CKSubscription.NotificationInfo()
+        messageInfo.alertLocalizationKey = "message_register_alerted"
+        messageInfo.alertLocalizationArgs = ["title"]
+        messageInfo.soundName = "default"
+        messageInfo.desiredKeys = ["title"]
+        
+        subscription.notificationInfo = messageInfo
+        
+        CKContainer.default().sharedCloudDatabase.save(subscription) { (subscription, error) in
+            switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+            case .none: break
+            }
+            
+            guard let subscriptionID = subscription?.subscriptionID else { return }
+            UserDefaults.standard.setValue(subscriptionID,
+                                           forKey: Current.k.messageSubscriptionID)
+        }
+    }
+    
+    private func fetchAllZones() {
+        CKContainer.default().sharedCloudDatabase.fetchAllRecordZones { zones, error in
+            switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+            case .none: break
+            }
 
+            self.fetchMyGroups(in: self.sharedMessageZone)
+
+            guard let zone = zones?.first else { return }
+            self.fetchSharedGroups(in: zone)
+        }
+    }
+    
+    private func fetchSharedGroups(in zone: CKRecordZone) {
+        let predicate = NSPredicate(value: true)
+        let query = CKQuery(recordType: "Group", predicate: predicate)
+
+        CKContainer.default()
+            .sharedCloudDatabase
+            .perform(query, inZoneWith: zone.zoneID) { groups, error in
+                switch error {
+                case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+                case .none: break
+                }
+
+                guard let newGroups = groups else { return }
+                let currentGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
+                let allGroups = currentGroups.union(newGroups)
+                Current.cloudKitGroupsSubject.send(allGroups)
+            }
+    }
+    
+    private func fetchUserRecord(with recordID: CKRecord.ID) {
+        CKContainer.default().privateCloudDatabase.fetch(withRecordID: recordID) { record, error in
+            switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription); return
+            case .none: break
+            }
+
+            guard let record = record,
+                let recordData = try? CKRecord.archive(record: record) else {
+                self.discoverUserIdentity(with: recordID)
+                return
+            }
+            UserDefaults.standard.set(recordData, forKey: Current.k.userAccount)
+            Current.cloudKitUserSubject.send(record)
+        }
+    }
+
+    private func discoverUserIdentity(with recordId: CKRecord.ID) {
+        CKContainer.default().discoverUserIdentity(withUserRecordID: recordId, completionHandler: { userID, error in
+            switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+            case .none: break
+            }
+
+            guard let userID = userID else {
+                os_log("Uninitialized user ID", log: .cloudKit, type: .error)
+                return
+            }
+            self.createNewUser(from: userID)
+        })
+    }
+    
     private func setupZones() {
         CKContainer.default().privateCloudDatabase.save(sharedMessageZone) { _, error in
             switch error {
