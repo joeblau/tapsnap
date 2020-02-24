@@ -10,4 +10,5 @@ extension OSLog {
     static let cloudKit = OSLog(subsystem: subsystem, category: "􀌌 CloudKit")
     static let avFoundation = OSLog(subsystem: subsystem, category: "􀍊 AVFoundation")
     static let coreLocation = OSLog(subsystem: subsystem, category: "􀋒 CoreLocation")
+    static let userNotification = OSLog(subsystem: subsystem, category: "􀑐 UserNotification")
 }

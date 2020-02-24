@@ -160,6 +160,10 @@ class CloudKitManager: NSObject {
                 Current.cloudKitFriendsSubject.send(identities)
             }
     }
+    
+    func postMessageToGroup() {
+        CKContainer.default().sharedCloudDatabase
+    }
 
     // MARK: - Private
 
