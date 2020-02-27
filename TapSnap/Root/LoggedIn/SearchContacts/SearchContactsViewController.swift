@@ -3,6 +3,7 @@
 
 import Combine
 import UIKit
+import CloudKit
 
 final class SearchContactsViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
@@ -36,7 +37,7 @@ final class SearchContactsViewController: UIViewController {
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = true
         bootstrap()
-        Current.cloudKitManager.findAllFriendsWithApp()
+        CKContainer.default().fetchAllFriendsWithApp()
     }
 
     private var isEmptyVisible: Bool = false {

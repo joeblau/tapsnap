@@ -4,6 +4,7 @@
 import AVFoundation
 import Photos
 import UIKit
+import CloudKit
 
 private let kMediaContentTimeValue: Int64 = 1
 private let kMediaContentTimeScale: Int32 = 30
@@ -24,31 +25,28 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                 switch result {
                 case let .success(watermarURL):
                     guard let currentGroup = self.currentGroup else { return }
-                    Current.cloudKitManager
-                        .createNewMessage(for: currentGroup,
-                                          with: MediaCapture.movie(watermarURL),
-                                          completion: { _ in
-                                            
-                                            guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
-                                            PHPhotoLibrary.requestAuthorization { status in
-                                                switch status {
-                                                case .authorized:
-                                                    PHPhotoLibrary.shared().performChanges({
-                                                        let options = PHAssetResourceCreationOptions()
-                                                        options.shouldMoveFile = true
-                                                        let creationRequest = PHAssetCreationRequest.forAsset()
-                                                        creationRequest.addResource(with: .video, fileURL: watermarURL, options: options)
-                                                    }, completionHandler: { success, error in
-                                                        if !success {
-                                                            print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
-                                                            self.cleanUp(url: watermarURL)
-                                                        }
-                                                    })
-                                                default:
-                                                    self.cleanUp(url: watermarURL)
-                                                }
-                                            }
-                        })
+                    CKContainer.default()
+                        .createNewMessage(for: currentGroup, with: .movie(watermarURL)) { _ in
+                            guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
+                            PHPhotoLibrary.requestAuthorization { status in
+                                switch status {
+                                case .authorized:
+                                    PHPhotoLibrary.shared().performChanges({
+                                        let options = PHAssetResourceCreationOptions()
+                                        options.shouldMoveFile = true
+                                        let creationRequest = PHAssetCreationRequest.forAsset()
+                                        creationRequest.addResource(with: .video, fileURL: watermarURL, options: options)
+                                    }, completionHandler: { success, error in
+                                        if !success {
+                                            print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
+                                            self.cleanUp(url: watermarURL)
+                                        }
+                                    })
+                                default:
+                                    self.cleanUp(url: watermarURL)
+                                }
+                            }
+                    }
                     
                 case let .failure(error):
                     print(error.localizedDescription)
@@ -61,33 +59,29 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                 cleanUp(url: outputFileURL)
             case .none:
                 guard let currentGroup = self.currentGroup else { return }
-                Current.cloudKitManager
-                    .createNewMessage(for: currentGroup,
-                                      with: MediaCapture.movie(outputFileURL),
-                                      completion: { _ in
-                                        guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
-                                        
-                                        PHPhotoLibrary.requestAuthorization { status in
-                                            switch status {
-                                            case .authorized:
-                                                PHPhotoLibrary.shared().performChanges({
-                                                    let options = PHAssetResourceCreationOptions()
-                                                    options.shouldMoveFile = true
-                                                    let creationRequest = PHAssetCreationRequest.forAsset()
-                                                    creationRequest.addResource(with: .video, fileURL: outputFileURL, options: options)
-                                                }, completionHandler: { success, error in
-                                                    if !success {
-                                                        print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
-                                                        self.cleanUp(url: outputFileURL)
-                                                    }
-                                                })
-                                            default:
-                                                self.cleanUp(url: outputFileURL)
-                                            }
-                                        }
-                    })
-                
-                
+                CKContainer.default()
+                    .createNewMessage(for: currentGroup, with: .movie(outputFileURL)) { _ in
+                        guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
+                        
+                        PHPhotoLibrary.requestAuthorization { status in
+                            switch status {
+                            case .authorized:
+                                PHPhotoLibrary.shared().performChanges({
+                                    let options = PHAssetResourceCreationOptions()
+                                    options.shouldMoveFile = true
+                                    let creationRequest = PHAssetCreationRequest.forAsset()
+                                    creationRequest.addResource(with: .video, fileURL: outputFileURL, options: options)
+                                }, completionHandler: { success, error in
+                                    if !success {
+                                        print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
+                                        self.cleanUp(url: outputFileURL)
+                                    }
+                                })
+                            default:
+                                self.cleanUp(url: outputFileURL)
+                            }
+                        }
+                }
             }
         }
     }

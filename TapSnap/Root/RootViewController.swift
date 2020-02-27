@@ -24,7 +24,7 @@ class RootViewController: UIViewController {
                 }
 
                 switch status {
-                case .granted: Current.cloudKitManager.fetchCurrentUser()
+                case .granted: CKContainer.default().currentUser()
                 case .couldNotComplete, .denied, .initialState: self.logout()
                 @unknown default: os_log("Unknown applicatoin permissions", log: .cloudKit, type: .error)
                 }

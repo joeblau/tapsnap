@@ -5,12 +5,18 @@ import CloudKit
 
 extension CKRecord {
     subscript(key: UserKey) -> Any? {
-        get {
-            self[key.rawValue]
-        }
-        set {
-            self[key.rawValue] = newValue as? CKRecordValue
-        }
+        get { self[key.rawValue] }
+        set { self[key.rawValue] = newValue as? CKRecordValue }
+    }
+    
+    subscript(key: GroupKey) -> Any? {
+        get { self[key.rawValue] }
+        set { self[key.rawValue] = newValue as? CKRecordValue }
+    }
+    
+    subscript(key: MessageKey) -> Any? {
+        get { self[key.rawValue] }
+        set { self[key.rawValue] = newValue as? CKRecordValue }
     }
 
     static func archive(record: CKRecord) throws -> Data {

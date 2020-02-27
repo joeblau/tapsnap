@@ -90,5 +90,6 @@ extension MenuViewController: UIImagePickerControllerDelegate & UINavigationCont
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let image = info[.originalImage] as? UIImage,
             let scaledImage = image.scale(to: 256.0) else { return }
+        
     }
 }

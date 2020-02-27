@@ -67,7 +67,6 @@ struct World {
         return pa
     }()
 
-    var cloudKitManager = CloudKitManager()
     // Sensors
     var locationManager: CLLocationManager = {
         let m = CLLocationManager()

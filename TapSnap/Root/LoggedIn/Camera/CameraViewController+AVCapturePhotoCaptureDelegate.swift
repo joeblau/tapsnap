@@ -4,6 +4,7 @@
 import Photos
 import UIKit
 import os.log
+import CloudKit
 
 extension CameraViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
@@ -69,36 +70,35 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
             os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
             return
         }
-    
+        
         guard let currentGroup = self.currentGroup else {
             self.cleanUp(url: outputFileURL)
             return
         }
-        Current.cloudKitManager
-            .createNewMessage(for: currentGroup,
-                              with: MediaCapture.photo(outputFileURL),
-                              completion: { _ in
-                                guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
-                                
-                                PHPhotoLibrary.requestAuthorization { status in
-                                    switch status {
-                                    case .authorized:
-                                        PHPhotoLibrary.shared().performChanges({
-                                              let options = PHAssetResourceCreationOptions()
-                                              let creationRequest = PHAssetCreationRequest.forAsset()
-                                              options.uniformTypeIdentifier = self.photoSettings.processedFileType.map { $0.rawValue }
-                                              creationRequest.addResource(with: .photo, data: photoData, options: options)
-                                              
-                                          }, completionHandler: { _, error in
-                                              if let error = error {
-                                                  print("Error occurred while saving photo to photo library: \(error)")
-                                                  self.cleanUp(url: outputFileURL)
-                                              }
-                                          })
-                                    default:
-                                        self.cleanUp(url: outputFileURL)
-                                    }
-                                }
-            })
+        CKContainer.default()
+            .createNewMessage(for: currentGroup, with: .photo(outputFileURL)) { _ in
+                guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
+                
+                PHPhotoLibrary.requestAuthorization { status in
+                    switch status {
+                    case .authorized:
+                        PHPhotoLibrary.shared().performChanges({
+                            let options = PHAssetResourceCreationOptions()
+                            let creationRequest = PHAssetCreationRequest.forAsset()
+                            options.uniformTypeIdentifier = self.photoSettings.processedFileType.map { $0.rawValue }
+                            creationRequest.addResource(with: .photo, data: photoData, options: options)
+                            
+                        }, completionHandler: { _, error in
+                            if let error = error {
+                                print("Error occurred while saving photo to photo library: \(error)")
+                                self.cleanUp(url: outputFileURL)
+                            }
+                        })
+                    default:
+                        self.cleanUp(url: outputFileURL)
+                    }
+                }
+        }
+        
     }
 }

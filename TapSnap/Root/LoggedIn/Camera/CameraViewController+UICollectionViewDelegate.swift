@@ -11,7 +11,10 @@ extension CameraViewController: UICollectionViewDelegate {
 
     func collectionView(_: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch indexPath {
-        case IndexPath(row: 0, section: 1): Current.cloudKitManager.createNewGroup(sender: self)
+        case IndexPath(row: 0, section: 1):
+            break
+//            CKContainer.default().create
+//            Current.cloudKitManager.createNewGroup(sender: self)
         default: break
         }
     }

@@ -131,6 +131,7 @@ final class CameraViewController: UIViewController {
         sessionQueue.async {
             self.session.startRunning()
         }
+        CKContainer.default().fetchUnreadMessages()
     }
 
     // MARK: - Actions
