@@ -8,9 +8,10 @@
 import CloudKit
 import os.lock
 import UIKit
+import CryptoKit
 
 extension CKContainer {
-    private var zoneID: CKRecordZone.ID {
+    private var sharedZoneID: CKRecordZone.ID {
         CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
     }
     
@@ -19,6 +20,20 @@ extension CKContainer {
             guard self.no(error: error), let recordID = recordID else { return }
             self.fetchUser(with: recordID)
         }
+    }
+
+    func bootstrapKeys(reset: Bool = false) {
+        do {
+            let pk: Curve25519.Signing.PrivateKey? = try GenericPasswordStore().readKey(account: Current.k.privateKey)
+            let pv: Curve25519.Signing.PublicKey? = try GenericPasswordStore().readKey(account: Current.k.publicKey)
+            guard pk == nil || pv == nil else { return }
+            resetKeys()
+        } catch {
+            os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
+        }
+        
+        guard reset else { return }
+        resetKeys()
     }
     
     func fetchAllFriendsWithApp() {
@@ -45,7 +60,7 @@ extension CKContainer {
     
     func share(group share: CKShare, in container: CKContainer, sender: UIViewController) {
         let controller = UICloudSharingController(share: share, container: container)
-        controller.availablePermissions = [.allowPrivate, .allowReadWrite]
+        controller.availablePermissions = [.allowPublic, .allowReadOnly]
         controller.delegate = self
         sender.present(controller, animated: true) {}
     }
@@ -68,7 +83,7 @@ extension CKContainer {
     func fetchAllGroups() {
         let query = CKQuery(recordType: .group, predicate: NSPredicate(value: true))
         
-        privateCloudDatabase.perform(query, inZoneWith: zoneID) { records, error in
+        privateCloudDatabase.perform(query, inZoneWith: sharedZoneID) { records, error in
             guard self.no(error: error), let groups = records else { return }
             
             let currentGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
@@ -80,7 +95,7 @@ extension CKContainer {
     func fetchUnreadMessages() {
         let query = CKQuery(recordType: .message, predicate: NSPredicate(value: true))
         
-        sharedCloudDatabase.perform(query, inZoneWith: zoneID) { records, error in
+        sharedCloudDatabase.perform(query, inZoneWith: sharedZoneID) { records, error in
             guard self.no(error: error) else { return }
 //            print(records)
         }
@@ -127,11 +142,77 @@ extension CKContainer {
     }
 }
 
+// MARK: - PKI
+
+extension CKContainer {
+    
+    func resetKeys() {
+        let privateKey = Curve25519.Signing.PrivateKey()
+        try? GenericPasswordStore().storeKey(privateKey, account: Current.k.privateKey)
+        let publicKey = privateKey.publicKey
+        try? GenericPasswordStore().storeKey(publicKey, account: Current.k.publicKey)
+        let newPrivateRecord = store(private: privateKey)
+        let newPublicRecords = store(public: publicKey)
+        let operation = CKModifyRecordsOperation(recordsToSave: [newPrivateRecord] + newPublicRecords,
+                                                 recordIDsToDelete: nil)
+        operation.perRecordCompletionBlock = { _, error  in
+            guard self.no(error: error) else { return }
+        }
+        operation.modifyRecordsCompletionBlock = { _, _, error in
+            guard self.no(error: error) else { return }
+        }
+        
+        clearExistingKeys().forEach { clearOperation in
+            operation.addDependency(clearOperation)
+            privateCloudDatabase.add(clearOperation)
+        }
+
+        privateCloudDatabase.add(operation)
+    }
+    
+    func store(private key: Curve25519.Signing.PrivateKey) -> CKRecord {
+        let privateKeyRecord = CKRecord(recordType: .privateKey)
+        privateKeyRecord[SigningKey.key] = key.rawRepresentation
+        return privateKeyRecord
+    }
+    
+    func store(public key: Curve25519.Signing.PublicKey) -> [CKRecord] {
+        let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
+        let publicKeyRecord = CKRecord(recordType: .publicKey, recordID: recordID)
+        publicKeyRecord[SigningKey.key] = key.rawRepresentation
+        
+        let shareRecord = CKShare(rootRecord: publicKeyRecord)
+        shareRecord.publicPermission = .readOnly
+        return [publicKeyRecord, shareRecord]
+    }
+    
+    func clearExistingKeys() -> [CKQueryOperation] {
+        let privateKeyQuery = CKQuery(recordType: .privateKey, predicate: NSPredicate(value: true))
+        let privateOperation = CKQueryOperation(query: privateKeyQuery)
+        privateOperation.recordFetchedBlock = { record in
+            self.privateCloudDatabase.delete(withRecordID: record.recordID) { recordID, error in
+                guard self.no(error: error) else { return }
+                try? GenericPasswordStore().deleteKey(account: Current.k.privateKey)
+            }
+        }
+        
+        let publicKeyQuery = CKQuery(recordType: .publicKey, predicate: NSPredicate(value: true))
+        let publicOperation = CKQueryOperation(query: publicKeyQuery)
+        publicOperation.recordFetchedBlock = { record in
+            self.privateCloudDatabase.delete(withRecordID: record.recordID) { recordID, error in
+                guard self.no(error: error) else { return }
+                try? GenericPasswordStore().deleteKey(account: Current.k.publicKey)
+            }
+        }
+        return [privateOperation, publicOperation]
+    }
+}
+
 // MARK: - Group
 
 extension CKContainer {
     func buildGroup(with name: String) -> [CKRecord] {
-        let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: zoneID)
+        let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
         let group = CKRecord(recordType: .group, recordID: recordID)
         
         group[GroupKey.name] = name
@@ -146,7 +227,7 @@ extension CKContainer {
 
 extension CKContainer {
     func buildMessage(for group: CKRecord) -> CKRecord {
-        let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: zoneID)
+        let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
         let message = CKRecord(recordType: .message, recordID: recordID)
         return message
     }

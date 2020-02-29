@@ -18,3 +18,7 @@ enum MessageKey: String {
     case photo
     case movie
 }
+
+enum SigningKey: String {
+    case key
+}

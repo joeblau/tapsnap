@@ -4,6 +4,7 @@
 import UIKit
 import CoreLocation
 import os.log
+import CloudKit
 
 final class LoggedInViewController: UIViewController {
     private lazy var camera: UINavigationController = {
@@ -15,6 +16,7 @@ final class LoggedInViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        CKContainer.default().bootstrapKeys()
         authorizeLocation()
         authorizeNotifications()
     }
