@@ -11,8 +11,13 @@ import UIKit
 import CryptoKit
 
 extension CKContainer {
+    static var inbox: CKRecord?
+    
     private var sharedZoneID: CKRecordZone.ID {
         CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
+    }
+    private var inboxZoneID: CKRecordZone.ID {
+        CKRecordZone.ID(zoneName: "InboxZone", ownerName: CKRecordZone.ID.default.ownerName)
     }
     
     func currentUser() {
@@ -21,7 +26,7 @@ extension CKContainer {
             self.fetchUser(with: recordID)
         }
     }
-
+    
     func bootstrapKeys(reset: Bool = false) {
         do {
             let pk: Curve25519.Signing.PrivateKey? = try GenericPasswordStore().readKey(account: Current.k.privateKey)
@@ -34,6 +39,19 @@ extension CKContainer {
         
         guard reset else { return }
         resetKeys()
+    }
+    
+    func crateInbox() {
+        guard CKContainer.inbox == nil else { return }
+        let inboxQuery = CKQuery(recordType: .inbox, predicate: NSPredicate(value: true))
+        privateCloudDatabase.perform(inboxQuery, inZoneWith: inboxZoneID) { records, error in
+            guard self.no(error: error) else { self.buildInbox(); return }
+            
+            switch records?.first {
+            case let .some(inbox): CKContainer.inbox = inbox
+            case .none: self.buildInbox()
+            }
+        }
     }
     
     func fetchAllFriendsWithApp() {
@@ -81,24 +99,24 @@ extension CKContainer {
     }
     
     func fetchAllGroups() {
-        let query = CKQuery(recordType: .group, predicate: NSPredicate(value: true))
-        
-        privateCloudDatabase.perform(query, inZoneWith: sharedZoneID) { records, error in
-            guard self.no(error: error), let groups = records else { return }
-            
-            let currentGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
-            let allGroups = currentGroups.union(groups)
-            Current.cloudKitGroupsSubject.send(allGroups)
-        }
+//        let query = CKQuery(recordType: .group, predicate: NSPredicate(value: true))
+//
+//        privateCloudDatabase.perform(query, inZoneWith: sharedZoneID) { records, error in
+//            guard self.no(error: error), let groups = records else { return }
+//
+//            let currentGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
+//            let allGroups = currentGroups.union(groups)
+//            Current.cloudKitGroupsSubject.send(allGroups)
+//        }
     }
     
     func fetchUnreadMessages() {
-        let query = CKQuery(recordType: .message, predicate: NSPredicate(value: true))
-        
-        sharedCloudDatabase.perform(query, inZoneWith: sharedZoneID) { records, error in
-            guard self.no(error: error) else { return }
-//            print(records)
-        }
+//        let query = CKQuery(recordType: .message, predicate: NSPredicate(value: true))
+//
+//        sharedCloudDatabase.perform(query, inZoneWith: sharedZoneID) { records, error in
+//            guard self.no(error: error) else { return }
+//            //            print(records)
+//        }
     }
 }
 
@@ -146,7 +164,7 @@ extension CKContainer {
 
 extension CKContainer {
     
-    func resetKeys() {
+    private func resetKeys() {
         let privateKey = Curve25519.Signing.PrivateKey()
         try? GenericPasswordStore().storeKey(privateKey, account: Current.k.privateKey)
         let publicKey = privateKey.publicKey
@@ -166,17 +184,17 @@ extension CKContainer {
             operation.addDependency(clearOperation)
             privateCloudDatabase.add(clearOperation)
         }
-
+        
         privateCloudDatabase.add(operation)
     }
     
-    func store(private key: Curve25519.Signing.PrivateKey) -> CKRecord {
+    private func store(private key: Curve25519.Signing.PrivateKey) -> CKRecord {
         let privateKeyRecord = CKRecord(recordType: .privateKey)
         privateKeyRecord[SigningKey.key] = key.rawRepresentation
         return privateKeyRecord
     }
     
-    func store(public key: Curve25519.Signing.PublicKey) -> [CKRecord] {
+    private func store(public key: Curve25519.Signing.PublicKey) -> [CKRecord] {
         let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
         let publicKeyRecord = CKRecord(recordType: .publicKey, recordID: recordID)
         publicKeyRecord[SigningKey.key] = key.rawRepresentation
@@ -186,7 +204,7 @@ extension CKContainer {
         return [publicKeyRecord, shareRecord]
     }
     
-    func clearExistingKeys() -> [CKQueryOperation] {
+    private func clearExistingKeys() -> [CKQueryOperation] {
         let privateKeyQuery = CKQuery(recordType: .privateKey, predicate: NSPredicate(value: true))
         let privateOperation = CKQueryOperation(query: privateKeyQuery)
         privateOperation.recordFetchedBlock = { record in
@@ -211,7 +229,7 @@ extension CKContainer {
 // MARK: - Group
 
 extension CKContainer {
-    func buildGroup(with name: String) -> [CKRecord] {
+    private func buildGroup(with name: String) -> [CKRecord] {
         let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
         let group = CKRecord(recordType: .group, recordID: recordID)
         
@@ -226,10 +244,32 @@ extension CKContainer {
 // MARK: - Messages
 
 extension CKContainer {
-    func buildMessage(for group: CKRecord) -> CKRecord {
+    private func buildMessage(for group: CKRecord) -> CKRecord {
         let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
         let message = CKRecord(recordType: .message, recordID: recordID)
         return message
+    }
+}
+
+// MARK: - Inbox
+
+extension CKContainer {
+    private func buildInbox() {
+        let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: inboxZoneID)
+        let inboxRecord = CKRecord(recordType: .inbox, recordID: recordID)
+        
+        let shareRecord = CKShare(rootRecord: inboxRecord)
+        shareRecord.publicPermission = .readWrite
+
+        let operation = CKModifyRecordsOperation(recordsToSave: [inboxRecord, shareRecord],
+                                                 recordIDsToDelete: nil)
+        operation.perRecordCompletionBlock = { _, error  in
+            guard self.no(error: error) else { return }
+        }
+        operation.modifyRecordsCompletionBlock = { _, _, error in
+            guard self.no(error: error) else { return }
+        }
+        self.privateCloudDatabase.add(operation)
     }
 }
 

@@ -23,7 +23,6 @@ extension CKRecord {
         get { self[key.rawValue] }
         set { self[key.rawValue] = newValue as? CKRecordValue }
     }
-    
 
     static func archive(record: CKRecord) throws -> Data {
         try NSKeyedArchiver.archivedData(withRootObject: record, requiringSecureCoding: true)
@@ -38,6 +37,7 @@ extension CKRecord.RecordType {
     static var message = "Message"
     static var group = "Group"
     static var user = "User"
+    static var inbox = "Inbox"
     static var privateKey = "PrivateKey"
     static var publicKey = "PublicKey"
 }
