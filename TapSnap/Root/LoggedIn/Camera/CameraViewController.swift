@@ -290,9 +290,8 @@ extension CameraViewController: ViewBootstrappable {
             }
 
             var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
-            snapshot.appendSections([.contacts, .addContact])
-            snapshot.appendItems(items, toSection: .contacts)
-            snapshot.appendItems([GroupValue(name: "add", record: nil)], toSection: .addContact)
+            snapshot.appendSections([.groups])
+            snapshot.appendItems(items, toSection: .groups)
             self.contactsCollectionView.diffableDataSource?.apply(snapshot)
 
         }.store(in: &cancellables)

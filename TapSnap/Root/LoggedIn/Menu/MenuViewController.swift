@@ -35,8 +35,8 @@ final class MenuViewController: UIViewController {
         t.translatesAutoresizingMaskIntoConstraints = false
         t.rowHeight = UITableView.automaticDimension
         t.estimatedRowHeight = 44.0
-        t.allowsSelection = false
         t.dataSource = self
+        t.delegate = self
         return t
     }()
 
@@ -54,7 +54,6 @@ final class MenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         title = "Menu"
         navigationItem.leftBarButtonItem = closeButton
         configureViews()
@@ -89,7 +88,7 @@ extension MenuViewController: UIImagePickerControllerDelegate & UINavigationCont
     func imagePickerController(_: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let image = info[.originalImage] as? UIImage,
-            let scaledImage = image.scale(to: 256.0) else { return }
+            let _ = image.scale(to: 256.0) else { return }
         
     }
 }

@@ -99,15 +99,15 @@ extension CKContainer {
     }
     
     func fetchAllGroups() {
-//        let query = CKQuery(recordType: .group, predicate: NSPredicate(value: true))
-//
-//        privateCloudDatabase.perform(query, inZoneWith: sharedZoneID) { records, error in
-//            guard self.no(error: error), let groups = records else { return }
-//
-//            let currentGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
-//            let allGroups = currentGroups.union(groups)
-//            Current.cloudKitGroupsSubject.send(allGroups)
-//        }
+        let query = CKQuery(recordType: .group, predicate: NSPredicate(value: true))
+
+        privateCloudDatabase.perform(query, inZoneWith: sharedZoneID) { records, error in
+            guard self.no(error: error), let groups = records else { return }
+
+            let currentGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
+            let allGroups = currentGroups.union(groups)
+            Current.cloudKitGroupsSubject.send(allGroups)
+        }
     }
     
     func fetchUnreadMessages() {

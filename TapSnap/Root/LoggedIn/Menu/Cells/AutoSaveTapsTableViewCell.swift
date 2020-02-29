@@ -12,6 +12,7 @@ class AutoSaveTapsTableViewCell: UITableViewCell {
 
     override init(style _: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+        selectionStyle = .none
         imageView?.tintColor = .label
         toggleView.isOn = UserDefaults.standard.bool(forKey: Current.k.autoSave)
         accessoryView = toggleView

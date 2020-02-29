@@ -24,6 +24,7 @@ class AvatarNameTableViewCell: UITableViewCell {
     override init(style _: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         translatesAutoresizingMaskIntoConstraints = false
+        selectionStyle = .none
         guard let userRecord = Current.cloudKitUserSubject.value else { return }
         nameView.text = userRecord[UserKey.name] as? String
         avatarView.imageView?.image = userRecord[UserKey.avatar] as? UIImage
