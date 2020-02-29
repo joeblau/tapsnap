@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UIApplication.shared.registerForRemoteNotifications()
+        CKContainer.default().bootstrapZones()
         
         do { // Delegates
             Current.locationManager.delegate = self

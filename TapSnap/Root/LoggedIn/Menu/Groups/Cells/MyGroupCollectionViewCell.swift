@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import CloudKit
 
 class MyGroupCollectionViewCell: UICollectionViewCell {
+    
+    var share: CKShare?
     
     override init(frame _: CGRect) {
         super.init(frame: .zero)
@@ -21,5 +24,4 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
     }
     
     static let id = String(describing: MyGroupCollectionViewCell.self)
-
 }

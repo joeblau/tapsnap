@@ -29,6 +29,7 @@ class MyGorupsCollectionView: UICollectionView {
         dataSource = diffableDataSource
         translatesAutoresizingMaskIntoConstraints = false
         showsHorizontalScrollIndicator = false
+        backgroundColor = .systemBackground
         register(MyGroupCollectionViewCell.self,
                  forCellWithReuseIdentifier: MyGroupCollectionViewCell.id)
     }

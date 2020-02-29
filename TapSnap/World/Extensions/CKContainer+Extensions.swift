@@ -16,6 +16,7 @@ extension CKContainer {
     private var sharedZoneID: CKRecordZone.ID {
         CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
     }
+    
     private var inboxZoneID: CKRecordZone.ID {
         CKRecordZone.ID(zoneName: "InboxZone", ownerName: CKRecordZone.ID.default.ownerName)
     }
@@ -40,6 +41,8 @@ extension CKContainer {
         guard reset else { return }
         resetKeys()
     }
+    
+    func bootstrapZones() { buildZones() }
     
     func crateInbox() {
         guard CKContainer.inbox == nil else { return }
@@ -74,6 +77,12 @@ extension CKContainer {
             
         }
         privateCloudDatabase.add(operation)
+    }
+    
+    func manage(group share: CKShare, sender: UIViewController) {
+        let controlloer = UICloudSharingController(share: share,
+                                                   container: CKContainer.default())
+        sender.present(controlloer, animated: true, completion: nil)
     }
     
     func share(group share: CKShare, in container: CKContainer, sender: UIViewController) {
@@ -236,7 +245,7 @@ extension CKContainer {
         group[GroupKey.name] = name
         group[GroupKey.userCount] = 1
         
-        let share = CKShare(rootRecord: group)
+        let share = CKShare(rootRecord: group, shareID: recordID)
         return [group, share]
     }
 }
@@ -257,7 +266,7 @@ extension CKContainer {
     private func buildInbox() {
         let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: inboxZoneID)
         let inboxRecord = CKRecord(recordType: .inbox, recordID: recordID)
-        
+
         let shareRecord = CKShare(rootRecord: inboxRecord)
         shareRecord.publicPermission = .readWrite
 
@@ -269,7 +278,29 @@ extension CKContainer {
         operation.modifyRecordsCompletionBlock = { _, _, error in
             guard self.no(error: error) else { return }
         }
-        self.privateCloudDatabase.add(operation)
+        privateCloudDatabase.add(operation)
+    }
+}
+
+// MARK: - Zones
+
+extension CKContainer {
+    private func buildZones() {
+        privateCloudDatabase.fetchAllRecordZones { zones, error in
+            let sharedZoneEmpty = zones?.filter { $0.zoneID.zoneName == self.sharedZoneID.zoneName }.isEmpty ?? true
+            if sharedZoneEmpty {
+                self.privateCloudDatabase.save(CKRecordZone(zoneID: self.sharedZoneID)) { zone, error in
+                    guard self.no(error: error) else { return }
+                }
+            }
+            
+            let inboxZoneEmpty = zones?.filter { $0.zoneID.zoneName == self.inboxZoneID.zoneName }.isEmpty ?? true
+            if inboxZoneEmpty {
+                self.privateCloudDatabase.save(CKRecordZone(zoneID: self.inboxZoneID)) { zone, error in
+                    guard self.no(error: error) else { return }
+                }
+            }
+        }
     }
 }
 
