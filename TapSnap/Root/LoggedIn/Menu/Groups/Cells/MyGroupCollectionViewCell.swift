@@ -10,7 +10,7 @@ import CloudKit
 
 class MyGroupCollectionViewCell: UICollectionViewCell {
     
-    var share: CKShare?
+    public private(set) var record: CKRecord?
     
     override init(frame _: CGRect) {
         super.init(frame: .zero)
@@ -21,6 +21,10 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(record: CKRecord) {
+        self.record = record
     }
     
     static let id = String(describing: MyGroupCollectionViewCell.self)

@@ -15,10 +15,10 @@ extension CKContainer: UICloudSharingControllerDelegate {
     }
 
     public func itemTitle(for _: UICloudSharingController) -> String? {
-        "Join Tapsnap Group"
+        CKContainer.shareTitle
     }
 
     public func itemThumbnailData(for _: UICloudSharingController) -> Data? {
-        UIImage(systemName: "video.fill")?.pngData()
+        CKContainer.shareImage
     }
 }

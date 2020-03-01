@@ -15,7 +15,6 @@ final class MenuViewController: UIViewController {
         ]),
         SectionItem(menuItems: [
             MenuItem(systemName: "paperplane", titleText: "Invite A Friend"),
-            MenuItem(systemName: "person", titleText: "My Friends"),
             MenuItem(systemName: "person.2", titleText: "My Groups"),
         ]),
         SectionItem(menuItems: [
@@ -59,7 +58,7 @@ final class MenuViewController: UIViewController {
         configureViews()
     }
 
-    // MARK: - Actoins
+    // MARK: - Actions
 
     @objc func closeMenuAction() {
         dismiss(animated: true, completion: nil)
@@ -89,6 +88,5 @@ extension MenuViewController: UIImagePickerControllerDelegate & UINavigationCont
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let image = info[.originalImage] as? UIImage,
             let _ = image.scale(to: 256.0) else { return }
-        
     }
 }

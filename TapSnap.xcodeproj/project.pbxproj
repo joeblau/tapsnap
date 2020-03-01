@@ -24,7 +24,6 @@
 		29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC4CE62F7AC981B913F18E9 /* CameraViewController+UICollectionViewDelegate.swift */; };
 		2B37C0C4091DCE3004B9AD60 /* SearchContactsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75AF4F2AFFAC3179572271C /* SearchContactsTableView.swift */; };
 		2F4F7CB3B90C4A3A2D8B8F71 /* SearchContactsViewController+UISearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F9CF40B86DB40C15BFBC /* SearchContactsViewController+UISearchControllerDelegate.swift */; };
-		2FC4A37888A8803C7CDFDFE6 /* ContactAddCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 936D48C75A42CF14A98918B1 /* ContactAddCollectionViewCell.swift */; };
 		317CC529D4268A10BCEEF5AD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B2528AD68900F4499FB43418 /* Settings.bundle */; };
 		381DF8A46DED81C7A2E0A84E /* CKContainer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC699B7654EFE34FD9C755 /* CKContainer+Extensions.swift */; };
 		3C874689D363AA4D98B647B5 /* SearchContactsViewControllerDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AE8EF6ACEF533ECD8110F8 /* SearchContactsViewControllerDiffableDataSource.swift */; };
@@ -49,7 +48,7 @@
 		8DCD4EBC5F1E0F9776A5A374 /* MapViewOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F76C684C320050C50C7BB2 /* MapViewOverlay.swift */; };
 		916F904C56D25570A3DA12B5 /* PlaybackViewController+MKMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5321E8A88101AC69230EB4AF /* PlaybackViewController+MKMapViewDelegate.swift */; };
 		91B75DB67B1F96B1929982AF /* ts1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 97BE037005EB3E030B1B3ED6 /* ts1.mov */; };
-		93706DF7B6ABC7130ADC4B4F /* GroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DD3CC49A61C4604E5E86B3 /* GroupsDiffableDataSource.swift */; };
+		93706DF7B6ABC7130ADC4B4F /* CameraGroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DD3CC49A61C4604E5E86B3 /* CameraGroupsDiffableDataSource.swift */; };
 		9459D858A99F4EE793F37E92 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A03D34D5EFD9078502D2B3D /* main.swift */; };
 		9D4E662859FBDF5BEC5704E2 /* CKRecord+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7036C718054EB3309DB1FD /* CKRecord+Extensions.swift */; };
 		9E45F15C27283EA75A95FDA8 /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCE2621E3412630A639A0E9 /* World.swift */; };
@@ -86,6 +85,7 @@
 		EDE8F0C2240AC56B00DFA828 /* MyGorupsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0C1240AC56B00DFA828 /* MyGorupsCollectionView.swift */; };
 		EDE8F0C4240AC7FD00DFA828 /* MenuViewController+UITableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0C3240AC7FD00DFA828 /* MenuViewController+UITableViewDelegate.swift */; };
 		EDE8F0C7240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0C6240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift */; };
+		EDE8F0C9240B278E00DFA828 /* MyGroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0C8240B278E00DFA828 /* MyGroupsDiffableDataSource.swift */; };
 		EE6B209AF27D3C6A315EDB82 /* AutoSaveTapsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F41006407FCD51B3388DA5 /* AutoSaveTapsTableViewCell.swift */; };
 		F0E540C952F07DBB0BAC2DD0 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6C48A082BDC2B70BD74753 /* UIImage+Extensions.swift */; };
 		F1049AD0FAD3C79A3CE179D7 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */; };
@@ -125,7 +125,7 @@
 		3228BAE858CB8C4BC7BEB9F8 /* ViewBootstrappable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewBootstrappable.swift; sourceTree = "<group>"; };
 		324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordProgressView.swift; sourceTree = "<group>"; };
 		3391EC80872D369C9F1D55CF /* SavedTapsViewController+UISearchControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchControllerDelegate.swift"; sourceTree = "<group>"; };
-		33DD3CC49A61C4604E5E86B3 /* GroupsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupsDiffableDataSource.swift; sourceTree = "<group>"; };
+		33DD3CC49A61C4604E5E86B3 /* CameraGroupsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraGroupsDiffableDataSource.swift; sourceTree = "<group>"; };
 		363154E07C7BBF93B754F492 /* PlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
 		3A03D34D5EFD9078502D2B3D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3C53A6281FFC03B8AA5A49A7 /* PlayerLooper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLooper.swift; sourceTree = "<group>"; };
@@ -155,7 +155,6 @@
 		89EC1518A0F3A3A662B0C16C /* GroupValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupValue.swift; sourceTree = "<group>"; };
 		8BC4CE62F7AC981B913F18E9 /* CameraViewController+UICollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+UICollectionViewDelegate.swift"; sourceTree = "<group>"; };
 		8DC248A20FDB5559FA99563E /* SearchContactsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsSection.swift; sourceTree = "<group>"; };
-		936D48C75A42CF14A98918B1 /* ContactAddCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAddCollectionViewCell.swift; sourceTree = "<group>"; };
 		94344FC87696F3296346CA01 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		973CEDB8780E17647226ACC0 /* ContactsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
 		97BE037005EB3E030B1B3ED6 /* ts1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = ts1.mov; sourceTree = "<group>"; };
@@ -186,6 +185,7 @@
 		EDE8F0C1240AC56B00DFA828 /* MyGorupsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGorupsCollectionView.swift; sourceTree = "<group>"; };
 		EDE8F0C3240AC7FD00DFA828 /* MenuViewController+UITableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuViewController+UITableViewDelegate.swift"; sourceTree = "<group>"; };
 		EDE8F0C6240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MyGroupsViewController+UICollectionViewDelegate.swift"; sourceTree = "<group>"; };
+		EDE8F0C8240B278E00DFA828 /* MyGroupsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsDiffableDataSource.swift; sourceTree = "<group>"; };
 		EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
 		F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
 		F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
@@ -374,7 +374,6 @@
 		7849E11C49913798BD2F22F1 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				936D48C75A42CF14A98918B1 /* ContactAddCollectionViewCell.swift */,
 				FB00B76FFC4807D3E14E941D /* ContactCollectionViewCell.swift */,
 				7073DEB4796F45F7A1481AD3 /* NowPlayingPreviewTableViewCell.swift */,
 				436F92BE0C3A45B52CA98080 /* SyncTableViewCell.swift */,
@@ -500,6 +499,7 @@
 				E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */,
 				9FB14F5E9AD2042E5DFC76BE /* CameraViewController+AVCapturePhotoCaptureDelegate.swift */,
 				8BC4CE62F7AC981B913F18E9 /* CameraViewController+UICollectionViewDelegate.swift */,
+				33DD3CC49A61C4604E5E86B3 /* CameraGroupsDiffableDataSource.swift */,
 				7849E11C49913798BD2F22F1 /* Cells */,
 				65B55C320395D4668C3F0356 /* Models */,
 				6217B4B7FA2175C2D4D28CFF /* Views */,
@@ -524,6 +524,7 @@
 				EDE8F0BD240AC48700DFA828 /* Cells */,
 				EDE8F0BB240AC3B200DFA828 /* MyGroupsViewController.swift */,
 				EDE8F0C6240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift */,
+				EDE8F0C8240B278E00DFA828 /* MyGroupsDiffableDataSource.swift */,
 			);
 			path = Groups;
 			sourceTree = "<group>";
@@ -547,7 +548,6 @@
 		EDE8F0C5240AD3E600DFA828 /* DataSources */ = {
 			isa = PBXGroup;
 			children = (
-				33DD3CC49A61C4604E5E86B3 /* GroupsDiffableDataSource.swift */,
 			);
 			path = DataSources;
 			sourceTree = "<group>";
@@ -710,11 +710,10 @@
 				82E8D57768BC08D80FE7CC89 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift in Sources */,
 				29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
 				4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */,
-				93706DF7B6ABC7130ADC4B4F /* GroupsDiffableDataSource.swift in Sources */,
+				93706DF7B6ABC7130ADC4B4F /* CameraGroupsDiffableDataSource.swift in Sources */,
 				DC538E002715EBD7FF6F0D98 /* CloudKitKeys.swift in Sources */,
 				8CACF9C2C0EA7613439180F8 /* Constants.swift in Sources */,
 				EDE8F0BC240AC3B200DFA828 /* MyGroupsViewController.swift in Sources */,
-				2FC4A37888A8803C7CDFDFE6 /* ContactAddCollectionViewCell.swift in Sources */,
 				B43FA60F5F10D71DF32E9760 /* ContactCollectionViewCell.swift in Sources */,
 				155FD04BF3EA39EBD754BDD6 /* ContactsCollectionView.swift in Sources */,
 				6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */,
@@ -729,6 +728,7 @@
 				AFA4B5B9C3DE95B8CCEE172D /* LoggedInViewController.swift in Sources */,
 				DD6A04D0AC022CB627DB36AE /* LoggedOutViewController.swift in Sources */,
 				8DCD4EBC5F1E0F9776A5A374 /* MapViewOverlay.swift in Sources */,
+				EDE8F0C9240B278E00DFA828 /* MyGroupsDiffableDataSource.swift in Sources */,
 				C67C5CACDE43DCF4381FB87C /* MenuCellTableViewCell.swift in Sources */,
 				C8D06DFC8502753F611D62C0 /* MenuModels.swift in Sources */,
 				3F1A7E560EB467CABA3D8E36 /* MenuViewController+UITableViewDataSource.swift in Sources */,

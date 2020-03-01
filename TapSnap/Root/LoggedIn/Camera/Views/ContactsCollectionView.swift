@@ -4,7 +4,7 @@
 import UIKit
 
 class ContactsCollectionView: UICollectionView {
-    var diffableDataSource: GroupsDiffableDataSource?
+    var diffableDataSource: CameraGroupsDiffableDataSource?
     init() {
         let hairline = 1.0 / UIScreen.main.scale
         let width = (UIScreen.main.bounds.width / 4) - hairline
@@ -17,7 +17,7 @@ class ContactsCollectionView: UICollectionView {
         flowLayout.itemSize = CGSize(width: width, height: height)
 
         super.init(frame: .zero, collectionViewLayout: flowLayout)
-        diffableDataSource = GroupsDiffableDataSource(collectionView: self)
+        diffableDataSource = CameraGroupsDiffableDataSource(collectionView: self)
         dataSource = diffableDataSource
 
         translatesAutoresizingMaskIntoConstraints = false
@@ -26,8 +26,6 @@ class ContactsCollectionView: UICollectionView {
         isPagingEnabled = true
         register(ContactCollectionViewCell.self,
                  forCellWithReuseIdentifier: ContactCollectionViewCell.id)
-        register(ContactAddCollectionViewCell.self,
-                 forCellWithReuseIdentifier: ContactAddCollectionViewCell.id)
     }
 
     required init?(coder _: NSCoder) {

@@ -9,7 +9,7 @@ import UIKit
 
 class MyGorupsCollectionView: UICollectionView {
 
-    var diffableDataSource: GroupsDiffableDataSource?
+    var diffableDataSource: MyGroupsDiffableDataSource?
     init() {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
                                              heightDimension: .fractionalHeight(1.0))
@@ -25,7 +25,7 @@ class MyGorupsCollectionView: UICollectionView {
         let layout = UICollectionViewCompositionalLayout(section: section)
         
         super.init(frame: .zero, collectionViewLayout: layout)
-        diffableDataSource = GroupsDiffableDataSource(collectionView: self)
+        diffableDataSource = MyGroupsDiffableDataSource(collectionView: self)
         dataSource = diffableDataSource
         translatesAutoresizingMaskIntoConstraints = false
         showsHorizontalScrollIndicator = false
