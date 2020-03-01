@@ -15,6 +15,7 @@ class RootViewController: UIViewController {
         super.viewDidAppear(animated)
         switch UserDefaults.standard.data(forKey: Current.k.userAccount) {
         case .some:
+            CKContainer.default().currentUser()
             login()
         case .none:
             CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in

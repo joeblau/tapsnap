@@ -16,9 +16,7 @@ final class LoggedInViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        CKContainer.default().bootstrapZones()
-//        CKContainer.default().bootstrapKeys()
-        CKContainer.default().bootstrapInbox()
+        CKContainer.default().bootstrapKeys()
         CKContainer.default().fetchAllGroups()
         authorizeLocation()
         authorizeNotifications()
