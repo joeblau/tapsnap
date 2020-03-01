@@ -12,8 +12,6 @@ import CryptoKit
 
 extension CKContainer {
     static var inbox: CKRecord?
-    static var shareTitle: String?
-    static var shareImage: Data?
 
     private var sharedZoneID: CKRecordZone.ID {
         CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
@@ -83,18 +81,22 @@ extension CKContainer {
     
     func manage(group record: CKRecord, sender: UIViewController) {
         guard let shareRecordId = record.share?.recordID else { return }
-        CKContainer.shareTitle = record[GroupKey.name] as? String
-        CKContainer.shareImage = UIImage(systemName: "video.fill")?.pngData()
          
         privateCloudDatabase.fetch(withRecordID: shareRecordId) { [unowned self] share, error in
             
             guard self.no(error: error), let share = share as? CKShare else { return }
+            share[CKShare.SystemFieldKey.title] = record[GroupKey.name] as? String
             
+            let thumbnailData = UIImage(systemName: "exclamationmark.triangle.fill",
+                               withConfiguration: UIImage.SymbolConfiguration(scale: .large))?
+                .withTintColor(.systemOrange, renderingMode: .alwaysTemplate)
+                .pngData()
+            
+            share[CKShare.SystemFieldKey.thumbnailImageData] =  record[GroupKey.avatar] as? NSData ?? thumbnailData
             DispatchQueue.main.async {
                 let controlloer = UICloudSharingController(share: share,
                                                            container: CKContainer.default())
                 controlloer.availablePermissions = [.allowPublic, .allowReadOnly]
-                controlloer.delegate = self
                 sender.present(controlloer, animated: true, completion: nil)
             }
         }
@@ -104,7 +106,6 @@ extension CKContainer {
 //        DispatchQueue.main.async {
 //        let controller = UICloudSharingController(share: share, container: container)
 //        controller.availablePermissions = [.allowPublic, .allowReadOnly]
-//        controller.delegate = self
 //        sender.present(controller, animated: true, completion: nil)
 //        }
 //    }

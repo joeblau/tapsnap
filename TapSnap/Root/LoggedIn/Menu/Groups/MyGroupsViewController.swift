@@ -26,7 +26,6 @@ class MyGroupsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        CKContainer.default().fetchAllGroups()
         title = "My Groups"
         activityIndicatorView.startAnimating()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newGroup))

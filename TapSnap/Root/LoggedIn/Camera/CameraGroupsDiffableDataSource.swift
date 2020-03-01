@@ -7,13 +7,9 @@ class CameraGroupsDiffableDataSource: UICollectionViewDiffableDataSource<GroupSe
     init(collectionView: UICollectionView) {
         super.init(collectionView: collectionView) { (collectionView, indexPath, groupValue) -> UICollectionViewCell? in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ContactCollectionViewCell.id,
-                                                                for: indexPath) as? ContactCollectionViewCell else {
-                                                                    return nil
-            }
-            cell.configure(image: groupValue.image,
-                            title: groupValue.name,
-                            record: groupValue.record,
-                            groupSize: groupValue.participantCount)
+                                                                for: indexPath) as? ContactCollectionViewCell,
+                let record = groupValue.record else { return nil }
+            cell.configure(record: record)
             return cell
         }
     }

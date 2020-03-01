@@ -18,6 +18,7 @@ final class LoggedInViewController: UIViewController {
         super.viewDidLoad()
         CKContainer.default().bootstrapKeys()
         CKContainer.default().crateInbox()
+        CKContainer.default().fetchAllGroups()
         authorizeLocation()
         authorizeNotifications()
     }

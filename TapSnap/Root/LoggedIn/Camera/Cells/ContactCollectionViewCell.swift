@@ -8,7 +8,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
     private lazy var contactImageView: UIImageView = {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.tintColor = .systemRed
+        v.tintColor = .systemOrange
         v.contentMode = .center
         return v
     }()
@@ -44,25 +44,29 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(image: UIImage,
-                   title: String,
-                   record: CKRecord?,
-                   groupSize: Int = 0) {
-        contactImageView.image = image
-
-        let attributedString = NSMutableAttributedString()
-        switch groupSize {
-        case 1 ... 50:
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = UIImage(systemName: "\(groupSize).circle.fill",
-                                            withConfiguration: UIImage.SymbolConfiguration(scale: .small))
-            imageAttachment.image?.withTintColor(.white, renderingMode: .alwaysOriginal)
-            attributedString.append(NSAttributedString(attachment: imageAttachment))
-        default: break
-        }
-        attributedString.append(NSAttributedString(string: "\(title)"))
-        contactTitleLabel.attributedText = attributedString
+    func configure(record: CKRecord) {
         self.record = record
+
+        switch record[GroupKey.avatar] as? Data {
+        case let .some(data): contactImageView.image = UIImage(data: data)
+        case .none: contactImageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
+        }
+        
+        if let title = record[GroupKey.name] as? String {
+            let userCount = record[GroupKey.userCount] as? Int ?? 1
+            let attributedString = NSMutableAttributedString()
+            switch userCount {
+            case 1 ... 50:
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = UIImage(systemName: "\(userCount).circle.fill",
+                                                withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
+                                                .withTintColor(.label, renderingMode: .alwaysTemplate)
+                attributedString.append(NSAttributedString(attachment: imageAttachment))
+            default: break
+            }
+            attributedString.append(NSAttributedString(string: "\(title)"))
+            contactTitleLabel.attributedText = attributedString
+        }
     }
 
     override func prepareForReuse() {

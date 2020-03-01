@@ -37,7 +37,6 @@
 		5369693BBCFA6A944EBF9190 /* ViewBootstrappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3228BAE858CB8C4BC7BEB9F8 /* ViewBootstrappable.swift */; };
 		579FC49A9D5FE9ABF57CA74B /* AppDelegate+CLLocationManagerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3190FA1230DC53C00386AE7 /* AppDelegate+CLLocationManagerDelegate.swift */; };
 		6006081149337EAE465CE208 /* SavedTapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 407456196370DF88EC8AC28D /* SavedTapsViewController.swift */; };
-		62F81E68A66D9BA32235C61D /* CKContainer+UICloudSharingControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223AD0F1D36153D84E40A998 /* CKContainer+UICloudSharingControllerDelegate.swift */; };
 		66125828B36DB8CA801593E3 /* EXIFData+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7D5A06F6B5145B89F4FE58B /* EXIFData+Extensions.swift */; };
 		66768FC1EDCE409731DCBBA6 /* SearchContactTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E136148D685C0D0BDAD1BB1 /* SearchContactTableViewCell.swift */; };
 		6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B33AE9F232CA872F98978A /* DrawingToolsView.swift */; };
@@ -115,7 +114,6 @@
 		1E519411855163D974866C78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Combine.swift"; sourceTree = "<group>"; };
 		21160D880151A4793003A226 /* SearchContactsValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsValue.swift; sourceTree = "<group>"; };
-		223AD0F1D36153D84E40A998 /* CKContainer+UICloudSharingControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKContainer+UICloudSharingControllerDelegate.swift"; sourceTree = "<group>"; };
 		23B9C3F84552C49835C8E45B /* GroupSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSection.swift; sourceTree = "<group>"; };
 		2F42B1667B76CAFE6765BBD3 /* SearchContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsViewController.swift; sourceTree = "<group>"; };
 		2F49C2973DE404FCAD8E71E1 /* OSLog+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OSLog+Extensions.swift"; sourceTree = "<group>"; };
@@ -410,7 +408,6 @@
 				E67DD7438DFB355B5132D5E3 /* AVAssetTrack+Extensions.swift */,
 				AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */,
 				99AC699B7654EFE34FD9C755 /* CKContainer+Extensions.swift */,
-				223AD0F1D36153D84E40A998 /* CKContainer+UICloudSharingControllerDelegate.swift */,
 				AB7036C718054EB3309DB1FD /* CKRecord+Extensions.swift */,
 				20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */,
 				F7D5A06F6B5145B89F4FE58B /* EXIFData+Extensions.swift */,
@@ -701,7 +698,6 @@
 				416E8AFAED4D2645FE4AAE57 /* AvatarNameTableViewCell.swift in Sources */,
 				381DF8A46DED81C7A2E0A84E /* CKContainer+Extensions.swift in Sources */,
 				EDE8F0C2240AC56B00DFA828 /* MyGorupsCollectionView.swift in Sources */,
-				62F81E68A66D9BA32235C61D /* CKContainer+UICloudSharingControllerDelegate.swift in Sources */,
 				9D4E662859FBDF5BEC5704E2 /* CKRecord+Extensions.swift in Sources */,
 				F1049AD0FAD3C79A3CE179D7 /* CLLocationManager+Combine.swift in Sources */,
 				E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */,
