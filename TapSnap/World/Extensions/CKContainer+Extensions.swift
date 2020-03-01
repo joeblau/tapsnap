@@ -31,9 +31,11 @@ extension CKContainer {
     
     func bootstrapKeys(reset: Bool = false) {
         do {
-            let pk: Curve25519.Signing.PrivateKey? = try GenericPasswordStore().readKey(account: Current.k.privateKey)
-            let pv: Curve25519.Signing.PublicKey? = try GenericPasswordStore().readKey(account: Current.k.publicKey)
-            if pk == nil || pv == nil {
+            let pvEncryption: Curve25519.KeyAgreement.PrivateKey? = try GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey)
+            let pkEncryption: Curve25519.KeyAgreement.PublicKey? = try GenericPasswordStore().readKey(account: Current.k.publicEncryptionKey)
+            let pvSigning: Curve25519.Signing.PrivateKey? = try GenericPasswordStore().readKey(account: Current.k.privateSigningKey)
+            let pkSigning: Curve25519.Signing.PublicKey? = try GenericPasswordStore().readKey(account: Current.k.publicSigningKey)
+            if pvEncryption == nil || pkEncryption == nil || pvSigning == nil || pkSigning == nil {
                 resetKeys()
             }
         } catch {
@@ -93,16 +95,58 @@ extension CKContainer {
     func createNewMessage(for group: CKRecord,
                           with media: MediaCapture,
                           completion: @escaping (_ saved: Bool)->()) {
-//        let message = buildMessage(for: group)
-//        switch media {
-//        case let .movie(url): message[MessageKey.movie] = CKAsset(fileURL: url)
-//        case let .photo(url): message[MessageKey.photo] = CKAsset(fileURL: url)
-//        }
-//
-//        sharedCloudDatabase.save(message) { [unowned self] record, error in
-//            guard self.no(error: error) else { completion(false); return }
-            completion(true)
-//        }
+        guard let shareRecordId = group.share?.recordID else { return }
+        
+        sharedCloudDatabase.fetch(withRecordID: shareRecordId) { [unowned self] share, error in
+            guard self.no(error: error), let share = share as? CKShare else { return }
+            
+            let participantRecordIDs = share.participants.filter { participant -> Bool in
+                !(participant.value(forKeyPath: "isCurrentUser") as? Bool ?? true)
+            }.map{ participant -> CKRecord.ID? in
+                participant.userIdentity.userRecordID
+            }
+            
+            let predecate = NSPredicate(format: "creator IN %@", participantRecordIDs)
+            let query = CKQuery(recordType: .publicKey, predicate: predecate)
+            
+            self.publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] publicKeys, error in
+                guard self.no(error: error), let publicKeys = publicKeys else { return }
+                
+                publicKeys.forEach { publicKey in
+                    guard let pkEncryption = publicKey[CryptoKey.encryption] as? Curve25519.KeyAgreement.PublicKey else { return }
+                    
+                    do {
+                        guard let pvSigning: Curve25519.Signing.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateSigningKey)  else {
+                            fatalError("Could not read private key/re-bootstrap")
+                            return
+                        }
+                        let record = CKRecord(recordType: .message)
+                        
+                        let sealedMessage: (ephemeralPublicKeyData: Data, ciphertext: Data, signature: Data)
+                        switch media {
+                        case let .movie(url):
+                            let movieData = try Data(contentsOf: url)
+                            sealedMessage = try Current.pki.encrypt(movieData, to: pkEncryption, signedBy: pvSigning)
+                        //                            record[MessageKey.movie] = CKAsset(fileURL: url)
+                        case let .photo(url):
+                            let photoData = try Data(contentsOf: url)
+                            sealedMessage = try Current.pki.encrypt(photoData, to: pkEncryption, signedBy: pvSigning)
+                            //                            record[MessageKey.photo] = CKAsset(fileURL: url)
+                        }
+                        
+                        
+                    } catch {
+                        os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
+                    }
+                    
+                }
+                
+                
+            }
+
+        }
+
+        completion(true)
     }
     
     func fetchAllGroups() {
@@ -112,7 +156,7 @@ extension CKContainer {
             zones?.forEach{ zone in
                 self.sharedCloudDatabase.perform(query, inZoneWith: zone.zoneID) { [unowned self] records, error in
                     guard self.no(error: error), let groups = records else { return }
-
+                    
                     let exsitingGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
                     let newGroups = Set(groups)
                     let unionGroups = newGroups.union(exsitingGroups)
@@ -120,10 +164,10 @@ extension CKContainer {
                 }
             }
         }
-
+        
         privateCloudDatabase.perform(query, inZoneWith: sharedZoneID) { [unowned self] records, error in
             guard self.no(error: error), let groups = records else { return }
-
+            
             let exsitingGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
             let newGroups = Set(groups)
             let unionGroups = newGroups.union(exsitingGroups)
@@ -186,19 +230,25 @@ extension CKContainer {
 extension CKContainer {
     
     private func resetKeys() {
-        let privateKey = Curve25519.Signing.PrivateKey()
-        let publicKey = privateKey.publicKey
-        store(private: privateKey)
-        store(public: publicKey)
+        let pvEncryption = Curve25519.KeyAgreement.PrivateKey()
+        let pkEncryption = pvEncryption.publicKey
+        
+        let pvSigning = Curve25519.Signing.PrivateKey()
+        let pkSigning = pvSigning.publicKey
+        
+        store(privateKey: pvEncryption, privateKey: pvSigning)
+        store(publicKey: pkEncryption, publicKey: pkSigning)
     }
     
-    private func store(private key: Curve25519.Signing.PrivateKey) {
+    private func store(privateKey encryption: Curve25519.KeyAgreement.PrivateKey,
+                       privateKey signing: Curve25519.Signing.PrivateKey) {
         guard let creatorReference = CKContainer.creatorReference else { return }
         
         let query = CKQuery(recordType: .privateKey, predicate: NSPredicate(value: true))
         privateCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] records, error in
             guard self.no(error: error) else { return }
-            try? GenericPasswordStore().deleteKey(account: Current.k.privateKey)
+            try? GenericPasswordStore().deleteKey(account: Current.k.privateEncryptionKey)
+            try? GenericPasswordStore().deleteKey(account: Current.k.privateSigningKey)
             records?.forEach { [unowned self] record in
                 self.privateCloudDatabase.delete(withRecordID: record.recordID) { recordID, error in
                     guard self.no(error: error) else { return }
@@ -206,23 +256,27 @@ extension CKContainer {
             }
             
             let record = CKRecord(recordType: .privateKey)
-            record[SigningKey.key] = key.rawRepresentation
-            record[SigningKey.creator] = creatorReference
+            record[CryptoKey.encryption] = encryption.rawRepresentation
+            record[CryptoKey.signing] = signing.rawRepresentation
+            record[CryptoKey.creator] = creatorReference
             self.privateCloudDatabase.save(record) { [unowned self] record, error in
                 guard self.no(error: error) else { return }
-                try? GenericPasswordStore().storeKey(key, account: Current.k.privateKey)
+                try? GenericPasswordStore().storeKey(encryption, account: Current.k.privateEncryptionKey)
+                try? GenericPasswordStore().storeKey(encryption, account: Current.k.privateSigningKey)
             }
         }
     }
     
-    private func store(public key: Curve25519.Signing.PublicKey) {
+    private func store(publicKey encryption: Curve25519.KeyAgreement.PublicKey,
+                       publicKey signing: Curve25519.Signing.PublicKey) {
         guard let creatorPredicate = CKContainer.creatorPredicate,
             let creatorReference = CKContainer.creatorReference else { return }
         
         let query = CKQuery(recordType: .publicKey, predicate: creatorPredicate)
         publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] records, error in
             guard self.no(error: error) else { return }
-            try? GenericPasswordStore().deleteKey(account: Current.k.publicKey)
+            try? GenericPasswordStore().deleteKey(account: Current.k.publicEncryptionKey)
+            try? GenericPasswordStore().deleteKey(account: Current.k.publicSigningKey)
             records?.forEach { [unowned self] record in
                 self.publicCloudDatabase.delete(withRecordID: record.recordID) { recordID, error in
                     guard self.no(error: error) else { return }
@@ -230,11 +284,13 @@ extension CKContainer {
             }
             
             let record = CKRecord(recordType: .publicKey)
-            record[SigningKey.key] = key.rawRepresentation
-            record[SigningKey.creator] = creatorReference
+            record[CryptoKey.encryption] = encryption.rawRepresentation
+            record[CryptoKey.signing] = signing.rawRepresentation
+            record[CryptoKey.creator] = creatorReference
             self.publicCloudDatabase.save(record) { [unowned self] record, error in
                 guard self.no(error: error) else { return }
-                try? GenericPasswordStore().storeKey(key, account: Current.k.publicKey)
+                try? GenericPasswordStore().storeKey(encryption, account: Current.k.publicEncryptionKey)
+                try? GenericPasswordStore().storeKey(encryption, account: Current.k.publicSigningKey)
             }
         }
     }
@@ -246,16 +302,16 @@ extension CKContainer {
     private func buildGroup(with name: String) -> [CKRecord] {
         let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
         let group = CKRecord(recordType: .group, recordID: recordID)
-
+        
         group[GroupKey.name] = name
         group[GroupKey.userCount] = 1
-
+        
         let share = CKShare(rootRecord: group)
         share.publicPermission = .readOnly
-
+        
         return [group, share]
-     }
- }
+    }
+}
 
 // MARK: - Error
 

@@ -22,7 +22,8 @@ enum MessageKey: String {
     case creator
 }
 
-enum SigningKey: String {
-    case key
+enum CryptoKey: String {
+    case encryption
+    case signing
     case creator
 }

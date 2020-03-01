@@ -19,7 +19,7 @@ extension CKRecord {
         set { self[key.rawValue] = newValue as? CKRecordValue }
     }
     
-    subscript(key: SigningKey) -> Any? {
+    subscript(key: CryptoKey) -> Any? {
         get { self[key.rawValue] }
         set { self[key.rawValue] = newValue as? CKRecordValue }
     }

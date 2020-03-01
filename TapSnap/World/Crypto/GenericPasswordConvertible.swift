@@ -29,6 +29,7 @@ extension GenericPasswordConvertible {
 
 // Declare that the Curve25519 keys are generic passord convertible.
 extension Curve25519.KeyAgreement.PrivateKey: GenericPasswordConvertible {}
+extension Curve25519.KeyAgreement.PublicKey: GenericPasswordConvertible {}
 extension Curve25519.Signing.PrivateKey: GenericPasswordConvertible {}
 extension Curve25519.Signing.PublicKey: GenericPasswordConvertible {}
 

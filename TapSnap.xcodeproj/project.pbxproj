@@ -76,6 +76,7 @@
 		E0CC88252B80F4D873A8E1B4 /* Tapsnap.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0F985F82AA8186B1FFB56A3A /* Tapsnap.xcdatamodeld */; };
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
+		ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */; };
 		EDE8F0B5240A0FA300DFA828 /* GenericPasswordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */; };
 		EDE8F0B7240A0FC300DFA828 /* GenericPasswordConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */; };
 		EDE8F0B9240A0FE200DFA828 /* KeyStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */; };
@@ -175,6 +176,7 @@
 		E75AF4F2AFFAC3179572271C /* SearchContactsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsTableView.swift; sourceTree = "<group>"; };
 		E7F4C07C5C51030334DDE02E /* CloudKitKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitKeys.swift; sourceTree = "<group>"; };
 		E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
+		ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyCryptography.swift; sourceTree = "<group>"; };
 		EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordStore.swift; sourceTree = "<group>"; };
 		EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordConvertible.swift; sourceTree = "<group>"; };
 		EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreError.swift; sourceTree = "<group>"; };
@@ -306,7 +308,7 @@
 			isa = PBXGroup;
 			children = (
 				EDE8F0C5240AD3E600DFA828 /* DataSources */,
-				EDE8F0B3240A0F9400DFA828 /* KeyChain */,
+				EDE8F0B3240A0F9400DFA828 /* Crypto */,
 				4541C7BAC1D79F3AE529B414 /* Constants.swift */,
 				30EFEEF0E80AD1385D07B53F /* EmptyDataView.swift */,
 				D092867E340FFAEA0055EC8C /* Formatter.swift */,
@@ -504,14 +506,15 @@
 			path = Camera;
 			sourceTree = "<group>";
 		};
-		EDE8F0B3240A0F9400DFA828 /* KeyChain */ = {
+		EDE8F0B3240A0F9400DFA828 /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
 				EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */,
 				EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */,
 				EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */,
+				ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */,
 			);
-			path = KeyChain;
+			path = Crypto;
 			sourceTree = "<group>";
 		};
 		EDE8F0BA240AC3A000DFA828 /* Groups */ = {
@@ -720,6 +723,7 @@
 				DF7728FCA91D5B5E5234D3E0 /* GroupSection.swift in Sources */,
 				BB2C52A7BAC8857534C19704 /* GroupValue.swift in Sources */,
 				23CEA16D7F7985D61172B946 /* IndeterminateProgressView.swift in Sources */,
+				ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */,
 				A58531E42B3285C125B4BC14 /* KeyboardAccessoryView.swift in Sources */,
 				AFA4B5B9C3DE95B8CCEE172D /* LoggedInViewController.swift in Sources */,
 				DD6A04D0AC022CB627DB36AE /* LoggedOutViewController.swift in Sources */,

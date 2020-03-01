@@ -55,6 +55,7 @@ enum MediaCapture {
 }
 
 struct World {
+    let pki = PublicKeyCryptography()
     let k = Constants()
     // DELTE
     let fakeContact: CNMutablePostalAddress = {
