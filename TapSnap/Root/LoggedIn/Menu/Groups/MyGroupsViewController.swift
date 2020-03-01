@@ -21,6 +21,7 @@ class MyGroupsViewController: UIViewController {
     private lazy var myGroupsCollectionView: MyGorupsCollectionView = {
         let v = MyGorupsCollectionView()
         v.delegate = self
+        v.refreshControl?.addTarget(self, action: #selector(refreshGroupsAction), for: .valueChanged)
         return v
     }()
     
@@ -28,13 +29,13 @@ class MyGroupsViewController: UIViewController {
         super.viewDidLoad()
         title = "My Groups"
         activityIndicatorView.startAnimating()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newGroup))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(newGroupAction))
         bootstrap()
     }
     
     // MARK: - Actions
     
-    @objc func newGroup() {
+    @objc func newGroupAction() {
         let newGroupAlert = UIAlertController(title: "New Group Name", message: nil, preferredStyle: .alert)
         newGroupAlert.addTextField()
         let submitAction = UIAlertAction(title: "Craete Group", style: .default) { [unowned newGroupAlert] _ in
@@ -44,6 +45,10 @@ class MyGroupsViewController: UIViewController {
         
         newGroupAlert.addAction(submitAction)
         present(newGroupAlert, animated: true)
+    }
+    
+    @objc func refreshGroupsAction() {
+        CKContainer.default().fetchAllGroups()
     }
 }
 
@@ -62,11 +67,12 @@ extension MyGroupsViewController: ViewBootstrappable {
     }
     
     func configureStreams() {
-        Current.cloudKitGroupsSubject.sink { groups in
+        Current.cloudKitGroupsSubject.sink { [unowned self] groups in
             guard let groups = groups else { return }
             
             DispatchQueue.main.async {
                 self.activityIndicatorView.stopAnimating()
+                self.myGroupsCollectionView.refreshControl?.endRefreshing()
                 
                 let items = groups.compactMap({ record -> GroupValue? in
                     guard let name = record["name"] as? String else { return nil }

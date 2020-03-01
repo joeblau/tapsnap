@@ -30,6 +30,7 @@ class MyGorupsCollectionView: UICollectionView {
         translatesAutoresizingMaskIntoConstraints = false
         showsHorizontalScrollIndicator = false
         backgroundColor = .systemBackground
+        refreshControl = UIRefreshControl()
         register(MyGroupCollectionViewCell.self,
                  forCellWithReuseIdentifier: MyGroupCollectionViewCell.id)
     }

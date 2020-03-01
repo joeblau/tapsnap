@@ -281,19 +281,18 @@ extension CameraViewController: ViewBootstrappable {
         }.store(in: &cancellables)
 
         Current.cloudKitGroupsSubject.sink { groups in
+            guard let groups = groups else { return }
+            DispatchQueue.main.async {
+                let items = groups.compactMap({ record -> GroupValue? in
+                    guard let name = record["name"] as? String else { return nil }
+                    return GroupValue(name: name, record: record)
+                })
 
-            guard let items = groups?.compactMap({ record -> GroupValue? in
-                guard let name = record["name"] as? String else { return nil }
-                return GroupValue(name: name, record: record)
-            }) else {
-                return
+                var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
+                snapshot.appendSections([.groups])
+                snapshot.appendItems(items, toSection: .groups)
+                self.contactsCollectionView.diffableDataSource?.apply(snapshot)
             }
-
-            var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
-            snapshot.appendSections([.groups])
-            snapshot.appendItems(items, toSection: .groups)
-            self.contactsCollectionView.diffableDataSource?.apply(snapshot)
-
         }.store(in: &cancellables)
         
         Current.cloudKitSelectedGroupSubject.sink { currentGroup in

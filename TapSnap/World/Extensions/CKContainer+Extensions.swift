@@ -102,14 +102,6 @@ extension CKContainer {
         }
     }
     
-//    func share(group share: CKShare, in container: CKContainer, sender: UIViewController) {
-//        DispatchQueue.main.async {
-//        let controller = UICloudSharingController(share: share, container: container)
-//        controller.availablePermissions = [.allowPublic, .allowReadOnly]
-//        sender.present(controller, animated: true, completion: nil)
-//        }
-//    }
-    
     func createNewMessage(for group: CKRecord,
                           with media: MediaCapture,
                           completion: @escaping (_ saved: Bool)->()) {
