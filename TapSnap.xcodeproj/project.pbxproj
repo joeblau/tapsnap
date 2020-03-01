@@ -306,7 +306,7 @@
 			isa = PBXGroup;
 			children = (
 				EDE8F0C5240AD3E600DFA828 /* DataSources */,
-				EDE8F0B3240A0F9400DFA828 /* Keychain */,
+				EDE8F0B3240A0F9400DFA828 /* KeyChain */,
 				4541C7BAC1D79F3AE529B414 /* Constants.swift */,
 				30EFEEF0E80AD1385D07B53F /* EmptyDataView.swift */,
 				D092867E340FFAEA0055EC8C /* Formatter.swift */,
@@ -504,14 +504,14 @@
 			path = Camera;
 			sourceTree = "<group>";
 		};
-		EDE8F0B3240A0F9400DFA828 /* Keychain */ = {
+		EDE8F0B3240A0F9400DFA828 /* KeyChain */ = {
 			isa = PBXGroup;
 			children = (
 				EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */,
 				EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */,
 				EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */,
 			);
-			path = Keychain;
+			path = KeyChain;
 			sourceTree = "<group>";
 		};
 		EDE8F0BA240AC3A000DFA828 /* Groups */ = {

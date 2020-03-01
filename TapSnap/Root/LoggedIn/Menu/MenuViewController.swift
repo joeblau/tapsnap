@@ -11,7 +11,7 @@ final class MenuViewController: UIViewController {
         SectionItem(menuItems: [
             MenuItem(systemName: "clock", titleText: "Activity"),
             MenuItem(systemName: "calendar", titleText: "Sent Today"),
-            MenuItem(systemName: "heart", titleText: "Saved Taps"),
+            MenuItem(systemName: "heart", titleText: "Saved"),
         ]),
         SectionItem(menuItems: [
             MenuItem(systemName: "paperplane", titleText: "Invite A Friend"),

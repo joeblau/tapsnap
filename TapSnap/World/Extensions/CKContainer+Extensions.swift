@@ -12,7 +12,11 @@ import CryptoKit
 
 extension CKContainer {
     static var inbox: CKRecord?
-
+    //    static var privateSharedZone: CKRecordZone?
+    //    static var privateInboxZone: CKRecordZone?
+    static var sharedSharedZone: CKRecordZone?
+    static var sharedInboxZone: CKRecordZone?
+    
     private var sharedZoneID: CKRecordZone.ID {
         CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
     }
@@ -44,7 +48,7 @@ extension CKContainer {
     
     func bootstrapZones() { buildZones() }
     
-    func crateInbox() {
+    func bootstrapInbox() {
         guard CKContainer.inbox == nil else { return }
         let inboxQuery = CKQuery(recordType: .inbox, predicate: NSPredicate(value: true))
         privateCloudDatabase.perform(inboxQuery, inZoneWith: inboxZoneID) { [unowned self] records, error in
@@ -81,14 +85,14 @@ extension CKContainer {
     
     func manage(group record: CKRecord, sender: UIViewController) {
         guard let shareRecordId = record.share?.recordID else { return }
-         
+        
         privateCloudDatabase.fetch(withRecordID: shareRecordId) { [unowned self] share, error in
             
             guard self.no(error: error), let share = share as? CKShare else { return }
             share[CKShare.SystemFieldKey.title] = record[GroupKey.name] as? String
             
             let thumbnailData = UIImage(systemName: "exclamationmark.triangle.fill",
-                               withConfiguration: UIImage.SymbolConfiguration(scale: .large))?
+                                        withConfiguration: UIImage.SymbolConfiguration(scale: .large))?
                 .withTintColor(.systemOrange, renderingMode: .alwaysTemplate)
                 .pngData()
             
@@ -119,20 +123,37 @@ extension CKContainer {
     
     func fetchAllGroups() {
         let query = CKQuery(recordType: .group, predicate: NSPredicate(value: true))
-
+        
+        sharedCloudDatabase.fetchAllRecordZones { [unowned self] zones, error in
+            zones?.forEach{ zone in
+                self.sharedCloudDatabase.perform(query, inZoneWith: zone.zoneID) { [unowned self] records, error in
+                    guard self.no(error: error), let groups = records else { return }
+                    
+                    let exsitingGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
+                    let newGroups = Set(groups)
+                    let unionGroups = newGroups.union(exsitingGroups)
+                    Current.cloudKitGroupsSubject.send(unionGroups)
+                }
+            }
+        }
+        
         privateCloudDatabase.perform(query, inZoneWith: sharedZoneID) { [unowned self] records, error in
             guard self.no(error: error), let groups = records else { return }
-            Current.cloudKitGroupsSubject.send(Set<CKRecord>(groups))
+            
+            let exsitingGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
+            let newGroups = Set(groups)
+            let unionGroups = newGroups.union(exsitingGroups)
+            Current.cloudKitGroupsSubject.send(unionGroups)
         }
     }
     
     func fetchUnreadMessages() {
-//        let query = CKQuery(recordType: .message, predicate: NSPredicate(value: true))
-//
-//        sharedCloudDatabase.perform(query, inZoneWith: sharedZoneID) { [unowned self] records, error in
-//            guard self.no(error: error) else { return }
-//            //            print(records)
-//        }
+        //        let query = CKQuery(recordType: .message, predicate: NSPredicate(value: true))
+        //
+        //        sharedCloudDatabase.perform(query, inZoneWith: sharedZoneID) { [unowned self] records, error in
+        //            guard self.no(error: error) else { return }
+        //            //            print(records)
+        //        }
     }
 }
 
@@ -275,10 +296,10 @@ extension CKContainer {
     private func buildInbox() {
         let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: inboxZoneID)
         let inboxRecord = CKRecord(recordType: .inbox, recordID: recordID)
-
+        
         let shareRecord = CKShare(rootRecord: inboxRecord)
         shareRecord.publicPermission = .readWrite
-
+        
         let operation = CKModifyRecordsOperation(recordsToSave: [inboxRecord, shareRecord],
                                                  recordIDsToDelete: nil)
         operation.perRecordCompletionBlock = { [unowned self] _, error  in
@@ -295,18 +316,28 @@ extension CKContainer {
 
 extension CKContainer {
     private func buildZones() {
-        privateCloudDatabase.fetchAllRecordZones { [unowned self] zones, error in
-            let sharedZoneEmpty = zones?.filter { $0.zoneID.zoneName == self.sharedZoneID.zoneName }.isEmpty ?? true
-            if sharedZoneEmpty {
-                self.privateCloudDatabase.save(CKRecordZone(zoneID: self.sharedZoneID)) { [unowned self] zone, error in
-                    guard self.no(error: error) else { return }
+        privateCloudDatabase.fetch(withRecordZoneID: self.sharedZoneID) { zone, error in
+            guard self.no(error: error) else { return }
+            
+            switch zone {
+            case .some(_): break
+            case .none:
+                self.privateCloudDatabase
+                    .save(CKRecordZone(zoneID: self.sharedZoneID)) { [unowned self] zone, error in
+                        guard self.no(error: error) else { return }
                 }
             }
-
-            let inboxZoneEmpty = zones?.filter { $0.zoneID.zoneName == self.inboxZoneID.zoneName }.isEmpty ?? true
-            if inboxZoneEmpty {
-                self.privateCloudDatabase.save(CKRecordZone(zoneID: self.inboxZoneID)) { [unowned self] zone, error in
-                    guard self.no(error: error) else { return }
+        }
+        
+        privateCloudDatabase.fetch(withRecordZoneID: self.inboxZoneID) { zone, error in
+            guard self.no(error: error) else { return }
+            
+            switch zone {
+            case .some(_): break
+            case .none:
+                self.privateCloudDatabase
+                    .save(CKRecordZone(zoneID: self.sharedZoneID)) { [unowned self] zone, error in
+                        guard self.no(error: error) else { return }
                 }
             }
         }
