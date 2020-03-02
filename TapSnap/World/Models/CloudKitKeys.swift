@@ -19,7 +19,10 @@ enum GroupKey: String {
 enum MessageKey: String {
     case photo
     case movie
-    case creator
+    case ciphertext
+    case signature
+    case senderSigningKey
+    case recipient
 }
 
 enum CryptoKey: String {

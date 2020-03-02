@@ -102,50 +102,12 @@ extension CKContainer {
             
             let participantRecordIDs = share.participants.filter { participant -> Bool in
                 !(participant.value(forKeyPath: "isCurrentUser") as? Bool ?? true)
-            }.map{ participant -> CKRecord.ID? in
+            }.compactMap { participant -> CKRecord.ID? in
                 participant.userIdentity.userRecordID
             }
             
-            let predecate = NSPredicate(format: "creator IN %@", participantRecordIDs)
-            let query = CKQuery(recordType: .publicKey, predicate: predecate)
-            
-            self.publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] publicKeys, error in
-                guard self.no(error: error), let publicKeys = publicKeys else { return }
-                
-                publicKeys.forEach { publicKey in
-                    guard let pkEncryption = publicKey[CryptoKey.encryption] as? Curve25519.KeyAgreement.PublicKey else { return }
-                    
-                    do {
-                        guard let pvSigning: Curve25519.Signing.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateSigningKey)  else {
-                            fatalError("Could not read private key/re-bootstrap")
-                            return
-                        }
-                        let record = CKRecord(recordType: .message)
-                        
-                        let sealedMessage: (ephemeralPublicKeyData: Data, ciphertext: Data, signature: Data)
-                        switch media {
-                        case let .movie(url):
-                            let movieData = try Data(contentsOf: url)
-                            sealedMessage = try Current.pki.encrypt(movieData, to: pkEncryption, signedBy: pvSigning)
-                        //                            record[MessageKey.movie] = CKAsset(fileURL: url)
-                        case let .photo(url):
-                            let photoData = try Data(contentsOf: url)
-                            sealedMessage = try Current.pki.encrypt(photoData, to: pkEncryption, signedBy: pvSigning)
-                            //                            record[MessageKey.photo] = CKAsset(fileURL: url)
-                        }
-                        
-                        
-                    } catch {
-                        os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
-                    }
-                    
-                }
-                
-                
-            }
-
+            self.sendMessages(to: participantRecordIDs, with: media)
         }
-
         completion(true)
     }
     
@@ -176,12 +138,12 @@ extension CKContainer {
     }
     
     func fetchUnreadMessages() {
-        //        let query = CKQuery(recordType: .message, predicate: NSPredicate(value: true))
-        //
-        //        sharedCloudDatabase.perform(query, inZoneWith: sharedZoneID) { [unowned self] records, error in
-        //            guard self.no(error: error) else { return }
-        //            //            print(records)
-        //        }
+        guard let creatorPredicate = CKContainer.creatorPredicate else { return }
+        let query = CKQuery(recordType: .message, predicate: NSPredicate(value: true))
+        sharedCloudDatabase.perform(query, inZoneWith: sharedZoneID) { [unowned self] records, error in
+            guard self.no(error: error) else { return }
+            //            print(records)
+        }
     }
 }
 
@@ -221,6 +183,75 @@ extension CKContainer {
             
             UserDefaults.standard.set(data, forKey: Current.k.userAccount)
             Current.cloudKitUserSubject.send(record)
+        }
+    }
+}
+
+extension CKContainer {
+    private func sendMessages(to participantRecordIDs: [CKRecord.ID], with media: MediaCapture) {
+        let predecate = NSPredicate(format: "creator IN %@", participantRecordIDs)
+        let query = CKQuery(recordType: .publicKey, predicate: predecate)
+        self.publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] publicKeys, error in
+            guard self.no(error: error), let publicKeys = publicKeys else { return }
+            
+            publicKeys.forEach { publicKey in
+                guard let bytes = publicKey[CryptoKey.encryption] as? Data,
+                    let pkEncryption = try? Curve25519.KeyAgreement.PublicKey(rawRepresentation: bytes) else {
+                    return
+                }
+                
+                do {
+                    guard let pvSigning: Curve25519.Signing.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateSigningKey),
+                        let pkSigning: Curve25519.Signing.PublicKey = try? GenericPasswordStore().readKey(account: Current.k.publicSigningKey) else {
+                        fatalError("Could not read private key/re-bootstrap")
+                    }
+                    let tempURL = URL.sealedURL
+                    
+                    let record = CKRecord(recordType: .message)
+                    record[MessageKey.senderSigningKey] = pkSigning
+                    let sealedMessage: SealedMessage
+                    switch media {
+                    case let .movie(url):
+                        let movieData = try Data(contentsOf: url)
+                        sealedMessage = try Current.pki.encrypt(movieData, to: pkEncryption, signedBy: pvSigning)
+                        try sealedMessage.ephemeralPublicKeyData.write(to: tempURL.ephemeralPublicKeyURL)
+                        record[MessageKey.movie] = CKAsset(fileURL: tempURL.ephemeralPublicKeyURL)
+                        
+                    case let .photo(url):
+                        let photoData = try Data(contentsOf: url)
+                        sealedMessage = try Current.pki.encrypt(photoData, to: pkEncryption, signedBy: pvSigning)
+                        try sealedMessage.ephemeralPublicKeyData.write(to: tempURL.ephemeralPublicKeyURL)
+                        record[MessageKey.photo] = CKAsset(fileURL: tempURL.ephemeralPublicKeyURL)
+                    }
+                    
+                    try sealedMessage.ciphertextData.write(to: tempURL.ciphertexURL)
+                    record[MessageKey.ciphertext] = CKAsset(fileURL: tempURL.ciphertexURL)
+                    try sealedMessage.signatureData.write(to: tempURL.signatureURL)
+                    record[MessageKey.signature] = CKAsset(fileURL: tempURL.signatureURL)
+                    record[MessageKey.recipient] = publicKey[CryptoKey.creator] as? CKRecord.Reference
+                    
+                    self.publicCloudDatabase.save(record) { [unowned self] record, error in
+                        self.cleanUp(tempURL: tempURL)
+                        guard self.no(error: error) else { return }
+                    }
+                } catch {
+                    os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
+                }
+            }
+        }
+    }
+    
+    private func cleanUp(tempURL: SealedURL) {
+        [tempURL.ephemeralPublicKeyURL,
+         tempURL.ciphertexURL,
+         tempURL.signatureURL].forEach { url in
+            if FileManager.default.fileExists(atPath: url.path) {
+                do {
+                    try FileManager.default.removeItem(atPath: url.path)
+                } catch {
+                    print("Could not remove file at url: \(url)")
+                }
+            }
         }
     }
 }

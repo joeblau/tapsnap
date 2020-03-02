@@ -77,6 +77,8 @@
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
 		ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */; };
+		ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA3240C810700DA4081 /* Aliases.swift */; };
+		ED8C2EA6240C81E800DA4081 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */; };
 		EDE8F0B5240A0FA300DFA828 /* GenericPasswordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */; };
 		EDE8F0B7240A0FC300DFA828 /* GenericPasswordConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */; };
 		EDE8F0B9240A0FE200DFA828 /* KeyStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */; };
@@ -177,6 +179,8 @@
 		E7F4C07C5C51030334DDE02E /* CloudKitKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitKeys.swift; sourceTree = "<group>"; };
 		E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
 		ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyCryptography.swift; sourceTree = "<group>"; };
+		ED8C2EA3240C810700DA4081 /* Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
+		ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordStore.swift; sourceTree = "<group>"; };
 		EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordConvertible.swift; sourceTree = "<group>"; };
 		EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreError.swift; sourceTree = "<group>"; };
@@ -316,6 +320,7 @@
 				81343ECC5DE5C427BB2D9208 /* Extensions */,
 				753A751A196650EE6B48B296 /* Models */,
 				152654B219B2E035B464B9CB /* Protocols */,
+				ED8C2EA3240C810700DA4081 /* Aliases.swift */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -418,6 +423,7 @@
 				5A6C48A082BDC2B70BD74753 /* UIImage+Extensions.swift */,
 				C938C741102596FD14058E88 /* UILabel+Extension.swift */,
 				F46D5270D9E16B4F9812EF95 /* UIView+Extensions.swift */,
+				ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -697,6 +703,7 @@
 				EDE8F0C7240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift in Sources */,
 				F2E7E66C5731EE7C43417559 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
 				5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */,
+				ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */,
 				EE6B209AF27D3C6A315EDB82 /* AutoSaveTapsTableViewCell.swift in Sources */,
 				416E8AFAED4D2645FE4AAE57 /* AvatarNameTableViewCell.swift in Sources */,
 				381DF8A46DED81C7A2E0A84E /* CKContainer+Extensions.swift in Sources */,
@@ -766,6 +773,7 @@
 				B01731BD3DB6387F41FFBC60 /* UILabel+Extension.swift in Sources */,
 				41887E30E56A03C962881E06 /* UIView+Extensions.swift in Sources */,
 				EDE8F0B5240A0FA300DFA828 /* GenericPasswordStore.swift in Sources */,
+				ED8C2EA6240C81E800DA4081 /* URL+Extensions.swift in Sources */,
 				5369693BBCFA6A944EBF9190 /* ViewBootstrappable.swift in Sources */,
 				9E45F15C27283EA75A95FDA8 /* World.swift in Sources */,
 			);

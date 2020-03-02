@@ -13,7 +13,7 @@ struct PublicKeyCryptography {
     
     /// Generates an ephemeral key agreement key and performs key agreement to get the shared secret and derive the symmetric encryption key.
     func encrypt(_ data: Data, to theirEncryptionKey: Curve25519.KeyAgreement.PublicKey, signedBy ourSigningKey: Curve25519.Signing.PrivateKey) throws ->
-        (ephemeralPublicKeyData: Data, ciphertext: Data, signature: Data) {
+        SealedMessage {
             let ephemeralKey = Curve25519.KeyAgreement.PrivateKey()
             let ephemeralPublicKey = ephemeralKey.publicKey.rawRepresentation
             
@@ -37,11 +37,11 @@ struct PublicKeyCryptography {
     }
     
     /// Generates an ephemeral key agreement key and the performs key agreement to get the shared secret and derive the symmetric encryption key.
-    func decrypt(_ sealedMessage: (ephemeralPublicKeyData: Data, ciphertext: Data, signature: Data),
+    func decrypt(_ sealedMessage: SealedMessage,
                  using ourKeyEncryptionKey: Curve25519.KeyAgreement.PrivateKey,
                  from theirSigningKey: Curve25519.Signing.PublicKey) throws -> Data {
-        let data = sealedMessage.ciphertext + sealedMessage.ephemeralPublicKeyData + ourKeyEncryptionKey.publicKey.rawRepresentation
-        guard theirSigningKey.isValidSignature(sealedMessage.signature, for: data) else {
+        let data = sealedMessage.ciphertextData + sealedMessage.ephemeralPublicKeyData + ourKeyEncryptionKey.publicKey.rawRepresentation
+        guard theirSigningKey.isValidSignature(sealedMessage.signatureData, for: data) else {
             throw DecryptionErrors.authenticationError
         }
         
@@ -55,7 +55,7 @@ struct PublicKeyCryptography {
                                                                     theirSigningKey.rawRepresentation,
                                                                 outputByteCount: 32)
         
-        let sealedBox = try! ChaChaPoly.SealedBox(combined: sealedMessage.ciphertext)
+        let sealedBox = try! ChaChaPoly.SealedBox(combined: sealedMessage.ciphertextData)
         
         return try ChaChaPoly.open(sealedBox, using: symmetricKey)
     }
