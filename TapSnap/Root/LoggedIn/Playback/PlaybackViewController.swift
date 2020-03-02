@@ -9,6 +9,7 @@ import UIKit
 
 final class PlaybackViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
+    private let mediaCapture: MediaCapture
 
     private lazy var backButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
@@ -61,8 +62,8 @@ final class PlaybackViewController: UIViewController {
         }
     }
 
-    private lazy var playerView: UIView = {
-        let v = UIView()
+    private lazy var playerView: UIImageView = {
+        let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -90,13 +91,31 @@ final class PlaybackViewController: UIViewController {
 
     // MARK: - Lifecycle
 
+    init(messageURL: URL) {
+        if let data = try? Data(contentsOf: messageURL), let _ = UIImage(data: data) {
+            self.mediaCapture = MediaCapture.photo(messageURL)
+        } else {
+            self.mediaCapture = MediaCapture.movie(messageURL)
+        }
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Pop That"
         view.backgroundColor = .systemBackground
         view.floatView()
-        if let playerPath = Bundle.main.path(forResource: "ts1", ofType: "mov") {
-            looper = PlayerLooper(videoURL: URL(fileURLWithPath: playerPath), loopCount: 0)
+        
+        switch mediaCapture {
+        case let .photo(url):
+            guard let data = try? Data(contentsOf: url) else { return }
+            playerView.image = UIImage(data: data)
+        case let .movie(url):
+            looper = PlayerLooper(videoURL: url, loopCount: 0)
         }
         toolbarItems = [saveButton, spacer, heartButton]
         populateMapAndMapOverlay()
@@ -105,12 +124,21 @@ final class PlaybackViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        looper?.start(in: playerView.layer)
+        switch mediaCapture {
+        case .photo(_): break
+        case .movie(_): looper?.start(in: playerView.layer)
+        }
+        
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        looper?.stop()
+        
+        switch mediaCapture {
+        case .photo(_): break
+        case .movie(_): looper?.stop()
+        }
+        
         cancellables.forEach { cancellable in
             cancellable.cancel()
         }
@@ -141,7 +169,7 @@ final class PlaybackViewController: UIViewController {
     private func populateMapAndMapOverlay() {
         let myLocation: CLLocation = CLLocation(latitude: 37.759580, longitude: -122.391850)
         let theirLocation: CLLocation = CLLocation(latitude: 33.996890, longitude: -84.428710)
-        let theirAddresss: CNPostalAddress = Current.fakeContact
+//        let theirAddresss: CNPostalAddress
         let theirDate: Date = Date(timeIntervalSince1970: 1_579_947_732)
 
         let theirAnnotation: MKPointAnnotation = {
@@ -168,7 +196,7 @@ final class PlaybackViewController: UIViewController {
 
         mapOverlayView.configure(myLocation: myLocation,
                                  theirLocation: theirLocation,
-                                 theirAddresss: theirAddresss,
+//                                 theirAddresss: theirAddresss,
                                  theirDate: theirDate)
     }
 }

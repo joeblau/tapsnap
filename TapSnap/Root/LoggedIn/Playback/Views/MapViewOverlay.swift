@@ -57,12 +57,12 @@ final class MapViewOverlay: UIView {
 
     public func configure(myLocation: CLLocation,
                           theirLocation: CLLocation,
-                          theirAddresss: CNPostalAddress,
+//                          theirAddresss: CNPostalAddress,
                           theirDate: Date) {
         let distance = myLocation.distance(from: theirLocation)
-        timeDistanceLocation.attributedText = formatMetadata(address: theirAddresss,
-                                                             date: theirDate,
-                                                             distance: distance)
+//        timeDistanceLocation.attributedText = formatMetadata(address: theirAddresss,
+//                                                             date: theirDate,
+//                                                             distance: distance)
     }
 
     private func formatMetadata(address: CNPostalAddress?,

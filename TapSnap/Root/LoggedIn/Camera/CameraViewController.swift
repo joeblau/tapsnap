@@ -206,8 +206,8 @@ extension CameraViewController: ViewBootstrappable {
                     self.session.enableBackgroundAudio()
                 }
             case .playback:
-                (0 ..< self.tapNotificationCount).forEach { _ in
-                    self.playbackViewController.pushViewController(PlaybackViewController(), animated: false)
+                Current.inboxURLsSubject.value?.forEach { url in
+                    self.playbackViewController.pushViewController(PlaybackViewController(messageURL: url), animated: false)
                 }
                 self.present(self.playbackViewController, animated: true) {
                     self.session.disableBackgroundAudio()

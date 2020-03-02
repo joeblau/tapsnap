@@ -62,16 +62,6 @@ enum MediaType {
 struct World {
     let pki = PublicKeyCryptography()
     let k = Constants()
-    // DELTE
-    let fakeContact: CNMutablePostalAddress = {
-        let pa = CNMutablePostalAddress()
-        pa.street = "1884 Wood Acres Lane"
-        pa.city = "Marieta"
-        pa.state = "Georga"
-        pa.postalCode = "30062"
-        pa.country = "United States"
-        return pa
-    }()
 
     // Sensors
     var locationManager: CLLocationManager = {
