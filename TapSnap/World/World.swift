@@ -126,6 +126,8 @@ struct World {
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
 
+    var inboxURLsSubject = CurrentValueSubject<[URL]?, Never>(nil)
+    
     // CloudKit
     var cloudKitUserSubject = CurrentValueSubject<CKRecord?, Never>(nil)
     var cloudKitGroupsSubject = CurrentValueSubject<Set<CKRecord>?, Never>(nil)

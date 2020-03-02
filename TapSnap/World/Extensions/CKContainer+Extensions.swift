@@ -179,7 +179,6 @@ extension CKContainer {
                 } else {
                     fatalError("Invalid assset/delete message")
                 }
-                
             }
         }
     }
@@ -300,12 +299,24 @@ extension CKContainer {
         guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else {
             fatalError("Bootstrap private encryptoin key")
         }
+
         do {
             let decryptedMessage = try Current.pki.decrypt(message, using: pvEncryption, from: signing)
-            
-            print(decryptedMessage.count)
+//            try decryptedMessage.write(to: URL.randomInboxSaveURL, options: .atomicWrite)
+            loadInbox()
         } catch {
             os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
+        }
+    }
+    
+    private func loadInbox() {
+        do {
+            let messageURLs = try FileManager.default.contentsOfDirectory(at: URL.inboxURL,
+                                                                    includingPropertiesForKeys: nil,
+                                                                    options: .includesDirectoriesPostOrder)
+            Current.inboxURLsSubject.send(messageURLs)
+        } catch {
+            os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
     }
 }

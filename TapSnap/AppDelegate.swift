@@ -15,6 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UIApplication.shared.registerForRemoteNotifications()
         
+        do { // Craete Inbox
+            try FileManager.default.createDirectory(at: URL.inboxURL, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
+        }
+        
         do { // Delegates
             Current.locationManager.delegate = self
             UNUserNotificationCenter.current().delegate = self
@@ -31,6 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             UIBarButtonItem.appearance().tintColor = .label
         }
+        
+
 
         switch UserDefaults.standard.bool(forKey: "enabled_sensor_visualizer") {
         case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)

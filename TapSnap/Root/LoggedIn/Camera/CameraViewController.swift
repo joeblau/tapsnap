@@ -11,7 +11,19 @@ import UIKit
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
 
-    let tapNotificationCount = 0
+    var tapNotificationCount = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                self.notificationButton.setTitle("\(self.tapNotificationCount)", for: .normal)
+                switch self.tapNotificationCount {
+                case 0:
+                    self.notificationButton.isHidden = true
+                default:
+                    self.notificationButton.isHidden = false
+                }
+            }
+        }
+    }
     let itemsInSection = [0]
     var currentGroup: CKRecord? = nil
 
@@ -53,9 +65,8 @@ final class CameraViewController: UIViewController {
     // Top right
     lazy var notificationButton: UIButton = {
         let b = UIButton(type: .custom)
-        b.setTitle("\(tapNotificationCount)", for: .normal)
         b.notification(diameter: 20)
-        b.isHidden = tapNotificationCount == 0
+        b.isHidden = true
         return b
     }()
 
@@ -296,6 +307,13 @@ extension CameraViewController: ViewBootstrappable {
         
         Current.cloudKitSelectedGroupSubject.sink { currentGroup in
             self.currentGroup = currentGroup
+        }.store(in: &cancellables)
+        
+        Current.inboxURLsSubject.sink { urls in
+            switch urls {
+            case let .some(urls): self.tapNotificationCount = urls.count
+            case .none: break
+            }
         }.store(in: &cancellables)
     }
 
