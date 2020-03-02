@@ -46,7 +46,6 @@
 		8CACF9C2C0EA7613439180F8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4541C7BAC1D79F3AE529B414 /* Constants.swift */; };
 		8DCD4EBC5F1E0F9776A5A374 /* MapViewOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F76C684C320050C50C7BB2 /* MapViewOverlay.swift */; };
 		916F904C56D25570A3DA12B5 /* PlaybackViewController+MKMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5321E8A88101AC69230EB4AF /* PlaybackViewController+MKMapViewDelegate.swift */; };
-		91B75DB67B1F96B1929982AF /* ts1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 97BE037005EB3E030B1B3ED6 /* ts1.mov */; };
 		93706DF7B6ABC7130ADC4B4F /* CameraGroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DD3CC49A61C4604E5E86B3 /* CameraGroupsDiffableDataSource.swift */; };
 		9459D858A99F4EE793F37E92 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A03D34D5EFD9078502D2B3D /* main.swift */; };
 		9D4E662859FBDF5BEC5704E2 /* CKRecord+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7036C718054EB3309DB1FD /* CKRecord+Extensions.swift */; };
@@ -158,7 +157,6 @@
 		8DC248A20FDB5559FA99563E /* SearchContactsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsSection.swift; sourceTree = "<group>"; };
 		94344FC87696F3296346CA01 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		973CEDB8780E17647226ACC0 /* ContactsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
-		97BE037005EB3E030B1B3ED6 /* ts1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = ts1.mov; sourceTree = "<group>"; };
 		98F41006407FCD51B3388DA5 /* AutoSaveTapsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSaveTapsTableViewCell.swift; sourceTree = "<group>"; };
 		99AC699B7654EFE34FD9C755 /* CKContainer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKContainer+Extensions.swift"; sourceTree = "<group>"; };
 		9CE23D3372831A7B685FA94F /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
@@ -301,7 +299,6 @@
 				B2528AD68900F4499FB43418 /* Settings.bundle */,
 				9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */,
 				0F985F82AA8186B1FFB56A3A /* Tapsnap.xcdatamodeld */,
-				97BE037005EB3E030B1B3ED6 /* ts1.mov */,
 				3485EF75C3FD9E24EC1B2598 /* Root */,
 				5B357A0CFC5D38D252784D58 /* World */,
 			);
@@ -685,7 +682,6 @@
 				A82CDC252A3653C4519C16FA /* Assets.xcassets in Resources */,
 				DD02C776E10CF87F7623060B /* LaunchScreen.storyboard in Resources */,
 				317CC529D4268A10BCEEF5AD /* Settings.bundle in Resources */,
-				91B75DB67B1F96B1929982AF /* ts1.mov in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

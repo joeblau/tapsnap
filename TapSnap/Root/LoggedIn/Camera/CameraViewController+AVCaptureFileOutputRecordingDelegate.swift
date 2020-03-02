@@ -26,7 +26,7 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                 case let .success(watermarURL):
                     guard let currentGroup = self.currentGroup else { return }
                     CKContainer.default()
-                        .createNewMessage(for: currentGroup, with: .movie(watermarURL)) { _ in
+                        .createNewMessage(for: currentGroup, with: watermarURL) { _ in
                             guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
                             PHPhotoLibrary.requestAuthorization { status in
                                 switch status {
@@ -60,7 +60,7 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
             case .none:
                 guard let currentGroup = self.currentGroup else { return }
                 CKContainer.default()
-                    .createNewMessage(for: currentGroup, with: .movie(outputFileURL)) { _ in
+                    .createNewMessage(for: currentGroup, with: outputFileURL) { _ in
                         guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
                         
                         PHPhotoLibrary.requestAuthorization { status in
@@ -183,9 +183,10 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
         instruction.layerInstructions = [layerInstrution]
         videoComposition.instructions = [instruction]
         
-        let outputFileName = NSUUID().uuidString
-        let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
-        let outputFileURL = URL(fileURLWithPath: outputFilePath)
+        let outputFileURL = FileManager.default
+            .temporaryDirectory
+            .appendingPathComponent(NSUUID().uuidString)
+            .appendingPathExtension("mov")
         
         guard let exportSession = AVAssetExportSession(asset: finalComposition,
                                                        presetName: AVAssetExportPresetHEVCHighestQuality) else {

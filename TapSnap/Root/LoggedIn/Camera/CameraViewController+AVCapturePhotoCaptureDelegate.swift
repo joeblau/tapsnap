@@ -61,9 +61,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
             return
         }
         
-        let outputFileName = NSUUID().uuidString
-        let tempPath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("dat")!)
-        let outputFileURL = URL(fileURLWithPath: tempPath)
+        let outputFileURL = URL.randomURL
         do {
             try photoData.write(to: outputFileURL)
         } catch {
@@ -76,7 +74,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
             return
         }
         CKContainer.default()
-            .createNewMessage(for: currentGroup, with: .photo(outputFileURL)) { _ in
+            .createNewMessage(for: currentGroup, with: outputFileURL) { _ in
                 guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
                 
                 PHPhotoLibrary.requestAuthorization { status in

@@ -95,7 +95,7 @@ extension CKContainer {
     }
     
     func createNewMessage(for group: CKRecord,
-                          with media: MediaCapture,
+                          with mediaURL: URL,
                           completion: @escaping (_ saved: Bool)->()) {
         guard let shareRecordId = group.share?.recordID else { return }
         
@@ -108,7 +108,7 @@ extension CKContainer {
                 participant.userIdentity.userRecordID
             }
             
-            self.sendMessages(to: participantRecordIDs, with: media)
+            self.sendMessages(to: participantRecordIDs, with: mediaURL)
         }
         completion(true)
     }
@@ -148,38 +148,43 @@ extension CKContainer {
             messages?.forEach{ message in
                 
                 guard let ciphertextAsset = message[MessageKey.ciphertext] as? CKAsset,
-                    let signatureAsset = message[MessageKey.signature] as? CKAsset,
                     let ciphertextURL = ciphertextAsset.fileURL,
-                    let signatureURL = signatureAsset.fileURL,
                     let ciphertextData = try? Data(contentsOf: ciphertextURL),
+                    
+                    let signatureAsset = message[MessageKey.signature] as? CKAsset,
+                    let signatureURL = signatureAsset.fileURL,
                     let signatureData = try? Data(contentsOf: signatureURL),
+                    
+                    let ephemeralPublicKeyAsset = message[MessageKey.media] as? CKAsset,
+                    let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
+                    let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL),
+                
                     let senderSigningKeyData = message[MessageKey.senderSigningKey] as? Data,
                     let senderSigningKey = try? Curve25519.Signing.PublicKey(rawRepresentation: senderSigningKeyData) else {
                         fatalError("Invalid message/delete message")
                 }
+                let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
+                                                    ciphertextData: ciphertextData,
+                                                    signatureData: signatureData)
+                self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, completed: { [unowned self] isSaved in
+                    guard isSaved else { return }
+                    self.publicCloudDatabase.delete(withRecordID: message.recordID) { [unowned self] record, error in
+                        guard self.no(error: error) else { return }
+                    }
+                })
                 
-                if let ephemeralPublicKeyAsset = message[MessageKey.photo] as? CKAsset,
-                    let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
-                    let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL) {
-                    
-                    let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
-                                                        ciphertextData: ciphertextData,
-                                                        signatureData: signatureData)
-                    self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, type: .photo)
-                    
-                } else if let ephemeralPublicKeyAsset = message[MessageKey.movie] as? CKAsset,
-                    let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
-                    let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL){
-                    
-                    let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
-                                                        ciphertextData: ciphertextData,
-                                                        signatureData: signatureData)
-                    self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, type: .movie)
-                    
-                } else {
-                    fatalError("Invalid assset/delete message")
-                }
             }
+        }
+    }
+    
+    func loadInbox() {
+        do {
+            let messageURLs = try FileManager.default.contentsOfDirectory(at: URL.inboxURL,
+                                                                    includingPropertiesForKeys: nil,
+                                                                    options: .includesDirectoriesPostOrder)
+            Current.inboxURLsSubject.send(messageURLs)
+        } catch {
+            os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
     }
 }
@@ -225,7 +230,7 @@ extension CKContainer {
 }
 
 extension CKContainer {
-    private func sendMessages(to participantRecordIDs: [CKRecord.ID], with media: MediaCapture) {
+    private func sendMessages(to participantRecordIDs: [CKRecord.ID], with mediaURL: URL) {
         let predecate = NSPredicate(format: "creator IN %@", participantRecordIDs)
         let query = CKQuery(recordType: .publicKey, predicate: predecate)
         self.publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] publicKeys, error in
@@ -247,19 +252,10 @@ extension CKContainer {
                     let record = CKRecord(recordType: .message)
                     record[MessageKey.senderSigningKey] = pkSigning.rawRepresentation
                     let sealedMessage: SealedMessage
-                    switch media {
-                    case let .movie(url):
-                        let movieData = try Data(contentsOf: url)
-                        sealedMessage = try Current.pki.encrypt(movieData, to: pkEncryption, signedBy: pvSigning)
-                        try sealedMessage.ephemeralPublicKeyData.write(to: tempURL.ephemeralPublicKeyURL)
-                        record[MessageKey.movie] = CKAsset(fileURL: tempURL.ephemeralPublicKeyURL)
-                        
-                    case let .photo(url):
-                        let photoData = try Data(contentsOf: url)
-                        sealedMessage = try Current.pki.encrypt(photoData, to: pkEncryption, signedBy: pvSigning)
-                        try sealedMessage.ephemeralPublicKeyData.write(to: tempURL.ephemeralPublicKeyURL)
-                        record[MessageKey.photo] = CKAsset(fileURL: tempURL.ephemeralPublicKeyURL)
-                    }
+                    let mediaData = try Data(contentsOf: mediaURL)
+                    sealedMessage = try Current.pki.encrypt(mediaData, to: pkEncryption, signedBy: pvSigning)
+                    try sealedMessage.ephemeralPublicKeyData.write(to: tempURL.ephemeralPublicKeyURL)
+                    record[MessageKey.media] = CKAsset(fileURL: tempURL.ephemeralPublicKeyURL)
                     
                     try sealedMessage.ciphertextData.write(to: tempURL.ciphertexURL)
                     record[MessageKey.ciphertext] = CKAsset(fileURL: tempURL.ciphertexURL)
@@ -295,28 +291,26 @@ extension CKContainer {
 
 // MARK: - Message
 extension CKContainer {
-    private func decrypt(sealed message: SealedMessage, publicKey signing: Curve25519.Signing.PublicKey, type: MediaType) {
+    private func decrypt(sealed message: SealedMessage,
+                         publicKey signing: Curve25519.Signing.PublicKey,
+                         completed: (_ saved: Bool) -> ()) {
         guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else {
             fatalError("Bootstrap private encryptoin key")
         }
 
         do {
             let decryptedMessage = try Current.pki.decrypt(message, using: pvEncryption, from: signing)
-//            try decryptedMessage.write(to: URL.randomInboxSaveURL, options: .atomicWrite)
+            
+            switch UIImage(data: decryptedMessage) {
+            case .some(_):
+                try decryptedMessage.write(to: URL.randomInboxSaveURL(fileExtension: .heic), options: .atomicWrite)
+            case .none:
+                try decryptedMessage.write(to: URL.randomInboxSaveURL(fileExtension: .mov), options: .atomicWrite)
+            }
             loadInbox()
+            completed(true)
         } catch {
             os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
-        }
-    }
-    
-    private func loadInbox() {
-        do {
-            let messageURLs = try FileManager.default.contentsOfDirectory(at: URL.inboxURL,
-                                                                    includingPropertiesForKeys: nil,
-                                                                    options: .includesDirectoriesPostOrder)
-            Current.inboxURLsSubject.send(messageURLs)
-        } catch {
-            os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
     }
 }

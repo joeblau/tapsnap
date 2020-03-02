@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
         
+        
         do { // Delegates
             Current.locationManager.delegate = self
             UNUserNotificationCenter.current().delegate = self

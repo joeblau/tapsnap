@@ -14,12 +14,19 @@ extension URL {
                 signatureURL: FileManager.default.temporaryDirectory.appendingPathComponent(NSUUID().uuidString).appendingPathExtension("dat"))
     }
     
-    static var randomInboxSaveURL: URL  {
+    static var randomURL: URL {
+        FileManager.default
+        .temporaryDirectory
+        .appendingPathComponent(NSUUID().uuidString)
+        .appendingPathExtension("dat")
+    }
+    
+    static func randomInboxSaveURL(fileExtension: FileExtension) -> URL  {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("inbox/")
             .appendingPathComponent(NSUUID().uuidString)
-            .appendingPathExtension("dat")
+            .appendingPathExtension(fileExtension.rawValue)
     }
     
     static var inboxURL: URL {

@@ -203,6 +203,7 @@ extension CameraViewController: ViewBootstrappable {
             switch present {
             case .camera:
                 self.dismiss(animated: true) {
+                    CKContainer.default().loadInbox()
                     self.session.enableBackgroundAudio()
                 }
             case .playback:

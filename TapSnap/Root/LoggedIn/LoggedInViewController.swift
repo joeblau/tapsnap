@@ -16,16 +16,11 @@ final class LoggedInViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            CKContainer.default().bootstrapKeys()
-//        }
+        CKContainer.default().bootstrapKeys()
         CKContainer.default().fetchAllGroups()
         authorizeLocation()
         authorizeNotifications()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            CKContainer.default().fetchUnreadMessages()
-        }
+        CKContainer.default().fetchUnreadMessages()
     }
     
     override func viewDidAppear(_ animated: Bool) {

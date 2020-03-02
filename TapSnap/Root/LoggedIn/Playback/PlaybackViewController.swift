@@ -74,6 +74,7 @@ final class PlaybackViewController: UIViewController {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.isUserInteractionEnabled = true
+        v.contentMode = .scaleAspectFit
         return v
     }()
 
@@ -135,10 +136,13 @@ final class PlaybackViewController: UIViewController {
         super.viewDidDisappear(animated)
         
         switch mediaCapture {
-        case .photo(_): break
-        case .movie(_): looper?.stop()
+        case let .photo(url):
+            try? FileManager.default.removeItem(at: url)
+        case let .movie(url):
+            try? FileManager.default.removeItem(at: url)
+            looper?.stop()
         }
-        
+
         cancellables.forEach { cancellable in
             cancellable.cancel()
         }
