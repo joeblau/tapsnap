@@ -97,19 +97,33 @@ extension CKContainer {
     func createNewMessage(for group: CKRecord,
                           with mediaURL: URL,
                           completion: @escaping (_ saved: Bool)->()) {
-        guard let shareRecordId = group.share?.recordID else { return }
+        guard let shareRecordID = group.share?.recordID else { return }
         
-        sharedCloudDatabase.fetch(withRecordID: shareRecordId) { [unowned self] share, error in
-            guard self.no(error: error), let share = share as? CKShare else { return }
-            
-            let participantRecordIDs = share.participants.filter { participant -> Bool in
-                !(participant.value(forKeyPath: "isCurrentUser") as? Bool ?? true)
-            }.compactMap { participant -> CKRecord.ID? in
-                participant.userIdentity.userRecordID
+        switch group.recordID.zoneID.ownerName {
+        case CKRecordZone.ID.default.ownerName:
+            privateCloudDatabase.fetch(withRecordID: shareRecordID) { [unowned self] share, error in
+                guard self.no(error: error), let share = share as? CKShare else { return }
+                let participantRecordIDs = share.participants.filter { participant -> Bool in
+                    !(participant.value(forKeyPath: "isCurrentUser") as? Bool ?? true)
+                }.compactMap { participant -> CKRecord.ID? in
+                    participant.userIdentity.userRecordID
+                }
+                self.sendMessages(to: participantRecordIDs, with: mediaURL)
             }
-            
-            self.sendMessages(to: participantRecordIDs, with: mediaURL)
+        default:
+            sharedCloudDatabase.fetch(withRecordID: shareRecordID) { [unowned self] share, error in
+                guard self.no(error: error), let share = share as? CKShare else { return }
+                
+                let participantRecordIDs = share.participants.filter { participant -> Bool in
+                    !(participant.value(forKeyPath: "isCurrentUser") as? Bool ?? true)
+                }.compactMap { participant -> CKRecord.ID? in
+                    participant.userIdentity.userRecordID
+                }
+                
+                self.sendMessages(to: participantRecordIDs, with: mediaURL)
+            }
         }
+
         completion(true)
     }
     

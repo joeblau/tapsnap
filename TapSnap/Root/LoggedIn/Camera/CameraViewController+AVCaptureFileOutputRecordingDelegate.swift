@@ -62,7 +62,6 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                 CKContainer.default()
                     .createNewMessage(for: currentGroup, with: outputFileURL) { _ in
                         guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
-                        
                         PHPhotoLibrary.requestAuthorization { status in
                             switch status {
                             case .authorized:
@@ -182,11 +181,11 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
         layerInstrution.setTransform(rotation, at: .zero)
         instruction.layerInstructions = [layerInstrution]
         videoComposition.instructions = [instruction]
-        
+
         let outputFileURL = FileManager.default
-            .temporaryDirectory
-            .appendingPathComponent(NSUUID().uuidString)
-            .appendingPathExtension("mov")
+                    .temporaryDirectory
+                    .appendingPathComponent(NSUUID().uuidString)
+                    .appendingPathExtension("mov")
         
         guard let exportSession = AVAssetExportSession(asset: finalComposition,
                                                        presetName: AVAssetExportPresetHEVCHighestQuality) else {
