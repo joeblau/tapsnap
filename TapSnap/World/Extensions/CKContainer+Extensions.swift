@@ -13,6 +13,8 @@ import CryptoKit
 extension CKContainer {
     static var creatorReference: CKRecord.Reference?
     static var creatorPredicate: NSPredicate?
+    static var recipientPredicate: NSPredicate?
+    
     private var sharedZoneID: CKRecordZone.ID {
         CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
     }
@@ -23,8 +25,8 @@ extension CKContainer {
             
             let creatorReference = CKRecord.Reference(recordID: recordID, action: .none)
             CKContainer.creatorReference = creatorReference
-            CKContainer.creatorPredicate = NSPredicate(format: "creatorUserRecordID == %@", creatorReference)
-            
+            CKContainer.creatorPredicate = NSPredicate(format: "creator == %@", creatorReference)
+            CKContainer.recipientPredicate = NSPredicate(format: "recipient == %@", creatorReference)
             self.fetchUser(with: recordID)
         }
     }
@@ -138,11 +140,47 @@ extension CKContainer {
     }
     
     func fetchUnreadMessages() {
-        guard let creatorPredicate = CKContainer.creatorPredicate else { return }
-        let query = CKQuery(recordType: .message, predicate: NSPredicate(value: true))
-        sharedCloudDatabase.perform(query, inZoneWith: sharedZoneID) { [unowned self] records, error in
+        guard let recipientPredicate = CKContainer.recipientPredicate else { return }
+        let query = CKQuery(recordType: .message, predicate: recipientPredicate)
+        publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] messages, error in
             guard self.no(error: error) else { return }
-            //            print(records)
+            
+            messages?.forEach{ message in
+                
+                guard let ciphertextAsset = message[MessageKey.ciphertext] as? CKAsset,
+                    let signatureAsset = message[MessageKey.signature] as? CKAsset,
+                    let ciphertextURL = ciphertextAsset.fileURL,
+                    let signatureURL = signatureAsset.fileURL,
+                    let ciphertextData = try? Data(contentsOf: ciphertextURL),
+                    let signatureData = try? Data(contentsOf: signatureURL),
+                    let senderSigningKeyData = message[MessageKey.senderSigningKey] as? Data,
+                    let senderSigningKey = try? Curve25519.Signing.PublicKey(rawRepresentation: senderSigningKeyData) else {
+                        fatalError("Invalid message/delete message")
+                }
+                
+                if let ephemeralPublicKeyAsset = message[MessageKey.photo] as? CKAsset,
+                    let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
+                    let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL) {
+                    
+                    let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
+                                                        ciphertextData: ciphertextData,
+                                                        signatureData: signatureData)
+                    self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, type: .photo)
+                    
+                } else if let ephemeralPublicKeyAsset = message[MessageKey.movie] as? CKAsset,
+                    let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
+                    let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL){
+                    
+                    let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
+                                                        ciphertextData: ciphertextData,
+                                                        signatureData: signatureData)
+                    self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, type: .movie)
+                    
+                } else {
+                    fatalError("Invalid assset/delete message")
+                }
+                
+            }
         }
     }
 }
@@ -197,18 +235,18 @@ extension CKContainer {
             publicKeys.forEach { publicKey in
                 guard let bytes = publicKey[CryptoKey.encryption] as? Data,
                     let pkEncryption = try? Curve25519.KeyAgreement.PublicKey(rawRepresentation: bytes) else {
-                    return
+                        return
                 }
                 
                 do {
                     guard let pvSigning: Curve25519.Signing.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateSigningKey),
                         let pkSigning: Curve25519.Signing.PublicKey = try? GenericPasswordStore().readKey(account: Current.k.publicSigningKey) else {
-                        fatalError("Could not read private key/re-bootstrap")
+                            fatalError("Could not read private key/re-bootstrap")
                     }
                     let tempURL = URL.sealedURL
                     
                     let record = CKRecord(recordType: .message)
-                    record[MessageKey.senderSigningKey] = pkSigning
+                    record[MessageKey.senderSigningKey] = pkSigning.rawRepresentation
                     let sealedMessage: SealedMessage
                     switch media {
                     case let .movie(url):
@@ -256,6 +294,22 @@ extension CKContainer {
     }
 }
 
+// MARK: - Message
+extension CKContainer {
+    private func decrypt(sealed message: SealedMessage, publicKey signing: Curve25519.Signing.PublicKey, type: MediaType) {
+        guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else {
+            fatalError("Bootstrap private encryptoin key")
+        }
+        do {
+            let decryptedMessage = try Current.pki.decrypt(message, using: pvEncryption, from: signing)
+            
+            print(decryptedMessage.count)
+        } catch {
+            os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
+        }
+    }
+}
+
 // MARK: - PKI
 
 extension CKContainer {
@@ -293,7 +347,7 @@ extension CKContainer {
             self.privateCloudDatabase.save(record) { [unowned self] record, error in
                 guard self.no(error: error) else { return }
                 try? GenericPasswordStore().storeKey(encryption, account: Current.k.privateEncryptionKey)
-                try? GenericPasswordStore().storeKey(encryption, account: Current.k.privateSigningKey)
+                try? GenericPasswordStore().storeKey(signing, account: Current.k.privateSigningKey)
             }
         }
     }
@@ -321,7 +375,7 @@ extension CKContainer {
             self.publicCloudDatabase.save(record) { [unowned self] record, error in
                 guard self.no(error: error) else { return }
                 try? GenericPasswordStore().storeKey(encryption, account: Current.k.publicEncryptionKey)
-                try? GenericPasswordStore().storeKey(encryption, account: Current.k.publicSigningKey)
+                try? GenericPasswordStore().storeKey(signing, account: Current.k.publicSigningKey)
             }
         }
     }

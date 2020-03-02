@@ -16,7 +16,9 @@ final class LoggedInViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        CKContainer.default().bootstrapKeys()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            CKContainer.default().bootstrapKeys()
+//        }
         CKContainer.default().fetchAllGroups()
         authorizeLocation()
         authorizeNotifications()

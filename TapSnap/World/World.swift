@@ -54,6 +54,11 @@ enum MediaCapture {
     case movie(URL)
 }
 
+enum MediaType {
+    case photo
+    case movie
+}
+
 struct World {
     let pki = PublicKeyCryptography()
     let k = Constants()
