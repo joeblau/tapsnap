@@ -142,6 +142,8 @@ final class CameraViewController: UIViewController {
         super.viewDidAppear(animated)
         sessionQueue.async {
             self.session.startRunning()
+            
+            self.session.initZoom()
         }
     }
     

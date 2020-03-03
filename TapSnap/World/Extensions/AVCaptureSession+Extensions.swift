@@ -35,6 +35,23 @@ extension AVCaptureSession {
             backVideoDevice().map { addVideoInput(videoDevice: $0) }
         }
         commitConfiguration()
+        initZoom()
+    }
+    
+    func initZoom() {
+        guard let device = AVCaptureSession.videoCaptureDevice,
+            device ==  AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) else { return }
+        do {
+            try device.lockForConfiguration()
+            switch device {
+            case AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back):
+                device.videoZoomFactor = device.virtualDeviceSwitchOverVideoZoomFactors.first as! CGFloat
+            default: break
+            }
+            device.unlockForConfiguration()
+        } catch {
+            os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
+        }
     }
 
     func zoom(with velocity: Float) {
@@ -76,9 +93,9 @@ extension AVCaptureSession {
     }
 
     private func backVideoDevice() -> AVCaptureDevice? {
-        if let tripple = AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) {
-            AVCaptureSession.videoCaptureDevice = tripple
-            return tripple
+        if let triple = AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) {
+            AVCaptureSession.videoCaptureDevice = triple
+            return triple
         } else if let dual = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back) {
             AVCaptureSession.videoCaptureDevice = dual
             return dual
