@@ -20,6 +20,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
                     photoData = imageWithMetadata
                     return
             }
+            Current.cleanupSubject.send(.watermarked)
             
             UIGraphicsBeginImageContext(originalImage.size)
             let area = CGRect(origin: .zero, size: originalImage.size)
@@ -70,13 +71,17 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         }
         
         guard let currentGroup = self.currentGroup else {
-            self.cleanUp(url: outputFileURL)
+            Current.cleanupSubject.send(.saveError(outputFileURL))
             return
         }
         CKContainer.default()
-            .createNewMessage(for: currentGroup, with: outputFileURL) { _ in
-                guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
+            .createNewMessage(for: currentGroup, with: outputFileURL) { isSaved in
+                guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else {
+                    Current.cleanupSubject.send(.saveTemp(outputFileURL))
+                    return
+                }
                 
+                guard isSaved else { return }
                 PHPhotoLibrary.requestAuthorization { status in
                     switch status {
                     case .authorized:
@@ -89,11 +94,11 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
                         }, completionHandler: { _, error in
                             if let error = error {
                                 print("Error occurred while saving photo to photo library: \(error)")
-                                self.cleanUp(url: outputFileURL)
                             }
+                            Current.cleanupSubject.send(.saveToPhotoLibraryAuthorized(outputFileURL))
                         })
                     default:
-                        self.cleanUp(url: outputFileURL)
+                        Current.cleanupSubject.send(.saveToPhotoLibraryUnauthorized(outputFileURL))
                     }
                 }
         }

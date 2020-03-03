@@ -367,7 +367,7 @@ extension CameraOverlayView: ViewBootstrappable {
             switch action {
             case .capturePhoto, .captureVideoEnd:
                 self.resetWatermark()
-
+                
                 self.udpateOverlay()
             case .captureVideoStart, .none: break
             }
@@ -376,6 +376,14 @@ extension CameraOverlayView: ViewBootstrappable {
         Current.musicSyncSubject.sink { shouldSync in
             self.musicButton.isEnabled = shouldSync
 
+        }.store(in: &cancellables)
+        
+        Current.cleanupSubject.sink { cleanup in
+            switch cleanup {
+            case .watermarked:
+                Current.currentWatermarkSubject.send(nil)
+            default: break
+            }
         }.store(in: &cancellables)
     }
 }

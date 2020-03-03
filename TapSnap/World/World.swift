@@ -59,7 +59,13 @@ enum FileExtension: String {
     case heic
 }
 
-
+enum CleanupAction {
+    case watermarked
+    case saveError(URL)
+    case saveTemp(URL)
+    case saveToPhotoLibraryAuthorized(URL)
+    case saveToPhotoLibraryUnauthorized(URL)
+}
 
 struct World {
     let pki = PublicKeyCryptography()
@@ -110,7 +116,8 @@ struct World {
     var topLeftNavBarSubject = CurrentValueSubject<LeftNavBarItem, Never>(.menu)
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
     var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
-
+    var cleanupSubject = CurrentValueSubject<CleanupAction?, Never>(nil)
+    
     var currentLocationSubject = CurrentValueSubject<CLLocation?, Never>(nil)
     var currentAddressSubject = CurrentValueSubject<String?, Never>(nil)
     var currentWatermarkSubject = CurrentValueSubject<UIImage?, Never>(nil)

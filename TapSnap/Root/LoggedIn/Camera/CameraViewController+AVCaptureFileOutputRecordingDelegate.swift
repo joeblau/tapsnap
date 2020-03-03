@@ -19,15 +19,21 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
     func fileOutput(_: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from _: [AVCaptureConnection], error: Error?) {
         switch Current.currentWatermarkSubject.value {
         case let .some(watermark):
+            Current.cleanupSubject.send(.watermarked)
             let urlAsset = AVURLAsset(url: outputFileURL)
             addWatermark(movie: urlAsset, image: watermark) { result in
-                self.cleanUp(url: outputFileURL)
+                Current.cleanupSubject.send(.saveTemp(outputFileURL))
                 switch result {
                 case let .success(watermarURL):
                     guard let currentGroup = self.currentGroup else { return }
                     CKContainer.default()
-                        .createNewMessage(for: currentGroup, with: watermarURL) { _ in
-                            guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
+                        .createNewMessage(for: currentGroup, with: watermarURL) { isSaved in
+                            guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else {
+                                Current.cleanupSubject.send(.saveTemp(watermarURL))
+                                return
+                            }
+                            
+                            guard isSaved else { return }
                             PHPhotoLibrary.requestAuthorization { status in
                                 switch status {
                                 case .authorized:
@@ -39,15 +45,14 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                                     }, completionHandler: { success, error in
                                         if !success {
                                             print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
-                                            self.cleanUp(url: watermarURL)
                                         }
+                                        Current.cleanupSubject.send(.saveToPhotoLibraryAuthorized(outputFileURL))
                                     })
                                 default:
-                                    self.cleanUp(url: watermarURL)
+                                    Current.cleanupSubject.send(.saveToPhotoLibraryUnauthorized(outputFileURL))
                                 }
                             }
                     }
-                    
                 case let .failure(error):
                     print(error.localizedDescription)
                 }
@@ -56,12 +61,17 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
             switch error {
             case let .some(error):
                 print("Movie file finishing error: \(String(describing: error))")
-                cleanUp(url: outputFileURL)
+                Current.cleanupSubject.send(.saveError(outputFileURL))
             case .none:
                 guard let currentGroup = self.currentGroup else { return }
                 CKContainer.default()
-                    .createNewMessage(for: currentGroup, with: outputFileURL) { _ in
-                        guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else { return }
+                    .createNewMessage(for: currentGroup, with: outputFileURL) { isSaved in
+                        guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else {
+                            Current.cleanupSubject.send(.saveTemp(outputFileURL))
+                            return
+                        }
+                        
+                        guard isSaved else { return }
                         PHPhotoLibrary.requestAuthorization { status in
                             switch status {
                             case .authorized:
@@ -73,33 +83,14 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                                 }, completionHandler: { success, error in
                                     if !success {
                                         print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
-                                        self.cleanUp(url: outputFileURL)
                                     }
+                                    Current.cleanupSubject.send(.saveToPhotoLibraryAuthorized(outputFileURL))
                                 })
                             default:
-                                self.cleanUp(url: outputFileURL)
+                                Current.cleanupSubject.send(.saveToPhotoLibraryUnauthorized(outputFileURL))
                             }
                         }
                 }
-            }
-        }
-    }
-    
-    func cleanUp(url: URL) {
-        let path = url.path
-        if FileManager.default.fileExists(atPath: path) {
-            do {
-                try FileManager.default.removeItem(atPath: path)
-            } catch {
-                print("Could not remove file at url: \(url)")
-            }
-        }
-        
-        if let currentBackgroundRecordingID = backgroundRecordingID {
-            backgroundRecordingID = UIBackgroundTaskIdentifier.invalid
-            
-            if currentBackgroundRecordingID != UIBackgroundTaskIdentifier.invalid {
-                UIApplication.shared.endBackgroundTask(currentBackgroundRecordingID)
             }
         }
     }
@@ -115,6 +106,7 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
                 completion(Result.failure(WatermarkError.extractTrack))
                 return
         }
+        
         
         let compositionVideoTrack = finalComposition.addMutableTrack(withMediaType: .video,
                                                                      preferredTrackID: kCMPersistentTrackID_Invalid)
