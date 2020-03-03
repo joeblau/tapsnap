@@ -52,8 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_: UIApplication) {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            Current.locationManager.requestLocation()
+            Current.locationManager.startUpdatingLocation()
         }
+        CKContainer.default().loadInbox()
     }
 
     func application(_: UIApplication,

@@ -6,10 +6,12 @@ import Contacts
 import CoreLocation
 import MapKit
 import UIKit
+import CloudKit
 
 final class PlaybackViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
     private let mediaCapture: MediaCapture
+    private let playbackMetadata: PlaybackMetadata?
 
     private lazy var backButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
@@ -89,15 +91,22 @@ final class PlaybackViewController: UIViewController {
 
     private var annotations = [MKPointAnnotation]()
     var looper: PlayerLooper?
+    
 
     // MARK: - Lifecycle
 
     init(messageURL: URL) {
-        if let data = try? Data(contentsOf: messageURL), let _ = UIImage(data: data) {
+        guard let data = try? Data(contentsOf: messageURL) else { fatalError("invalid data") }
+        
+        switch UIImage(data: data) {
+        case .some(_):
             self.mediaCapture = MediaCapture.photo(messageURL)
-        } else {
+            self.playbackMetadata = data.playbackMetadata
+        case .none:
             self.mediaCapture = MediaCapture.movie(messageURL)
+            self.playbackMetadata = nil
         }
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -107,7 +116,7 @@ final class PlaybackViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Pop That"
+        title = self.playbackMetadata?.author
         view.backgroundColor = .systemBackground
         view.floatView()
         
@@ -171,37 +180,35 @@ final class PlaybackViewController: UIViewController {
     }
 
     private func populateMapAndMapOverlay() {
-        let myLocation: CLLocation = CLLocation(latitude: 37.759580, longitude: -122.391850)
-        let theirLocation: CLLocation = CLLocation(latitude: 33.996890, longitude: -84.428710)
-//        let theirAddresss: CNPostalAddress
-        let theirDate: Date = Date(timeIntervalSince1970: 1_579_947_732)
 
-        let theirAnnotation: MKPointAnnotation = {
-            let pa = MKPointAnnotation()
-            pa.coordinate = theirLocation.coordinate
-            pa.title = "Shane"
-            mapView.addAnnotation(pa)
-            return pa
-        }()
+        if let playbackMetadata = self.playbackMetadata,
+            let theirCoordinate = playbackMetadata.location?.coordinate {
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = theirCoordinate
+            annotation.title = playbackMetadata.author
+            mapView.addAnnotation(annotation)
+            annotations.append(annotation)
+        }
+        
+        if let coordinate = Current.currentLocationSubject.value?.coordinate,
+            let nameData = UserDefaults.standard.data(forKey: Current.k.userAccount),
+            let userRecord = try? CKRecord.unarchive(data: nameData) {
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = userRecord[UserKey.name] as? String ?? "-"
+            mapView.addAnnotation(annotation)
+            annotations.append(annotation)
+        }
 
-        annotations.append(theirAnnotation)
-        let myAnnotation: MKPointAnnotation = {
-            let pa = MKPointAnnotation()
-            pa.coordinate = myLocation.coordinate
-            pa.title = "You"
-            mapView.addAnnotation(pa)
-            return pa
-        }()
-        annotations.append(myAnnotation)
+        var coordinates = annotations.compactMap { $0.coordinate }
+        if coordinates.count == 2 {
+            let geodesicPolyline = MKGeodesicPolyline(coordinates: &coordinates, count: coordinates.count)
+            mapView.addOverlay(geodesicPolyline)
+        }
 
-        var coordinates = [myAnnotation.coordinate, theirAnnotation.coordinate]
-        let geodesicPolyline = MKGeodesicPolyline(coordinates: &coordinates, count: coordinates.count)
-        mapView.addOverlay(geodesicPolyline)
-
-        mapOverlayView.configure(myLocation: myLocation,
-                                 theirLocation: theirLocation,
-//                                 theirAddresss: theirAddresss,
-                                 theirDate: theirDate)
+        mapOverlayView.configure(playbackMetadata: self.playbackMetadata)
     }
 }
 

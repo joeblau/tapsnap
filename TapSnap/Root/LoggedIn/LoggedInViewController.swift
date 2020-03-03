@@ -20,7 +20,10 @@ final class LoggedInViewController: UIViewController {
         CKContainer.default().fetchAllGroups()
         authorizeLocation()
         authorizeNotifications()
-        CKContainer.default().fetchUnreadMessages()
+        CKContainer.default().loadInbox()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            CKContainer.default().fetchUnreadMessages()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -10,7 +10,7 @@ final class MapViewOverlay: UIView {
     var cancellables = Set<AnyCancellable>()
     private let kButtonSize: CGFloat = 48
     private let kButtonPadding: CGFloat = 8
-
+    
     private lazy var timeDistanceLocation: UILabel = {
         let l = UILabel()
         l.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
@@ -20,7 +20,7 @@ final class MapViewOverlay: UIView {
         l.floatLabel()
         return l
     }()
-
+    
     private lazy var toggle3DButton: UIButton = {
         let b = UIButton(type: .system)
         b.setImage(UIImage(systemName: "view.3d"), for: .normal)
@@ -28,7 +28,7 @@ final class MapViewOverlay: UIView {
         b.segmentButton(position: .top)
         return b
     }()
-
+    
     private lazy var toggleAnnotationsButton: UIButton = {
         let b = UIButton(type: .system)
         b.setImage(UIImage(systemName: "person.2"), for: .normal)
@@ -36,7 +36,7 @@ final class MapViewOverlay: UIView {
         b.segmentButton(position: .bottom)
         return b
     }()
-
+    
     private lazy var mapActionsStack: UIStackView = {
         let sv = UIStackView(arrangedSubviews: [toggle3DButton, toggleAnnotationsButton])
         sv.translatesAutoresizingMaskIntoConstraints = false
@@ -44,69 +44,63 @@ final class MapViewOverlay: UIView {
         sv.spacing = UIStackView.spacingUseSystem
         return sv
     }()
-
+    
+    
+    
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         bootstrap()
     }
-
+    
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    public func configure(myLocation: CLLocation,
-                          theirLocation: CLLocation,
-//                          theirAddresss: CNPostalAddress,
-                          theirDate: Date) {
-        let distance = myLocation.distance(from: theirLocation)
-//        timeDistanceLocation.attributedText = formatMetadata(address: theirAddresss,
-//                                                             date: theirDate,
-//                                                             distance: distance)
-    }
-
-    private func formatMetadata(address: CNPostalAddress?,
-                                date: Date,
-                                distance: CLLocationDistance) -> NSAttributedString {
+    
+    public func configure(playbackMetadata: PlaybackMetadata?) {
+        
         let attributedMetadataString = NSMutableAttributedString()
-
-        if let formattedAddress = address?.streetCity {
+        if let formattedAddress = playbackMetadata?.address {
             let imageAttachment = NSTextAttachment()
             imageAttachment.image = UIImage(systemName: "mappin.and.ellipse",
                                             withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
                 .withTintColor(.white, renderingMode: .alwaysOriginal)
-
+            
             attributedMetadataString.append(NSAttributedString(attachment: imageAttachment))
             attributedMetadataString.append(NSAttributedString(string: " \(formattedAddress)\n"))
         }
-
-        do { // distance
+        
+        if let myLocation = Current.currentLocationSubject.value,
+            let theirLocation = playbackMetadata?.location {
+            let distance = myLocation.distance(from: theirLocation)
+            
             let formattedDistance = Current.formatter.distance.string(fromDistance: distance)
             let imageAttachment = NSTextAttachment()
             imageAttachment.image = UIImage(systemName: "map",
                                             withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
                 .withTintColor(.white, renderingMode: .alwaysOriginal)
-
+            
             attributedMetadataString.append(NSAttributedString(attachment: imageAttachment))
             attributedMetadataString.append(NSAttributedString(string: " \(formattedDistance) away\n"))
         }
-
-        do { // Time Ago
-            let formattedTimeAgo = Current.formatter.timeAgo.localizedString(for: date, relativeTo: Date())
+        
+        
+        if let sentDate = playbackMetadata?.date {
+            let formattedTimeAgo = Current.formatter.timeAgo.localizedString(for: sentDate, relativeTo: Date())
             let imageAttachment = NSTextAttachment()
             imageAttachment.image = UIImage(systemName: "clock",
                                             withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
                 .withTintColor(.white, renderingMode: .alwaysOriginal)
-
+            
             attributedMetadataString.append(NSAttributedString(attachment: imageAttachment))
             attributedMetadataString.append(NSAttributedString(string: " \(formattedTimeAgo)\n"))
         }
-
-        return attributedMetadataString
+        
+        timeDistanceLocation.attributedText = attributedMetadataString
     }
-
+    
     // MARK: - Actions
-
+    
     @objc func toggleMapPreviewModeAction(sender: UIButton) {
         switch sender.accessibilityIdentifier {
         case let .some(identifier) where identifier == "2d":
@@ -116,7 +110,7 @@ final class MapViewOverlay: UIView {
         default: break
         }
     }
-
+    
     @objc func toggleAnnotationsGroupAction(sender: UIButton) {
         switch sender.accessibilityIdentifier {
         case let .some(identifier) where identifier == "them":
@@ -132,42 +126,42 @@ extension MapViewOverlay: ViewBootstrappable {
     func configureViews() {
         toggle3DButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         toggle3DButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-
+        
         toggleAnnotationsButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         toggleAnnotationsButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
-
+        
         addSubview(mapActionsStack)
         mapActionsStack.heightAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
         mapActionsStack.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         mapActionsStack.topAnchor.constraint(equalTo: topAnchor, constant: kButtonPadding).isActive = true
         mapActionsStack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -kButtonPadding).isActive = true
-
+        
         addSubview(timeDistanceLocation)
         timeDistanceLocation.topAnchor.constraint(equalTo: topAnchor, constant: kButtonPadding).isActive = true
         timeDistanceLocation.heightAnchor.constraint(greaterThanOrEqualToConstant: kButtonSize).isActive = true
         timeDistanceLocation.leadingAnchor.constraint(equalTo: leadingAnchor, constant: kButtonPadding).isActive = true
         timeDistanceLocation.trailingAnchor.constraint(equalTo: mapActionsStack.leadingAnchor, constant: -kButtonPadding).isActive = true
     }
-
+    
     func configureButtonTargets() {
         toggle3DButton.addTarget(self, action: #selector(toggleMapPreviewModeAction), for: .touchUpInside)
         toggleAnnotationsButton.addTarget(self, action: #selector(toggleAnnotationsGroupAction), for: .touchUpInside)
     }
-
+    
     func configureStreams() {
         Current.mapDimensionSubject.sink(receiveValue: { dimension in
             switch dimension {
             case .two:
                 self.toggle3DButton.setImage(UIImage(systemName: "view.3d"), for: .normal)
                 self.toggle3DButton.accessibilityIdentifier = "3d"
-
+                
             case .three:
                 self.toggle3DButton.setImage(UIImage(systemName: "view.2d"), for: .normal)
                 self.toggle3DButton.accessibilityIdentifier = "2d"
             }
         })
             .store(in: &cancellables)
-
+        
         Current.mapAnnotationsSubject.sink(receiveValue: { annotationsGroup in
             switch annotationsGroup {
             case .them:

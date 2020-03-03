@@ -72,12 +72,12 @@
 		DD6A04D0AC022CB627DB36AE /* LoggedOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0481FEC9E55AB29A26B9238B /* LoggedOutViewController.swift */; };
 		DF7728FCA91D5B5E5234D3E0 /* GroupSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B9C3F84552C49835C8E45B /* GroupSection.swift */; };
 		E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */; };
-		E0CC88252B80F4D873A8E1B4 /* Tapsnap.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0F985F82AA8186B1FFB56A3A /* Tapsnap.xcdatamodeld */; };
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
 		ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */; };
 		ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA3240C810700DA4081 /* Aliases.swift */; };
 		ED8C2EA6240C81E800DA4081 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */; };
+		ED8C2EA8240E104A00DA4081 /* PlaybackMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA7240E104A00DA4081 /* PlaybackMetadata.swift */; };
 		EDE8F0B5240A0FA300DFA828 /* GenericPasswordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */; };
 		EDE8F0B7240A0FC300DFA828 /* GenericPasswordConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */; };
 		EDE8F0B9240A0FE200DFA828 /* KeyStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */; };
@@ -179,6 +179,7 @@
 		ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyCryptography.swift; sourceTree = "<group>"; };
 		ED8C2EA3240C810700DA4081 /* Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
 		ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
+		ED8C2EA7240E104A00DA4081 /* PlaybackMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackMetadata.swift; sourceTree = "<group>"; };
 		EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordStore.swift; sourceTree = "<group>"; };
 		EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordConvertible.swift; sourceTree = "<group>"; };
 		EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreError.swift; sourceTree = "<group>"; };
@@ -190,7 +191,6 @@
 		EDE8F0C8240B278E00DFA828 /* MyGroupsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsDiffableDataSource.swift; sourceTree = "<group>"; };
 		EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
 		F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
-		F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Dolo.xcdatamodel; sourceTree = "<group>"; };
 		F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TapsnapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46D5270D9E16B4F9812EF95 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		F7D5A06F6B5145B89F4FE58B /* EXIFData+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EXIFData+Extensions.swift"; sourceTree = "<group>"; };
@@ -298,7 +298,6 @@
 				CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */,
 				B2528AD68900F4499FB43418 /* Settings.bundle */,
 				9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */,
-				0F985F82AA8186B1FFB56A3A /* Tapsnap.xcdatamodeld */,
 				3485EF75C3FD9E24EC1B2598 /* Root */,
 				5B357A0CFC5D38D252784D58 /* World */,
 			);
@@ -308,7 +307,6 @@
 		5B357A0CFC5D38D252784D58 /* World */ = {
 			isa = PBXGroup;
 			children = (
-				EDE8F0C5240AD3E600DFA828 /* DataSources */,
 				EDE8F0B3240A0F9400DFA828 /* Crypto */,
 				4541C7BAC1D79F3AE529B414 /* Constants.swift */,
 				30EFEEF0E80AD1385D07B53F /* EmptyDataView.swift */,
@@ -369,6 +367,7 @@
 			isa = PBXGroup;
 			children = (
 				E7F4C07C5C51030334DDE02E /* CloudKitKeys.swift */,
+				ED8C2EA7240E104A00DA4081 /* PlaybackMetadata.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -548,13 +547,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		EDE8F0C5240AD3E600DFA828 /* DataSources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = DataSources;
-			sourceTree = "<group>";
-		};
 		F833A6B6616A443E1FCE1C61 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -717,6 +709,7 @@
 				8CACF9C2C0EA7613439180F8 /* Constants.swift in Sources */,
 				EDE8F0BC240AC3B200DFA828 /* MyGroupsViewController.swift in Sources */,
 				B43FA60F5F10D71DF32E9760 /* ContactCollectionViewCell.swift in Sources */,
+				ED8C2EA8240E104A00DA4081 /* PlaybackMetadata.swift in Sources */,
 				155FD04BF3EA39EBD754BDD6 /* ContactsCollectionView.swift in Sources */,
 				6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */,
 				EDE8F0B7240A0FC300DFA828 /* GenericPasswordConvertible.swift in Sources */,
@@ -762,7 +755,6 @@
 				1508AA5A76058B45B00A0930 /* SearchContactsViewController.swift in Sources */,
 				3C874689D363AA4D98B647B5 /* SearchContactsViewControllerDiffableDataSource.swift in Sources */,
 				8482333F2160B5F2A948391F /* SyncTableViewCell.swift in Sources */,
-				E0CC88252B80F4D873A8E1B4 /* Tapsnap.xcdatamodeld in Sources */,
 				3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */,
 				0C8A689BC97B6E0FA76866D2 /* UIButton+Extension.swift in Sources */,
 				F0E540C952F07DBB0BAC2DD0 /* UIImage+Extensions.swift in Sources */,
@@ -1091,19 +1083,6 @@
 			productName = SensorVisualizerKit;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		0F985F82AA8186B1FFB56A3A /* Tapsnap.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */,
-			);
-			currentVersion = F43C45FE2394DF0F3EE0E5CC /* Dolo.xcdatamodel */;
-			path = Tapsnap.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = D0BD78D46161BCEF6F917A8C /* Project object */;
 }
