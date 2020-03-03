@@ -61,10 +61,7 @@ enum FileExtension: String {
 
 enum CleanupAction {
     case watermarked
-    case saveError(URL)
-    case saveTemp(URL)
-    case saveToPhotoLibraryAuthorized(URL)
-    case saveToPhotoLibraryUnauthorized(URL)
+    case cleanUp(URL)
 }
 
 struct World {

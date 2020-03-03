@@ -71,13 +71,13 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         }
         
         guard let currentGroup = self.currentGroup else {
-            Current.cleanupSubject.send(.saveError(outputFileURL))
+            Current.cleanupSubject.send(.cleanUp(outputFileURL))
             return
         }
         CKContainer.default()
             .createNewMessage(for: currentGroup, with: outputFileURL) { isSaved in
                 guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else {
-                    Current.cleanupSubject.send(.saveTemp(outputFileURL))
+                    Current.cleanupSubject.send(.cleanUp(outputFileURL))
                     return
                 }
                 
@@ -95,10 +95,10 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
                             if let error = error {
                                 print("Error occurred while saving photo to photo library: \(error)")
                             }
-                            Current.cleanupSubject.send(.saveToPhotoLibraryAuthorized(outputFileURL))
+                            Current.cleanupSubject.send(.cleanUp(outputFileURL))
                         })
                     default:
-                        Current.cleanupSubject.send(.saveToPhotoLibraryUnauthorized(outputFileURL))
+                        Current.cleanupSubject.send(.cleanUp(outputFileURL))
                     }
                 }
         }

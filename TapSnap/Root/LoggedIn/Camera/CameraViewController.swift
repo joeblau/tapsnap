@@ -338,11 +338,7 @@ extension CameraViewController: ViewBootstrappable {
         
         Current.cleanupSubject.sink { cleanup in
             switch cleanup {
-            case let .saveError(url),
-                 let .saveTemp(url),
-                 let .saveToPhotoLibraryAuthorized(url),
-                 let .saveToPhotoLibraryUnauthorized(url):
-                self.cleanUp(url: url)
+            case let .cleanUp(url): self.cleanUp(url: url)
             default: break
             }
         }.store(in: &cancellables)

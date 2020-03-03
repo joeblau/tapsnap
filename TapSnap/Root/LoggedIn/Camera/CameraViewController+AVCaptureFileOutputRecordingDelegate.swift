@@ -22,76 +22,57 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
             Current.cleanupSubject.send(.watermarked)
             let urlAsset = AVURLAsset(url: outputFileURL)
             addWatermark(movie: urlAsset, image: watermark) { result in
-                Current.cleanupSubject.send(.saveTemp(outputFileURL))
+                Current.cleanupSubject.send(.cleanUp(outputFileURL))
                 switch result {
                 case let .success(watermarURL):
-                    guard let currentGroup = self.currentGroup else { return }
-                    CKContainer.default()
-                        .createNewMessage(for: currentGroup, with: watermarURL) { isSaved in
-                            guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else {
-                                Current.cleanupSubject.send(.saveTemp(watermarURL))
-                                return
-                            }
-                            
-                            guard isSaved else { return }
-                            PHPhotoLibrary.requestAuthorization { status in
-                                switch status {
-                                case .authorized:
-                                    PHPhotoLibrary.shared().performChanges({
-                                        let options = PHAssetResourceCreationOptions()
-                                        options.shouldMoveFile = true
-                                        let creationRequest = PHAssetCreationRequest.forAsset()
-                                        creationRequest.addResource(with: .video, fileURL: watermarURL, options: options)
-                                    }, completionHandler: { success, error in
-                                        if !success {
-                                            print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
-                                        }
-                                        Current.cleanupSubject.send(.saveToPhotoLibraryAuthorized(outputFileURL))
-                                    })
-                                default:
-                                    Current.cleanupSubject.send(.saveToPhotoLibraryUnauthorized(outputFileURL))
-                                }
-                            }
-                    }
+                    self.save(video: watermarURL)
                 case let .failure(error):
                     print(error.localizedDescription)
+                    Current.cleanupSubject.send(.cleanUp(outputFileURL))
                 }
             }
         case .none:
             switch error {
             case let .some(error):
                 print("Movie file finishing error: \(String(describing: error))")
-                Current.cleanupSubject.send(.saveError(outputFileURL))
+                Current.cleanupSubject.send(.cleanUp(outputFileURL))
             case .none:
-                guard let currentGroup = self.currentGroup else { return }
-                CKContainer.default()
-                    .createNewMessage(for: currentGroup, with: outputFileURL) { isSaved in
-                        guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else {
-                            Current.cleanupSubject.send(.saveTemp(outputFileURL))
-                            return
-                        }
-                        
-                        guard isSaved else { return }
-                        PHPhotoLibrary.requestAuthorization { status in
-                            switch status {
-                            case .authorized:
-                                PHPhotoLibrary.shared().performChanges({
-                                    let options = PHAssetResourceCreationOptions()
-                                    options.shouldMoveFile = true
-                                    let creationRequest = PHAssetCreationRequest.forAsset()
-                                    creationRequest.addResource(with: .video, fileURL: outputFileURL, options: options)
-                                }, completionHandler: { success, error in
-                                    if !success {
-                                        print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
-                                    }
-                                    Current.cleanupSubject.send(.saveToPhotoLibraryAuthorized(outputFileURL))
-                                })
-                            default:
-                                Current.cleanupSubject.send(.saveToPhotoLibraryUnauthorized(outputFileURL))
-                            }
-                        }
-                }
+                self.save(video: outputFileURL)
             }
+        }
+    }
+    
+    func save(video url: URL) {
+        guard let currentGroup = self.currentGroup else {
+            Current.cleanupSubject.send(.cleanUp(url))
+            return
+        }
+        CKContainer.default()
+            .createNewMessage(for: currentGroup, with: url) { isSaved in
+                guard UserDefaults.standard.bool(forKey: Current.k.autoSave) else {
+                    Current.cleanupSubject.send(.cleanUp(url))
+                    return
+                }
+                
+                guard isSaved else { return }
+                PHPhotoLibrary.requestAuthorization { status in
+                    switch status {
+                    case .authorized:
+                        PHPhotoLibrary.shared().performChanges({
+                            let options = PHAssetResourceCreationOptions()
+                            options.shouldMoveFile = true
+                            let creationRequest = PHAssetCreationRequest.forAsset()
+                            creationRequest.addResource(with: .video, fileURL: url, options: options)
+                        }, completionHandler: { success, error in
+                            if !success {
+                                print("AVCam couldn't save the movie to your photo library: \(String(describing: error))")
+                            }
+                            Current.cleanupSubject.send(.cleanUp(url))
+                        })
+                    default:
+                        Current.cleanupSubject.send(.cleanUp(url))
+                    }
+                }
         }
     }
     
