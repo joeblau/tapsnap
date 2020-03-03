@@ -155,13 +155,13 @@ extension CKContainer {
         }
     }
     
-    func fetchUnreadMessages() {
+    func fetchUnreadMessages(completion: @escaping (UIBackgroundFetchResult)->())  {
         guard let recipientPredicate = CKContainer.recipientPredicate else { return }
         let query = CKQuery(recordType: .message, predicate: recipientPredicate)
         publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] messages, error in
-            guard self.no(error: error) else { return }
+            guard self.no(error: error), let messages = messages else { return }
             
-            messages?.forEach{ message in
+            messages.forEach{ message in
                 
                 guard let ciphertextAsset = message[MessageKey.ciphertext] as? CKAsset,
                     let ciphertextURL = ciphertextAsset.fileURL,
@@ -190,6 +190,12 @@ extension CKContainer {
                 })
                 
             }
+            
+            switch messages.isEmpty {
+            case true: completion(.noData)
+            case false: completion(.newData)
+            }
+            self.loadInbox()
         }
     }
     
@@ -201,6 +207,15 @@ extension CKContainer {
             Current.inboxURLsSubject.send(messageURLs)
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
+        }
+    }
+    
+    func subscribeToInbox() {
+        publicCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
+            guard self.no(error: error), let subscriptions = subscriptions else { return }
+            
+            guard subscriptions.isEmpty else { return }
+            self.buildSubscriptions()
         }
     }
 }
@@ -244,6 +259,8 @@ extension CKContainer {
         }
     }
 }
+
+// MARK: - Messages
 
 extension CKContainer {
     private func sendMessages(to participantRecordIDs: [CKRecord.ID],
@@ -308,7 +325,31 @@ extension CKContainer {
     }
 }
 
-// MARK: - Message
+
+// MARK: - Subscriptions
+
+extension CKContainer {
+    
+    private func buildSubscriptions() {
+        guard let recipientPredicate = CKContainer.recipientPredicate else { return }
+        let subscription = CKQuerySubscription(recordType: .message,
+                                               predicate: recipientPredicate,
+                                               options: [.firesOnRecordCreation])
+        subscription.notificationInfo = {
+            let ni = CKSubscription.NotificationInfo()
+            ni.shouldSendContentAvailable = true
+            return ni
+        }()
+        
+        publicCloudDatabase.save(subscription) { subscription, error in
+            guard self.no(error: error) else { return }
+        }
+    }
+
+}
+
+// MARK: - PKI
+
 extension CKContainer {
     private func decrypt(sealed message: SealedMessage,
                          publicKey signing: Curve25519.Signing.PublicKey,
@@ -332,11 +373,6 @@ extension CKContainer {
             os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
         }
     }
-}
-
-// MARK: - PKI
-
-extension CKContainer {
     
     private func resetKeys() {
         let pvEncryption = Curve25519.KeyAgreement.PrivateKey()

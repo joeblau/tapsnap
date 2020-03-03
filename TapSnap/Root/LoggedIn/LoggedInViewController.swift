@@ -20,9 +20,15 @@ final class LoggedInViewController: UIViewController {
         CKContainer.default().fetchAllGroups()
         authorizeLocation()
         authorizeNotifications()
-        CKContainer.default().loadInbox()
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            CKContainer.default().fetchUnreadMessages()
+            CKContainer.default().fetchUnreadMessages { result in
+                switch result {
+                case .newData: CKContainer.default().loadInbox()
+                default: break
+                }
+            }
+            CKContainer.default().subscribeToInbox()
         }
     }
     

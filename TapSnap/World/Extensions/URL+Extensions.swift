@@ -29,10 +29,25 @@ extension URL {
             .appendingPathExtension(fileExtension.rawValue)
     }
     
+    
     static var inboxURL: URL {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("inbox/")
+    }
+    
+    static func randomOutboxSaveURL(with fileExtension: FileExtension) -> URL {
+        FileManager.default
+            .temporaryDirectory
+            .appendingPathComponent("outbox/")
+            .appendingPathComponent(NSUUID().uuidString)
+            .appendingPathExtension(fileExtension.rawValue)
+    }
+    
+    static var outboxURL: URL {
+        FileManager.default
+            .temporaryDirectory
+            .appendingPathComponent("outbox/")
     }
 }
 

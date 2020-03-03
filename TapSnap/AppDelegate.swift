@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         do { // Craete Inbox
             try FileManager.default.createDirectory(at: URL.inboxURL, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(at: URL.outboxURL, withIntermediateDirectories: true, attributes: nil)
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
@@ -60,14 +61,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication,
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        guard let dictionary = userInfo as? [String: Any],
-            let notification = CKNotification(fromRemoteNotificationDictionary: dictionary) else { return }
 
-        switch notification.subscriptionID {
-        case "shared-messages-changed":
-            print("handle shared messages")
-            completionHandler(.newData)
-        default: break
+        CKContainer.default().fetchUnreadMessages { result in
+            switch result {
+            case .newData: CKContainer.default().loadInbox()
+            default: break
+            }
+            completionHandler(result)
         }
     }
 
@@ -98,23 +98,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Helpers
 
     private func subscribeToPushNotifications() {
-        guard !UserDefaults.standard.bool(forKey: "subscription-cached") else { return }
 
-        let subscription = CKDatabaseSubscription(subscriptionID: "shared-messages-changed")
-
-        let notificationInfo = CKSubscription.NotificationInfo()
-        notificationInfo.shouldSendContentAvailable = true
-        subscription.notificationInfo = notificationInfo
-
-        let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription],
-                                                       subscriptionIDsToDelete: [])
-        operation.modifySubscriptionsCompletionBlock = { _, _, error in
-            switch error {
-            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-            case .none: UserDefaults.standard.set(true, forKey: "subscription-cached")
-            }
-        }
-        operation.qualityOfService = .utility
-        CKContainer.default().sharedCloudDatabase.add(operation)
     }
 }
