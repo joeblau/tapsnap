@@ -7,6 +7,7 @@ import CoreLocation
 import MapKit
 import UIKit
 import CloudKit
+import AVFoundation
 
 final class PlaybackViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
@@ -104,7 +105,7 @@ final class PlaybackViewController: UIViewController {
             self.playbackMetadata = data.playbackMetadata
         case .none:
             self.mediaCapture = MediaCapture.movie(messageURL)
-            self.playbackMetadata = nil
+            self.playbackMetadata = AVAsset(url: messageURL).metadata.playbackMetadta
         }
         
         super.init(nibName: nil, bundle: nil)
