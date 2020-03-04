@@ -78,6 +78,7 @@
 		ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA3240C810700DA4081 /* Aliases.swift */; };
 		ED8C2EA6240C81E800DA4081 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */; };
 		ED8C2EA8240E104A00DA4081 /* PlaybackMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA7240E104A00DA4081 /* PlaybackMetadata.swift */; };
+		EDAAAB5D240F84D4002326D9 /* UINavigationBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB5C240F84D4002326D9 /* UINavigationBar+Extensions.swift */; };
 		EDE8F0B5240A0FA300DFA828 /* GenericPasswordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */; };
 		EDE8F0B7240A0FC300DFA828 /* GenericPasswordConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */; };
 		EDE8F0B9240A0FE200DFA828 /* KeyStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */; };
@@ -180,6 +181,7 @@
 		ED8C2EA3240C810700DA4081 /* Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
 		ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		ED8C2EA7240E104A00DA4081 /* PlaybackMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackMetadata.swift; sourceTree = "<group>"; };
+		EDAAAB5C240F84D4002326D9 /* UINavigationBar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extensions.swift"; sourceTree = "<group>"; };
 		EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordStore.swift; sourceTree = "<group>"; };
 		EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordConvertible.swift; sourceTree = "<group>"; };
 		EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreError.swift; sourceTree = "<group>"; };
@@ -420,6 +422,7 @@
 				C938C741102596FD14058E88 /* UILabel+Extension.swift */,
 				F46D5270D9E16B4F9812EF95 /* UIView+Extensions.swift */,
 				ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */,
+				EDAAAB5C240F84D4002326D9 /* UINavigationBar+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -689,6 +692,7 @@
 				EDE8F0C4240AC7FD00DFA828 /* MenuViewController+UITableViewDelegate.swift in Sources */,
 				579FC49A9D5FE9ABF57CA74B /* AppDelegate+CLLocationManagerDelegate.swift in Sources */,
 				EDE8F0C7240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift in Sources */,
+				EDAAAB5D240F84D4002326D9 /* UINavigationBar+Extensions.swift in Sources */,
 				F2E7E66C5731EE7C43417559 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
 				5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */,
 				ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */,

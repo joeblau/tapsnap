@@ -114,8 +114,10 @@ final class CameraViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        
         navigationItem.leftBarButtonItem = menuButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notificationButton)
+    
         
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .notDetermined:
