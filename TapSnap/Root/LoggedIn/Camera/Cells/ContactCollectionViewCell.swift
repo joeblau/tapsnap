@@ -101,19 +101,19 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         }
     }
 
-//    @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
-//        switch recognizer.state {
-//        case .changed:
-//            let velocity = recognizer.velocity(in: contentView)
-//            Current.zoomVeloictySubject.send(velocity)
-//        default: break
-//        }
-//    }
+    @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .changed:
+            let velocity = recognizer.velocity(in: contentView)
+            Current.zoomVeloictySubject.send(velocity)
+        default: break
+        }
+    }
 }
 
 // MARK: - ViewBootstrappable
 
-extension ContactCollectionViewCell: ViewBootstrappable, UIGestureRecognizerDelegate {
+extension ContactCollectionViewCell: ViewBootstrappable {
     internal func configureViews() {
         contentView.addSubview(contactImageView)
         contactImageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
@@ -130,12 +130,23 @@ extension ContactCollectionViewCell: ViewBootstrappable, UIGestureRecognizerDele
 
     func configureGestureRecoginzers() {
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleVideoAction(_:)))
+        longPress.delegate = self
         contentView.addGestureRecognizer(longPress)
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(handlePhotoAction(_:)))
+        tap.delegate = self
         contentView.addGestureRecognizer(tap)
 
-//        let zoom = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
-//        contentView.addGestureRecognizer(zoom)
+        let zoom = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
+        zoom.delegate = self
+        contentView.addGestureRecognizer(zoom)
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+
+extension ContactCollectionViewCell: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer) -> Bool {
+        true
     }
 }

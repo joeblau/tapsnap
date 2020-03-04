@@ -5,6 +5,7 @@ import Combine
 import CoreLocation
 import PencilKit
 import UIKit
+import AVFoundation
 
 final class CameraOverlayView: UIView {
     var cancellables = Set<AnyCancellable>()
@@ -72,11 +73,13 @@ final class CameraOverlayView: UIView {
         UIPanGestureRecognizer(target: self, action: #selector(panTextAction(_:)))
     }()
 
+    private lazy var indeterminateProgressView: IndeterminateProgressView = {
+        IndeterminateProgressView()
+    }()
+    
     private let annotationTextView = TextOverlayView()
     private var annotationTextViewWidth: NSLayoutConstraint!
     private var annotationTextViewHeight: NSLayoutConstraint!
-
-    private let indeterminateProgressView = IndeterminateProgressView()
     private let recordingProgressView = RecordProgressView()
     private var drawingToolsViewHeight: CGFloat = 340
 
@@ -354,9 +357,6 @@ extension CameraOverlayView: ViewBootstrappable {
             switch action {
             case .capturePhoto, .captureVideoEnd:
                 self.indeterminateProgressView.startAnimating()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                    self.indeterminateProgressView.stopAnimating(withExitTransition: true, completion: nil)
-                }
             default: break
             }
         }.store(in: &cancellables)
@@ -367,7 +367,7 @@ extension CameraOverlayView: ViewBootstrappable {
             switch action {
             case .capturePhoto, .captureVideoEnd:
                 self.resetWatermark()
-                
+                AVCaptureSession().initZoom()
                 self.udpateOverlay()
             case .captureVideoStart, .none: break
             }
@@ -382,6 +382,10 @@ extension CameraOverlayView: ViewBootstrappable {
             switch cleanup {
             case .watermarked:
                 Current.currentWatermarkSubject.send(nil)
+            case .cleanUp(_):
+                DispatchQueue.main.async {
+                    self.indeterminateProgressView.stopAnimating(withExitTransition: true, completion: nil)
+                }
             default: break
             }
         }.store(in: &cancellables)

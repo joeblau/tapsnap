@@ -60,7 +60,9 @@ final class CameraViewController: UIViewController {
     }()
     
     private lazy var zoomInOutPan: UIPanGestureRecognizer = {
-        UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
+        let r = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
+        r.delegate = self
+        return r
     }()
     
     // Top right
@@ -193,6 +195,14 @@ final class CameraViewController: UIViewController {
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
+    }
+}
+
+// MARK: - UIGestureRecognizerDelegate
+
+extension CameraViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith _: UIGestureRecognizer) -> Bool {
+        true
     }
 }
 

@@ -39,6 +39,7 @@ class IndeterminateProgressView: UIView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         bit.layer.bounds.size = CGSize(width: bitContractedWidth, height: bitHeight)
+        bit.layer.opacity = 0
         resetBitPosition()
     }
 
