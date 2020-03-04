@@ -5,8 +5,17 @@ import AVFoundation
 import os.log
 
 extension AVCaptureSession {
-    static var photoOutput = AVCapturePhotoOutput()
-    static var movieFileOutput = AVCaptureMovieFileOutput()
+    static var photoOutput: AVCapturePhotoOutput = {
+        let o = AVCapturePhotoOutput()
+        o.isHighResolutionCaptureEnabled = true
+        o.connection(with: .video)?.videoOrientation = .landscapeLeft
+        return o
+    }()
+    static var movieFileOutput: AVCaptureMovieFileOutput = {
+        let o = AVCaptureMovieFileOutput()
+        o.connection(with: .video)?.preferredVideoStabilizationMode = .auto
+        return o
+    }()
     private static var videoCaptureDevice: AVCaptureDevice?
 
     // MARK: - Public function
@@ -142,7 +151,6 @@ extension AVCaptureSession {
     private func addPhotoOutput() {
         switch canAddOutput(AVCaptureSession.photoOutput) {
         case true:
-            AVCaptureSession.photoOutput.isHighResolutionCaptureEnabled = true
             addOutput(AVCaptureSession.photoOutput)
         case false:
             os_log("%@", log: .avFoundation, type: .error, "Could not add photo output to the session")
@@ -151,11 +159,7 @@ extension AVCaptureSession {
 
     private func addMovieOutput() {
         switch canAddOutput(AVCaptureSession.movieFileOutput) {
-        case true:
-            if let connection = AVCaptureSession.movieFileOutput.connection(with: .video),
-                connection.isVideoStabilizationSupported {
-                connection.preferredVideoStabilizationMode = .auto
-            }
+        case true:            
             addOutput(AVCaptureSession.movieFileOutput)
         case false:
             os_log("%@", log: .avFoundation, type: .error, "Could not add movie output to the session")

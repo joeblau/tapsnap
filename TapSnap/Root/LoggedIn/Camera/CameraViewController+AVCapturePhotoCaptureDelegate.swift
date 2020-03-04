@@ -28,13 +28,16 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
             originalImage.draw(in: area)
             
             let widthRatio = originalImage.size.width / watermarkImage.size.width
-            let watermarkSize = CGSize(width: originalImage.size.width,
-                                       height: watermarkImage.size.height * widthRatio)
+
+            let scaledWatermark = UIImage(cgImage: watermarkImage.cgImage!,
+                                          scale: watermarkImage.scale / widthRatio,
+                                          orientation: watermarkImage.imageOrientation)
+
+            let xOffset = abs(originalImage.size.height - scaledWatermark.size.height) / 2
+            let watermarkArea = CGRect(origin: CGPoint(x: 0, y: xOffset),
+                                       size: scaledWatermark.size)
             
-            let yOffset = (originalImage.size.height - watermarkSize.height) / 2
-            let watermarkArea = CGRect(origin: CGPoint(x: 0, y: yOffset),
-                                       size: watermarkSize)
-            watermarkImage.draw(in: watermarkArea, blendMode: .normal, alpha: 1.0)
+            scaledWatermark.draw(in: watermarkArea, blendMode: .normal, alpha: 1.0)
             
             let layeredImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()

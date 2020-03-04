@@ -10,7 +10,7 @@ extension UIView {
         layer.shadowOpacity = 1.0
     }
 
-    func toImage(scale _: CGFloat = 0) -> UIImage? {
+    var toImage: UIImage? {
         UIGraphicsBeginImageContextWithOptions(bounds.size, isOpaque, 0.0)
         defer { UIGraphicsEndImageContext() }
         if let context = UIGraphicsGetCurrentContext() {
