@@ -68,6 +68,7 @@ final class PlaybackViewController: UIViewController {
     private lazy var playerView: UIImageView = {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentMode = .scaleAspectFill
         return v
     }()
 
@@ -77,7 +78,7 @@ final class PlaybackViewController: UIViewController {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.isUserInteractionEnabled = true
-        v.contentMode = .scaleAspectFit
+        v.contentMode = .scaleAspectFill
         return v
     }()
 
@@ -220,7 +221,7 @@ extension PlaybackViewController: ViewBootstrappable {
 
         view.addSubview(playerView)
         playerView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        playerView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height / 2).isActive = true
+        playerView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.6).isActive = true
         playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 

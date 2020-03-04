@@ -19,7 +19,7 @@ final class CameraPreviewView: UIView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         videoPreviewLayer = AVCaptureVideoPreviewLayer(session: session)
-        videoPreviewLayer.videoGravity = .resize
+        videoPreviewLayer.videoGravity = .resizeAspectFill
         layer.addSublayer(videoPreviewLayer)
         bootstrap()
     }

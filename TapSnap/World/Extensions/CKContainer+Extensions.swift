@@ -211,6 +211,8 @@ extension CKContainer {
     }
     
     func subscribeToInbox() {
+        guard !UserDefaults.standard.bool(forKey: Current.k.subscriptionCached) else { return }
+        
         publicCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
             guard self.no(error: error), let subscriptions = subscriptions else { return }
             
@@ -343,6 +345,7 @@ extension CKContainer {
         
         publicCloudDatabase.save(subscription) { subscription, error in
             guard self.no(error: error) else { return }
+            UserDefaults.standard.set(true, forKey: Current.k.subscriptionCached)
         }
     }
 
