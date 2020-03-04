@@ -232,10 +232,13 @@ extension CameraViewController: ViewBootstrappable {
             }
         }.store(in: &cancellables)
         
-        Current.presentViewContollersSubject.sink { present in
+        Current.presentViewContollersSubject
+            .removeDuplicates()
+            .sink { present in
             switch present {
             case .camera:
                 self.dismiss(animated: true) {
+                    self.playbackViewController.viewControllers.removeAll()
                     CKContainer.default().loadInbox()
                     self.session.enableBackgroundAudio()
                 }
