@@ -161,7 +161,7 @@ extension CKContainer {
         publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] messages, error in
             guard self.no(error: error), let messages = messages else { return }
             
-            messages.forEach{ message in
+            let deleteIDs = messages.map { message -> CKRecord.ID in
                 
                 guard let ciphertextAsset = message[MessageKey.ciphertext] as? CKAsset,
                     let ciphertextURL = ciphertextAsset.fileURL,
@@ -182,20 +182,24 @@ extension CKContainer {
                 let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
                                                     ciphertextData: ciphertextData,
                                                     signatureData: signatureData)
-                self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, completed: { [unowned self] isSaved in
+                self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, completed: { isSaved in
                     guard isSaved else { return }
-                    self.publicCloudDatabase.delete(withRecordID: message.recordID) { [unowned self] record, error in
-                        guard self.no(error: error) else { return }
-                    }
                 })
                 
+                return message.recordID
             }
             
-            switch messages.isEmpty {
-            case true: completion(.noData)
-            case false: completion(.newData)
+            let operation = CKModifyRecordsOperation(recordsToSave: nil,
+                                                     recordIDsToDelete: deleteIDs)
+            operation.modifyRecordsCompletionBlock = { [unowned self] _, recordIDs, error in
+                guard self.no(error: error), let recordIDs = recordIDs else { return }
+
+                switch recordIDs.isEmpty {
+                case true: completion(.noData)
+                case false: completion(.newData)
+                }
             }
-            self.loadInbox()
+            self.publicCloudDatabase.add(operation)
         }
     }
     
@@ -315,15 +319,15 @@ extension CKContainer {
     private func cleanUp(tempURL: SealedURL) {
         [tempURL.ephemeralPublicKeyURL,
          tempURL.ciphertexURL,
-         tempURL.signatureURL].forEach { url in
-            if FileManager.default.fileExists(atPath: url.path) {
+         tempURL.signatureURL]
+            .filter { FileManager.default.fileExists(atPath: $0.path) }
+            .forEach { url in
                 do {
                     try FileManager.default.removeItem(atPath: url.path)
                 } catch {
                     print("Could not remove file at url: \(url)")
                 }
             }
-        }
     }
 }
 
@@ -370,7 +374,6 @@ extension CKContainer {
             case .none:
                 try decryptedMessage.write(to: URL.randomInboxSaveURL(fileExtension: .mov), options: .atomicWrite)
             }
-            loadInbox()
             completed(true)
         } catch {
             os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
