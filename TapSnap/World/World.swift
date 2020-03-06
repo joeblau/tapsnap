@@ -59,6 +59,7 @@ enum MediaCapture {
 enum FileExtension: String {
     case mov
     case heic
+    case dat
 }
 
 enum CleanupAction {
@@ -125,6 +126,7 @@ struct World {
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
 
     var inboxURLsSubject = CurrentValueSubject<[URL]?, Never>(nil)
+    var outboxRecordsSubject = CurrentValueSubject<[CKRecord]?, Never>(nil)
     
     // CloudKit
     var cloudKitUserSubject = CurrentValueSubject<CKRecord?, Never>(nil)

@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         do { // Craete Inbox
             try FileManager.default.createDirectory(at: URL.inboxURL, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.createDirectory(at: URL.outboxURL, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(at: URL.encryptedOutboxURL, withIntermediateDirectories: true, attributes: nil)
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
@@ -40,8 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIBarButtonItem.appearance().tintColor = .label
         }
         
-
-
         switch UserDefaults.standard.bool(forKey: "enabled_sensor_visualizer") {
         case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
         case false: window = UIWindow(frame: UIScreen.main.bounds)
@@ -55,18 +54,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             Current.locationManager.startUpdatingLocation()
         }
-        CKContainer.default().loadInbox()
+        CKContainer.default().fetchUnreadMessages { result in
+            CKContainer.default().loadInbox()
+        }
     }
 
     func application(_: UIApplication,
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-
         CKContainer.default().fetchUnreadMessages { result in
-            switch result {
-            case .newData, .noData: CKContainer.default().loadInbox()
-            default: break
-            }
+            CKContainer.default().loadInbox()
             completionHandler(result)
         }
     }
@@ -97,7 +94,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Helpers
 
-    private func subscribeToPushNotifications() {
+    private func loadInbox() {
 
     }
+    
 }

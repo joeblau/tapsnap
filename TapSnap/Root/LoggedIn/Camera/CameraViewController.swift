@@ -85,6 +85,7 @@ final class CameraViewController: UIViewController {
         b.backgroundColor = .systemBlue
         b.layer.cornerRadius = 8
         b.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+        b.isHidden = true
         return b
     }()
     
@@ -92,6 +93,7 @@ final class CameraViewController: UIViewController {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.3)
+        v.isHidden = true
         return v
     }()
     
@@ -338,7 +340,7 @@ extension CameraViewController: ViewBootstrappable {
                 self.previewView.flash()
                 self.startCancelCountdown()
             case .captureVideoStart:
-                self.sendCancellable = true
+                self.sendCancellable = false
                 if Current.musicSyncSubject.value {
                     MPMusicPlayerController.systemMusicPlayer.prepareToPlay { _ in
                         MPMusicPlayerController.systemMusicPlayer.play()
@@ -359,6 +361,7 @@ extension CameraViewController: ViewBootstrappable {
                 AVCaptureSession.movieFileOutput.metadata?.append(contentsOf: videoMetadata)
                 AVCaptureSession.movieFileOutput.startRecording(to: URL.randomOutboxSaveURL(with: .mov), recordingDelegate: self)
             case .captureVideoEnd:
+                self.sendCancellable = true
                 if Current.musicSyncSubject.value {
                     MPMusicPlayerController.systemMusicPlayer.stop()
                 }
@@ -366,12 +369,11 @@ extension CameraViewController: ViewBootstrappable {
                 self.previewView.flash()
                 self.startCancelCountdown()
             case .cancelMediaStart:
+                Current.outboxRecordsSubject.send(nil)
                 self.sendCancellable = false
-                // Cancel encyrpting and remove temp files
-                break
-                
             case .cancelMediaEnd:
                 self.sendCancellable = false
+                CKContainer.default().sendMessages()
             }
         }.store(in: &cancellables)
         

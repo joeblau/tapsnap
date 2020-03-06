@@ -9,9 +9,9 @@ import Foundation
 
 extension URL {
     static var sealedURL: SealedURL {
-        return (ephemeralPublicKeyURL: FileManager.default.temporaryDirectory.appendingPathComponent(NSUUID().uuidString).appendingPathExtension("dat"),
-                ciphertexURL: FileManager.default.temporaryDirectory.appendingPathComponent(NSUUID().uuidString).appendingPathExtension("dat"),
-                signatureURL: FileManager.default.temporaryDirectory.appendingPathComponent(NSUUID().uuidString).appendingPathExtension("dat"))
+        return (ephemeralPublicKeyURL: self.randomEncryptedOutboxSaveURL(with: .dat),
+                ciphertexURL: self.randomEncryptedOutboxSaveURL(with: .dat),
+                signatureURL: self.randomEncryptedOutboxSaveURL(with: .dat))
     }
     
     static var randomURL: URL {
@@ -20,6 +20,8 @@ extension URL {
         .appendingPathComponent(NSUUID().uuidString)
         .appendingPathExtension("dat")
     }
+    
+    // MARK: - Inbox
     
     static func randomInboxSaveURL(fileExtension: FileExtension) -> URL  {
         FileManager.default
@@ -36,6 +38,24 @@ extension URL {
             .appendingPathComponent("inbox/")
     }
     
+    // MARK: - Encrypted Outbox
+    
+    static func randomEncryptedOutboxSaveURL(with fileExtension: FileExtension) -> URL {
+        FileManager.default
+            .temporaryDirectory
+            .appendingPathComponent("encrypted-outbox/")
+            .appendingPathComponent(dateUUID)
+            .appendingPathExtension(fileExtension.rawValue)
+    }
+    
+    static var encryptedOutboxURL: URL {
+        FileManager.default
+            .temporaryDirectory
+            .appendingPathComponent("encrypted-outbox/")
+    }
+    
+    // MARK: - Outbox
+    
     static func randomOutboxSaveURL(with fileExtension: FileExtension) -> URL {
         FileManager.default
             .temporaryDirectory
@@ -50,7 +70,8 @@ extension URL {
             .appendingPathComponent("outbox/")
     }
     
-    static var dateUUID: String {
+    // MARK; - Private
+    static private var dateUUID: String {
         return "\(Date().timeIntervalSince1970)-\(NSUUID().uuidString)"
     }
 }

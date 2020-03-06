@@ -9,11 +9,14 @@ import CloudKit
 import os.lock
 import UIKit
 import CryptoKit
+import Combine
 
 extension CKContainer {
     static var creatorReference: CKRecord.Reference?
     static var creatorPredicate: NSPredicate?
     static var recipientPredicate: NSPredicate?
+    
+    static var outboxSubscriber =  AnySubscriber<CKRecord, Never>()
     
     private var sharedZoneID: CKRecordZone.ID {
         CKRecordZone.ID(zoneName: "SharedZone", ownerName: CKRecordZone.ID.default.ownerName)
@@ -112,7 +115,7 @@ extension CKContainer {
                 }.compactMap { participant -> CKRecord.ID? in
                     participant.userIdentity.userRecordID
                 }
-                self.sendMessages(to: participantRecordIDs, with: mediaURL, completion: completion)
+                self.buildMessages(to: participantRecordIDs, with: mediaURL, completion: completion)
             }
         default:
             sharedCloudDatabase.fetch(withRecordID: shareRecordID) { [unowned self] share, error in
@@ -124,9 +127,23 @@ extension CKContainer {
                     participant.userIdentity.userRecordID
                 }
                 
-                self.sendMessages(to: participantRecordIDs, with: mediaURL, completion: completion)
+                self.buildMessages(to: participantRecordIDs, with: mediaURL, completion: completion)
             }
         }
+    }
+    
+    func sendMessages() {
+        guard let sendMessages = Current.outboxRecordsSubject.value else { return }
+        let operation = CKModifyRecordsOperation(recordsToSave: sendMessages, recordIDsToDelete: nil)
+        operation.perRecordCompletionBlock = { [unowned self] _, error  in
+            guard self.no(error: error) else { return }
+        }
+        operation.modifyRecordsCompletionBlock = { [unowned self] _, _, error in
+            guard self.no(error: error) else { return }
+            Current.outboxRecordsSubject.send(nil)
+            self.cleanUpEncryptedOutbox()
+        }
+        publicCloudDatabase.add(operation)
     }
     
     func fetchAllGroups() {
@@ -174,7 +191,7 @@ extension CKContainer {
                     let ephemeralPublicKeyAsset = message[MessageKey.media] as? CKAsset,
                     let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
                     let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL),
-                
+                    
                     let senderSigningKeyData = message[MessageKey.senderSigningKey] as? Data,
                     let senderSigningKey = try? Curve25519.Signing.PublicKey(rawRepresentation: senderSigningKeyData) else {
                         fatalError("Invalid message/delete message")
@@ -193,7 +210,7 @@ extension CKContainer {
                                                      recordIDsToDelete: deleteIDs)
             operation.modifyRecordsCompletionBlock = { [unowned self] _, recordIDs, error in
                 guard self.no(error: error), let recordIDs = recordIDs else { completion(.failed); return }
-
+                
                 switch recordIDs.isEmpty {
                 case true: completion(.noData)
                 case false: completion(.newData)
@@ -206,8 +223,8 @@ extension CKContainer {
     func loadInbox() {
         do {
             let messageURLs = try FileManager.default.contentsOfDirectory(at: URL.inboxURL,
-                                                                    includingPropertiesForKeys: nil,
-                                                                    options: .includesDirectoriesPostOrder)
+                                                                          includingPropertiesForKeys: nil,
+                                                                          options: .includesDirectoriesPostOrder)
             Current.inboxURLsSubject.send(messageURLs.sorted(by: {$0.path < $1.path }))
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
@@ -269,18 +286,18 @@ extension CKContainer {
 // MARK: - Messages
 
 extension CKContainer {
-    private func sendMessages(to participantRecordIDs: [CKRecord.ID],
-                              with mediaURL: URL,
-                              completion: @escaping (_ saved: Bool)->()) {
+    private func buildMessages(to participantRecordIDs: [CKRecord.ID],
+                               with mediaURL: URL,
+                               completion: @escaping (_ saved: Bool)->()) {
         let predecate = NSPredicate(format: "creator IN %@", participantRecordIDs)
         let query = CKQuery(recordType: .publicKey, predicate: predecate)
         self.publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] publicKeys, error in
             guard self.no(error: error), let publicKeys = publicKeys else { return }
             
-            publicKeys.forEach { publicKey in
+            let sendMessages = publicKeys.compactMap { publicKey -> CKRecord? in
                 guard let bytes = publicKey[CryptoKey.encryption] as? Data,
                     let pkEncryption = try? Curve25519.KeyAgreement.PublicKey(rawRepresentation: bytes) else {
-                        return
+                        return nil
                 }
                 
                 do {
@@ -288,46 +305,52 @@ extension CKContainer {
                         let pkSigning: Curve25519.Signing.PublicKey = try? GenericPasswordStore().readKey(account: Current.k.publicSigningKey) else {
                             fatalError("Could not read private key/re-bootstrap")
                     }
-                    let tempURL = URL.sealedURL
+                    let sealed = URL.sealedURL
                     
                     let record = CKRecord(recordType: .message)
                     record[MessageKey.senderSigningKey] = pkSigning.rawRepresentation
                     let sealedMessage: SealedMessage
                     let mediaData = try Data(contentsOf: mediaURL)
                     sealedMessage = try Current.pki.encrypt(mediaData, to: pkEncryption, signedBy: pvSigning)
-                    try sealedMessage.ephemeralPublicKeyData.write(to: tempURL.ephemeralPublicKeyURL)
-                    record[MessageKey.media] = CKAsset(fileURL: tempURL.ephemeralPublicKeyURL)
+                    try sealedMessage.ephemeralPublicKeyData.write(to: sealed.ephemeralPublicKeyURL)
+                    record[MessageKey.media] = CKAsset(fileURL: sealed.ephemeralPublicKeyURL)
                     
-                    try sealedMessage.ciphertextData.write(to: tempURL.ciphertexURL)
-                    record[MessageKey.ciphertext] = CKAsset(fileURL: tempURL.ciphertexURL)
-                    try sealedMessage.signatureData.write(to: tempURL.signatureURL)
-                    record[MessageKey.signature] = CKAsset(fileURL: tempURL.signatureURL)
+                    try sealedMessage.ciphertextData.write(to: sealed.ciphertexURL)
+                    record[MessageKey.ciphertext] = CKAsset(fileURL: sealed.ciphertexURL)
+                    try sealedMessage.signatureData.write(to: sealed.signatureURL)
+                    record[MessageKey.signature] = CKAsset(fileURL: sealed.signatureURL)
                     record[MessageKey.recipient] = publicKey[CryptoKey.creator] as? CKRecord.Reference
                     
-                    self.publicCloudDatabase.save(record) { [unowned self] record, error in
-                        self.cleanUp(tempURL: tempURL)
-                        guard self.no(error: error) else { return }
-                        completion(true)
-                    }
+                    return record
                 } catch {
                     os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
                 }
+                return nil
             }
+            
+            Current.outboxRecordsSubject.send(sendMessages)
+            completion(true)
         }
     }
     
-    private func cleanUp(tempURL: SealedURL) {
-        [tempURL.ephemeralPublicKeyURL,
-         tempURL.ciphertexURL,
-         tempURL.signatureURL]
-            .filter { FileManager.default.fileExists(atPath: $0.path) }
-            .forEach { url in
-                do {
-                    try FileManager.default.removeItem(atPath: url.path)
-                } catch {
-                    print("Could not remove file at url: \(url)")
-                }
-            }
+    private func cleanUpEncryptedOutbox() {
+        do {
+            try FileManager.default
+                .contentsOfDirectory(at: URL.encryptedOutboxURL,
+                                     includingPropertiesForKeys: nil,
+                                     options: .includesDirectoriesPostOrder)
+                .forEach({ url in
+                    do {
+                        try FileManager.default.removeItem(atPath: url.path)
+                    } catch {
+                        print("Could not remove file at url: \(url)")
+                    }
+                })
+            
+        } catch {
+            os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
+        }
+        
     }
 }
 
@@ -352,7 +375,6 @@ extension CKContainer {
             UserDefaults.standard.set(true, forKey: Current.k.subscriptionCached)
         }
     }
-
 }
 
 // MARK: - PKI
@@ -363,7 +385,7 @@ extension CKContainer {
                          completed: (_ saved: Bool) -> ()) {
         guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else {            fatalError("Bootstrap private encryptoin key")
         }
-
+        
         do {
             let decryptedMessage = try Current.pki.decrypt(message, using: pvEncryption, from: signing)
             
