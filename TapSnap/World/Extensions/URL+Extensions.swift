@@ -25,7 +25,7 @@ extension URL {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("inbox/")
-            .appendingPathComponent(NSUUID().uuidString)
+            .appendingPathComponent(dateUUID)
             .appendingPathExtension(fileExtension.rawValue)
     }
     
@@ -40,7 +40,7 @@ extension URL {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("outbox/")
-            .appendingPathComponent(NSUUID().uuidString)
+            .appendingPathComponent(dateUUID)
             .appendingPathExtension(fileExtension.rawValue)
     }
     
@@ -48,6 +48,10 @@ extension URL {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("outbox/")
+    }
+    
+    static var dateUUID: String {
+        return "\(Date().timeIntervalSince1970)-\(NSUUID().uuidString)"
     }
 }
 

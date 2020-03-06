@@ -158,43 +158,49 @@ extension CKContainer {
     func fetchUnreadMessages(completion: @escaping (UIBackgroundFetchResult)->())  {
         guard let recipientPredicate = CKContainer.recipientPredicate else { return }
         let query = CKQuery(recordType: .message, predicate: recipientPredicate)
-        let operation = CKQueryOperation(query: query)
-        operation.recordFetchedBlock = {  [unowned self] message in
-            guard let ciphertextAsset = message[MessageKey.ciphertext] as? CKAsset,
-                let ciphertextURL = ciphertextAsset.fileURL,
-                let ciphertextData = try? Data(contentsOf: ciphertextURL),
+        publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] messages, error in
+            guard self.no(error: error), let messages = messages else { return }
+            
+            let deleteIDs = messages.map { message -> CKRecord.ID in
                 
-                let signatureAsset = message[MessageKey.signature] as? CKAsset,
-                let signatureURL = signatureAsset.fileURL,
-                let signatureData = try? Data(contentsOf: signatureURL),
+                guard let ciphertextAsset = message[MessageKey.ciphertext] as? CKAsset,
+                    let ciphertextURL = ciphertextAsset.fileURL,
+                    let ciphertextData = try? Data(contentsOf: ciphertextURL),
+                    
+                    let signatureAsset = message[MessageKey.signature] as? CKAsset,
+                    let signatureURL = signatureAsset.fileURL,
+                    let signatureData = try? Data(contentsOf: signatureURL),
+                    
+                    let ephemeralPublicKeyAsset = message[MessageKey.media] as? CKAsset,
+                    let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
+                    let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL),
                 
-                let ephemeralPublicKeyAsset = message[MessageKey.media] as? CKAsset,
-                let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
-                let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL),
-                
-                let senderSigningKeyData = message[MessageKey.senderSigningKey] as? Data,
-                let senderSigningKey = try? Curve25519.Signing.PublicKey(rawRepresentation: senderSigningKeyData) else {
-                    fatalError("Invalid message/delete message")
-            }
-            let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
-                                                ciphertextData: ciphertextData,
-                                                signatureData: signatureData)
-            self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, completed: { isSaved in
-                guard isSaved else { return }
-                let operation = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: [message.recordID])
-                operation.modifyRecordsCompletionBlock = { [unowned self] _, _, error in
-                    guard self.no(error: error) else { return }
+                    let senderSigningKeyData = message[MessageKey.senderSigningKey] as? Data,
+                    let senderSigningKey = try? Curve25519.Signing.PublicKey(rawRepresentation: senderSigningKeyData) else {
+                        fatalError("Invalid message/delete message")
                 }
-                self.publicCloudDatabase.add(operation)
-            })
-            completion(.newData)
+                let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
+                                                    ciphertextData: ciphertextData,
+                                                    signatureData: signatureData)
+                self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, completed: { isSaved in
+                    guard isSaved else { return }
+                })
+                
+                return message.recordID
+            }
+            
+            let operation = CKModifyRecordsOperation(recordsToSave: nil,
+                                                     recordIDsToDelete: deleteIDs)
+            operation.modifyRecordsCompletionBlock = { [unowned self] _, recordIDs, error in
+                guard self.no(error: error), let recordIDs = recordIDs else { completion(.failed); return }
+
+                switch recordIDs.isEmpty {
+                case true: completion(.noData)
+                case false: completion(.newData)
+                }
+            }
+            self.publicCloudDatabase.add(operation)
         }
-        operation.queryCompletionBlock = { cursor, error in
-            guard self.no(error: error) else { return }
-            completion(.noData)
-        }
-        
-        publicCloudDatabase.add(operation)
     }
     
     func loadInbox() {
@@ -202,7 +208,7 @@ extension CKContainer {
             let messageURLs = try FileManager.default.contentsOfDirectory(at: URL.inboxURL,
                                                                     includingPropertiesForKeys: nil,
                                                                     options: .includesDirectoriesPostOrder)
-            Current.inboxURLsSubject.send(messageURLs)
+            Current.inboxURLsSubject.send(messageURLs.sorted(by: {$0.path < $1.path }))
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
