@@ -47,6 +47,8 @@ enum MediaAction {
     case capturePhoto
     case captureVideoStart
     case captureVideoEnd
+    case cancelMediaStart
+    case cancelMediaEnd
 }
 
 enum MediaCapture {

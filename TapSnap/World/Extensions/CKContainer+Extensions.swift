@@ -361,8 +361,7 @@ extension CKContainer {
     private func decrypt(sealed message: SealedMessage,
                          publicKey signing: Curve25519.Signing.PublicKey,
                          completed: (_ saved: Bool) -> ()) {
-        guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else {
-            fatalError("Bootstrap private encryptoin key")
+        guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else {            fatalError("Bootstrap private encryptoin key")
         }
 
         do {

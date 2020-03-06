@@ -243,7 +243,7 @@ extension CameraOverlayView: ViewBootstrappable {
 
         addSubview(recordingProgressView)
         recordingProgressView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        recordingProgressView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor).isActive = true
+        recordingProgressView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 12).isActive = true
         recordingProgressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         recordingProgressView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
 
@@ -366,10 +366,10 @@ extension CameraOverlayView: ViewBootstrappable {
 
             switch action {
             case .capturePhoto, .captureVideoEnd:
-                self.resetWatermark()
                 AVCaptureSession().initZoom()
+                self.resetWatermark()
                 self.udpateOverlay()
-            case .captureVideoStart, .none: break
+            default: break
             }
         }.store(in: &cancellables)
 

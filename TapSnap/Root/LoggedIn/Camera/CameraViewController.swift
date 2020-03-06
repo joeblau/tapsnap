@@ -25,8 +25,16 @@ final class CameraViewController: UIViewController {
             }
         }
     }
-    let itemsInSection = [0]
+    var sendCancellable: Bool = false {
+        didSet {
+            DispatchQueue.main.async {
+                self.cancelSendButton.isHidden = !self.sendCancellable
+                self.cancelBackground.isHidden = !self.sendCancellable
+            }
+        }
+    }
     var currentGroup: CKRecord? = nil
+    
     
     // Photo Video
     private let session: AVCaptureSession = { AVCaptureSession() }()
@@ -65,10 +73,33 @@ final class CameraViewController: UIViewController {
         return r
     }()
     
+    // Top center
+    
+    private lazy var cancelSendButton: UIButton = {
+        let b = UIButton(type: .system)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setImage(UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(scale: .small)), for: .normal)
+        b.addTarget(self, action: #selector(cancelSendAction), for: .touchUpInside)
+        b.setTitle(" Cancel Send", for: .normal)
+        b.tintColor = .label
+        b.backgroundColor = .systemBlue
+        b.layer.cornerRadius = 8
+        b.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+        return b
+    }()
+    
+    private lazy var cancelBackground: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.3)
+        return v
+    }()
+    
     // Top right
     lazy var notificationButton: UIButton = {
         let b = UIButton(type: .custom)
         b.notification(diameter: 20)
+        b.addTarget(self, action: #selector(showPlaybackAction), for: .touchUpInside)
         b.isHidden = true
         return b
     }()
@@ -116,9 +147,9 @@ final class CameraViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         navigationItem.leftBarButtonItem = menuButton
+        navigationItem.titleView = cancelSendButton
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notificationButton)
     
-        
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .notDetermined:
             sessionQueue.suspend()
@@ -136,7 +167,6 @@ final class CameraViewController: UIViewController {
             UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction)),
         ]
         
-        contactPageControl.numberOfPages = Int(ceil(Double(itemsInSection[0]) / 8.0))
         sessionQueue.async {
             self.session.bootstrap()
         }
@@ -181,6 +211,10 @@ final class CameraViewController: UIViewController {
         }
     }
     
+    @objc private func cancelSendAction() {
+        Current.mediaActionSubject.send(.cancelMediaStart)
+    }
+    
     func cleanUp(url: URL) {
         switch backgroundRecordingID {
         case let .some(backgroundID) where backgroundID != .invalid:
@@ -196,6 +230,12 @@ final class CameraViewController: UIViewController {
             try FileManager.default.removeItem(atPath: url.path)
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
+        }
+    }
+    
+    private func startCancelCountdown() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            Current.mediaActionSubject.send(.cancelMediaEnd)
         }
     }
 }
@@ -223,6 +263,15 @@ extension CameraViewController: ViewBootstrappable {
         previewView.bottomAnchor.constraint(equalTo: contactsCollectionView.topAnchor).isActive = true
         previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        view.addSubview(cancelBackground)
+        cancelBackground.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        cancelBackground.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12).isActive = true
+        cancelBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        cancelBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+
+        cancelSendButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        cancelSendButton.widthAnchor.constraint(equalToConstant: 180).isActive = true
     }
     
     internal func configureStreams() {
@@ -275,13 +324,10 @@ extension CameraViewController: ViewBootstrappable {
         
         Current.mediaActionSubject.sink { action in
             switch action {
-            case .none: break
+            case .none:
+                self.sendCancellable = false
             case .capturePhoto:
-                if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-                    Current.locationManager.requestLocation()
-                }
-                self.previewView.flash()
-                
+                self.sendCancellable = true
                 self.photoSettings.isHighResolutionPhotoEnabled = false
                 self.photoSettings.photoQualityPrioritization = .speed
                 if !self.photoSettings.__availablePreviewPhotoPixelFormatTypes.isEmpty {
@@ -289,10 +335,10 @@ extension CameraViewController: ViewBootstrappable {
                 }
                 
                 AVCaptureSession.photoOutput.capturePhoto(with: self.photoSettings, delegate: self)
+                self.previewView.flash()
+                self.startCancelCountdown()
             case .captureVideoStart:
-                if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-                    Current.locationManager.requestLocation()
-                }
+                self.sendCancellable = true
                 if Current.musicSyncSubject.value {
                     MPMusicPlayerController.systemMusicPlayer.prepareToPlay { _ in
                         MPMusicPlayerController.systemMusicPlayer.play()
@@ -316,8 +362,16 @@ extension CameraViewController: ViewBootstrappable {
                 if Current.musicSyncSubject.value {
                     MPMusicPlayerController.systemMusicPlayer.stop()
                 }
-                self.previewView.flash()
                 AVCaptureSession.movieFileOutput.stopRecording()
+                self.previewView.flash()
+                self.startCancelCountdown()
+            case .cancelMediaStart:
+                self.sendCancellable = false
+                // Cancel encyrpting and remove temp files
+                break
+                
+            case .cancelMediaEnd:
+                self.sendCancellable = false
             }
         }.store(in: &cancellables)
         
@@ -337,6 +391,7 @@ extension CameraViewController: ViewBootstrappable {
                 snapshot.appendSections([.groups])
                 snapshot.appendItems(items, toSection: .groups)
                 self.contactsCollectionView.diffableDataSource?.apply(snapshot)
+                self.contactPageControl.numberOfPages = items.count / 8
             }
         }.store(in: &cancellables)
         
@@ -357,10 +412,6 @@ extension CameraViewController: ViewBootstrappable {
             default: break
             }
         }.store(in: &cancellables)
-    }
-    
-    internal func configureButtonTargets() {
-        notificationButton.addTarget(self, action: #selector(showPlaybackAction), for: .touchUpInside)
     }
     
     func configureGestureRecoginzers() {
