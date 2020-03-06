@@ -24,7 +24,7 @@ extension AVCaptureSession {
         beginConfiguration()
         inputs.forEach { removeInput($0) }
 
-        backVideoDevice().map { addVideoInput(videoDevice: $0) }
+        addVideo(capture: backVideoDevice())
         addAudioInput()
         addPhotoOutput()
         addMovieOutput()
@@ -38,10 +38,8 @@ extension AVCaptureSession {
         currentVideoCaptureDevice.map { removeInput($0) }
 
         switch position {
-        case .front:
-            frontVideoDevice().map { addVideoInput(videoDevice: $0) }
-        default:
-            backVideoDevice().map { addVideoInput(videoDevice: $0) }
+        case .front: addVideo(capture: frontVideoDevice())
+        default: addVideo(capture: backVideoDevice())
         }
         commitConfiguration()
         initZoom()
@@ -51,13 +49,15 @@ extension AVCaptureSession {
         guard let device = AVCaptureSession.videoCaptureDevice,
             device ==  AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) else { return }
         do {
+            defer {
+                device.unlockForConfiguration()
+            }
             try device.lockForConfiguration()
             switch device {
             case AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back):
                 device.videoZoomFactor = device.virtualDeviceSwitchOverVideoZoomFactors.first as! CGFloat
             default: break
             }
-            device.unlockForConfiguration()
         } catch {
             os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
         }
@@ -89,6 +89,29 @@ extension AVCaptureSession {
 
     // MARK: - Cameras
 
+    private func addVideo(capture device: AVCaptureDevice?) {
+        device.map { currentDevice in
+            defer {
+                currentDevice.unlockForConfiguration()
+            }
+            do {
+                try currentDevice.lockForConfiguration()
+                if currentDevice.isFocusModeSupported(.continuousAutoFocus) {
+                    currentDevice.focusMode = .continuousAutoFocus
+                }
+//                if currentDevice.isGeometricDistortionCorrectionSupported {
+//                    currentDevice.isGeometricDistortionCorrectionEnabled = true
+//                }
+                if currentDevice.isLowLightBoostSupported {
+                    currentDevice.automaticallyEnablesLowLightBoostWhenAvailable = true
+                }
+                addVideoInput(videoDevice: currentDevice)
+            } catch {
+                os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
+            }
+        }
+    }
+    
     private func frontVideoDevice() -> AVCaptureDevice? {
         if let trueDepth = AVCaptureDevice.default(.builtInTrueDepthCamera, for: .video, position: .front) {
             AVCaptureSession.videoCaptureDevice = trueDepth

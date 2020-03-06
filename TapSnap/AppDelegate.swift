@@ -64,10 +64,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         CKContainer.default().fetchUnreadMessages { result in
             switch result {
-            case .newData:
-                CKContainer.default().loadInbox()
-            default:
-                break
+            case .newData, .noData: CKContainer.default().loadInbox()
+            default: break
             }
             completionHandler(result)
         }

@@ -308,12 +308,10 @@ extension CameraViewController: ViewBootstrappable {
                 if AVCaptureSession.movieFileOutput.availableVideoCodecTypes.contains(.hevc) {
                     AVCaptureSession.movieFileOutput.setOutputSettings([AVVideoCodecKey: AVVideoCodecType.hevc], for: movieFileOutputConnection!)
                 }
-                
-                let outputFileName = NSUUID().uuidString
-                let outputFilePath = (NSTemporaryDirectory() as NSString).appendingPathComponent((outputFileName as NSString).appendingPathExtension("mov")!)
-                
-                AVCaptureSession.movieFileOutput.metadata = [AVMetadataItem].movieMetadata(group: self.currentGroup?[GroupKey.name] as? String)
-                AVCaptureSession.movieFileOutput.startRecording(to: URL(fileURLWithPath: outputFilePath), recordingDelegate: self)
+
+                let videoMetadata =  [AVMetadataItem].movieMetadata(group: self.currentGroup?[GroupKey.name] as? String)
+                AVCaptureSession.movieFileOutput.metadata?.append(contentsOf: videoMetadata)
+                AVCaptureSession.movieFileOutput.startRecording(to: URL.randomOutboxSaveURL(with: .mov), recordingDelegate: self)
             case .captureVideoEnd:
                 if Current.musicSyncSubject.value {
                     MPMusicPlayerController.systemMusicPlayer.stop()
