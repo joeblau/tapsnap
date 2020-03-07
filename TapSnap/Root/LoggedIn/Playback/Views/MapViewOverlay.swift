@@ -45,8 +45,6 @@ final class MapViewOverlay: UIView {
         return sv
     }()
     
-    
-    
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
