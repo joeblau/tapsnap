@@ -393,7 +393,7 @@ extension CameraViewController: ViewBootstrappable {
                 snapshot.appendSections([.groups])
                 snapshot.appendItems(items, toSection: .groups)
                 self.contactsCollectionView.diffableDataSource?.apply(snapshot)
-                self.contactPageControl.numberOfPages = items.count / 8
+                self.contactPageControl.numberOfPages = Int(ceil(Double(items.count) / 8.0))
             }
         }.store(in: &cancellables)
         
