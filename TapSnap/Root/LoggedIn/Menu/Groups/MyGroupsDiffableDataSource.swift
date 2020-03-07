@@ -1,9 +1,5 @@
-//
-//  MyGroupsDiffableDataSource.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/29/20.
-//
+// MyGroupsDiffableDataSource.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
@@ -15,7 +11,6 @@ class MyGroupsDiffableDataSource: UICollectionViewDiffableDataSource<GroupSectio
                 let record = groupValue.record else { return nil }
             cell.configure(record: record)
             return cell
-            
         }
     }
 }

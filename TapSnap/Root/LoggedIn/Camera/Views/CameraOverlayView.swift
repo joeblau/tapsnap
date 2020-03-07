@@ -1,11 +1,11 @@
 // CameraOverlayView.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
+import AVFoundation
 import Combine
 import CoreLocation
 import PencilKit
 import UIKit
-import AVFoundation
 
 final class CameraOverlayView: UIView {
     var cancellables = Set<AnyCancellable>()
@@ -76,7 +76,7 @@ final class CameraOverlayView: UIView {
     private lazy var indeterminateProgressView: IndeterminateProgressView = {
         IndeterminateProgressView()
     }()
-    
+
     private let annotationTextView = TextOverlayView()
     private var annotationTextViewWidth: NSLayoutConstraint!
     private var annotationTextViewHeight: NSLayoutConstraint!
@@ -377,12 +377,12 @@ extension CameraOverlayView: ViewBootstrappable {
             self.musicButton.isEnabled = shouldSync
 
         }.store(in: &cancellables)
-        
+
         Current.cleanupSubject.sink { cleanup in
             switch cleanup {
             case .watermarked:
                 Current.currentWatermarkSubject.send(nil)
-            case .cleanUp(_):
+            case .cleanUp:
                 DispatchQueue.main.async {
                     self.indeterminateProgressView.stopAnimating(withExitTransition: true, completion: nil)
                 }

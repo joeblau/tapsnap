@@ -1,13 +1,13 @@
 // PlaybackViewController.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
+import AVFoundation
+import CloudKit
 import Combine
 import Contacts
 import CoreLocation
 import MapKit
 import UIKit
-import CloudKit
-import AVFoundation
 
 final class PlaybackViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
@@ -93,35 +93,34 @@ final class PlaybackViewController: UIViewController {
 
     private var annotations = [MKPointAnnotation]()
     var looper: PlayerLooper?
-    
 
     // MARK: - Lifecycle
 
     init(messageURL: URL) {
         guard let data = try? Data(contentsOf: messageURL) else { fatalError("invalid data") }
-        
+
         switch UIImage(data: data) {
-        case .some(_):
-            self.mediaCapture = MediaCapture.photo(messageURL)
-            self.playbackMetadata = data.playbackMetadata
+        case .some:
+            mediaCapture = MediaCapture.photo(messageURL)
+            playbackMetadata = data.playbackMetadata
         case .none:
-            self.mediaCapture = MediaCapture.movie(messageURL)
-            self.playbackMetadata = AVAsset(url: messageURL).metadata.playbackMetadta
+            mediaCapture = MediaCapture.movie(messageURL)
+            playbackMetadata = AVAsset(url: messageURL).metadata.playbackMetadta
         }
-        
+
         super.init(nibName: nil, bundle: nil)
     }
-    
-    required init?(coder: NSCoder) {
+
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = self.playbackMetadata?.author
+        title = playbackMetadata?.author
         view.backgroundColor = .systemBackground
         view.floatView()
-        
+
         switch mediaCapture {
         case let .photo(url):
             guard let data = try? Data(contentsOf: url) else { return }
@@ -137,15 +136,14 @@ final class PlaybackViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         switch mediaCapture {
-        case .photo(_): break
-        case .movie(_): looper?.start(in: playerView.layer)
+        case .photo: break
+        case .movie: looper?.start(in: playerView.layer)
         }
-        
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
+
         switch mediaCapture {
         case let .photo(url):
             try? FileManager.default.removeItem(at: url)
@@ -182,21 +180,18 @@ final class PlaybackViewController: UIViewController {
     }
 
     private func populateMapAndMapOverlay() {
-
         if let playbackMetadata = self.playbackMetadata,
             let theirCoordinate = playbackMetadata.location?.coordinate {
-            
             let annotation = MKPointAnnotation()
             annotation.coordinate = theirCoordinate
             annotation.title = playbackMetadata.author
             mapView.addAnnotation(annotation)
             annotations.append(annotation)
         }
-        
+
         if let coordinate = Current.currentLocationSubject.value?.coordinate,
             let nameData = UserDefaults.standard.data(forKey: Current.k.userAccount),
             let userRecord = try? CKRecord.unarchive(data: nameData) {
-            
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             annotation.title = userRecord[UserKey.name] as? String ?? "-"
@@ -210,7 +205,7 @@ final class PlaybackViewController: UIViewController {
             mapView.addOverlay(geodesicPolyline)
         }
 
-        mapOverlayView.configure(playbackMetadata: self.playbackMetadata)
+        mapOverlayView.configure(playbackMetadata: playbackMetadata)
     }
 }
 

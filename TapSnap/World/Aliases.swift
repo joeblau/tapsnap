@@ -1,9 +1,5 @@
-//
-//  Aliases.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/1/20.
-//
+// Aliases.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import Foundation
 

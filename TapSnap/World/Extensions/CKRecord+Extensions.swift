@@ -8,17 +8,17 @@ extension CKRecord {
         get { self[key.rawValue] }
         set { self[key.rawValue] = newValue as? CKRecordValue }
     }
-    
+
     subscript(key: GroupKey) -> Any? {
         get { self[key.rawValue] }
         set { self[key.rawValue] = newValue as? CKRecordValue }
     }
-    
+
     subscript(key: MessageKey) -> Any? {
         get { self[key.rawValue] }
         set { self[key.rawValue] = newValue as? CKRecordValue }
     }
-    
+
     subscript(key: CryptoKey) -> Any? {
         get { self[key.rawValue] }
         set { self[key.rawValue] = newValue as? CKRecordValue }

@@ -1,16 +1,12 @@
-//
-//  MyGroupsCollectionViewCell.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/29/20.
-//
+// MyGroupCollectionViewCell.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
+import UIKit
 
 class MyGroupCollectionViewCell: UICollectionViewCell {
     public private(set) var record: CKRecord?
-    
+
     private lazy var contactImageView: UIImageView = {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -18,7 +14,7 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
         v.contentMode = .center
         return v
     }()
-    
+
     private lazy var contactTitleLabel: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -32,8 +28,7 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
         l.lineBreakMode = .byTruncatingTail
         return l
     }()
-    
-    
+
     override init(frame _: CGRect) {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
@@ -41,19 +36,19 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
         layer.cornerRadius = 16
         bootstrap()
     }
-    
-    required init?(coder: NSCoder) {
+
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func configure(record: CKRecord) {
         self.record = record
-        
+
         switch record[GroupKey.avatar] as? Data {
         case let .some(data): contactImageView.image = UIImage(data: data)
         case .none: contactImageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
         }
-        
+
         if let title = record[GroupKey.name] as? String {
             let userCount = record[GroupKey.userCount] as? Int ?? 1
             let attributedString = NSMutableAttributedString()
@@ -61,7 +56,7 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
             case 1 ... 50:
                 let imageAttachment = NSTextAttachment()
                 imageAttachment.image = UIImage(systemName: "\(userCount).circle.fill",
-                    withConfiguration: UIImage.SymbolConfiguration(scale: .large))?
+                                                withConfiguration: UIImage.SymbolConfiguration(scale: .large))?
                     .withTintColor(.label, renderingMode: .alwaysTemplate)
                 attributedString.append(NSAttributedString(attachment: imageAttachment))
             default: break
@@ -70,7 +65,7 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
             contactTitleLabel.attributedText = attributedString
         }
     }
-    
+
     static let id = String(describing: MyGroupCollectionViewCell.self)
 }
 
@@ -81,7 +76,7 @@ extension MyGroupCollectionViewCell: ViewBootstrappable {
         contactImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         contactImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         contactImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-        
+
         contentView.addSubview(contactTitleLabel)
         contactTitleLabel.heightAnchor.constraint(equalToConstant: 32).isActive = true
         contactTitleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4).isActive = true

@@ -1,45 +1,40 @@
-//
-//  URL+Extensions.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/1/20.
-//
+// URL+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import Foundation
 
 extension URL {
     static var sealedURL: SealedURL {
-        return (ephemeralPublicKeyURL: self.randomEncryptedOutboxSaveURL(with: .dat),
-                ciphertexURL: self.randomEncryptedOutboxSaveURL(with: .dat),
-                signatureURL: self.randomEncryptedOutboxSaveURL(with: .dat))
+        (ephemeralPublicKeyURL: randomEncryptedOutboxSaveURL(with: .dat),
+         ciphertexURL: randomEncryptedOutboxSaveURL(with: .dat),
+         signatureURL: randomEncryptedOutboxSaveURL(with: .dat))
     }
-    
+
     static var randomURL: URL {
         FileManager.default
-        .temporaryDirectory
-        .appendingPathComponent(NSUUID().uuidString)
-        .appendingPathExtension("dat")
+            .temporaryDirectory
+            .appendingPathComponent(NSUUID().uuidString)
+            .appendingPathExtension("dat")
     }
-    
+
     // MARK: - Inbox
-    
-    static func randomInboxSaveURL(fileExtension: FileExtension) -> URL  {
+
+    static func randomInboxSaveURL(fileExtension: FileExtension) -> URL {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("inbox/")
             .appendingPathComponent(dateUUID)
             .appendingPathExtension(fileExtension.rawValue)
     }
-    
-    
+
     static var inboxURL: URL {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("inbox/")
     }
-    
+
     // MARK: - Encrypted Outbox
-    
+
     static func randomEncryptedOutboxSaveURL(with fileExtension: FileExtension) -> URL {
         FileManager.default
             .temporaryDirectory
@@ -47,15 +42,15 @@ extension URL {
             .appendingPathComponent(dateUUID)
             .appendingPathExtension(fileExtension.rawValue)
     }
-    
+
     static var encryptedOutboxURL: URL {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("encrypted-outbox/")
     }
-    
+
     // MARK: - Outbox
-    
+
     static func randomOutboxSaveURL(with fileExtension: FileExtension) -> URL {
         FileManager.default
             .temporaryDirectory
@@ -63,16 +58,16 @@ extension URL {
             .appendingPathComponent(dateUUID)
             .appendingPathExtension(fileExtension.rawValue)
     }
-    
+
     static var outboxURL: URL {
         FileManager.default
             .temporaryDirectory
             .appendingPathComponent("outbox/")
     }
-    
-    // MARK; - Private
-    static private var dateUUID: String {
-        return "\(Date().timeIntervalSince1970)-\(NSUUID().uuidString)"
+
+    // MARK: - Private
+
+    private static var dateUUID: String {
+        "\(Date().timeIntervalSince1970)-\(NSUUID().uuidString)"
     }
 }
-

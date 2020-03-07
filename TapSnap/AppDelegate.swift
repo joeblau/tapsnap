@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UIApplication.shared.registerForRemoteNotifications()
-        
+
         do { // Craete Inbox
             try FileManager.default.createDirectory(at: URL.inboxURL, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.createDirectory(at: URL.outboxURL, withIntermediateDirectories: true, attributes: nil)
@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
-        
+
         do { // Delegates
             Current.locationManager.delegate = self
             UNUserNotificationCenter.current().delegate = self
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
             UIBarButtonItem.appearance().tintColor = .label
         }
-        
+
         switch UserDefaults.standard.bool(forKey: "enabled_sensor_visualizer") {
         case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
         case false: window = UIWindow(frame: UIScreen.main.bounds)
@@ -53,13 +53,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             Current.locationManager.startUpdatingLocation()
         }
-        CKContainer.default().fetchUnreadMessages { result in
+        CKContainer.default().fetchUnreadMessages { _ in
             CKContainer.default().loadInbox()
         }
     }
 
     func application(_: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+                     didReceiveRemoteNotification _: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         CKContainer.default().fetchUnreadMessages { result in
             CKContainer.default().loadInbox()
@@ -93,8 +93,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // MARK: - Helpers
 
-    private func loadInbox() {
-
-    }
-    
+    private func loadInbox() {}
 }

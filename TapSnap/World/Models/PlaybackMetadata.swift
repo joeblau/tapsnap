@@ -1,12 +1,8 @@
-//
-//  PlaybackMetadata.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/2/20.
-//
+// PlaybackMetadata.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CoreLocation
+import UIKit
 
 struct PlaybackMetadata {
     var group: String

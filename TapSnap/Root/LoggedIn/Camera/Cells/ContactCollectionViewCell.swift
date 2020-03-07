@@ -1,8 +1,8 @@
 // ContactCollectionViewCell.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
+import UIKit
 
 final class ContactCollectionViewCell: UICollectionViewCell {
     private lazy var contactImageView: UIImageView = {
@@ -26,7 +26,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         l.lineBreakMode = .byTruncatingTail
         return l
     }()
-    
+
     private var record: CKRecord?
 
 //    let zoom = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
@@ -51,7 +51,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         case let .some(data): contactImageView.image = UIImage(data: data)
         case .none: contactImageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
         }
-        
+
         if let title = record[GroupKey.name] as? String {
             let userCount = record[GroupKey.userCount] as? Int ?? 1
             let attributedString = NSMutableAttributedString()
@@ -60,7 +60,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
                 let imageAttachment = NSTextAttachment()
                 imageAttachment.image = UIImage(systemName: "\(userCount).circle.fill",
                                                 withConfiguration: UIImage.SymbolConfiguration(scale: .small))?
-                                                .withTintColor(.label, renderingMode: .alwaysTemplate)
+                    .withTintColor(.label, renderingMode: .alwaysTemplate)
                 attributedString.append(NSAttributedString(attachment: imageAttachment))
             default: break
             }

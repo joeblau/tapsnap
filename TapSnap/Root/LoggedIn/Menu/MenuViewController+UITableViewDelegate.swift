@@ -1,14 +1,10 @@
-//
-//  MenuViewController+UITableViewDelegate.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/29/20.
-//
+// MenuViewController+UITableViewDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 extension MenuViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
         case IndexPath(row: 1, section: 2):
             let myGroups = MyGroupsViewController()

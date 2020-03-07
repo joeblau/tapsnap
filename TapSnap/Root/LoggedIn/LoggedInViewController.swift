@@ -1,10 +1,10 @@
 // LoggedInViewController.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
+import CloudKit
 import CoreLocation
 import os.log
-import CloudKit
+import UIKit
 
 final class LoggedInViewController: UIViewController {
     private lazy var camera: UINavigationController = {
@@ -20,7 +20,7 @@ final class LoggedInViewController: UIViewController {
         CKContainer.default().fetchAllGroups()
         authorizeLocation()
         authorizeNotifications()
-        
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             CKContainer.default().fetchUnreadMessages { result in
                 switch result {
@@ -31,25 +31,24 @@ final class LoggedInViewController: UIViewController {
             CKContainer.default().subscribeToInbox()
         }
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         present(camera, animated: false) {}
     }
-    
+
     private func authorizeLocation() {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             Current.locationManager.requestLocation()
         }
     }
-    
+
     private func authorizeNotifications() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (authorized, error) in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { _, error in
             switch error {
             case let .some(error): os_log("%@", log: .userNotification, type: .error, error.localizedDescription); return
             case .none: break
             }
-            
         }
     }
 }

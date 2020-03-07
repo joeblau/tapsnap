@@ -1,8 +1,8 @@
 // GroupValue.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
+import UIKit
 
 struct GroupValue: Hashable {
     let image: UIImage = UIImage(systemName: "person.crop.circle.fill.badge.exclam",

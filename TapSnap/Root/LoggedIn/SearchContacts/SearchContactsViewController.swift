@@ -1,9 +1,9 @@
 // SearchContactsViewController.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
+import CloudKit
 import Combine
 import UIKit
-import CloudKit
 
 final class SearchContactsViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()

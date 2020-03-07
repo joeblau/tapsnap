@@ -1,15 +1,10 @@
-//
-//  UINavigationBar+Extensions.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/3/20.
-//
+// UINavigationBar+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 extension UINavigationBar {
-
-    override open func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         guard let view = super.hitTest(point, with: event) else { return nil }
 
         switch view.isKind(of: UIControl.self) {

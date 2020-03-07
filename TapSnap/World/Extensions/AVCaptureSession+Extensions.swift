@@ -11,11 +11,13 @@ extension AVCaptureSession {
         o.connection(with: .video)?.videoOrientation = .landscapeLeft
         return o
     }()
+
     static var movieFileOutput: AVCaptureMovieFileOutput = {
         let o = AVCaptureMovieFileOutput()
         o.connection(with: .video)?.preferredVideoStabilizationMode = .auto
         return o
     }()
+
     private static var videoCaptureDevice: AVCaptureDevice?
 
     // MARK: - Public function
@@ -44,10 +46,10 @@ extension AVCaptureSession {
         commitConfiguration()
         initZoom()
     }
-    
+
     func initZoom() {
         guard let device = AVCaptureSession.videoCaptureDevice,
-            device ==  AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) else { return }
+            device == AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back) else { return }
         do {
             defer {
                 device.unlockForConfiguration()
@@ -111,7 +113,7 @@ extension AVCaptureSession {
             }
         }
     }
-    
+
     private func frontVideoDevice() -> AVCaptureDevice? {
         if let trueDepth = AVCaptureDevice.default(.builtInTrueDepthCamera, for: .video, position: .front) {
             AVCaptureSession.videoCaptureDevice = trueDepth
@@ -182,7 +184,7 @@ extension AVCaptureSession {
 
     private func addMovieOutput() {
         switch canAddOutput(AVCaptureSession.movieFileOutput) {
-        case true:            
+        case true:
             addOutput(AVCaptureSession.movieFileOutput)
         case false:
             os_log("%@", log: .avFoundation, type: .error, "Could not add movie output to the session")

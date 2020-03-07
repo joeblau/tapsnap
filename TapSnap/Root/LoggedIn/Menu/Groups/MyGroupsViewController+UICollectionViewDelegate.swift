@@ -1,12 +1,8 @@
-//
-//  MyGroupsViewController+UICollectionViewDelegate.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 2/29/20.
-//
+// MyGroupsViewController+UICollectionViewDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
+import UIKit
 
 extension MyGroupsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

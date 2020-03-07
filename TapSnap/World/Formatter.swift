@@ -26,7 +26,7 @@ struct Formatter {
     let personName: PersonNameComponentsFormatter = {
         PersonNameComponentsFormatter()
     }()
-    
+
     let dateTimeDigitized: DateFormatter = {
         let f = DateFormatter()
         f.dateFormat = "yyyy:MM:dd HH:mm:ss"
