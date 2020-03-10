@@ -61,7 +61,6 @@ extension SubscriptionViewController: UIPageViewControllerDelegate {
         let t = SubscriptionValueViewController(offerImage: UIImage(systemName: "creditcard")!,
         offerTitle: "Great",
         offerDescription: "Value")
-        
-        return [s, t]
+        addChild(t)
     }
 }

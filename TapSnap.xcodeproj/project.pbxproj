@@ -84,6 +84,8 @@
 		EDAAAB68241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB67241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift */; };
 		EDAAAB6A2414175B002326D9 /* AppDelegate+SKRequestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB692414175B002326D9 /* AppDelegate+SKRequestDelegate.swift */; };
 		EDAAAB6C24148FC8002326D9 /* SubscriptionValueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB6B24148FC8002326D9 /* SubscriptionValueViewController.swift */; };
+		EDAAAB6E241746F9002326D9 /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB6D241746F9002326D9 /* UITableViewCell+Extensions.swift */; };
+		EDAAAB7024174B21002326D9 /* UICollectionViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB6F24174B21002326D9 /* UICollectionViewCell+Extensions.swift */; };
 		EDE8F0B5240A0FA300DFA828 /* GenericPasswordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */; };
 		EDE8F0B7240A0FC300DFA828 /* GenericPasswordConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */; };
 		EDE8F0B9240A0FE200DFA828 /* KeyStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */; };
@@ -93,7 +95,6 @@
 		EDE8F0C4240AC7FD00DFA828 /* MenuViewController+UITableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0C3240AC7FD00DFA828 /* MenuViewController+UITableViewDelegate.swift */; };
 		EDE8F0C7240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0C6240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift */; };
 		EDE8F0C9240B278E00DFA828 /* MyGroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0C8240B278E00DFA828 /* MyGroupsDiffableDataSource.swift */; };
-		EE6B209AF27D3C6A315EDB82 /* AutoSaveTapsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F41006407FCD51B3388DA5 /* AutoSaveTapsTableViewCell.swift */; };
 		F0E540C952F07DBB0BAC2DD0 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6C48A082BDC2B70BD74753 /* UIImage+Extensions.swift */; };
 		F1049AD0FAD3C79A3CE179D7 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */; };
 		F2E7E66C5731EE7C43417559 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD12357AD9F75CC08F4F230 /* AppDelegate+UNUserNotificationCenterDelegate.swift */; };
@@ -163,7 +164,6 @@
 		8DC248A20FDB5559FA99563E /* SearchContactsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsSection.swift; sourceTree = "<group>"; };
 		94344FC87696F3296346CA01 /* CameraPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPreviewView.swift; sourceTree = "<group>"; };
 		973CEDB8780E17647226ACC0 /* ContactsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCollectionView.swift; sourceTree = "<group>"; };
-		98F41006407FCD51B3388DA5 /* AutoSaveTapsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoSaveTapsTableViewCell.swift; sourceTree = "<group>"; };
 		99AC699B7654EFE34FD9C755 /* CKContainer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKContainer+Extensions.swift"; sourceTree = "<group>"; };
 		9CE23D3372831A7B685FA94F /* KeyboardAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardAccessoryView.swift; sourceTree = "<group>"; };
 		9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tapsnap.entitlements; sourceTree = "<group>"; };
@@ -192,6 +192,8 @@
 		EDAAAB67241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKPaymentTransactionState+Extensions.swift"; sourceTree = "<group>"; };
 		EDAAAB692414175B002326D9 /* AppDelegate+SKRequestDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+SKRequestDelegate.swift"; sourceTree = "<group>"; };
 		EDAAAB6B24148FC8002326D9 /* SubscriptionValueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionValueViewController.swift; sourceTree = "<group>"; };
+		EDAAAB6D241746F9002326D9 /* UITableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extensions.swift"; sourceTree = "<group>"; };
+		EDAAAB6F24174B21002326D9 /* UICollectionViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordStore.swift; sourceTree = "<group>"; };
 		EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordConvertible.swift; sourceTree = "<group>"; };
 		EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreError.swift; sourceTree = "<group>"; };
@@ -255,7 +257,6 @@
 		03017EADA659A2F2EB261194 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				98F41006407FCD51B3388DA5 /* AutoSaveTapsTableViewCell.swift */,
 				0DF3EFD1681C289327AEDEA5 /* AvatarNameTableViewCell.swift */,
 				5238843AA98A456F4A06E3EA /* MenuCellTableViewCell.swift */,
 			);
@@ -433,6 +434,8 @@
 				ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */,
 				EDAAAB5C240F84D4002326D9 /* UINavigationBar+Extensions.swift */,
 				EDAAAB67241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift */,
+				EDAAAB6D241746F9002326D9 /* UITableViewCell+Extensions.swift */,
+				EDAAAB6F24174B21002326D9 /* UICollectionViewCell+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -728,7 +731,6 @@
 				EDAAAB6A2414175B002326D9 /* AppDelegate+SKRequestDelegate.swift in Sources */,
 				5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */,
 				ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */,
-				EE6B209AF27D3C6A315EDB82 /* AutoSaveTapsTableViewCell.swift in Sources */,
 				416E8AFAED4D2645FE4AAE57 /* AvatarNameTableViewCell.swift in Sources */,
 				381DF8A46DED81C7A2E0A84E /* CKContainer+Extensions.swift in Sources */,
 				EDE8F0C2240AC56B00DFA828 /* MyGorupsCollectionView.swift in Sources */,
@@ -753,6 +755,7 @@
 				66125828B36DB8CA801593E3 /* EXIFData+Extensions.swift in Sources */,
 				232A9FA6181990F9A203E760 /* EmptyDataView.swift in Sources */,
 				C1839759E1E3E4E4F07F9D07 /* Formatter.swift in Sources */,
+				EDAAAB7024174B21002326D9 /* UICollectionViewCell+Extensions.swift in Sources */,
 				DF7728FCA91D5B5E5234D3E0 /* GroupSection.swift in Sources */,
 				EDAAAB6424140DA9002326D9 /* SubscriptionViewController.swift in Sources */,
 				BB2C52A7BAC8857534C19704 /* GroupValue.swift in Sources */,
@@ -791,6 +794,7 @@
 				CF316AB82F76159755C780BD /* SearchContactsViewController+UISearchBarDelegate.swift in Sources */,
 				2F4F7CB3B90C4A3A2D8B8F71 /* SearchContactsViewController+UISearchControllerDelegate.swift in Sources */,
 				C29EE32C12F71E0B9F186304 /* SearchContactsViewController+UISearchResultsUpdating.swift in Sources */,
+				EDAAAB6E241746F9002326D9 /* UITableViewCell+Extensions.swift in Sources */,
 				1508AA5A76058B45B00A0930 /* SearchContactsViewController.swift in Sources */,
 				3C874689D363AA4D98B647B5 /* SearchContactsViewControllerDiffableDataSource.swift in Sources */,
 				8482333F2160B5F2A948391F /* SyncTableViewCell.swift in Sources */,

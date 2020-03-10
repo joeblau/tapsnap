@@ -24,7 +24,4 @@ final class SearchContactTableViewCell: UITableViewCell {
         textLabel?.text = friendName
     }
 
-    // MARK: - Resuse Identifier
-
-    static let id = String(describing: SearchContactTableViewCell.self)
 }

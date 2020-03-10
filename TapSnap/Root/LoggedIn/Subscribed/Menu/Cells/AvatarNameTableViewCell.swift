@@ -34,10 +34,6 @@ class AvatarNameTableViewCell: UITableViewCell {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    // MARK: - Resuse Identifier
-
-    static let id = String(describing: AvatarNameTableViewCell.self)
 }
 
 extension AvatarNameTableViewCell: ViewBootstrappable {

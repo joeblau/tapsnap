@@ -66,7 +66,6 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
         }
     }
 
-    static let id = String(describing: MyGroupCollectionViewCell.self)
 }
 
 extension MyGroupCollectionViewCell: ViewBootstrappable {

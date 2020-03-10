@@ -25,11 +25,13 @@ extension MenuViewController: UITableViewDataSource {
             cell.avatarView.addTarget(self, action: #selector(updateAvatar), for: .touchUpInside)
             return cell
         case IndexPath(row: 0, section: 3):
-            let cell = tableView.dequeueReusableCell(withIdentifier: AutoSaveTapsTableViewCell.id, for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.id, for: indexPath)
             let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
             cell.imageView?.image = UIImage(systemName: menuItem.systemName)
+            cell.imageView?.tintColor = .label
             cell.textLabel?.text = menuItem.titleText
             cell.detailTextLabel?.text = menuItem.subtitleText
+            cell.accessoryType = UserDefaults.standard.bool(forKey: Current.k.autoSave) ? .checkmark : .none
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)

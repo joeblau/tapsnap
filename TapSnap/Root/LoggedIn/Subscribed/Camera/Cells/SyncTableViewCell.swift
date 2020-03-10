@@ -47,5 +47,4 @@ final class SyncTableViewCell: UITableViewCell {
         Current.musicSyncSubject.send(sender.isOn)
     }
 
-    static let id = String(describing: SyncTableViewCell.self)
 }

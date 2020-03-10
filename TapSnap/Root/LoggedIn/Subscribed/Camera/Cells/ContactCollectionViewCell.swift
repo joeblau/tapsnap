@@ -74,10 +74,6 @@ final class ContactCollectionViewCell: UICollectionViewCell {
         contactImageView.image = nil
     }
 
-    // MARK: - Resuse Identifier
-
-    static let id = String(describing: ContactCollectionViewCell.self)
-
     // MARK: - Actions
 
     @objc func handleVideoAction(_ recognizer: UIPanGestureRecognizer) {

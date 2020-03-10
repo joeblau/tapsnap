@@ -27,8 +27,8 @@ final class MenuViewController: UIViewController {
         let t = UITableView(frame: .zero, style: .insetGrouped)
         t.register(MenuCellTableViewCell.self,
                    forCellReuseIdentifier: MenuCellTableViewCell.id)
-        t.register(AutoSaveTapsTableViewCell.self,
-                   forCellReuseIdentifier: AutoSaveTapsTableViewCell.id)
+        t.register(UITableViewCell.self,
+                   forCellReuseIdentifier: UITableViewCell.id)
         t.register(AvatarNameTableViewCell.self,
                    forCellReuseIdentifier: AvatarNameTableViewCell.id)
         t.translatesAutoresizingMaskIntoConstraints = false

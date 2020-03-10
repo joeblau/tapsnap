@@ -48,8 +48,6 @@ final class NowPlayingPreviewTableViewCell: UITableViewCell {
         titleLabel.text = title
         artistLabel.text = artist
     }
-
-    static let id = String(describing: NowPlayingPreviewTableViewCell.self)
 }
 
 // MARK: - ViewBootstrappable
