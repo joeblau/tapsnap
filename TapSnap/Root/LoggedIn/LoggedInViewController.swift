@@ -13,6 +13,12 @@ final class LoggedInViewController: UIViewController {
         nc.isToolbarHidden = false
         return nc
     }()
+    
+    private lazy var subscription: UINavigationController = {
+        let nc = UINavigationController(rootViewController: SubscriptionViewController())
+        nc.modalPresentationStyle = .fullScreen
+        return nc
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +40,8 @@ final class LoggedInViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        present(camera, animated: false) {}
+//        present(camera, animated: false) {}
+        present(subscription, animated: false) {}
     }
 
     private func authorizeLocation() {

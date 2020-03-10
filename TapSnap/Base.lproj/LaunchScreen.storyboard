@@ -124,10 +124,6 @@
                     </view>
                     <toolbarItems>
                         <barButtonItem title="Edit" id="h0x-Lh-g0k"/>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="EPS-kk-8OE"/>
-                        <barButtonItem title="•" id="gNX-3S-Qyr">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="hob-Ch-7Rs"/>
                         <barButtonItem image="magnifyingglass" catalog="system" id="UPL-bP-YP1"/>
                     </toolbarItems>

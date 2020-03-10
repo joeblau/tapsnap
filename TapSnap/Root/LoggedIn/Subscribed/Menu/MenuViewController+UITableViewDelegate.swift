@@ -9,6 +9,9 @@ extension MenuViewController: UITableViewDelegate {
         case IndexPath(row: 1, section: 2):
             let myGroups = MyGroupsViewController()
             navigationController?.pushViewController(myGroups, animated: true)
+        case IndexPath(row: 1, section: 3):
+            guard let settings = URL(string: UIApplication.openSettingsURLString) else { return }
+            UIApplication.shared.open(settings)
         default: break
         }
     }

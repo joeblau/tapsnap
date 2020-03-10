@@ -79,6 +79,11 @@
 		ED8C2EA6240C81E800DA4081 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */; };
 		ED8C2EA8240E104A00DA4081 /* PlaybackMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA7240E104A00DA4081 /* PlaybackMetadata.swift */; };
 		EDAAAB5D240F84D4002326D9 /* UINavigationBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB5C240F84D4002326D9 /* UINavigationBar+Extensions.swift */; };
+		EDAAAB6424140DA9002326D9 /* SubscriptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB6324140DA9002326D9 /* SubscriptionViewController.swift */; };
+		EDAAAB6624140FB1002326D9 /* AppDelegate+SKPaymentTransactionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB6524140FB1002326D9 /* AppDelegate+SKPaymentTransactionObserver.swift */; };
+		EDAAAB68241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB67241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift */; };
+		EDAAAB6A2414175B002326D9 /* AppDelegate+SKRequestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB692414175B002326D9 /* AppDelegate+SKRequestDelegate.swift */; };
+		EDAAAB6C24148FC8002326D9 /* SubscriptionValueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDAAAB6B24148FC8002326D9 /* SubscriptionValueViewController.swift */; };
 		EDE8F0B5240A0FA300DFA828 /* GenericPasswordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */; };
 		EDE8F0B7240A0FC300DFA828 /* GenericPasswordConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */; };
 		EDE8F0B9240A0FE200DFA828 /* KeyStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */; };
@@ -182,6 +187,11 @@
 		ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		ED8C2EA7240E104A00DA4081 /* PlaybackMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackMetadata.swift; sourceTree = "<group>"; };
 		EDAAAB5C240F84D4002326D9 /* UINavigationBar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extensions.swift"; sourceTree = "<group>"; };
+		EDAAAB6324140DA9002326D9 /* SubscriptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionViewController.swift; sourceTree = "<group>"; };
+		EDAAAB6524140FB1002326D9 /* AppDelegate+SKPaymentTransactionObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+SKPaymentTransactionObserver.swift"; sourceTree = "<group>"; };
+		EDAAAB67241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKPaymentTransactionState+Extensions.swift"; sourceTree = "<group>"; };
+		EDAAAB692414175B002326D9 /* AppDelegate+SKRequestDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+SKRequestDelegate.swift"; sourceTree = "<group>"; };
+		EDAAAB6B24148FC8002326D9 /* SubscriptionValueViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionValueViewController.swift; sourceTree = "<group>"; };
 		EDE8F0B4240A0FA300DFA828 /* GenericPasswordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordStore.swift; sourceTree = "<group>"; };
 		EDE8F0B6240A0FC300DFA828 /* GenericPasswordConvertible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericPasswordConvertible.swift; sourceTree = "<group>"; };
 		EDE8F0B8240A0FE200DFA828 /* KeyStoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyStoreError.swift; sourceTree = "<group>"; };
@@ -225,12 +235,9 @@
 		003C2EC4C962B79E42490DBD /* LoggedIn */ = {
 			isa = PBXGroup;
 			children = (
+				EDAAAB6224140D6D002326D9 /* Unsubscribed */,
+				EDAAAB6124140D41002326D9 /* Subscribed */,
 				5E6DAA497C51E06D884C0B2C /* LoggedInViewController.swift */,
-				E406814D34DFE8CB910BF391 /* Camera */,
-				7C5978959DFB0C415BC9A390 /* Menu */,
-				E08A2059AD9CE9BEA87BA865 /* Onboarding */,
-				00F11CF7232C41398FB2CAA8 /* Playback */,
-				E3CED9C998F7E29BD74DE07B /* SearchContacts */,
 			);
 			path = LoggedIn;
 			sourceTree = "<group>";
@@ -293,6 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */,
+				EDAAAB6524140FB1002326D9 /* AppDelegate+SKPaymentTransactionObserver.swift */,
 				A3190FA1230DC53C00386AE7 /* AppDelegate+CLLocationManagerDelegate.swift */,
 				DCD12357AD9F75CC08F4F230 /* AppDelegate+UNUserNotificationCenterDelegate.swift */,
 				4D03047C2E3CD982E5D1E38E /* Assets.xcassets */,
@@ -302,6 +310,7 @@
 				9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */,
 				3485EF75C3FD9E24EC1B2598 /* Root */,
 				5B357A0CFC5D38D252784D58 /* World */,
+				EDAAAB692414175B002326D9 /* AppDelegate+SKRequestDelegate.swift */,
 			);
 			path = Tapsnap;
 			sourceTree = "<group>";
@@ -423,6 +432,7 @@
 				F46D5270D9E16B4F9812EF95 /* UIView+Extensions.swift */,
 				ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */,
 				EDAAAB5C240F84D4002326D9 /* UINavigationBar+Extensions.swift */,
+				EDAAAB67241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -509,6 +519,27 @@
 				6217B4B7FA2175C2D4D28CFF /* Views */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		EDAAAB6124140D41002326D9 /* Subscribed */ = {
+			isa = PBXGroup;
+			children = (
+				E406814D34DFE8CB910BF391 /* Camera */,
+				7C5978959DFB0C415BC9A390 /* Menu */,
+				E08A2059AD9CE9BEA87BA865 /* Onboarding */,
+				00F11CF7232C41398FB2CAA8 /* Playback */,
+				E3CED9C998F7E29BD74DE07B /* SearchContacts */,
+			);
+			path = Subscribed;
+			sourceTree = "<group>";
+		};
+		EDAAAB6224140D6D002326D9 /* Unsubscribed */ = {
+			isa = PBXGroup;
+			children = (
+				EDAAAB6324140DA9002326D9 /* SubscriptionViewController.swift */,
+				EDAAAB6B24148FC8002326D9 /* SubscriptionValueViewController.swift */,
+			);
+			path = Unsubscribed;
 			sourceTree = "<group>";
 		};
 		EDE8F0B3240A0F9400DFA828 /* Crypto */ = {
@@ -694,6 +725,7 @@
 				EDE8F0C7240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift in Sources */,
 				EDAAAB5D240F84D4002326D9 /* UINavigationBar+Extensions.swift in Sources */,
 				F2E7E66C5731EE7C43417559 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
+				EDAAAB6A2414175B002326D9 /* AppDelegate+SKRequestDelegate.swift in Sources */,
 				5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */,
 				ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */,
 				EE6B209AF27D3C6A315EDB82 /* AutoSaveTapsTableViewCell.swift in Sources */,
@@ -710,6 +742,7 @@
 				4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */,
 				93706DF7B6ABC7130ADC4B4F /* CameraGroupsDiffableDataSource.swift in Sources */,
 				DC538E002715EBD7FF6F0D98 /* CloudKitKeys.swift in Sources */,
+				EDAAAB68241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift in Sources */,
 				8CACF9C2C0EA7613439180F8 /* Constants.swift in Sources */,
 				EDE8F0BC240AC3B200DFA828 /* MyGroupsViewController.swift in Sources */,
 				B43FA60F5F10D71DF32E9760 /* ContactCollectionViewCell.swift in Sources */,
@@ -721,6 +754,7 @@
 				232A9FA6181990F9A203E760 /* EmptyDataView.swift in Sources */,
 				C1839759E1E3E4E4F07F9D07 /* Formatter.swift in Sources */,
 				DF7728FCA91D5B5E5234D3E0 /* GroupSection.swift in Sources */,
+				EDAAAB6424140DA9002326D9 /* SubscriptionViewController.swift in Sources */,
 				BB2C52A7BAC8857534C19704 /* GroupValue.swift in Sources */,
 				23CEA16D7F7985D61172B946 /* IndeterminateProgressView.swift in Sources */,
 				ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */,
@@ -735,6 +769,7 @@
 				180CC59DBCBF2C5F6981762F /* MenuViewController.swift in Sources */,
 				1ACADBCC58A1D7F2300EC556 /* MusicPlaybackView.swift in Sources */,
 				741B620F5F12F6E6DFDADBA2 /* NowPlayingPreviewTableViewCell.swift in Sources */,
+				EDAAAB6C24148FC8002326D9 /* SubscriptionValueViewController.swift in Sources */,
 				046E347920DC64553DBFA614 /* OSLog+Extensions.swift in Sources */,
 				EDE8F0B9240A0FE200DFA828 /* KeyStoreError.swift in Sources */,
 				18DFAD298AD224C785C85011 /* OnboardingViewController.swift in Sources */,
@@ -767,6 +802,7 @@
 				EDE8F0B5240A0FA300DFA828 /* GenericPasswordStore.swift in Sources */,
 				ED8C2EA6240C81E800DA4081 /* URL+Extensions.swift in Sources */,
 				5369693BBCFA6A944EBF9190 /* ViewBootstrappable.swift in Sources */,
+				EDAAAB6624140FB1002326D9 /* AppDelegate+SKPaymentTransactionObserver.swift in Sources */,
 				9E45F15C27283EA75A95FDA8 /* World.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

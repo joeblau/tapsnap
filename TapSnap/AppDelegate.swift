@@ -7,15 +7,22 @@ import os.log
 import PencilKit
 import SensorVisualizerKit
 import UIKit
+import StoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        UIApplication.shared.registerForRemoteNotifications()
+        do { // StoreKit
+            SKPaymentQueue.default().add(self)
+        }
+        
+        do { // Notificaions
+            UIApplication.shared.registerForRemoteNotifications()
+        }
 
-        do { // Craete Inbox
+        do { // CloudKit
             try FileManager.default.createDirectory(at: URL.inboxURL, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.createDirectory(at: URL.outboxURL, withIntermediateDirectories: true, attributes: nil)
             try FileManager.default.createDirectory(at: URL.encryptedOutboxURL, withIntermediateDirectories: true, attributes: nil)
