@@ -40,7 +40,7 @@ extension MenuViewController: UITableViewDataSource {
             cell.imageView?.tintColor = .label
             cell.textLabel?.text = menuItem.titleText
             cell.detailTextLabel?.text = menuItem.subtitleText
-            cell.accessoryType = UserDefaults.standard.bool(forKey: Current.k.settingVisualizer) ? .checkmark : .none
+            cell.accessoryType = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden) ? .none : .checkmark
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)

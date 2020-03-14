@@ -127,6 +127,8 @@ struct World {
 
     var inboxURLsSubject = CurrentValueSubject<[URL]?, Never>(nil)
     var outboxRecordsSubject = CurrentValueSubject<[CKRecord]?, Never>(nil)
+    
+    var hideTouchVisuzlierSubject = CurrentValueSubject<Bool, Never>(true)
 
     // CloudKit
     var cloudKitUserSubject = CurrentValueSubject<CKRecord?, Never>(nil)

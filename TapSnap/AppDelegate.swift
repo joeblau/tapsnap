@@ -5,13 +5,20 @@ import CloudKit
 import CoreLocation
 import os.log
 import PencilKit
-import SensorVisualizerKit
 import UIKit
 import StoreKit
+import Combine
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
     var window: UIWindow?
+    private var cancellables = Set<AnyCancellable>()
+    lazy var sensorVisualizerWindow: SensorVisualizerWindow = {
+        SensorVisualizerWindow(frame: UIScreen.main.bounds,
+                               primary: .systemRed,
+                               secondary: .systemRed)
+    }()
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         do { // StoreKit
@@ -47,13 +54,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIBarButtonItem.appearance().tintColor = .label
         }
 
-        switch UserDefaults.standard.bool(forKey: "display_touch_visuzlier_during_gestures") {
-        case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
-        case false: window = UIWindow(frame: UIScreen.main.bounds)
-        }
+        window = sensorVisualizerWindow
         window?.rootViewController = RootViewController()
         window?.makeKeyAndVisible()
         
+        bootstrap()
+        do { // Visuzliser
+            Current.hideTouchVisuzlierSubject
+                .send(UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden))
+        }
         return true
     }
 
@@ -97,5 +106,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             /// Send your user to where they need to go in your app
         }
         CKContainer(identifier: cloudKitShareMetadata.containerIdentifier).add(acceptShareOperation)
+    }
+}
+
+extension AppDelegate: ViewBootstrappable {
+    func configureStreams() {
+        Current.hideTouchVisuzlierSubject
+            .sink { showVisualizer in
+                self.sensorVisualizerWindow.visualizationWindow.isHidden = showVisualizer
+                UserDefaults.standard.set(showVisualizer, forKey: Current.k.isVisualizerHidden)
+            }
+            .store(in: &cancellables)
     }
 }

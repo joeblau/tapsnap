@@ -13,8 +13,6 @@ struct Constants {
     let userAccount = "current_user_cloudKit_account"
 
     let settingAutoSave = "automatically_save_sent_taps_to_camera_roll"
-    let settingVisualizer = "display_touch_visuzlier_during_gestures"
+    let isVisualizerHidden = "hidden_touch_visuzlier_during_gestures"
     let subscriptionCached = "subscription_cached"
-    
-    let touchVisualizer = "touch_visualizer"
 }

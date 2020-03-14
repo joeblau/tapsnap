@@ -15,9 +15,9 @@ extension MenuViewController: UITableViewDelegate {
             UserDefaults.standard.set(autoSave, forKey: Current.k.settingAutoSave)
             tableView.reloadRows(at: [indexPath], with: .automatic)
         case IndexPath(row: 1, section: 3):
-            var visualizer = UserDefaults.standard.bool(forKey: Current.k.settingVisualizer)
+            var visualizer = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden)
             visualizer.toggle()
-            UserDefaults.standard.set(visualizer, forKey: Current.k.settingVisualizer)
+            Current.hideTouchVisuzlierSubject.send(visualizer)
             tableView.reloadRows(at: [indexPath], with: .automatic)
         case IndexPath(row: 0, section: 4):
             guard let settings = URL(string: UIApplication.openSettingsURLString) else { return }
