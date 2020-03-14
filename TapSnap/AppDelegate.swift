@@ -16,11 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private var cancellables = Set<AnyCancellable>()
     lazy var sensorVisualizerWindow: SensorVisualizerWindow = {
         SensorVisualizerWindow(frame: UIScreen.main.bounds,
-                               primary: .systemRed,
-                               secondary: .systemRed)
+                               primary: .systemBlue,
+                               secondary: .systemBlue)
     }()
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        bootstrap()
+        
         do { // StoreKit
             SKPaymentQueue.default().add(self)
         }
@@ -41,6 +43,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Current.locationManager.delegate = self
             UNUserNotificationCenter.current().delegate = self
         }
+        
+        do { // Location
+            if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+                Current.locationManager.startUpdatingLocation()
+            }
+        }
 
         do { // Global settings
             UIView.appearance().overrideUserInterfaceStyle = .dark
@@ -54,15 +62,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIBarButtonItem.appearance().tintColor = .label
         }
 
+        do { // Visuzliser
+            let hideVizualiser = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden)
+            Current.hideTouchVisuzlierSubject.send(hideVizualiser)
+        }
+        
         window = sensorVisualizerWindow
         window?.rootViewController = RootViewController()
         window?.makeKeyAndVisible()
-        
-        bootstrap()
-        do { // Visuzliser
-            Current.hideTouchVisuzlierSubject
-                .send(UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden))
-        }
+
         return true
     }
 

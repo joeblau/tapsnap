@@ -220,7 +220,7 @@ extension CKContainer {
             let messageURLs = try FileManager.default.contentsOfDirectory(at: URL.inboxURL,
                                                                           includingPropertiesForKeys: nil,
                                                                           options: .includesDirectoriesPostOrder)
-            Current.inboxURLsSubject.send(messageURLs.sorted(by: { $0.path < $1.path }))
+            Current.inboxURLsSubject.send(messageURLs.sorted(by: { $0.path > $1.path }))
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }

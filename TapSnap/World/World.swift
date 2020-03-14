@@ -74,7 +74,7 @@ struct World {
     // Sensors
     var locationManager: CLLocationManager = {
         let m = CLLocationManager()
-        m.desiredAccuracy = kCLLocationAccuracyKilometer
+        m.desiredAccuracy = kCLLocationAccuracyBest
         return m
     }()
 
@@ -100,6 +100,7 @@ struct World {
         mv.showsCompass = false
         mv.showsScale = false
         mv.showsBuildings = true
+        mv.showsUserLocation = true
         return mv
     }()
 

@@ -13,6 +13,7 @@ final class PlaybackViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
     private let mediaCapture: MediaCapture
     private let playbackMetadata: PlaybackMetadata?
+    var senderImage: UIImage?
     
     private lazy var backButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "chevron.down"),
@@ -197,21 +198,21 @@ final class PlaybackViewController: UIViewController {
     }
     
     private func populateMapAndMapOverlay() {
-        if let playbackMetadata = self.playbackMetadata,
-            let theirCoordinate = playbackMetadata.location?.coordinate {
+        senderImage = self.playbackMetadata?.thumbnail
+        title = self.playbackMetadata?.group
+        
+        if let theirCoordinate = self.playbackMetadata?.location?.coordinate {
             let annotation = MKPointAnnotation()
-            annotation.coordinate = theirCoordinate
-            annotation.title = playbackMetadata.author
+            let coordiante = theirCoordinate
+            annotation.coordinate = coordiante
+            annotation.title = self.playbackMetadata?.author
             mapView.addAnnotation(annotation)
             annotations.append(annotation)
         }
         
-        if let coordinate = Current.currentLocationSubject.value?.coordinate,
-            let nameData = UserDefaults.standard.data(forKey: Current.k.userAccount),
-            let userRecord = try? CKRecord.unarchive(data: nameData) {
+        if let coordinate = Current.currentLocationSubject.value?.coordinate {
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
-            annotation.title = userRecord[UserKey.name] as? String ?? "-"
             mapView.addAnnotation(annotation)
             annotations.append(annotation)
         }
@@ -258,7 +259,7 @@ extension PlaybackViewController: ViewBootstrappable {
     
     internal func configureStreams() {
         Current.mapDimensionSubject.sink(receiveValue: { dimension in
-            self.mapCamera.centerCoordinate = self.annotations.last?.coordinate ?? CLLocation().coordinate
+            self.mapCamera.centerCoordinate = self.annotations.first?.coordinate ?? CLLocation().coordinate
             
             switch dimension {
             case .two:
