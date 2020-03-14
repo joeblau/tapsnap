@@ -359,7 +359,7 @@ extension CameraViewController: ViewBootstrappable {
                 }
 
                 let videoMetadata = [AVMetadataItem].movieMetadata(group: self.currentGroup?[GroupKey.name] as? String)
-                AVCaptureSession.movieFileOutput.metadata?.append(contentsOf: videoMetadata)
+                AVCaptureSession.movieFileOutput.metadata = videoMetadata
                 AVCaptureSession.movieFileOutput.startRecording(to: URL.randomOutboxSaveURL(with: .mov), recordingDelegate: self)
             case .captureVideoEnd:
                 self.sendCancellable = true

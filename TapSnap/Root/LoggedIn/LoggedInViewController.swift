@@ -29,10 +29,7 @@ final class LoggedInViewController: UIViewController {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             CKContainer.default().fetchUnreadMessages { result in
-                switch result {
-                case .newData: CKContainer.default().loadInbox()
-                default: break
-                }
+                CKContainer.default().loadInbox()
             }
             CKContainer.default().subscribeToInbox()
         }

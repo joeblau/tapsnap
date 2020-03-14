@@ -70,7 +70,7 @@ enum CleanupAction {
 struct World {
     let pki = PublicKeyCryptography()
     let k = Constants()
-
+    
     // Sensors
     var locationManager: CLLocationManager = {
         let m = CLLocationManager()

@@ -96,6 +96,7 @@ extension Data {
 
 extension Array where Element: AVMetadataItem {
     var playbackMetadta: PlaybackMetadata? {
+        
         let group = AVMetadataItem.metadataItems(from: self, filteredByIdentifier: .quickTimeUserDataAlbum).first?.value as? String ?? "-"
         let author = AVMetadataItem.metadataItems(from: self, filteredByIdentifier: .quickTimeUserDataArtist).first?.value as? String ?? "-"
         let date: Date
@@ -123,7 +124,7 @@ extension Array where Element: AVMetadataItem {
         let address = AVMetadataItem.metadataItems(from: self, filteredByIdentifier: .quickTimeUserDataInformation).first?.value as? String
 
         var coverArt: UIImage?
-        if let coverArtData = AVMetadataItem.metadataItems(from: self, filteredByIdentifier: .iTunesMetadataSongName).first?.value as? Data,
+        if let coverArtData = AVMetadataItem.metadataItems(from: self, filteredByIdentifier: .iTunesMetadataCoverArt).first?.value as? Data,
             let coverArtImage = UIImage(data: coverArtData) {
             coverArt = coverArtImage
         }

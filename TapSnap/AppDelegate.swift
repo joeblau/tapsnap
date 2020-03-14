@@ -53,6 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         window?.rootViewController = RootViewController()
         window?.makeKeyAndVisible()
+        
         return true
     }
 
@@ -97,8 +98,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         CKContainer(identifier: cloudKitShareMetadata.containerIdentifier).add(acceptShareOperation)
     }
-
-    // MARK: - Helpers
-
-    private func loadInbox() {}
 }
