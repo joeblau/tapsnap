@@ -31,7 +31,16 @@ extension MenuViewController: UITableViewDataSource {
             cell.imageView?.tintColor = .label
             cell.textLabel?.text = menuItem.titleText
             cell.detailTextLabel?.text = menuItem.subtitleText
-            cell.accessoryType = UserDefaults.standard.bool(forKey: Current.k.autoSave) ? .checkmark : .none
+            cell.accessoryType = UserDefaults.standard.bool(forKey: Current.k.settingAutoSave) ? .checkmark : .none
+            return cell
+        case IndexPath(row: 1, section: 3):
+            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.id, for: indexPath)
+            let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
+            cell.imageView?.image = UIImage(systemName: menuItem.systemName)
+            cell.imageView?.tintColor = .label
+            cell.textLabel?.text = menuItem.titleText
+            cell.detailTextLabel?.text = menuItem.subtitleText
+            cell.accessoryType = UserDefaults.standard.bool(forKey: Current.k.settingVisualizer) ? .checkmark : .none
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)

@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UIBarButtonItem.appearance().tintColor = .label
         }
 
-        switch UserDefaults.standard.bool(forKey: "enabled_sensor_visualizer") {
+        switch UserDefaults.standard.bool(forKey: "display_touch_visuzlier_during_gestures") {
         case true: window = SensorVisualizerWindow(frame: UIScreen.main.bounds)
         case false: window = UIWindow(frame: UIScreen.main.bounds)
         }

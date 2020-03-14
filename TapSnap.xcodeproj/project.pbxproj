@@ -24,7 +24,6 @@
 		29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC4CE62F7AC981B913F18E9 /* CameraViewController+UICollectionViewDelegate.swift */; };
 		2B37C0C4091DCE3004B9AD60 /* SearchContactsTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75AF4F2AFFAC3179572271C /* SearchContactsTableView.swift */; };
 		2F4F7CB3B90C4A3A2D8B8F71 /* SearchContactsViewController+UISearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0180F9CF40B86DB40C15BFBC /* SearchContactsViewController+UISearchControllerDelegate.swift */; };
-		317CC529D4268A10BCEEF5AD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B2528AD68900F4499FB43418 /* Settings.bundle */; };
 		381DF8A46DED81C7A2E0A84E /* CKContainer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99AC699B7654EFE34FD9C755 /* CKContainer+Extensions.swift */; };
 		3C874689D363AA4D98B647B5 /* SearchContactsViewControllerDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AE8EF6ACEF533ECD8110F8 /* SearchContactsViewControllerDiffableDataSource.swift */; };
 		3E135B3650A3BBE3722DF126 /* TextOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136E453746FC1A56F9A261CA /* TextOverlayView.swift */; };
@@ -173,7 +172,6 @@
 		A86F521E8A3727658211B4A2 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		AB7036C718054EB3309DB1FD /* CKRecord+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord+Extensions.swift"; sourceTree = "<group>"; };
 		AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureSession+Extensions.swift"; sourceTree = "<group>"; };
-		B2528AD68900F4499FB43418 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		C4C8B897FDADE8980A430106 /* MusicPlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlaybackView.swift; sourceTree = "<group>"; };
 		C938C741102596FD14058E88 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		D092867E340FFAEA0055EC8C /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
@@ -307,7 +305,6 @@
 				4D03047C2E3CD982E5D1E38E /* Assets.xcassets */,
 				880AA06728253910B5D1F81A /* Info.plist */,
 				CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */,
-				B2528AD68900F4499FB43418 /* Settings.bundle */,
 				9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */,
 				3485EF75C3FD9E24EC1B2598 /* Root */,
 				5B357A0CFC5D38D252784D58 /* World */,
@@ -710,7 +707,6 @@
 			files = (
 				A82CDC252A3653C4519C16FA /* Assets.xcassets in Resources */,
 				DD02C776E10CF87F7623060B /* LaunchScreen.storyboard in Resources */,
-				317CC529D4268A10BCEEF5AD /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

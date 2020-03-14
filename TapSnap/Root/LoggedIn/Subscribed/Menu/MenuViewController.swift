@@ -19,6 +19,9 @@ final class MenuViewController: UIViewController {
         ]),
         SectionItem(menuItems: [
             MenuItem(systemName: "square.and.arrow.down", titleText: "Auto-Save", subtitleText: "Automatically save sent taps"),
+            MenuItem(systemName: "hand.draw", titleText: "Visualizer", subtitleText: "Visualize touches on screen (requires app restart)"),
+        ]),
+        SectionItem(menuItems: [
             MenuItem(systemName: "gear", titleText: "Settings"),
         ]),
     ]

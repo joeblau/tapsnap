@@ -4,6 +4,7 @@
 import Foundation
 
 struct SectionItem {
+    let title: String? = nil
     let menuItems: [MenuItem]
 }
 

@@ -5,8 +5,13 @@ import Combine
 import UIKit
 
 final class RecordProgressView: UIView {
-    var progressView: UIView?
-    var widthConstraint: NSLayoutConstraint!
+    lazy var progressView: UIView = {
+        let v = UIView()
+        v.backgroundColor = .systemRed
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+    var widthConstraint: NSLayoutConstraint?
     var cancellables = Set<AnyCancellable>()
 
     override init(frame _: CGRect) {
@@ -23,43 +28,45 @@ final class RecordProgressView: UIView {
 // MARK: - ViewBootstrappable
 
 extension RecordProgressView: ViewBootstrappable {
+    func configureViews() {
+        addSubview(progressView)
+        progressView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        progressView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        progressView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        widthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
+        widthConstraint?.isActive = true
+    }
+    
     internal func configureStreams() {
         Current.mediaActionSubject.sink { action in
             switch action {
             case .captureVideoStart:
-                self.widthConstraint.constant = UIScreen.main.bounds.width
+                self.widthConstraint?.constant = UIScreen.main.bounds.width
                 UIView.animate(withDuration: 10.0,
                                delay: 0.0,
-                               options: .curveLinear, animations: {
+                               options: .curveLinear,
+                               animations: {
                                    self.layoutIfNeeded()
-                               }, completion: { _ in
+                               },
+                               completion: { _ in
                                    guard !(Current.mediaActionSubject.value == .captureVideoEnd) else { return }
-
                                    Current.mediaActionSubject.send(.captureVideoEnd)
-                })
+                                })
 
                 UIView.animate(withDuration: 1,
                                delay: 0.0,
                                options: [.repeat, .autoreverse],
                                animations: {
-                                   self.progressView?.backgroundColor = UIColor(displayP3Red: 0.500,
+                                   self.progressView.backgroundColor = UIColor(displayP3Red: 0.500,
                                                                                 green: 0.134,
                                                                                 blue: 0.115,
                                                                                 alpha: 1.0)
                                },
                                completion: nil)
             case .none, .captureVideoEnd:
-                self.progressView?.removeFromSuperview()
-                self.progressView = UIView()
-                self.progressView?.backgroundColor = .systemRed
-                self.progressView?.translatesAutoresizingMaskIntoConstraints = false
-
-                self.addSubview(self.progressView!)
-                self.progressView?.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-                self.progressView?.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-                self.progressView?.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-                self.widthConstraint = self.progressView?.widthAnchor.constraint(equalToConstant: 0)
-                self.widthConstraint.isActive = true
+                self.progressView.layer.removeAllAnimations()
+                self.progressView.backgroundColor = .systemRed
+                self.widthConstraint?.constant = 0
             default: break
             }
         }
