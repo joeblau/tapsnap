@@ -403,7 +403,11 @@ extension CameraOverlayView: UITextViewDelegate {
         annotationTextViewWidth.constant = textView.contentSize.width
         annotationTextViewHeight.constant = textView.contentSize.height
         if !textView.text.isEmpty {
-            Current.topLeftNavBarSubject.value = .clear
+            Current.topLeftNavBarSubject.send(.clear)
         }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        Current.editingSubject.send(.none)
     }
 }
