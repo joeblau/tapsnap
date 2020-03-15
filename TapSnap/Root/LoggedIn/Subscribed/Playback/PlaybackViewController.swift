@@ -91,15 +91,22 @@ final class PlaybackViewController: UIViewController {
     }()
 
     private lazy var mapView: MKMapView = {
-        let v = Current.mapView
-        v.register(PersonAnnotationView.self, forAnnotationViewWithReuseIdentifier: PersonAnnotationView.id)
+        let v = MKMapView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.isZoomEnabled = false
+        v.isScrollEnabled = false
+        v.isRotateEnabled = false
+        v.isPitchEnabled = false
+        v.showsCompass = false
+        v.showsScale = false
+        v.showsBuildings = true
+        v.showsUserLocation = true
         v.delegate = self
         return v
     }()
 
     private lazy var mapOverlayView: MapViewOverlay = { MapViewOverlay() }()
 
-    private var annotations = [MKPointAnnotation]()
     var looper: PlayerLooper?
 
     // MARK: - Lifecycle
@@ -161,6 +168,8 @@ final class PlaybackViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
+        mapView.removeOverlays(mapView.overlays)
+        mapView.removeAnnotations(mapView.annotations)
         switch mediaCapture {
         case let .photo(url):
             try? FileManager.default.removeItem(at: url)
@@ -206,20 +215,6 @@ final class PlaybackViewController: UIViewController {
             annotation.coordinate = coordiante
             annotation.title = playbackMetadata?.author
             mapView.addAnnotation(annotation)
-            annotations.append(annotation)
-        }
-
-        if let coordinate = Current.currentLocationSubject.value?.coordinate {
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            mapView.addAnnotation(annotation)
-            annotations.append(annotation)
-        }
-
-        var coordinates = annotations.compactMap { $0.coordinate }
-        if coordinates.count == 2 {
-            let geodesicPolyline = MKGeodesicPolyline(coordinates: &coordinates, count: coordinates.count)
-            mapView.addOverlay(geodesicPolyline)
         }
 
         mapOverlayView.configure(playbackMetadata: playbackMetadata)
@@ -257,8 +252,12 @@ extension PlaybackViewController: ViewBootstrappable {
     }
 
     internal func configureStreams() {
-        Current.mapDimensionSubject.sink(receiveValue: { dimension in
-            self.mapCamera.centerCoordinate = self.annotations.first?.coordinate ?? CLLocation().coordinate
+        Current.mapDimensionSubject.sink { dimension in
+            
+            self.mapCamera.centerCoordinate = self.mapView
+                .annotations
+                .first(where: { !($0 is MKUserLocation) })?
+                .coordinate ?? CLLocation().coordinate
 
             switch dimension {
             case .two:
@@ -277,10 +276,9 @@ extension PlaybackViewController: ViewBootstrappable {
             }
 
             self.updateMapSnapshot()
-        })
-            .store(in: &cancellables)
+        }.store(in: &cancellables)
 
-        Current.mapAnnotationsSubject.sink(receiveValue: { annotationsGroup in
+        Current.mapAnnotationsSubject.sink { annotationsGroup in
             switch annotationsGroup {
             case .them:
                 self.mapView.mapType = .mutedStandard
@@ -291,10 +289,9 @@ extension PlaybackViewController: ViewBootstrappable {
 
                 self.updateMapSnapshot()
             case .all:
-                self.mapView.showAnnotations(self.annotations, animated: false)
+                self.mapView.showAnnotations(self.mapView.annotations, animated: false)
             }
-        })
-            .store(in: &cancellables)
+        }.store(in: &cancellables)
     }
 
     private func updateMapSnapshot() {

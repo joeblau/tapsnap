@@ -69,7 +69,13 @@ extension CKContainer {
                 let avatarURL = avatarAsset.fileURL,
                 let imageData = try? Data(contentsOf: avatarURL) {
                 
+                UserDefaults.standard.set(imageData, forKey: Current.k.currentUserAvatar)
                 image = UIImage(data: imageData)
+            }
+            
+            if let data = try? CKRecord.archive(record: userRecord) {
+                UserDefaults.standard.set(data, forKey: Current.k.userAccount)
+                Current.cloudKitUserSubject.send(userRecord)
             }
             completion(username, image)
         }
@@ -241,6 +247,7 @@ extension CKContainer {
                     let senderSigningKey = try? Curve25519.Signing.PublicKey(rawRepresentation: senderSigningKeyData) else {
                     fatalError("Invalid message/delete message")
                 }
+                
                 let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
                                                     ciphertextData: ciphertextData,
                                                     signatureData: signatureData)
@@ -326,6 +333,7 @@ extension CKContainer {
                 let record = record,
                 let data = try? CKRecord.archive(record: record) else { return }
 
+            UserDefaults.standard.set(name, forKey: Current.k.currentUserName)
             UserDefaults.standard.set(data, forKey: Current.k.userAccount)
             Current.cloudKitUserSubject.send(record)
         }
@@ -465,7 +473,8 @@ extension CKContainer {
     private func decrypt(sealed message: SealedMessage,
                          publicKey signing: Curve25519.Signing.PublicKey,
                          completed: (_ saved: Bool) -> Void) {
-        guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else { fatalError("Bootstrap private encryptoin key")
+        guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else {
+            fatalError("Bootstrap private encryptoin key")
         }
 
         do {

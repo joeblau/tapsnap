@@ -17,18 +17,17 @@ extension Data {
 
         var metadata = copiedMetadata
 
-        var exif = [String: Any]()
-        if let nameData = UserDefaults.standard.data(forKey: Current.k.userAccount),
-            let userRecord = try? CKRecord.unarchive(data: nameData) {
-            exif[kCGImagePropertyExifCameraOwnerName as String] = userRecord[UserAliasKey.name] as? String ?? "-"
+        do {
+            var exif = [String: Any]()
+            exif[kCGImagePropertyExifCameraOwnerName as String] = UserDefaults.standard.string(forKey: Current.k.currentUserName)
+            if let currentAddress = Current.currentAddressSubject.value {
+                exif[kCGImagePropertyExifUserComment as String] = currentAddress
+            }
+            
+            exif[kCGImagePropertyExifDateTimeDigitized as String] = Current.formatter.dateTimeDigitized.string(from: Date())
+            metadata[kCGImagePropertyExifDictionary as String] = exif
         }
-        if let currentAddress = Current.currentAddressSubject.value {
-            exif[kCGImagePropertyExifUserComment as String] = currentAddress
-        }
-        exif[kCGImagePropertyExifDateTimeDigitized as String] = Current.formatter.dateTimeDigitized.string(from: Date())
-
-        metadata[kCGImagePropertyExifDictionary as String] = exif
-
+        
         if let currentLocation = Current.currentLocationSubject.value {
             metadata[kCGImagePropertyGPSDictionary as String] = [kCGImagePropertyGPSLatitudeRef: currentLocation.coordinate.latitude < 0 ? "S" : "N",
                                                                  kCGImagePropertyGPSLatitude: fabs(currentLocation.coordinate.latitude),
@@ -37,7 +36,7 @@ extension Data {
                                                                  kCGImagePropertyGPSAltitudeRef: currentLocation.altitude < 0 ? 1 : 0,
                                                                  kCGImagePropertyGPSAltitude: fabs(currentLocation.altitude)]
         }
-
+        
         let destinationData = NSMutableData(data: self)
         guard let destination = CGImageDestinationCreateWithData(destinationData, ref, 1, nil) else {
             return nil
@@ -66,6 +65,12 @@ extension Data {
                 date = creationDate
             }
         }
+        
+        var avatar: UIImage?
+        if let aux = metadata[kCGImagePropertyExifAuxDictionary as String] as? [String: Any],
+            let avatarData = aux["avatar"] as? Data {
+            avatar = UIImage(data: avatarData)
+        }
 
         var location: CLLocation?
         if let gps = metadata[kCGImagePropertyGPSDictionary as String] as? [String: Any],
@@ -81,7 +86,7 @@ extension Data {
 
         return PlaybackMetadata(group: "",
                                 author: author ?? "-",
-                                thumbnail: UIImage(),
+                                thumbnail: avatar ?? UIImage(),
                                 date: date,
                                 location: location,
                                 address: address,
@@ -156,14 +161,22 @@ extension Array where Element: AVMetadataItem {
             metadata.append(group)
         }
 
-        if let nameData = UserDefaults.standard.data(forKey: Current.k.userAccount),
-            let userRecord = try? CKRecord.unarchive(data: nameData) {
-            let author = AVMutableMetadataItem()
-            author.keySpace = .quickTimeUserData
-            author.key = AVMetadataKey.quickTimeUserDataKeyArtist as NSString
-            author.identifier = AVMetadataIdentifier.quickTimeUserDataArtist
-            author.value = userRecord[UserAliasKey.name] as? NSString ?? "-"
-            metadata.append(author)
+        if let currentUsername = UserDefaults.standard.string(forKey: Current.k.currentUserName) {
+            let username = AVMutableMetadataItem()
+            username.keySpace = .quickTimeUserData
+            username.key = AVMetadataKey.quickTimeUserDataKeyArtist as NSString
+            username.identifier = AVMetadataIdentifier.quickTimeUserDataArtist
+            username.value = currentUsername as NSString
+            metadata.append(username)
+        }
+        
+        if let currentAvatar = UserDefaults.standard.data(forKey: Current.k.currentUserAvatar) {
+            let avatar = AVMutableMetadataItem()
+            avatar.keySpace = .quickTimeUserData
+            avatar.key = AVMetadataKey.id3MetadataKeyAttachedPicture as NSString
+            avatar.identifier = AVMetadataIdentifier.id3MetadataAttachedPicture
+            avatar.value = currentAvatar as NSData
+            metadata.append(avatar)
         }
 
         let timestamp = AVMutableMetadataItem()

@@ -64,7 +64,6 @@
 		C67C5CACDE43DCF4381FB87C /* MenuCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5238843AA98A456F4A06E3EA /* MenuCellTableViewCell.swift */; };
 		C8D06DFC8502753F611D62C0 /* MenuModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 498458FBC2D4D55AE69522B1 /* MenuModels.swift */; };
 		CF316AB82F76159755C780BD /* SearchContactsViewController+UISearchBarDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */; };
-		DBC106F1029BFF5DD36907DA /* PersonAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58CC607B90ABB2DC535F466F /* PersonAnnotationView.swift */; };
 		DC538E002715EBD7FF6F0D98 /* CloudKitKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F4C07C5C51030334DDE02E /* CloudKitKeys.swift */; };
 		DD02C776E10CF87F7623060B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */; };
 		DD6A04D0AC022CB627DB36AE /* LoggedOutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0481FEC9E55AB29A26B9238B /* LoggedOutViewController.swift */; };
@@ -76,6 +75,7 @@
 		ED5CA36A241D6A66009A03A4 /* SensorVisualizerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA369241D6A66009A03A4 /* SensorVisualizerWindow.swift */; };
 		ED5CA36C241D6BA5009A03A4 /* SensorVisualizerWindow+Touch.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA36B241D6BA5009A03A4 /* SensorVisualizerWindow+Touch.swift */; };
 		ED5CA370241D6C26009A03A4 /* CAAnimationGroup+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA36F241D6C26009A03A4 /* CAAnimationGroup+Extensions.swift */; };
+		ED5CA372241E6C58009A03A4 /* MKPinAnnotationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA371241E6C58009A03A4 /* MKPinAnnotationView+Extensions.swift */; };
 		ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */; };
 		ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA3240C810700DA4081 /* Aliases.swift */; };
 		ED8C2EA6240C81E800DA4081 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */; };
@@ -147,7 +147,6 @@
 		4D03047C2E3CD982E5D1E38E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5238843AA98A456F4A06E3EA /* MenuCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuCellTableViewCell.swift; sourceTree = "<group>"; };
 		5321E8A88101AC69230EB4AF /* PlaybackViewController+MKMapViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlaybackViewController+MKMapViewDelegate.swift"; sourceTree = "<group>"; };
-		58CC607B90ABB2DC535F466F /* PersonAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonAnnotationView.swift; sourceTree = "<group>"; };
 		5A6C48A082BDC2B70BD74753 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		5E136148D685C0D0BDAD1BB1 /* SearchContactTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactTableViewCell.swift; sourceTree = "<group>"; };
 		5E6DAA497C51E06D884C0B2C /* LoggedInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedInViewController.swift; sourceTree = "<group>"; };
@@ -187,6 +186,7 @@
 		ED5CA369241D6A66009A03A4 /* SensorVisualizerWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorVisualizerWindow.swift; sourceTree = "<group>"; };
 		ED5CA36B241D6BA5009A03A4 /* SensorVisualizerWindow+Touch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SensorVisualizerWindow+Touch.swift"; sourceTree = "<group>"; };
 		ED5CA36F241D6C26009A03A4 /* CAAnimationGroup+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CAAnimationGroup+Extensions.swift"; sourceTree = "<group>"; };
+		ED5CA371241E6C58009A03A4 /* MKPinAnnotationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKPinAnnotationView+Extensions.swift"; sourceTree = "<group>"; };
 		ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyCryptography.swift; sourceTree = "<group>"; };
 		ED8C2EA3240C810700DA4081 /* Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
 		ED8C2EA5240C81E800DA4081 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
@@ -442,6 +442,7 @@
 				EDAAAB67241411C7002326D9 /* SKPaymentTransactionState+Extensions.swift */,
 				EDAAAB6D241746F9002326D9 /* UITableViewCell+Extensions.swift */,
 				EDAAAB6F24174B21002326D9 /* UICollectionViewCell+Extensions.swift */,
+				ED5CA371241E6C58009A03A4 /* MKPinAnnotationView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -602,7 +603,6 @@
 			isa = PBXGroup;
 			children = (
 				A2F76C684C320050C50C7BB2 /* MapViewOverlay.swift */,
-				58CC607B90ABB2DC535F466F /* PersonAnnotationView.swift */,
 				3C53A6281FFC03B8AA5A49A7 /* PlayerLooper.swift */,
 				ED371267241C8C63001B972D /* CurrentSongView.swift */,
 			);
@@ -751,6 +751,7 @@
 				F1049AD0FAD3C79A3CE179D7 /* CLLocationManager+Combine.swift in Sources */,
 				E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */,
 				22441ACCFD9F673D8EC70B23 /* CameraPreviewView.swift in Sources */,
+				ED5CA372241E6C58009A03A4 /* MKPinAnnotationView+Extensions.swift in Sources */,
 				20122B4E8B2E6B67C0B0979C /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift in Sources */,
 				82E8D57768BC08D80FE7CC89 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift in Sources */,
 				29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
@@ -790,7 +791,6 @@
 				EDE8F0B9240A0FE200DFA828 /* KeyStoreError.swift in Sources */,
 				ED5CA36A241D6A66009A03A4 /* SensorVisualizerWindow.swift in Sources */,
 				18DFAD298AD224C785C85011 /* OnboardingViewController.swift in Sources */,
-				DBC106F1029BFF5DD36907DA /* PersonAnnotationView.swift in Sources */,
 				916F904C56D25570A3DA12B5 /* PlaybackViewController+MKMapViewDelegate.swift in Sources */,
 				1047116A40B5EE793B3B33B2 /* PlaybackViewController.swift in Sources */,
 				A9A7591F02AC39A45275A65D /* PlayerLooper.swift in Sources */,

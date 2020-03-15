@@ -105,6 +105,7 @@ extension MenuViewController: UIImagePickerControllerDelegate & UINavigationCont
         
         CKContainer.default().updateUser(image: outputFileURL, completion: { [unowned self] saved in
             DispatchQueue.main.async {
+                UserDefaults.standard.set(smallImage, forKey: Current.k.currentUserAvatar)
                 switch saved {
                 case true: self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
                 case false: break

@@ -4,6 +4,9 @@
 import Foundation
 
 struct Constants {
+    let currentUserName = "current_user_name"
+    let currentUserAvatar = "current_user_avatar"
+    
     let privateEncryptionKey = "private_encryption_key"
     let publicEncryptionKey = "public_encryption_key"
     let privateSigningKey = "private_signing_key"
