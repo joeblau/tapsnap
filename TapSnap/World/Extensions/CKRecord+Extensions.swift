@@ -4,7 +4,7 @@
 import CloudKit
 
 extension CKRecord {
-    subscript(key: UserKey) -> Any? {
+    subscript(key: UserAliasKey) -> Any? {
         get { self[key.rawValue] }
         set { self[key.rawValue] = newValue as? CKRecordValue }
     }
@@ -36,7 +36,7 @@ extension CKRecord {
 extension CKRecord.RecordType {
     static var message = "Message"
     static var group = "Group"
-    static var user = "User"
+    static var userAlias = "UserAlias"
     static var inbox = "Inbox"
     static var privateKey = "PrivateKey"
     static var publicKey = "PublicKey"

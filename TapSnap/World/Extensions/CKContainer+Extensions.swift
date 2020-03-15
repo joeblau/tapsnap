@@ -30,7 +30,7 @@ extension CKContainer {
             
             let recipientPredicateData = try? NSKeyedArchiver.archivedData(withRootObject: recipientPredicate, requiringSecureCoding: true)
             UserDefaults.standard.set(recipientPredicateData, forKey: Current.k.recipientPredicate)
-            self.fetchUser(with: recordID)
+            self.buildUser(with: recordID)
         }
     }
 
@@ -97,7 +97,7 @@ extension CKContainer {
     }
 
     func createNewMessage(for group: CKRecord,
-                          with mediaURL: URL,
+                          with mediaURL: MediaCapture,
                           completion: @escaping (_ saved: Bool) -> Void) {
         guard let shareRecordID = group.share?.recordID else {
             completion(false)
@@ -251,16 +251,13 @@ extension CKContainer {
 // MARK: - User
 
 extension CKContainer {
-    private func fetchUser(with recordID: CKRecord.ID) {
-        privateCloudDatabase.fetch(withRecordID: recordID) { [unowned self] record, error in
-            guard self.no(error: error),
-                let record = record,
-                let data = try? CKRecord.archive(record: record) else {
-                self.discoverUser(with: recordID)
-                return
-            }
-            UserDefaults.standard.set(data, forKey: Current.k.userAccount)
-            Current.cloudKitUserSubject.send(record)
+    private func buildUser(with recordID: CKRecord.ID) {
+        switch UserDefaults.standard.data(forKey: Current.k.userAccount) {
+        case let .some(record):
+            guard let user = try? CKRecord.unarchive(data: record) else { return }
+            Current.cloudKitUserSubject.send(user)
+        case .none:
+            self.discoverUser(with: recordID)
         }
     }
 
@@ -272,13 +269,18 @@ extension CKContainer {
     }
 
     private func createUser(from identity: CKUserIdentity) {
-        guard let components = identity.nameComponents else { fatalError("No identity name components") }
+        guard let components = identity.nameComponents,
+            let creatorReferenceData = UserDefaults.standard.value(forKey: Current.k.creatorReference) as? Data,
+            let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
+                fatalError("No identity name components")
+        }
 
         let name = Current.formatter.personName.string(from: components)
-        let user = CKRecord(recordType: .user)
-        user[UserKey.name] = name
+        let user = CKRecord(recordType: .userAlias)
+        user[UserAliasKey.name] = name
+        user[UserAliasKey.creator] = creatorReference
 
-        privateCloudDatabase.save(user) { [unowned self] record, error in
+        publicCloudDatabase.save(user) { [unowned self] record, error in
             guard self.no(error: error),
                 let record = record,
                 let data = try? CKRecord.archive(record: record) else { return }
@@ -293,7 +295,7 @@ extension CKContainer {
 
 extension CKContainer {
     private func buildMessages(to participantRecordIDs: [CKRecord.ID],
-                               with mediaURL: URL,
+                               with mediaCapture: MediaCapture,
                                completion: @escaping (_ saved: Bool) -> Void) {
         let predecate = NSPredicate(format: "creator IN %@", participantRecordIDs)
         let query = CKQuery(recordType: .publicKey, predicate: predecate)
@@ -314,12 +316,27 @@ extension CKContainer {
                     let sealed = URL.sealedURL
 
                     let record = CKRecord(recordType: .message)
+                    
+                    if let data =  UserDefaults.standard.value(forKey:  Current.k.userAccount) as? Data,
+                        let userRecord = try? CKRecord.unarchive(data: data),
+                        let username = userRecord[UserAliasKey.name] as? String {
+
+                        switch mediaCapture {
+                        case .movie(_): record[MessageKey.notification] = "Video from \(username)"
+                        case .photo(_): record[MessageKey.notification] = "Photo from \(username)"
+                        }
+                    }
+                    
                     record[MessageKey.senderSigningKey] = pkSigning.rawRepresentation
                     let sealedMessage: SealedMessage
-                    let mediaData = try Data(contentsOf: mediaURL)
-                    sealedMessage = try Current.pki.encrypt(mediaData, to: pkEncryption, signedBy: pvSigning)
-                    try sealedMessage.ephemeralPublicKeyData.write(to: sealed.ephemeralPublicKeyURL)
-                    record[MessageKey.media] = CKAsset(fileURL: sealed.ephemeralPublicKeyURL)
+
+                    switch mediaCapture {
+                    case let .movie(url),let .photo(url):
+                        let mediaData = try Data(contentsOf: url)
+                        sealedMessage = try Current.pki.encrypt(mediaData, to: pkEncryption, signedBy: pvSigning)
+                        try sealedMessage.ephemeralPublicKeyData.write(to: sealed.ephemeralPublicKeyURL)
+                        record[MessageKey.media] = CKAsset(fileURL: sealed.ephemeralPublicKeyURL)
+                    }
 
                     try sealedMessage.ciphertextData.write(to: sealed.ciphertexURL)
                     record[MessageKey.ciphertext] = CKAsset(fileURL: sealed.ciphertexURL)
@@ -371,8 +388,13 @@ extension CKContainer {
         let subscription = CKQuerySubscription(recordType: .message,
                                                predicate: recipientPredicate,
                                                options: [.firesOnRecordCreation])
+        
         subscription.notificationInfo = {
             let ni = CKSubscription.NotificationInfo()
+            ni.titleLocalizationKey = "%@"
+            ni.titleLocalizationArgs = ["notification"]
+            ni.shouldBadge = true
+            ni.soundName = "default"
             ni.shouldSendContentAvailable = true
             return ni
         }()
@@ -380,6 +402,19 @@ extension CKContainer {
         publicCloudDatabase.save(subscription) { _, error in
             guard self.no(error: error) else { return }
             UserDefaults.standard.set(true, forKey: Current.k.subscriptionCached)
+        }
+    }
+    
+    private func removeAllSubscriptions() {
+        publicCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
+            guard self.no(error: error), let subscriptions = subscriptions else { return }
+
+            subscriptions.forEach { subscription in
+                self.publicCloudDatabase.delete(withSubscriptionID: subscription.subscriptionID) { subscrption, error in
+                    guard self.no(error: error) else { return }
+                }
+            }
+            UserDefaults.standard.removeObject(forKey: Current.k.subscriptionCached)
         }
     }
 }

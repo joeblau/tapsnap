@@ -48,7 +48,7 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
             return
         }
         CKContainer.default()
-            .createNewMessage(for: currentGroup, with: url) { isSaved in
+            .createNewMessage(for: currentGroup, with: .movie(url)) { isSaved in
                 guard UserDefaults.standard.bool(forKey: Current.k.settingAutoSave) else {
                     Current.cleanupSubject.send(.cleanUp(url))
                     return

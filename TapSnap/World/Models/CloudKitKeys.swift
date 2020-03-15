@@ -3,7 +3,7 @@
 
 import UIKit
 
-enum UserKey: String {
+enum UserAliasKey: String {
     case name
     case avatar
     case creator
@@ -22,6 +22,7 @@ enum MessageKey: String {
     case signature
     case senderSigningKey
     case recipient
+    case notification
 }
 
 enum CryptoKey: String {

@@ -20,7 +20,7 @@ extension Data {
         var exif = [String: Any]()
         if let nameData = UserDefaults.standard.data(forKey: Current.k.userAccount),
             let userRecord = try? CKRecord.unarchive(data: nameData) {
-            exif[kCGImagePropertyExifCameraOwnerName as String] = userRecord[UserKey.name] as? String ?? "-"
+            exif[kCGImagePropertyExifCameraOwnerName as String] = userRecord[UserAliasKey.name] as? String ?? "-"
         }
         if let currentAddress = Current.currentAddressSubject.value {
             exif[kCGImagePropertyExifUserComment as String] = currentAddress
@@ -163,7 +163,7 @@ extension Array where Element: AVMetadataItem {
             author.keySpace = .quickTimeUserData
             author.key = AVMetadataKey.quickTimeUserDataKeyArtist as NSString
             author.identifier = AVMetadataIdentifier.quickTimeUserDataArtist
-            author.value = userRecord[UserKey.name] as? NSString ?? "-"
+            author.value = userRecord[UserAliasKey.name] as? NSString ?? "-"
             metadata.append(author)
         }
 

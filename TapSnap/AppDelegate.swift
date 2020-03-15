@@ -81,12 +81,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CKContainer.default().fetchUnreadMessages()
     }
 
-    func application(_: UIApplication,
-                     didReceiveRemoteNotification _: [AnyHashable: Any],
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        
         // TODO: Figure out race condition between push notifiction and asset upload
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             CKContainer.default().fetchUnreadMessages { result in
+
                 completionHandler(result)
             }
         }
@@ -123,7 +126,16 @@ extension AppDelegate: ViewBootstrappable {
             .sink { showVisualizer in
                 self.sensorVisualizerWindow.visualizationWindow.isHidden = showVisualizer
                 UserDefaults.standard.set(showVisualizer, forKey: Current.k.isVisualizerHidden)
+            }.store(in: &cancellables)
+        
+        Current.inboxURLsSubject.sink { inboxState in
+            switch inboxState {
+            case let .completedFetching(urls):
+                DispatchQueue.main.async {
+                    UIApplication.shared.applicationIconBadgeNumber = urls?.count ?? 0
+                }
+            default: break
             }
-            .store(in: &cancellables)
+        }.store(in: &cancellables)
     }
 }
