@@ -21,13 +21,13 @@ extension CKContainer {
             let creatorReference = CKRecord.Reference(recordID: recordID, action: .none)
             let creatorPredicate = NSPredicate(format: "creator == %@", creatorReference)
             let recipientPredicate = NSPredicate(format: "recipient == %@", creatorReference)
-            
+
             let creatorReferenceData = try? NSKeyedArchiver.archivedData(withRootObject: creatorReference, requiringSecureCoding: true)
             UserDefaults.standard.set(creatorReferenceData, forKey: Current.k.creatorReference)
-            
+
             let creatorPredicateData = try? NSKeyedArchiver.archivedData(withRootObject: creatorPredicate, requiringSecureCoding: true)
             UserDefaults.standard.set(creatorPredicateData, forKey: Current.k.creatorPredicate)
-            
+
             let recipientPredicateData = try? NSKeyedArchiver.archivedData(withRootObject: recipientPredicate, requiringSecureCoding: true)
             UserDefaults.standard.set(recipientPredicateData, forKey: Current.k.recipientPredicate)
             self.buildUser(with: recordID)
@@ -171,9 +171,9 @@ extension CKContainer {
         }
     }
 
-    func fetchUnreadMessages(completion: ((UIBackgroundFetchResult) -> Void)? = nil ) {
+    func fetchUnreadMessages(completion: ((UIBackgroundFetchResult) -> Void)? = nil) {
         Current.inboxURLsSubject.send(.fetching)
-        
+
         guard let recipientPredicateData = UserDefaults.standard.value(forKey: Current.k.recipientPredicate) as? Data,
             let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
             currentUser(); return
@@ -257,7 +257,7 @@ extension CKContainer {
             guard let user = try? CKRecord.unarchive(data: record) else { return }
             Current.cloudKitUserSubject.send(user)
         case .none:
-            self.discoverUser(with: recordID)
+            discoverUser(with: recordID)
         }
     }
 
@@ -272,7 +272,7 @@ extension CKContainer {
         guard let components = identity.nameComponents,
             let creatorReferenceData = UserDefaults.standard.value(forKey: Current.k.creatorReference) as? Data,
             let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
-                fatalError("No identity name components")
+            fatalError("No identity name components")
         }
 
         let name = Current.formatter.personName.string(from: components)
@@ -316,22 +316,21 @@ extension CKContainer {
                     let sealed = URL.sealedURL
 
                     let record = CKRecord(recordType: .message)
-                    
-                    if let data =  UserDefaults.standard.value(forKey:  Current.k.userAccount) as? Data,
+
+                    if let data = UserDefaults.standard.value(forKey: Current.k.userAccount) as? Data,
                         let userRecord = try? CKRecord.unarchive(data: data),
                         let username = userRecord[UserAliasKey.name] as? String {
-
                         switch mediaCapture {
-                        case .movie(_): record[MessageKey.notification] = "Video from \(username)"
-                        case .photo(_): record[MessageKey.notification] = "Photo from \(username)"
+                        case .movie: record[MessageKey.notification] = "Video from \(username)"
+                        case .photo: record[MessageKey.notification] = "Photo from \(username)"
                         }
                     }
-                    
+
                     record[MessageKey.senderSigningKey] = pkSigning.rawRepresentation
                     let sealedMessage: SealedMessage
 
                     switch mediaCapture {
-                    case let .movie(url),let .photo(url):
+                    case let .movie(url), let .photo(url):
                         let mediaData = try Data(contentsOf: url)
                         sealedMessage = try Current.pki.encrypt(mediaData, to: pkEncryption, signedBy: pvSigning)
                         try sealedMessage.ephemeralPublicKeyData.write(to: sealed.ephemeralPublicKeyURL)
@@ -388,7 +387,7 @@ extension CKContainer {
         let subscription = CKQuerySubscription(recordType: .message,
                                                predicate: recipientPredicate,
                                                options: [.firesOnRecordCreation])
-        
+
         subscription.notificationInfo = {
             let ni = CKSubscription.NotificationInfo()
             ni.titleLocalizationKey = "%@"
@@ -404,13 +403,13 @@ extension CKContainer {
             UserDefaults.standard.set(true, forKey: Current.k.subscriptionCached)
         }
     }
-    
+
     private func removeAllSubscriptions() {
         publicCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
             guard self.no(error: error), let subscriptions = subscriptions else { return }
 
             subscriptions.forEach { subscription in
-                self.publicCloudDatabase.delete(withSubscriptionID: subscription.subscriptionID) { subscrption, error in
+                self.publicCloudDatabase.delete(withSubscriptionID: subscription.subscriptionID) { _, error in
                     guard self.no(error: error) else { return }
                 }
             }
@@ -487,14 +486,12 @@ extension CKContainer {
 
     private func store(publicKey encryption: Curve25519.KeyAgreement.PublicKey,
                        publicKey signing: Curve25519.Signing.PublicKey) {
-        
         guard let creatorPredicateData = UserDefaults.standard.value(forKey: Current.k.creatorPredicate) as? Data,
             let creatorPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorPredicateData) as? NSPredicate,
             let creatorReferenceData = UserDefaults.standard.value(forKey: Current.k.creatorReference) as? Data,
             let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
-                currentUser(); return
+            currentUser(); return
         }
-        
 
         let query = CKQuery(recordType: .publicKey, predicate: creatorPredicate)
         publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] records, error in

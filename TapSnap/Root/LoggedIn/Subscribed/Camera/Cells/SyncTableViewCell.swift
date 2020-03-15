@@ -46,5 +46,4 @@ final class SyncTableViewCell: UITableViewCell {
     @objc func toggleAudioSyncAction(_ sender: UISwitch) {
         Current.musicSyncSubject.send(sender.isOn)
     }
-
 }

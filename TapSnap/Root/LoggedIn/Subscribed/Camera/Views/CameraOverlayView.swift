@@ -406,8 +406,8 @@ extension CameraOverlayView: UITextViewDelegate {
             Current.topLeftNavBarSubject.send(.clear)
         }
     }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
+
+    func textViewDidEndEditing(_: UITextView) {
         Current.editingSubject.send(.none)
     }
 }

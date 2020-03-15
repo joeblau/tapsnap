@@ -23,5 +23,4 @@ final class SearchContactTableViewCell: UITableViewCell {
         imageView?.contentMode = .scaleAspectFit
         textLabel?.text = friendName
     }
-
 }

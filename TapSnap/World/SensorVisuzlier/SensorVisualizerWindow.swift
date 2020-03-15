@@ -1,21 +1,15 @@
-//
-//  SensorVisualizerWindow.swift
-//  SensorVisualizerKit-iOS
-//
-//  Created by Joe Blau on 4/9/19.
-//  Copyright © 2019 SensorVisualizerKit. All rights reserved.
-//
+// SensorVisualizerWindow.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 public class SensorVisualizerWindow: UIWindow {
-
     let primaryColor: UIColor
     let secondaryColor: UIColor
     var animator: UIDynamicAnimator?
 
     var touchPointViews = [UITouch: UIView]()
-    
+
     internal let visualizationWindow: UIWindow = {
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.isUserInteractionEnabled = false
@@ -36,17 +30,16 @@ public class SensorVisualizerWindow: UIWindow {
     public init(frame: CGRect,
                 primary: UIColor = UIView().tintColor,
                 secondary: UIColor = UIView().tintColor) {
-        self.primaryColor = primary
-        self.secondaryColor = secondary
+        primaryColor = primary
+        secondaryColor = secondary
 
         super.init(frame: frame)
         if let windowView = visualizationWindow.rootViewController?.view {
-            self.animator = UIDynamicAnimator(referenceView: windowView)
+            animator = UIDynamicAnimator(referenceView: windowView)
         }
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

@@ -13,7 +13,7 @@ final class LoggedInViewController: UIViewController {
         nc.isToolbarHidden = false
         return nc
     }()
-    
+
     private lazy var subscription: UINavigationController = {
         let nc = UINavigationController(rootViewController: SubscriptionViewController())
         nc.modalPresentationStyle = .fullScreen

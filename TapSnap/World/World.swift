@@ -76,7 +76,7 @@ enum InboxRequestState {
 struct World {
     let pki = PublicKeyCryptography()
     let k = Constants()
-    
+
     // Sensors
     var locationManager: CLLocationManager = {
         let m = CLLocationManager()
@@ -124,7 +124,7 @@ struct World {
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
     var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
     var cleanupSubject = CurrentValueSubject<CleanupAction?, Never>(nil)
-    
+
     var currentLocationSubject = CurrentValueSubject<CLLocation?, Never>(nil)
     var currentAddressSubject = CurrentValueSubject<String?, Never>(nil)
     var currentWatermarkSubject = CurrentValueSubject<UIImage?, Never>(nil)
@@ -134,7 +134,7 @@ struct World {
 
     var inboxURLsSubject = CurrentValueSubject<InboxRequestState, Never>(.idle)
     var outboxRecordsSubject = CurrentValueSubject<[CKRecord]?, Never>(nil)
-    
+
     var hideTouchVisuzlierSubject = CurrentValueSubject<Bool, Never>(true)
 
     // CloudKit

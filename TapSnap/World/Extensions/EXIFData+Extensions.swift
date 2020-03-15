@@ -96,7 +96,6 @@ extension Data {
 
 extension Array where Element: AVMetadataItem {
     var playbackMetadta: PlaybackMetadata? {
-        
         let group = AVMetadataItem.metadataItems(from: self, filteredByIdentifier: .quickTimeUserDataAlbum).first?.value as? String ?? "-"
         let author = AVMetadataItem.metadataItems(from: self, filteredByIdentifier: .quickTimeUserDataArtist).first?.value as? String ?? "-"
         let date: Date

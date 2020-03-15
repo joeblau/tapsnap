@@ -1,15 +1,11 @@
-//
-//  AppDelegate+SKPaymentTransactionObserver.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/7/20.
-//
+// AppDelegate+SKPaymentTransactionObserver.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import StoreKit
 import os.log
+import StoreKit
 
 extension AppDelegate: SKPaymentTransactionObserver {
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    func paymentQueue(_: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         transactions.forEach { transaction in
             switch transaction.transactionState {
             case .purchased, .restored:
@@ -23,19 +19,18 @@ extension AppDelegate: SKPaymentTransactionObserver {
             }
         }
     }
-    
-    private func validatePurchase(for transaction: SKPaymentTransaction) {
+
+    private func validatePurchase(for _: SKPaymentTransaction) {
         guard let url = Bundle.main.appStoreReceiptURL,
             let receipt = try? Data(contentsOf: url) else {
             os_log("%@", log: .storeKit, type: .error, "No app store receipt")
             return
         }
-        
+
         // check bundle id
         // check bundle version
-        
     }
-    
+
     private func refreshReceipts() {
         let request = SKReceiptRefreshRequest()
         request.delegate = self

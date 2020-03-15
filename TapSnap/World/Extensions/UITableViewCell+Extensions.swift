@@ -1,13 +1,8 @@
-//
-//  UITableViewCell+Extensions.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/9/20.
-//
+// UITableViewCell+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 extension UITableViewCell {
     static var id: String { String(describing: self) }
 }
-

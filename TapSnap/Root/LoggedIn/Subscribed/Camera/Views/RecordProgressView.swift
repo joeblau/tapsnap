@@ -11,6 +11,7 @@ final class RecordProgressView: UIView {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+
     var widthConstraint: NSLayoutConstraint?
     var cancellables = Set<AnyCancellable>()
 
@@ -30,13 +31,13 @@ final class RecordProgressView: UIView {
 extension RecordProgressView: ViewBootstrappable {
     func configureViews() {
         addSubview(progressView)
-        progressView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        progressView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        progressView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        progressView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        progressView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        progressView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         widthConstraint = progressView.widthAnchor.constraint(equalToConstant: 0)
         widthConstraint?.isActive = true
     }
-    
+
     internal func configureStreams() {
         Current.mediaActionSubject.sink { action in
             switch action {
@@ -58,9 +59,9 @@ extension RecordProgressView: ViewBootstrappable {
                                options: [.repeat, .autoreverse],
                                animations: {
                                    self.progressView.backgroundColor = UIColor(displayP3Red: 0.500,
-                                                                                green: 0.134,
-                                                                                blue: 0.115,
-                                                                                alpha: 1.0)
+                                                                               green: 0.134,
+                                                                               blue: 0.115,
+                                                                               alpha: 1.0)
                                },
                                completion: nil)
             case .none, .captureVideoEnd:

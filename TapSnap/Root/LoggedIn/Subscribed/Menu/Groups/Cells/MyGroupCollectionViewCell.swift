@@ -65,7 +65,6 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
             contactTitleLabel.attributedText = attributedString
         }
     }
-
 }
 
 extension MyGroupCollectionViewCell: ViewBootstrappable {

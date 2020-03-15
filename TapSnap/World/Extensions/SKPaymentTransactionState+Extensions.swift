@@ -1,9 +1,5 @@
-//
-//  SKPaymentTransactionState+Extensions.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/7/20.
-//
+// SKPaymentTransactionState+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import StoreKit
 

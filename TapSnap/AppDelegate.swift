@@ -2,16 +2,15 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import CloudKit
+import Combine
 import CoreLocation
 import os.log
 import PencilKit
-import UIKit
 import StoreKit
-import Combine
+import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
     var window: UIWindow?
     private var cancellables = Set<AnyCancellable>()
     lazy var sensorVisualizerWindow: SensorVisualizerWindow = {
@@ -22,11 +21,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         bootstrap()
-        
+
         do { // StoreKit
             SKPaymentQueue.default().add(self)
         }
-        
+
         do { // Notificaions
             UIApplication.shared.registerForRemoteNotifications()
         }
@@ -43,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Current.locationManager.delegate = self
             UNUserNotificationCenter.current().delegate = self
         }
-        
+
         do { // Location
             if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
                 Current.locationManager.startUpdatingLocation()
@@ -66,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let hideVizualiser = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden)
             Current.hideTouchVisuzlierSubject.send(hideVizualiser)
         }
-        
+
         window = sensorVisualizerWindow
         window?.rootViewController = RootViewController()
         window?.makeKeyAndVisible()
@@ -81,11 +80,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CKContainer.default().fetchUnreadMessages()
     }
 
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
+    func application(_: UIApplication,
+                     didReceiveRemoteNotification _: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
-        
         // TODO: Figure out race condition between push notifiction and asset upload
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             CKContainer.default().fetchUnreadMessages { result in
@@ -127,7 +124,7 @@ extension AppDelegate: ViewBootstrappable {
                 self.sensorVisualizerWindow.visualizationWindow.isHidden = showVisualizer
                 UserDefaults.standard.set(showVisualizer, forKey: Current.k.isVisualizerHidden)
             }.store(in: &cancellables)
-        
+
         Current.inboxURLsSubject.sink { inboxState in
             switch inboxState {
             case let .completedFetching(urls):
