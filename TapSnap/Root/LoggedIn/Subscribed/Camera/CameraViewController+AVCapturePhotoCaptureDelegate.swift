@@ -13,7 +13,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         case .none:
             guard let imageData = photo.fileDataRepresentation() else { return }
 
-            let imageWithMetadata = imageData.updateMetadata ?? imageData
+            let imageWithMetadata = imageData.updateMetadata(group: self.currentGroup?[GroupKey.name] as? String) ?? imageData
 
             guard let originalImage = UIImage(data: imageWithMetadata),
                 let watermarkImage = Current.currentWatermarkSubject.value else {

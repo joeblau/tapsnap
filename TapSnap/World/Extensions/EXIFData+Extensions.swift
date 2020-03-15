@@ -10,7 +10,7 @@ import UIKit
 // MARK: - Photo
 
 extension Data {
-    var updateMetadata: Data? {
+    func updateMetadata(group name: String?) -> Data? {
         guard let source = CGImageSourceCreateWithData(self as CFData, nil),
             let ref = CGImageSourceGetType(source),
             let copiedMetadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return nil }
@@ -19,9 +19,14 @@ extension Data {
 
         do {
             var exif = [String: Any]()
-            exif[kCGImagePropertyExifCameraOwnerName as String] = UserDefaults.standard.string(forKey: Current.k.currentUserName)
-            if let currentAddress = Current.currentAddressSubject.value {
-                exif[kCGImagePropertyExifUserComment as String] = currentAddress
+            
+            var exifProperties = EXIRProperites()
+            exifProperties.group = name
+            exifProperties.address = Current.currentAddressSubject.value
+            exifProperties.author = UserDefaults.standard.string(forKey: Current.k.currentUserName)
+            
+            if let exifCommentString = try? JSONEncoder().encode(exifProperties).base64EncodedString() {
+                exif[kCGImagePropertyExifUserComment as String] = exifCommentString
             }
             
             exif[kCGImagePropertyExifDateTimeDigitized as String] = Current.formatter.dateTimeDigitized.string(from: Date())
@@ -53,12 +58,20 @@ extension Data {
         guard let source = CGImageSourceCreateWithData(self as CFData, nil),
             let metadata = CGImageSourceCopyPropertiesAtIndex(source, 0, nil) as? [String: Any] else { return nil }
 
+        var group: String?
         var author: String?
         var address: String?
         var date = Date()
         if let exif = metadata[kCGImagePropertyExifDictionary as String] as? [String: Any] {
-            author = exif[kCGImagePropertyExifCameraOwnerName as String] as? String
-            address = exif[kCGImagePropertyExifUserComment as String] as? String
+
+            if let exifCommentString = exif[kCGImagePropertyExifUserComment as String] as? String,
+                let exifData = Data(base64Encoded: exifCommentString),
+                let exifProperties = try? JSONDecoder().decode(EXIRProperites.self, from: exifData) {
+                
+                group = exifProperties.group
+                author = exifProperties.author
+                address = exifProperties.address
+            }
 
             if let dateTimeDigitized = exif[kCGImagePropertyExifDateTimeDigitized as String] as? String,
                 let creationDate = Current.formatter.dateTimeDigitized.date(from: dateTimeDigitized) {
@@ -84,7 +97,7 @@ extension Data {
             location = CLLocation(latitude: lat, longitude: lon)
         }
 
-        return PlaybackMetadata(group: "",
+        return PlaybackMetadata(group: group ?? "-",
                                 author: author ?? "-",
                                 thumbnail: avatar ?? UIImage(),
                                 date: date,
