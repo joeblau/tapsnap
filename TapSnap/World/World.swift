@@ -67,6 +67,12 @@ enum CleanupAction {
     case cleanUp(URL)
 }
 
+enum InboxRequestState {
+    case idle
+    case fetching
+    case completedFetching([URL]?)
+}
+
 struct World {
     let pki = PublicKeyCryptography()
     let k = Constants()
@@ -118,7 +124,7 @@ struct World {
     var mediaActionSubject = CurrentValueSubject<MediaAction, Never>(.none)
     var zoomVeloictySubject = CurrentValueSubject<CGPoint, Never>(.zero)
     var cleanupSubject = CurrentValueSubject<CleanupAction?, Never>(nil)
-
+    
     var currentLocationSubject = CurrentValueSubject<CLLocation?, Never>(nil)
     var currentAddressSubject = CurrentValueSubject<String?, Never>(nil)
     var currentWatermarkSubject = CurrentValueSubject<UIImage?, Never>(nil)
@@ -126,7 +132,7 @@ struct World {
     var musicSyncSubject = CurrentValueSubject<Bool, Never>(false)
     var lockMeidaBetweenSendSubject = CurrentValueSubject<Bool, Never>(false)
 
-    var inboxURLsSubject = CurrentValueSubject<[URL]?, Never>(nil)
+    var inboxURLsSubject = CurrentValueSubject<InboxRequestState, Never>(.idle)
     var outboxRecordsSubject = CurrentValueSubject<[CKRecord]?, Never>(nil)
     
     var hideTouchVisuzlierSubject = CurrentValueSubject<Bool, Never>(true)

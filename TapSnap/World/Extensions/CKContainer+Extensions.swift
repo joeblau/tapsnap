@@ -8,10 +8,6 @@ import os.lock
 import UIKit
 
 extension CKContainer {
-    static var creatorReference: CKRecord.Reference?
-    static var creatorPredicate: NSPredicate?
-    static var recipientPredicate: NSPredicate?
-
     static var outboxSubscriber = AnySubscriber<CKRecord, Never>()
 
     private var sharedZoneID: CKRecordZone.ID {
@@ -23,9 +19,17 @@ extension CKContainer {
             guard self.no(error: error), let recordID = recordID else { return }
 
             let creatorReference = CKRecord.Reference(recordID: recordID, action: .none)
-            CKContainer.creatorReference = creatorReference
-            CKContainer.creatorPredicate = NSPredicate(format: "creator == %@", creatorReference)
-            CKContainer.recipientPredicate = NSPredicate(format: "recipient == %@", creatorReference)
+            let creatorPredicate = NSPredicate(format: "creator == %@", creatorReference)
+            let recipientPredicate = NSPredicate(format: "recipient == %@", creatorReference)
+            
+            let creatorReferenceData = try? NSKeyedArchiver.archivedData(withRootObject: creatorReference, requiringSecureCoding: true)
+            UserDefaults.standard.set(creatorReferenceData, forKey: Current.k.creatorReference)
+            
+            let creatorPredicateData = try? NSKeyedArchiver.archivedData(withRootObject: creatorPredicate, requiringSecureCoding: true)
+            UserDefaults.standard.set(creatorPredicateData, forKey: Current.k.creatorPredicate)
+            
+            let recipientPredicateData = try? NSKeyedArchiver.archivedData(withRootObject: recipientPredicate, requiringSecureCoding: true)
+            UserDefaults.standard.set(recipientPredicateData, forKey: Current.k.recipientPredicate)
             self.fetchUser(with: recordID)
         }
     }
@@ -167,8 +171,13 @@ extension CKContainer {
         }
     }
 
-    func fetchUnreadMessages(completion: @escaping (UIBackgroundFetchResult) -> Void) {
-        guard let recipientPredicate = CKContainer.recipientPredicate else { return }
+    func fetchUnreadMessages(completion: ((UIBackgroundFetchResult) -> Void)? = nil ) {
+        Current.inboxURLsSubject.send(.fetching)
+        
+        guard let recipientPredicateData = UserDefaults.standard.value(forKey: Current.k.recipientPredicate) as? Data,
+            let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
+            currentUser(); return
+        }
         let query = CKQuery(recordType: .message, predicate: recipientPredicate)
         publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] messages, error in
             guard self.no(error: error), let messages = messages else { return }
@@ -204,11 +213,11 @@ extension CKContainer {
             let operation = CKModifyRecordsOperation(recordsToSave: nil,
                                                      recordIDsToDelete: deleteIDs)
             operation.modifyRecordsCompletionBlock = { [unowned self] _, recordIDs, error in
-                guard self.no(error: error), let recordIDs = recordIDs else { completion(.failed); return }
-
+                guard self.no(error: error), let recordIDs = recordIDs else { completion?(.failed); return }
+                self.loadInbox()
                 switch recordIDs.isEmpty {
-                case true: completion(.noData)
-                case false: completion(.newData)
+                case true: completion?(.noData)
+                case false: completion?(.newData)
                 }
             }
             self.publicCloudDatabase.add(operation)
@@ -220,7 +229,8 @@ extension CKContainer {
             let messageURLs = try FileManager.default.contentsOfDirectory(at: URL.inboxURL,
                                                                           includingPropertiesForKeys: nil,
                                                                           options: .includesDirectoriesPostOrder)
-            Current.inboxURLsSubject.send(messageURLs.sorted(by: { $0.path > $1.path }))
+            let reverseOrderMessageURLs = messageURLs.sorted(by: { $0.path > $1.path })
+            Current.inboxURLsSubject.send(.completedFetching(reverseOrderMessageURLs))
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
@@ -353,7 +363,11 @@ extension CKContainer {
 
 extension CKContainer {
     private func buildSubscriptions() {
-        guard let recipientPredicate = CKContainer.recipientPredicate else { return }
+        guard let recipientPredicateData = UserDefaults.standard.value(forKey: Current.k.recipientPredicate) as? Data,
+            let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
+            currentUser()
+            return
+        }
         let subscription = CKQuerySubscription(recordType: .message,
                                                predicate: recipientPredicate,
                                                options: [.firesOnRecordCreation])
@@ -408,7 +422,10 @@ extension CKContainer {
 
     private func store(privateKey encryption: Curve25519.KeyAgreement.PrivateKey,
                        privateKey signing: Curve25519.Signing.PrivateKey) {
-        guard let creatorReference = CKContainer.creatorReference else { return }
+        guard let creatorReferenceData = UserDefaults.standard.value(forKey: Current.k.creatorReference) as? Data,
+            let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
+            currentUser(); return
+        }
 
         let query = CKQuery(recordType: .privateKey, predicate: NSPredicate(value: true))
         privateCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] records, error in
@@ -435,8 +452,14 @@ extension CKContainer {
 
     private func store(publicKey encryption: Curve25519.KeyAgreement.PublicKey,
                        publicKey signing: Curve25519.Signing.PublicKey) {
-        guard let creatorPredicate = CKContainer.creatorPredicate,
-            let creatorReference = CKContainer.creatorReference else { return }
+        
+        guard let creatorPredicateData = UserDefaults.standard.value(forKey: Current.k.creatorPredicate) as? Data,
+            let creatorPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorPredicateData) as? NSPredicate,
+            let creatorReferenceData = UserDefaults.standard.value(forKey: Current.k.creatorReference) as? Data,
+            let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
+                currentUser(); return
+        }
+        
 
         let query = CKQuery(recordType: .publicKey, predicate: creatorPredicate)
         publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] records, error in

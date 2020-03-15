@@ -28,10 +28,8 @@ final class LoggedInViewController: UIViewController {
         authorizeNotifications()
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            CKContainer.default().fetchUnreadMessages { result in
-                CKContainer.default().loadInbox()
-            }
             CKContainer.default().subscribeToInbox()
+            CKContainer.default().fetchUnreadMessages()
         }
     }
 

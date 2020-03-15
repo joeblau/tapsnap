@@ -11,21 +11,7 @@ import UIKit
 
 final class CameraViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
-
-    var tapNotificationCount = 0 {
-        didSet {
-            DispatchQueue.main.async {
-                self.notificationButton.setTitle("\(self.tapNotificationCount)", for: .normal)
-                switch self.tapNotificationCount {
-                case 0:
-                    self.notificationButton.isHidden = true
-                default:
-                    self.notificationButton.isHidden = false
-                }
-            }
-        }
-    }
-
+    
     var sendCancellable: Bool = false {
         didSet {
             DispatchQueue.main.async {
@@ -34,9 +20,10 @@ final class CameraViewController: UIViewController {
             }
         }
     }
-
+    
     var currentGroup: CKRecord?
-
+    private var inboxMessageURLs: [URL]?
+    
     // Photo Video
     private let session: AVCaptureSession = { AVCaptureSession() }()
     let sessionQueue = DispatchQueue(label: "session queue")
@@ -48,34 +35,34 @@ final class CameraViewController: UIViewController {
         case false: return AVCapturePhotoSettings()
         }
     }
-
+    
     // Top left
     private lazy var menuButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
-                                style: .plain,
-                                target: self,
-                                action: #selector(showMenuAction))
-        b.tintColor = .label
-        return b
+        let bbi = UIBarButtonItem(image: UIImage(systemName: "line.horizontal.3"),
+                                  style: .plain,
+                                  target: self,
+                                  action: #selector(showMenuAction))
+        bbi.tintColor = .label
+        return bbi
     }()
-
+    
     private lazy var clearButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(image: UIImage(systemName: "clear"),
-                                style: .plain,
-                                target: self,
-                                action: #selector(clearEditingAction))
-        b.tintColor = .label
-        return b
+        let bbi = UIBarButtonItem(image: UIImage(systemName: "clear"),
+                                  style: .plain,
+                                  target: self,
+                                  action: #selector(clearEditingAction))
+        bbi.tintColor = .label
+        return bbi
     }()
-
+    
     private lazy var zoomInOutPan: UIPanGestureRecognizer = {
         let r = UIPanGestureRecognizer(target: self, action: #selector(zoomCameraAction(_:)))
         r.delegate = self
         return r
     }()
-
+    
     // Top center
-
+    
     private lazy var cancelSendButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -89,7 +76,7 @@ final class CameraViewController: UIViewController {
         b.isHidden = true
         return b
     }()
-
+    
     private lazy var cancelBackground: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -97,62 +84,76 @@ final class CameraViewController: UIViewController {
         v.isHidden = true
         return v
     }()
-
+    
     // Top right
+    lazy var activityView: UIActivityIndicatorView = {
+        let v = UIActivityIndicatorView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.hidesWhenStopped = true
+        v.startAnimating()
+        return v
+    }()
+    
+    lazy var activityButtonItem: UIBarButtonItem = {
+        let bbi = UIBarButtonItem(customView: activityView)
+        
+        return bbi
+    }()
+    
     lazy var notificationButton: UIButton = {
         let b = UIButton(type: .custom)
         b.notification(diameter: 20)
         b.addTarget(self, action: #selector(showPlaybackAction), for: .touchUpInside)
-        b.isHidden = true
         return b
     }()
-
+    
+    lazy var notificationButtonItem: UIBarButtonItem = { UIBarButtonItem(customView: notificationButton) }()
+    
     private lazy var previewView: CameraPreviewView = {
         CameraPreviewView(session: session)
     }()
-
+    
     let contactPageControl = UIPageControl()
-
+    
     private lazy var contactsCollectionView: ContactsCollectionView = {
         let cv = ContactsCollectionView()
         cv.delegate = self
         return cv
     }()
-
+    
     private lazy var menuViewController: UINavigationController = {
         UINavigationController(rootViewController: MenuViewController())
     }()
-
+    
     private lazy var searchViewController: UINavigationController = {
         UINavigationController(rootViewController: SearchContactsViewController())
     }()
-
+    
     private lazy var playbackViewController: UINavigationController = {
         let nc = UINavigationController()
         nc.modalPresentationStyle = .overCurrentContext
         nc.isToolbarHidden = false
         return nc
     }()
-
+    
     // MARK: - Lifecycle
-
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         bootstrap()
     }
-
+    
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-
+        
         navigationItem.leftBarButtonItem = menuButton
         navigationItem.titleView = cancelSendButton
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: notificationButton)
-
+        
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .notDetermined:
             sessionQueue.suspend()
@@ -161,7 +162,7 @@ final class CameraViewController: UIViewController {
             })
         default: break
         }
-
+        
         toolbarItems = [
             UIBarButtonItem(title: "Edit", style: .plain, target: self, action: nil),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
@@ -169,42 +170,42 @@ final class CameraViewController: UIViewController {
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
             UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction)),
         ]
-
+        
         sessionQueue.async {
             self.session.bootstrap()
         }
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         sessionQueue.async {
             self.session.startRunning()
-
+            
             self.session.initZoom()
         }
     }
-
+    
     // MARK: - Actions
-
+    
     @objc private func showPlaybackAction() {
         Current.presentViewContollersSubject.value = .playback
     }
-
+    
     @objc private func showMenuAction() {
         Current.presentViewContollersSubject.value = .menu
         present(menuViewController, animated: true, completion: nil)
     }
-
+    
     @objc private func clearEditingAction() {
         Current.editingSubject.value = .clear
     }
-
+    
     @objc private func editContacts() {}
-
+    
     @objc private func searchContactsAction() {
         present(searchViewController, animated: true, completion: nil)
     }
-
+    
     @objc private func zoomCameraAction(_ recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .changed:
@@ -213,11 +214,11 @@ final class CameraViewController: UIViewController {
         default: break
         }
     }
-
+    
     @objc private func cancelSendAction() {
         Current.mediaActionSubject.send(.cancelMediaStart)
     }
-
+    
     func cleanUp(url: URL) {
         switch backgroundRecordingID {
         case let .some(backgroundID) where backgroundID != .invalid:
@@ -227,7 +228,7 @@ final class CameraViewController: UIViewController {
             backgroundRecordingID = .invalid
         case .none: break
         }
-
+        
         guard FileManager.default.fileExists(atPath: url.path) else { return }
         do {
             try FileManager.default.removeItem(atPath: url.path)
@@ -235,7 +236,7 @@ final class CameraViewController: UIViewController {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
     }
-
+    
     private func startCancelCountdown() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             Current.mediaActionSubject.send(.cancelMediaEnd)
@@ -260,30 +261,30 @@ extension CameraViewController: ViewBootstrappable {
         contactsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         contactsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         contactsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-
+        
         view.addSubview(previewView)
         previewView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         previewView.bottomAnchor.constraint(equalTo: contactsCollectionView.topAnchor).isActive = true
         previewView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         previewView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-
+        
         view.addSubview(cancelBackground)
         cancelBackground.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         cancelBackground.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12).isActive = true
         cancelBackground.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         cancelBackground.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-
+        
         cancelSendButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
         cancelSendButton.widthAnchor.constraint(equalToConstant: 180).isActive = true
     }
-
+    
     internal func configureStreams() {
         Current.activeCameraSubject.sink { position in
             self.sessionQueue.async {
                 self.session.setCamera(to: position)
             }
         }.store(in: &cancellables)
-
+        
         Current.presentViewContollersSubject
             .removeDuplicates()
             .sink { present in
@@ -295,7 +296,8 @@ extension CameraViewController: ViewBootstrappable {
                         self.session.enableBackgroundAudio()
                     }
                 case .playback:
-                    Current.inboxURLsSubject.value?.forEach { url in
+                    guard let inboxMessageURLs = self.inboxMessageURLs else { return }
+                    inboxMessageURLs.forEach { url in
                         self.playbackViewController.pushViewController(PlaybackViewController(messageURL: url), animated: false)
                     }
                     self.present(self.playbackViewController, animated: true) {
@@ -303,8 +305,8 @@ extension CameraViewController: ViewBootstrappable {
                     }
                 case .none, .menu, .search: break
                 }
-            }.store(in: &cancellables)
-
+        }.store(in: &cancellables)
+        
         Current.topLeftNavBarSubject.sink { leftNavBarItem in
             switch leftNavBarItem {
             case .none:
@@ -315,7 +317,7 @@ extension CameraViewController: ViewBootstrappable {
                 self.navigationItem.leftBarButtonItem = self.clearButton
             }
         }.store(in: &cancellables)
-
+        
         Current.editingSubject.sink { editState in
             switch editState {
             case .none:
@@ -324,7 +326,7 @@ extension CameraViewController: ViewBootstrappable {
                 self.zoomInOutPan.isEnabled = false
             }
         }.store(in: &cancellables)
-
+        
         Current.mediaActionSubject.sink { action in
             switch action {
             case .none:
@@ -336,7 +338,7 @@ extension CameraViewController: ViewBootstrappable {
                 if !self.photoSettings.__availablePreviewPhotoPixelFormatTypes.isEmpty {
                     self.photoSettings.previewPhotoFormat = [kCVPixelBufferPixelFormatTypeKey as String: self.photoSettings.__availablePreviewPhotoPixelFormatTypes.first!]
                 }
-
+                
                 AVCaptureSession.photoOutput.capturePhoto(with: self.photoSettings, delegate: self)
                 self.previewView.flash()
                 self.startCancelCountdown()
@@ -350,14 +352,14 @@ extension CameraViewController: ViewBootstrappable {
                 if UIDevice.current.isMultitaskingSupported {
                     self.backgroundRecordingID = UIApplication.shared.beginBackgroundTask(expirationHandler: nil)
                 }
-
+                
                 let movieFileOutputConnection = AVCaptureSession.movieFileOutput.connection(with: .video)
                 movieFileOutputConnection?.videoOrientation = .portrait
-
+                
                 if AVCaptureSession.movieFileOutput.availableVideoCodecTypes.contains(.hevc) {
                     AVCaptureSession.movieFileOutput.setOutputSettings([AVVideoCodecKey: AVVideoCodecType.hevc], for: movieFileOutputConnection!)
                 }
-
+                
                 let videoMetadata = [AVMetadataItem].movieMetadata(group: self.currentGroup?[GroupKey.name] as? String)
                 AVCaptureSession.movieFileOutput.metadata = videoMetadata
                 AVCaptureSession.movieFileOutput.startRecording(to: URL.randomOutboxSaveURL(with: .mov), recordingDelegate: self)
@@ -377,11 +379,11 @@ extension CameraViewController: ViewBootstrappable {
                 CKContainer.default().sendMessages()
             }
         }.store(in: &cancellables)
-
+        
         Current.zoomVeloictySubject.sink { zoomVelocity in
             self.session.zoom(with: Float(zoomVelocity.y))
         }.store(in: &cancellables)
-
+        
         Current.cloudKitGroupsSubject.sink { groups in
             guard let groups = groups else { return }
             DispatchQueue.main.async {
@@ -389,7 +391,7 @@ extension CameraViewController: ViewBootstrappable {
                     guard let name = record["name"] as? String else { return nil }
                     return GroupValue(name: name, record: record)
                 }
-
+                
                 var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
                 snapshot.appendSections([.groups])
                 snapshot.appendItems(items, toSection: .groups)
@@ -397,18 +399,31 @@ extension CameraViewController: ViewBootstrappable {
                 self.contactPageControl.numberOfPages = Int(ceil(Double(items.count) / 8.0))
             }
         }.store(in: &cancellables)
-
+        
         Current.cloudKitSelectedGroupSubject.sink { currentGroup in
             self.currentGroup = currentGroup
         }.store(in: &cancellables)
-
-        Current.inboxURLsSubject.sink { urls in
-            switch urls {
-            case let .some(urls): self.tapNotificationCount = urls.count
-            case .none: break
+        
+        Current.inboxURLsSubject.sink { inboxState in
+            DispatchQueue.main.async {
+                switch inboxState {
+                case .idle: break
+                case .fetching:
+                    self.navigationItem.rightBarButtonItem = self.activityButtonItem
+                    self.activityView.startAnimating()
+                case let .completedFetching(urls):
+                    switch urls {
+                    case let .some(urls) where !urls.isEmpty:
+                        self.inboxMessageURLs = urls
+                        self.navigationItem.rightBarButtonItem = self.notificationButtonItem
+                        self.notificationButton.setTitle("\(urls.count)", for: .normal)
+                    default:
+                        self.navigationItem.rightBarButtonItem = nil
+                    }
+                }
             }
         }.store(in: &cancellables)
-
+        
         Current.cleanupSubject.sink { cleanup in
             switch cleanup {
             case let .cleanUp(url): self.cleanUp(url: url)
@@ -416,7 +431,7 @@ extension CameraViewController: ViewBootstrappable {
             }
         }.store(in: &cancellables)
     }
-
+    
     func configureGestureRecoginzers() {
         previewView.addGestureRecognizer(zoomInOutPan)
     }

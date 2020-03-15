@@ -15,4 +15,8 @@ struct Constants {
     let settingAutoSave = "automatically_save_sent_taps_to_camera_roll"
     let isVisualizerHidden = "hidden_touch_visuzlier_during_gestures"
     let subscriptionCached = "subscription_cached"
+    
+    let creatorReference = "cloudkit_creator_reference"
+    let creatorPredicate = "cloudkit_creator_predicate"
+    let recipientPredicate = "cloudkit_recipient_predicate"
 }

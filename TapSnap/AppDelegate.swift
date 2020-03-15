@@ -78,17 +78,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             Current.locationManager.startUpdatingLocation()
         }
-        CKContainer.default().fetchUnreadMessages { _ in
-            CKContainer.default().loadInbox()
-        }
+        CKContainer.default().fetchUnreadMessages()
     }
 
     func application(_: UIApplication,
                      didReceiveRemoteNotification _: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        CKContainer.default().fetchUnreadMessages { result in
-            CKContainer.default().loadInbox()
-            completionHandler(result)
+        // TODO: Figure out race condition between push notifiction and asset upload
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            CKContainer.default().fetchUnreadMessages { result in
+                completionHandler(result)
+            }
         }
     }
 

@@ -25,12 +25,12 @@ final class PlaybackViewController: UIViewController {
     }()
     
     private lazy var nextButton: UIBarButtonItem = {
-        let b = UIBarButtonItem(image: UIImage(systemName: "forward.end"),
+        let bbi = UIBarButtonItem(image: UIImage(systemName: "forward.end"),
                                 style: .plain,
                                 target: self,
                                 action: #selector(nextAction))
-        b.tintColor = .label
-        return b
+        bbi.tintColor = .label
+        return bbi
     }()
     
     private lazy var saveButton: UIBarButtonItem = {
