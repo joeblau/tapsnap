@@ -2,6 +2,8 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
+import os.log
+import CloudKit
 
 final class MenuViewController: UIViewController {
     let menuSections: [SectionItem] = [
@@ -25,7 +27,7 @@ final class MenuViewController: UIViewController {
             MenuItem(systemName: "gear", titleText: "Settings"),
         ]),
     ]
-
+    
     lazy var tableView: UITableView = {
         let t = UITableView(frame: .zero, style: .insetGrouped)
         t.register(MenuCellTableViewCell.self,
@@ -41,7 +43,7 @@ final class MenuViewController: UIViewController {
         t.delegate = self
         return t
     }()
-
+    
     lazy var closeButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "xmark"),
                                 landscapeImagePhone: UIImage(systemName: "xmark"),
@@ -51,22 +53,22 @@ final class MenuViewController: UIViewController {
         b.tintColor = .white
         return b
     }()
-
+    
     // MARK: - Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Menu"
         navigationItem.leftBarButtonItem = closeButton
         configureViews()
     }
-
+    
     // MARK: - Actions
-
+    
     @objc func closeMenuAction() {
         dismiss(animated: true, completion: nil)
     }
-
+    
     @objc func updateAvatar() {
         let imagePickerViewController = UIImagePickerController()
         imagePickerViewController.delegate = self
@@ -87,9 +89,28 @@ extension MenuViewController: ViewBootstrappable {
 }
 
 extension MenuViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
-    func imagePickerController(_: UIImagePickerController,
+    func imagePickerController(_ imagePickerController: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let image = info[.originalImage] as? UIImage,
-            let _ = image.scale(to: 256.0) else { return }
+            let smallImage = image.scale(to: 256.0) else { return }
+        
+        let outputFileURL = URL.randomURL
+        do {
+            try smallImage.pngData()?.write(to: outputFileURL)
+        } catch {
+            os_log("%@", log: .avFoundation, type: .error, error.localizedDescription)
+            imagePickerController.dismiss(animated: true, completion: nil)
+            return
+        }
+        
+        CKContainer.default().updateUser(image: outputFileURL, completion: { [unowned self] saved in
+            DispatchQueue.main.async {
+                switch saved {
+                case true: self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+                case false: break
+                }
+                imagePickerController.dismiss(animated: true, completion: nil)
+            }
+        })
     }
 }

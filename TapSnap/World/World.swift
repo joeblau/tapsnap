@@ -67,7 +67,7 @@ enum CleanupAction {
     case cleanUp(URL)
 }
 
-enum InboxRequestState {
+enum InboxRequestState: Equatable {
     case idle
     case fetching
     case completedFetching([URL]?)

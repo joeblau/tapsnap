@@ -89,14 +89,13 @@ final class CameraViewController: UIViewController {
     lazy var activityView: UIActivityIndicatorView = {
         let v = UIActivityIndicatorView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.hidesWhenStopped = true
         v.startAnimating()
         return v
     }()
 
     lazy var activityButtonItem: UIBarButtonItem = {
         let bbi = UIBarButtonItem(customView: activityView)
-
+        activityView.startAnimating()
         return bbi
     }()
 
@@ -404,13 +403,14 @@ extension CameraViewController: ViewBootstrappable {
             self.currentGroup = currentGroup
         }.store(in: &cancellables)
 
-        Current.inboxURLsSubject.sink { inboxState in
+        Current.inboxURLsSubject
+            .removeDuplicates()
+            .sink { inboxState in
             DispatchQueue.main.async {
                 switch inboxState {
                 case .idle: break
                 case .fetching:
                     self.navigationItem.rightBarButtonItem = self.activityButtonItem
-                    self.activityView.startAnimating()
                 case let .completedFetching(urls):
                     switch urls {
                     case let .some(urls) where !urls.isEmpty:

@@ -33,6 +33,47 @@ extension CKContainer {
             self.buildUser(with: recordID)
         }
     }
+    
+    func updateUser(image url: URL, completion: @escaping (Bool) -> Void) {
+        guard let data = UserDefaults.standard.data(forKey: Current.k.userAccount),
+            let userRecord = try? CKRecord.unarchive(data: data) else {
+                completion(false); return
+        }
+        
+        self.publicCloudDatabase.fetch(withRecordID: userRecord.recordID) { record, error in
+            guard self.no(error: error), let userRecord = record else { completion(false); return }
+
+            userRecord[UserAliasKey.avatar] = CKAsset(fileURL: url)
+            
+            self.publicCloudDatabase.save(userRecord) { record, error in
+                guard self.no(error: error),
+                    let record = record,
+                    let data = try? CKRecord.archive(record: record) else { completion(false); return }
+
+                UserDefaults.standard.set(data, forKey: Current.k.userAccount)
+                Current.cloudKitUserSubject.send(record)
+                
+                completion(true)
+            }
+            
+        }
+    }
+    
+    func fetchUser(with recordID: CKRecord.ID, completion: @escaping (_ username: String, _ avatar: UIImage?) -> Void) {
+        publicCloudDatabase.fetch(withRecordID: recordID) { record, error in
+            guard self.no(error: error), let userRecord = record else { return }
+
+            let username = userRecord[UserAliasKey.name] as? String ?? "-"
+            var image: UIImage?
+            if let avatarAsset = userRecord[UserAliasKey.avatar] as? CKAsset,
+                let avatarURL = avatarAsset.fileURL,
+                let imageData = try? Data(contentsOf: avatarURL) {
+                
+                image = UIImage(data: imageData)
+            }
+            completion(username, image)
+        }
+    }
 
     func bootstrapKeys(reset: Bool = false) {
         do {
@@ -270,7 +311,7 @@ extension CKContainer {
 
     private func createUser(from identity: CKUserIdentity) {
         guard let components = identity.nameComponents,
-            let creatorReferenceData = UserDefaults.standard.value(forKey: Current.k.creatorReference) as? Data,
+            let creatorReferenceData = UserDefaults.standard.data(forKey: Current.k.creatorReference),
             let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
             fatalError("No identity name components")
         }
@@ -317,7 +358,7 @@ extension CKContainer {
 
                     let record = CKRecord(recordType: .message)
 
-                    if let data = UserDefaults.standard.value(forKey: Current.k.userAccount) as? Data,
+                    if let data = UserDefaults.standard.data(forKey: Current.k.userAccount),
                         let userRecord = try? CKRecord.unarchive(data: data),
                         let username = userRecord[UserAliasKey.name] as? String {
                         switch mediaCapture {
@@ -379,7 +420,7 @@ extension CKContainer {
 
 extension CKContainer {
     private func buildSubscriptions() {
-        guard let recipientPredicateData = UserDefaults.standard.value(forKey: Current.k.recipientPredicate) as? Data,
+        guard let recipientPredicateData = UserDefaults.standard.data(forKey: Current.k.recipientPredicate),
             let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
             currentUser()
             return
@@ -456,7 +497,7 @@ extension CKContainer {
 
     private func store(privateKey encryption: Curve25519.KeyAgreement.PrivateKey,
                        privateKey signing: Curve25519.Signing.PrivateKey) {
-        guard let creatorReferenceData = UserDefaults.standard.value(forKey: Current.k.creatorReference) as? Data,
+        guard let creatorReferenceData = UserDefaults.standard.data(forKey: Current.k.creatorReference),
             let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
             currentUser(); return
         }
@@ -486,9 +527,9 @@ extension CKContainer {
 
     private func store(publicKey encryption: Curve25519.KeyAgreement.PublicKey,
                        publicKey signing: Curve25519.Signing.PublicKey) {
-        guard let creatorPredicateData = UserDefaults.standard.value(forKey: Current.k.creatorPredicate) as? Data,
+        guard let creatorPredicateData = UserDefaults.standard.data(forKey: Current.k.creatorPredicate),
             let creatorPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorPredicateData) as? NSPredicate,
-            let creatorReferenceData = UserDefaults.standard.value(forKey: Current.k.creatorReference) as? Data,
+            let creatorReferenceData = UserDefaults.standard.data(forKey: Current.k.creatorReference),
             let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
             currentUser(); return
         }

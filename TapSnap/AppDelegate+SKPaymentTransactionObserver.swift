@@ -22,7 +22,7 @@ extension AppDelegate: SKPaymentTransactionObserver {
 
     private func validatePurchase(for _: SKPaymentTransaction) {
         guard let url = Bundle.main.appStoreReceiptURL,
-            let receipt = try? Data(contentsOf: url) else {
+            let _ = try? Data(contentsOf: url) else {
             os_log("%@", log: .storeKit, type: .error, "No app store receipt")
             return
         }
