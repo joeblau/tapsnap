@@ -32,15 +32,8 @@ class MyGroupsViewController: UIViewController {
     // MARK: - Actions
 
     @objc func newGroupAction() {
-        let newGroupAlert = UIAlertController(title: "New Group Name", message: nil, preferredStyle: .alert)
-        newGroupAlert.addTextField()
-        let submitAction = UIAlertAction(title: "Craete Group", style: .default) { [unowned newGroupAlert] _ in
-            guard let groupName = newGroupAlert.textFields?.first?.text else { return }
-            CKContainer.default().createNewGroup(with: groupName, from: self)
-        }
-
-        newGroupAlert.addAction(submitAction)
-        present(newGroupAlert, animated: true)
+        let newGroup = NewGroupViewController(title: "New Group", message: "Enter a name for your new group", preferredStyle: .alert)
+        present(newGroup, animated: true)
     }
 
     @objc func refreshGroupsAction() {
@@ -69,13 +62,12 @@ extension MyGroupsViewController: ViewBootstrappable {
                 self.activityIndicatorView.stopAnimating()
                 self.myGroupsCollectionView.refreshControl?.endRefreshing()
 
-                let items = groups.compactMap { record -> GroupValue? in
-                    guard let name = record["name"] as? String else { return nil }
-                    return GroupValue(name: name, record: record)
+                let items = groups.compactMap { record -> GroupValue? in                    
+                    return GroupValue(record: record)
                 }
 
                 switch items.isEmpty {
-                case true: print("no groups")
+                case true: break
                 case false:
                     var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
                     snapshot.appendSections([.groups])

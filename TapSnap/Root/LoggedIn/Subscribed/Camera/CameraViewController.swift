@@ -383,12 +383,11 @@ extension CameraViewController: ViewBootstrappable {
             self.session.zoom(with: Float(zoomVelocity.y))
         }.store(in: &cancellables)
 
-        Current.cloudKitGroupsSubject.sink { groups in
+        Current.cloudKitGroupsSubject.sink { [unowned self] groups in
             guard let groups = groups else { return }
             DispatchQueue.main.async {
                 let items = groups.compactMap { record -> GroupValue? in
-                    guard let name = record["name"] as? String else { return nil }
-                    return GroupValue(name: name, record: record)
+                    return GroupValue(record: record)
                 }
 
                 var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()

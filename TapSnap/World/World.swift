@@ -80,7 +80,8 @@ struct World {
     // Sensors
     var locationManager: CLLocationManager = {
         let m = CLLocationManager()
-        m.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        m.pausesLocationUpdatesAutomatically = true
+        m.desiredAccuracy = kCLLocationAccuracyBest
         return m
     }()
 
@@ -95,20 +96,6 @@ struct World {
 
         return URLSession(configuration: configuraiton)
     }()
-
-//    let mapView: MKMapView = {
-//        let mv = MKMapView()
-//        mv.translatesAutoresizingMaskIntoConstraints = false
-//        mv.isZoomEnabled = false
-//        mv.isScrollEnabled = false
-//        mv.isRotateEnabled = false
-//        mv.isPitchEnabled = false
-//        mv.showsCompass = false
-//        mv.showsScale = false
-//        mv.showsBuildings = true
-//        mv.showsUserLocation = true
-//        return mv
-//    }()
 
     // Constants
     var formatter = Formatter()

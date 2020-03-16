@@ -45,7 +45,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         do { // Location
             if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-                Current.locationManager.startUpdatingLocation()
+//                Current.locationManager.startUpdatingLocation()
+                Current.locationManager.startMonitoringSignificantLocationChanges()
             }
         }
 
@@ -75,7 +76,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_: UIApplication) {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            Current.locationManager.startUpdatingLocation()
+//            Current.locationManager.startUpdatingLocation()
+            Current.locationManager.startMonitoringSignificantLocationChanges()
         }
         CKContainer.default().fetchUnreadMessages()
     }

@@ -10,8 +10,9 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
     private lazy var contactImageView: UIImageView = {
         let v = UIImageView()
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentMode = .scaleAspectFill
         v.tintColor = .systemOrange
-        v.contentMode = .center
+        v.clipsToBounds = true
         return v
     }()
 
@@ -44,9 +45,13 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
     func configure(record: CKRecord) {
         self.record = record
 
-        switch record[GroupKey.avatar] as? Data {
-        case let .some(data): contactImageView.image = UIImage(data: data)
-        case .none: contactImageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
+        if let avatarAsset = record[GroupKey.avatar] as? CKAsset,
+            let avatarURL = avatarAsset.fileURL,
+            let avatarData = try? Data(contentsOf: avatarURL),
+            let image = UIImage(data: avatarData) {
+            contactImageView.image = image
+        } else {
+            contactImageView.image = UIImage(systemName: "exclamationmark.triangle.fill")
         }
 
         if let title = record[GroupKey.name] as? String {
