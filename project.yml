@@ -1,18 +1,11 @@
 
 name: Tapsnap
 settings:
-  DEVELOPMENT_TEAM: K78G42H4U2
+  DEVELOPMENT_TEAM: 5WSA243UP9
 options:
   createIntermediateGroups: true
-  bundleIdPrefix: app.beta.tapsnap
+  bundleIdPrefix: app.tapsnap
   transitivelyLinkDependencies: true
-packages:
-  Publish:
-    url: https://github.com/johnsundell/publish
-    from: 0.1.0
-  SensorVisualizerKit:
-    url: https://github.com/joeblau/sensor-visualizer-kit
-    from: 0.2.0
 targets:
   Tapsnap:
     type: application
@@ -35,10 +28,3 @@ targets:
       - TapsnapTests
     dependencies:
       - target: Tapsnap
-  Web:
-    type: tool
-    platform: macOS
-    sources:
-      - Website/Sources/
-    dependencies:
-      - package: Publish
