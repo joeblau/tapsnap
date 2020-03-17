@@ -15,6 +15,7 @@ extension CKContainer {
     }
     
     func currentUser() {
+        guard UserDefaults.standard.data(forKey: Current.k.userAccount) == nil else { return }
         fetchUserRecordID { [unowned self] recordID, error in
             guard self.no(error: error), let recordID = recordID else { return }
             
@@ -639,5 +640,11 @@ extension CKContainer {
         case .none:
             return true
         }
+    }
+}
+
+extension CKContainer {
+    func bootstrap() {
+        
     }
 }

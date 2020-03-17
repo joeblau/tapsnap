@@ -123,12 +123,12 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <toolbarItems>
-                        <barButtonItem title="Edit" id="h0x-Lh-g0k"/>
+                        <barButtonItem style="plain" systemItem="edit" id="h0x-Lh-g0k"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="hob-Ch-7Rs"/>
                         <barButtonItem image="magnifyingglass" catalog="system" id="UPL-bP-YP1"/>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="Ld3-pp-pFm">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="line.horizontal.3" catalog="system" style="plain" id="ILa-6f-ZXG"/>
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="line.horizontal.3" catalog="system" id="ILa-6f-ZXG"/>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" translucent="NO" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics" barStyle="black" translucent="NO"/>

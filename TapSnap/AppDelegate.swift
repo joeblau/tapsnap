@@ -22,6 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         bootstrap()
 
+        do { // Bootstrap user
+            if let data = UserDefaults.standard.data(forKey: Current.k.userAccount),
+                let record = try? CKRecord.unarchive(data: data) {
+                Current.cloudKitUserSubject.send(record)
+            }
+        }
         do { // StoreKit
             SKPaymentQueue.default().add(self)
         }
@@ -40,12 +46,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         do { // Delegates
             Current.locationManager.delegate = self
-            UNUserNotificationCenter.current().delegate = self
         }
 
         do { // Location
             if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-//                Current.locationManager.startUpdatingLocation()
                 Current.locationManager.startMonitoringSignificantLocationChanges()
             }
         }
@@ -76,7 +80,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_: UIApplication) {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-//            Current.locationManager.startUpdatingLocation()
             Current.locationManager.startMonitoringSignificantLocationChanges()
         }
         CKContainer.default().fetchUnreadMessages()

@@ -7,6 +7,15 @@ import os.log
 import UIKit
 
 final class LoggedInViewController: UIViewController {
+    
+    lazy var tag: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.textColor = .tertiarySystemBackground
+        l.text = self.title
+        return l
+    }()
+    
     private lazy var camera: UINavigationController = {
         let nc = UINavigationController(rootViewController: CameraViewController())
         nc.modalPresentationStyle = .fullScreen
@@ -49,5 +58,13 @@ final class LoggedInViewController: UIViewController {
             case .none: break
             }
         }
+    }
+}
+
+extension LoggedInViewController: ViewBootstrappable {
+    func configureViews() {
+        view.addSubview(tag)
+        tag.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        tag.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }

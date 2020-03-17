@@ -2,45 +2,35 @@
 // Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
+import CloudKit
 
 class LoggedOutViewController: UIViewController {
-    lazy var stackView: UIStackView = {
-        let v = UIStackView(arrangedSubviews: [logoView, errorLabel])
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.axis = .vertical
-        return v
-    }()
 
-    lazy var logoView: UIImageView = {
-        let v = UIImageView(image: UIImage(systemName: "video.fill"))
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.contentMode = .scaleAspectFit
-        v.tintColor = .label
-        return v
+    lazy var loginButton: UIButton = {
+        let b = UIButton(type: .system)
+        b.translatesAutoresizingMaskIntoConstraints = false
+        b.setTitle("Login", for: .normal)
+        b.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        return b
     }()
-
-    lazy var errorLabel: UILabel = {
-        let l = UILabel()
-        l.translatesAutoresizingMaskIntoConstraints = false
-        return l
-    }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
+        title = "Logged Out"
+        UserDefaults.standard.removeObject(forKey: Current.k.userAccount)
         bootstrap()
     }
 
-    @objc func handleAuthorizationAppleIDButtonPress() {}
+    @objc func handleLogin() {
+        CKContainer.default().currentUser()
+    }
 }
 
 extension LoggedOutViewController: ViewBootstrappable {
     func configureViews() {
-        logoView.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        logoView.heightAnchor.constraint(equalToConstant: 32).isActive = true
-
-        view.addSubview(stackView)
-        stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        stackView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        view.addSubview(loginButton)
+        loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loginButton.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }

@@ -69,6 +69,7 @@
 		E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */; };
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
+		ED28B8412420987700B9C7A3 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED28B8402420987700B9C7A3 /* CloudKit.framework */; };
 		ED371268241C8C63001B972D /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED371267241C8C63001B972D /* CurrentSongView.swift */; };
 		ED5CA36A241D6A66009A03A4 /* SensorVisualizerWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA369241D6A66009A03A4 /* SensorVisualizerWindow.swift */; };
 		ED5CA36C241D6BA5009A03A4 /* SensorVisualizerWindow+Touch.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA36B241D6BA5009A03A4 /* SensorVisualizerWindow+Touch.swift */; };
@@ -101,7 +102,6 @@
 		EDE8F0C9240B278E00DFA828 /* MyGroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDE8F0C8240B278E00DFA828 /* MyGroupsDiffableDataSource.swift */; };
 		F0E540C952F07DBB0BAC2DD0 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6C48A082BDC2B70BD74753 /* UIImage+Extensions.swift */; };
 		F1049AD0FAD3C79A3CE179D7 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */; };
-		F2E7E66C5731EE7C43417559 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD12357AD9F75CC08F4F230 /* AppDelegate+UNUserNotificationCenterDelegate.swift */; };
 		F61C92CF1B3263C4F0D72D17 /* SearchContactsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC248A20FDB5559FA99563E /* SearchContactsSection.swift */; };
 		FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */; };
 /* End PBXBuildFile section */
@@ -166,11 +166,11 @@
 		C4C8B897FDADE8980A430106 /* MusicPlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlaybackView.swift; sourceTree = "<group>"; };
 		C938C741102596FD14058E88 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		D092867E340FFAEA0055EC8C /* Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
-		DCD12357AD9F75CC08F4F230 /* AppDelegate+UNUserNotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+UNUserNotificationCenterDelegate.swift"; sourceTree = "<group>"; };
 		E67DD7438DFB355B5132D5E3 /* AVAssetTrack+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVAssetTrack+Extensions.swift"; sourceTree = "<group>"; };
 		E75AF4F2AFFAC3179572271C /* SearchContactsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsTableView.swift; sourceTree = "<group>"; };
 		E7F4C07C5C51030334DDE02E /* CloudKitKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitKeys.swift; sourceTree = "<group>"; };
 		E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
+		ED28B8402420987700B9C7A3 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		ED371267241C8C63001B972D /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
 		ED5CA369241D6A66009A03A4 /* SensorVisualizerWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorVisualizerWindow.swift; sourceTree = "<group>"; };
 		ED5CA36B241D6BA5009A03A4 /* SensorVisualizerWindow+Touch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SensorVisualizerWindow+Touch.swift"; sourceTree = "<group>"; };
@@ -214,6 +214,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED28B8412420987700B9C7A3 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,7 +290,6 @@
 				1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */,
 				EDAAAB6524140FB1002326D9 /* AppDelegate+SKPaymentTransactionObserver.swift */,
 				A3190FA1230DC53C00386AE7 /* AppDelegate+CLLocationManagerDelegate.swift */,
-				DCD12357AD9F75CC08F4F230 /* AppDelegate+UNUserNotificationCenterDelegate.swift */,
 				4D03047C2E3CD982E5D1E38E /* Assets.xcassets */,
 				880AA06728253910B5D1F81A /* Info.plist */,
 				CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */,
@@ -356,6 +356,7 @@
 			children = (
 				5A6F49659D49014364C59390 /* Tapsnap */,
 				832B0EE083BC0F4BCBBF460A /* Products */,
+				ED28B83F2420987700B9C7A3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -483,6 +484,14 @@
 				6217B4B7FA2175C2D4D28CFF /* Views */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		ED28B83F2420987700B9C7A3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ED28B8402420987700B9C7A3 /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		ED5CA368241D6A58009A03A4 /* SensorVisuzlier */ = {
@@ -656,7 +665,6 @@
 				579FC49A9D5FE9ABF57CA74B /* AppDelegate+CLLocationManagerDelegate.swift in Sources */,
 				EDE8F0C7240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift in Sources */,
 				EDAAAB5D240F84D4002326D9 /* UINavigationBar+Extensions.swift in Sources */,
-				F2E7E66C5731EE7C43417559 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */,
 				EDAAAB6A2414175B002326D9 /* AppDelegate+SKRequestDelegate.swift in Sources */,
 				5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */,
 				ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */,
@@ -772,7 +780,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Tapsnap;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.tap;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -900,7 +908,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Tapsnap;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.tap;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

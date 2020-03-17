@@ -80,12 +80,8 @@ extension MyGroupsViewController: UIImagePickerControllerDelegate & UINavigation
             return
         }
         
-        CKContainer.default().updateGroup(recordID: selectedGroup.recordID, image: outputFileURL) { [unowned self] saved in
+        CKContainer.default().updateGroup(recordID: selectedGroup.recordID, image: outputFileURL) { saved in
             DispatchQueue.main.async {
-                switch saved {
-                case true: break
-                case false: break
-                }
                 imagePickerController.dismiss(animated: true, completion: nil)
             }
         }

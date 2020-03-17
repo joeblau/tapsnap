@@ -9,14 +9,27 @@ import UIKit
 class RootViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
 
+    lazy var tag: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.textColor = .tertiarySystemBackground
+        l.text = self.title
+        return l
+    }()
+    
     // MARK: - Lifecycle
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        bootstrap()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        title = "Root"
+        
         switch UserDefaults.standard.data(forKey: Current.k.userAccount) {
-        case .some:
-            CKContainer.default().currentUser()
-            login()
+        case .some: login()
         case .none:
             CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
                 switch error {
@@ -72,7 +85,7 @@ class RootViewController: UIViewController {
     }
 
     private func showLogout() {
-        let loggedOut = LoggedOutViewController()
+        let loggedOut = UINavigationController(rootViewController: LoggedOutViewController())
         loggedOut.modalPresentationStyle = .fullScreen
         present(loggedOut, animated: true, completion: nil)
     }
@@ -81,6 +94,12 @@ class RootViewController: UIViewController {
 // MARK: - ViewBootstrappable
 
 extension RootViewController: ViewBootstrappable {
+    func configureViews() {
+        view.addSubview(tag)
+        tag.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        tag.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+    }
+    
     func configureStreams() {
         Current.cloudKitUserSubject.sink { record in
             switch record {
