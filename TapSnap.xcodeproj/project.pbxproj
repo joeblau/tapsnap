@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -45,7 +45,6 @@
 		8DCD4EBC5F1E0F9776A5A374 /* MapViewOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2F76C684C320050C50C7BB2 /* MapViewOverlay.swift */; };
 		916F904C56D25570A3DA12B5 /* PlaybackViewController+MKMapViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5321E8A88101AC69230EB4AF /* PlaybackViewController+MKMapViewDelegate.swift */; };
 		93706DF7B6ABC7130ADC4B4F /* CameraGroupsDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33DD3CC49A61C4604E5E86B3 /* CameraGroupsDiffableDataSource.swift */; };
-		9459D858A99F4EE793F37E92 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A03D34D5EFD9078502D2B3D /* main.swift */; };
 		9D4E662859FBDF5BEC5704E2 /* CKRecord+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB7036C718054EB3309DB1FD /* CKRecord+Extensions.swift */; };
 		9E45F15C27283EA75A95FDA8 /* World.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCE2621E3412630A639A0E9 /* World.swift */; };
 		A058166BFF713A68E73E4851 /* SearchContactsValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21160D880151A4793003A226 /* SearchContactsValue.swift */; };
@@ -55,7 +54,6 @@
 		AF47C80A85CD3460CD91BB26 /* AVAssetTrack+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67DD7438DFB355B5132D5E3 /* AVAssetTrack+Extensions.swift */; };
 		AFA4B5B9C3DE95B8CCEE172D /* LoggedInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6DAA497C51E06D884C0B2C /* LoggedInViewController.swift */; };
 		B01731BD3DB6387F41FFBC60 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C938C741102596FD14058E88 /* UILabel+Extension.swift */; };
-		B1056B558F641BB2E6E27970 /* DoloTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE7EBA8689CADC6D750F9940 /* DoloTests.swift */; };
 		B2B31D4CC31457910B010787 /* SavedTapsViewController+UISearchControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3391EC80872D369C9F1D55CF /* SavedTapsViewController+UISearchControllerDelegate.swift */; };
 		B43FA60F5F10D71DF32E9760 /* ContactCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB00B76FFC4807D3E14E941D /* ContactCollectionViewCell.swift */; };
 		BB2C52A7BAC8857534C19704 /* GroupValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EC1518A0F3A3A662B0C16C /* GroupValue.swift */; };
@@ -106,25 +104,14 @@
 		F2E7E66C5731EE7C43417559 /* AppDelegate+UNUserNotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCD12357AD9F75CC08F4F230 /* AppDelegate+UNUserNotificationCenterDelegate.swift */; };
 		F61C92CF1B3263C4F0D72D17 /* SearchContactsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC248A20FDB5559FA99563E /* SearchContactsSection.swift */; };
 		FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324EF45CD0C3DCDA08174727 /* RecordProgressView.swift */; };
-		FF320E97C50A9B334BA51547 /* Publish in Frameworks */ = {isa = PBXBuildFile; productRef = 1242DD598088F38154B6B61B /* Publish */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		1398CE87B1D8253804A88032 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D0BD78D46161BCEF6F917A8C /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 9495FDBD704DC879B6B218A9;
-			remoteInfo = Tapsnap;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0180F9CF40B86DB40C15BFBC /* SearchContactsViewController+UISearchControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchControllerDelegate.swift"; sourceTree = "<group>"; };
 		0481FEC9E55AB29A26B9238B /* LoggedOutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedOutViewController.swift; sourceTree = "<group>"; };
 		0DF3EFD1681C289327AEDEA5 /* AvatarNameTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarNameTableViewCell.swift; sourceTree = "<group>"; };
 		136E453746FC1A56F9A261CA /* TextOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextOverlayView.swift; sourceTree = "<group>"; };
-		1C91A7E84958BFD9517292B6 /* Tapsnap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tapsnap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C91A7E84958BFD9517292B6 /* Tapsnap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tapsnap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E519411855163D974866C78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Combine.swift"; sourceTree = "<group>"; };
@@ -140,7 +127,6 @@
 		3391EC80872D369C9F1D55CF /* SavedTapsViewController+UISearchControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchControllerDelegate.swift"; sourceTree = "<group>"; };
 		33DD3CC49A61C4604E5E86B3 /* CameraGroupsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraGroupsDiffableDataSource.swift; sourceTree = "<group>"; };
 		363154E07C7BBF93B754F492 /* PlaybackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackViewController.swift; sourceTree = "<group>"; };
-		3A03D34D5EFD9078502D2B3D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		3C53A6281FFC03B8AA5A49A7 /* PlayerLooper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLooper.swift; sourceTree = "<group>"; };
 		407456196370DF88EC8AC28D /* SavedTapsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedTapsViewController.swift; sourceTree = "<group>"; };
 		436F92BE0C3A45B52CA98080 /* SyncTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTableViewCell.swift; sourceTree = "<group>"; };
@@ -161,7 +147,6 @@
 		75B33AE9F232CA872F98978A /* DrawingToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingToolsView.swift; sourceTree = "<group>"; };
 		77AE8EF6ACEF533ECD8110F8 /* SearchContactsViewControllerDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsViewControllerDiffableDataSource.swift; sourceTree = "<group>"; };
 		7804AD1BEDDF879B464AEA26 /* SavedTapsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTapsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
-		780A8DC04979D988BFBE6D14 /* Web */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = text; path = Web; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOverlayView.swift; sourceTree = "<group>"; };
 		880AA06728253910B5D1F81A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		89EC1518A0F3A3A662B0C16C /* GroupValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupValue.swift; sourceTree = "<group>"; };
@@ -218,13 +203,10 @@
 		EDE8F0C8240B278E00DFA828 /* MyGroupsDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsDiffableDataSource.swift; sourceTree = "<group>"; };
 		EF2E74C60D5EADC9E648DD25 /* SearchContactsViewController+UISearchResultsUpdating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchResultsUpdating.swift"; sourceTree = "<group>"; };
 		F2A7A851871D38A06F417BE0 /* SearchContactsViewController+UISearchBarDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchContactsViewController+UISearchBarDelegate.swift"; sourceTree = "<group>"; };
-		F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = TapsnapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46D5270D9E16B4F9812EF95 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		F7D5A06F6B5145B89F4FE58B /* EXIFData+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EXIFData+Extensions.swift"; sourceTree = "<group>"; };
 		F9EEDD1D28EB6874C497953C /* IndeterminateProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndeterminateProgressView.swift; sourceTree = "<group>"; };
-		F9F5D6BFE34CF3CA503D8669 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FB00B76FFC4807D3E14E941D /* ContactCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCollectionViewCell.swift; sourceTree = "<group>"; };
-		FE7EBA8689CADC6D750F9940 /* DoloTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoloTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,14 +214,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A7680B0A566555AB996C8BB6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FF320E97C50A9B334BA51547 /* Publish in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -381,8 +355,6 @@
 			isa = PBXGroup;
 			children = (
 				5A6F49659D49014364C59390 /* Tapsnap */,
-				9E56A6D23262E00CCE7B79AF /* TapsnapTests */,
-				E1B2AE3E0FB821DDCE822F59 /* Website */,
 				832B0EE083BC0F4BCBBF460A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -460,27 +432,8 @@
 			isa = PBXGroup;
 			children = (
 				1C91A7E84958BFD9517292B6 /* Tapsnap.app */,
-				F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */,
-				780A8DC04979D988BFBE6D14 /* Web */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		9AE5B963D6795C0FE8D3CEAC /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				3A03D34D5EFD9078502D2B3D /* main.swift */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		9E56A6D23262E00CCE7B79AF /* TapsnapTests */ = {
-			isa = PBXGroup;
-			children = (
-				FE7EBA8689CADC6D750F9940 /* DoloTests.swift */,
-				F9F5D6BFE34CF3CA503D8669 /* Info.plist */,
-			);
-			path = TapsnapTests;
 			sourceTree = "<group>";
 		};
 		AC8E376C67070B908DA41A49 /* Saved */ = {
@@ -500,14 +453,6 @@
 				7052B4CE08D672F73ECB0E2C /* OnboardingViewController.swift */,
 			);
 			path = Onboarding;
-			sourceTree = "<group>";
-		};
-		E1B2AE3E0FB821DDCE822F59 /* Website */ = {
-			isa = PBXGroup;
-			children = (
-				9AE5B963D6795C0FE8D3CEAC /* Sources */,
-			);
-			path = Website;
 			sourceTree = "<group>";
 		};
 		E3CED9C998F7E29BD74DE07B /* SearchContacts */ = {
@@ -659,41 +604,6 @@
 			productReference = 1C91A7E84958BFD9517292B6 /* Tapsnap.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D714C02D509E7AC733447861 /* TapsnapTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5642933A4E30B98336B68CDF /* Build configuration list for PBXNativeTarget "TapsnapTests" */;
-			buildPhases = (
-				E9A9408A342C0376C79C6099 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				89AA69F8B28D5A62A965A34F /* PBXTargetDependency */,
-			);
-			name = TapsnapTests;
-			productName = TapsnapTests;
-			productReference = F4409B077345D1B9B02C6D32 /* TapsnapTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		F689F375F906563163F97FE2 /* Web */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1750E1695EB0B17EA31581B9 /* Build configuration list for PBXNativeTarget "Web" */;
-			buildPhases = (
-				D2ACC401F85B895B0733B2AD /* Sources */,
-				A7680B0A566555AB996C8BB6 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = Web;
-			packageProductDependencies = (
-				1242DD598088F38154B6B61B /* Publish */,
-			);
-			productName = Web;
-			productReference = 780A8DC04979D988BFBE6D14 /* Web */;
-			productType = "com.apple.product-type.tool";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -701,20 +611,8 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 1020;
-				TargetAttributes = {
-					9495FDBD704DC879B6B218A9 = {
-						DevelopmentTeam = K78G42H4U2;
-					};
-					D714C02D509E7AC733447861 = {
-						DevelopmentTeam = K78G42H4U2;
-						TestTargetID = 9495FDBD704DC879B6B218A9;
-					};
-					F689F375F906563163F97FE2 = {
-						DevelopmentTeam = K78G42H4U2;
-					};
-				};
 			};
-			buildConfigurationList = 3F19EA590F165979C250B682 /* Build configuration list for PBXProject "Tapsnap" */;
+			buildConfigurationList = 3F19EA590F165979C250B682 /* Build configuration list for PBXProject "TapSnap" */;
 			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -724,14 +622,11 @@
 			);
 			mainGroup = 6803BFD8A97340E540815774;
 			packageReferences = (
-				D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */,
 			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				9495FDBD704DC879B6B218A9 /* Tapsnap */,
-				D714C02D509E7AC733447861 /* TapsnapTests */,
-				F689F375F906563163F97FE2 /* Web */,
 			);
 		};
 /* End PBXProject section */
@@ -851,31 +746,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D2ACC401F85B895B0733B2AD /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9459D858A99F4EE793F37E92 /* main.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E9A9408A342C0376C79C6099 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B1056B558F641BB2E6E27970 /* DoloTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		89AA69F8B28D5A62A965A34F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 9495FDBD704DC879B6B218A9 /* Tapsnap */;
-			targetProxy = 1398CE87B1D8253804A88032 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */ = {
@@ -889,31 +760,19 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		33CAEE5B1542828C20BC16B0 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.Web;
-				SDKROOT = macosx;
-			};
-			name = Debug;
-		};
 		54672B290182A5E889F0158F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Tapsnap/Tapsnap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5WSA243UP9;
 				INFOPLIST_FILE = Tapsnap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.Tapsnap;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Tapsnap;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1029,85 +888,28 @@
 			};
 			name = Debug;
 		};
-		A6B2292F649C91CD53A66F15 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = TapsnapTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.TapsnapTests;
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tapsnap.app/Tapsnap";
-				TEST_TARGET_NAME = Tapsnap;
-			};
-			name = Debug;
-		};
-		B83339915B269DF42CB8A860 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = TapsnapTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.TapsnapTests;
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Tapsnap.app/Tapsnap";
-				TEST_TARGET_NAME = Tapsnap;
-			};
-			name = Release;
-		};
 		B9C2655109C111E376DE9EA2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Tapsnap/Tapsnap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 5WSA243UP9;
 				INFOPLIST_FILE = Tapsnap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.Tapsnap;
+				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.Tapsnap;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
-		D62C7AAE3EDBB81EC48D4AE0 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COMBINE_HIDPI_IMAGES = YES;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = app.beta.tapsnap.Web;
-				SDKROOT = macosx;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1750E1695EB0B17EA31581B9 /* Build configuration list for PBXNativeTarget "Web" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				33CAEE5B1542828C20BC16B0 /* Debug */,
-				D62C7AAE3EDBB81EC48D4AE0 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
-		};
-		3F19EA590F165979C250B682 /* Build configuration list for PBXProject "Tapsnap" */ = {
+		3F19EA590F165979C250B682 /* Build configuration list for PBXProject "TapSnap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				99B9357A71841A1E17F25388 /* Debug */,
@@ -1115,15 +917,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
-		};
-		5642933A4E30B98336B68CDF /* Build configuration list for PBXNativeTarget "TapsnapTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A6B2292F649C91CD53A66F15 /* Debug */,
-				B83339915B269DF42CB8A860 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = "";
 		};
 		D6DC16EE5754885C8E9AA0BA /* Build configuration list for PBXNativeTarget "Tapsnap" */ = {
 			isa = XCConfigurationList;
@@ -1135,25 +928,6 @@
 			defaultConfigurationName = "";
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/johnsundell/publish";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		1242DD598088F38154B6B61B /* Publish */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D404D97784776A2EE72F98E9 /* XCRemoteSwiftPackageReference "publish" */;
-			productName = Publish;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D0BD78D46161BCEF6F917A8C /* Project object */;
 }
