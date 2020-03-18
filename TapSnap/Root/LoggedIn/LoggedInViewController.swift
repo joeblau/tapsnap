@@ -33,8 +33,6 @@ final class LoggedInViewController: UIViewController {
         super.viewDidLoad()
         CKContainer.default().bootstrapKeys()
         CKContainer.default().fetchAllGroups()
-        authorizeLocation()
-        authorizeNotifications()
         CKContainer.default().subscribeToInbox()
         CKContainer.default().fetchUnreadMessages()
     }
@@ -45,20 +43,6 @@ final class LoggedInViewController: UIViewController {
 //        present(subscription, animated: false) {}
     }
 
-    private func authorizeLocation() {
-        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
-            Current.locationManager.requestLocation()
-        }
-    }
-
-    private func authorizeNotifications() {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { _, error in
-            switch error {
-            case let .some(error): os_log("%@", log: .userNotification, type: .error, error.localizedDescription); return
-            case .none: break
-            }
-        }
-    }
 }
 
 extension LoggedInViewController: ViewBootstrappable {

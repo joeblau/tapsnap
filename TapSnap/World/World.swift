@@ -124,6 +124,7 @@ struct World {
 
     var hideTouchVisuzlierSubject = CurrentValueSubject<Bool, Never>(true)
 
+    var currentLocationAuthorizationSubject = CurrentValueSubject<CLAuthorizationStatus, Never>(.notDetermined)
     // CloudKit
     var cloudKitUserSubject = CurrentValueSubject<CKRecord?, Never>(nil)
     var cloudKitGroupsSubject = CurrentValueSubject<Set<CKRecord>?, Never>(nil)

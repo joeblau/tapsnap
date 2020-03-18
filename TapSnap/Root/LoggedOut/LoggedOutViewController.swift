@@ -3,6 +3,7 @@
 
 import UIKit
 import CloudKit
+import os.log
 
 class LoggedOutViewController: UIViewController {
 
@@ -18,7 +19,12 @@ class LoggedOutViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = "Logged Out"
-        UserDefaults.standard.removeObject(forKey: Current.k.userAccount)
+        CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
+            switch error {
+            case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+            case .none: break
+            }
+        }
         bootstrap()
     }
 
