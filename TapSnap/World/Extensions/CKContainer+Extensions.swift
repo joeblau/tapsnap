@@ -107,18 +107,32 @@ extension CKContainer {
         }
     }
     
-    func createNewGroup(with name: String, from _: UIViewController) {
-        let groupRecords = buildGroup(with: name)
+    func createNewGroup(with name: String, from viewController: MyGroupsViewController) {
+        let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
+        let group = CKRecord(recordType: .group, recordID: recordID)
         
-        let operation = CKModifyRecordsOperation(recordsToSave: groupRecords,
-                                                 recordIDsToDelete: nil)
-        operation.perRecordCompletionBlock = { [unowned self] _, error in
-            guard self.no(error: error) else { return }
-        }
-        operation.modifyRecordsCompletionBlock = { [unowned self] _, _, error in
-            guard self.no(error: error) else { return }
-        }
-        privateCloudDatabase.add(operation)
+        group[GroupKey.name] = name
+        group[GroupKey.userCount] = 1
+        
+        let share = CKShare(rootRecord: group)
+        share.publicPermission = .readOnly
+        
+        let sharingController = UICloudSharingController(preparationHandler: {(UICloudSharingController, handler:
+            @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+            let operation = CKModifyRecordsOperation(recordsToSave: [group, share],
+                                                     recordIDsToDelete: nil)
+            operation.perRecordCompletionBlock = { [unowned self] _, error in
+                guard self.no(error: error) else { return }
+            }
+            operation.modifyRecordsCompletionBlock = { _, _, error in
+                handler(share, CKContainer.default(), error)
+            }
+            self.privateCloudDatabase.add(operation)
+        })
+        sharingController.availablePermissions = [.allowReadOnly ]
+        sharingController.delegate = viewController
+        
+        viewController.present(sharingController, animated: true, completion: nil)
     }
     
     func updateGroup(recordID: CKRecord.ID, image url: URL, completion: @escaping (Bool) -> Void) {
@@ -612,23 +626,6 @@ extension CKContainer {
     }
 }
 
-// MARK: - Group
-
-extension CKContainer {
-    private func buildGroup(with name: String) -> [CKRecord] {
-        let recordID = CKRecord.ID(recordName: UUID().uuidString, zoneID: sharedZoneID)
-        let group = CKRecord(recordType: .group, recordID: recordID)
-        
-        group[GroupKey.name] = name
-        group[GroupKey.userCount] = 1
-        
-        let share = CKShare(rootRecord: group)
-        share.publicPermission = .readOnly
-        
-        return [group, share]
-    }
-}
-
 // MARK: - Error
 
 extension CKContainer {
@@ -643,8 +640,3 @@ extension CKContainer {
     }
 }
 
-extension CKContainer {
-    func bootstrap() {
-        
-    }
-}

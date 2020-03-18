@@ -6,19 +6,22 @@
 //
 
 import UIKit
-import CloudKit
+
+protocol NewGroupViewControllerDelegate {
+    func createNewGroup(with name: String)
+}
 
 class NewGroupViewController: UIAlertController {
 
-    var groupName: String?
+    var delegate: NewGroupViewControllerDelegate?
     lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action  in
                 // NO op
             }
             
     lazy var createAction = UIAlertAction(title: "Create", style: .default) { action in
         guard let groupName = self.textFields?.first?.text else { return }
-        CKContainer.default().createNewGroup(with: groupName, from: self)
-        }
+        self.delegate?.createNewGroup(with: groupName)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,3 +44,4 @@ extension NewGroupViewController: UITextFieldDelegate {
         actions.first(where: { $0.title == "Create"})?.isEnabled = !(textField.text?.isEmpty ?? false)
     }
 }
+

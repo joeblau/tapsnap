@@ -4,9 +4,19 @@
 import CloudKit
 import Combine
 import UIKit
+import os.log
 
 class MyGroupsViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
+    private var newGroupName: String?
+    
+    lazy var newGroup: NewGroupViewController = {
+        let c = NewGroupViewController(title: "New Group",
+                               message: "Enter a name for your new group",
+                               preferredStyle: .alert)
+        c.delegate = self
+        return c
+    }()
 
     private lazy var activityIndicatorView: UIActivityIndicatorView = {
         let v = UIActivityIndicatorView(style: .large)
@@ -32,7 +42,6 @@ class MyGroupsViewController: UIViewController {
     // MARK: - Actions
 
     @objc func newGroupAction() {
-        let newGroup = NewGroupViewController(title: "New Group", message: "Enter a name for your new group", preferredStyle: .alert)
         present(newGroup, animated: true)
     }
 
@@ -78,3 +87,26 @@ extension MyGroupsViewController: ViewBootstrappable {
         }.store(in: &cancellables)
     }
 }
+
+extension MyGroupsViewController: NewGroupViewControllerDelegate {
+    
+    func createNewGroup(with name: String) {
+        newGroupName = name
+        CKContainer.default().createNewGroup(with: name, from: self)
+    }
+}
+
+extension MyGroupsViewController: UICloudSharingControllerDelegate {
+    public func cloudSharingController(_: UICloudSharingController, failedToSaveShareWithError error: Error) {
+        os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+    }
+
+    public func itemTitle(for _: UICloudSharingController) -> String? {
+        newGroupName ?? "-"
+    }
+
+    public func itemThumbnailData(for _: UICloudSharingController) -> Data? {
+        UIImage(systemName: "video.fill")?.pngData()
+    }
+}
+
