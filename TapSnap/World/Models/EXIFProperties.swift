@@ -1,9 +1,5 @@
-//
-//  EXIFProperties.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/15/20.
-//
+// EXIFProperties.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import Foundation
 

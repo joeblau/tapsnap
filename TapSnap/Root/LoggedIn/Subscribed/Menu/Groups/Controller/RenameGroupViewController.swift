@@ -1,28 +1,23 @@
-//
-//  RenameGroupViewController.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/15/20.
-//
+// RenameGroupViewController.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
+import UIKit
 
 class RenameGroupViewController: UIAlertController {
-
     var groupName: String?
-    lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action  in
-                // NO op
-            }
-            
-    lazy var renameAction = UIAlertAction(title: "Rename", style: .default) { action in
+    lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+        // NO op
+    }
+
+    lazy var renameAction = UIAlertAction(title: "Rename", style: .default) { _ in
         guard let record = Current.cloudKitSelectedGroupSubject.value,
             let newGroupName = self.textFields?.first?.text else { return }
-        CKContainer.default().updateGroup(recordID: record.recordID, name: newGroupName) { isSaved in
+        CKContainer.default().updateGroup(recordID: record.recordID, name: newGroupName) { _ in
             CKContainer.default().fetchAllGroups()
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,7 +28,7 @@ class RenameGroupViewController: UIAlertController {
         textFields?.first?.delegate = self
 
         renameAction.isEnabled = false
-        
+
         addAction(cancelAction)
         addAction(renameAction)
     }
@@ -42,6 +37,6 @@ class RenameGroupViewController: UIAlertController {
 extension RenameGroupViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         let isEnabled = !(textField.text == textField.placeholder || textField.text?.isEmpty ?? true)
-        actions.first(where: { $0.title == "Rename"})?.isEnabled = isEnabled
+        actions.first(where: { $0.title == "Rename" })?.isEnabled = isEnabled
     }
 }

@@ -387,7 +387,7 @@ extension CameraViewController: ViewBootstrappable {
             guard let groups = groups else { return }
             DispatchQueue.main.async {
                 let items = groups.compactMap { record -> GroupValue? in
-                    return GroupValue(record: record)
+                    GroupValue(record: record)
                 }
 
                 var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
@@ -405,23 +405,23 @@ extension CameraViewController: ViewBootstrappable {
         Current.inboxURLsSubject
             .removeDuplicates()
             .sink { inboxState in
-            DispatchQueue.main.async {
-                switch inboxState {
-                case .idle: break
-                case .fetching:
-                    self.navigationItem.rightBarButtonItem = self.activityButtonItem
-                case let .completedFetching(urls):
-                    switch urls {
-                    case let .some(urls) where !urls.isEmpty:
-                        self.inboxMessageURLs = urls
-                        self.navigationItem.rightBarButtonItem = self.notificationButtonItem
-                        self.notificationButton.setTitle("\(urls.count)", for: .normal)
-                    default:
-                        self.navigationItem.rightBarButtonItem = nil
+                DispatchQueue.main.async {
+                    switch inboxState {
+                    case .idle: break
+                    case .fetching:
+                        self.navigationItem.rightBarButtonItem = self.activityButtonItem
+                    case let .completedFetching(urls):
+                        switch urls {
+                        case let .some(urls) where !urls.isEmpty:
+                            self.inboxMessageURLs = urls
+                            self.navigationItem.rightBarButtonItem = self.notificationButtonItem
+                            self.notificationButton.setTitle("\(urls.count)", for: .normal)
+                        default:
+                            self.navigationItem.rightBarButtonItem = nil
+                        }
                     }
                 }
-            }
-        }.store(in: &cancellables)
+            }.store(in: &cancellables)
 
         Current.cleanupSubject.sink { cleanup in
             switch cleanup {

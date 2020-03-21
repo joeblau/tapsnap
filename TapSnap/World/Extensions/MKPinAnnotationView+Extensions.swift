@@ -1,12 +1,8 @@
-//
-//  MKPointAnnotation.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/15/20.
-//
+// MKPinAnnotationView+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import MapKit
+import UIKit
 
 extension MKPinAnnotationView {
     static var id: String { String(describing: self) }

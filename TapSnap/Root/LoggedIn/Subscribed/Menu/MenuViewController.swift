@@ -1,9 +1,9 @@
 // MenuViewController.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
-import os.log
 import CloudKit
+import os.log
+import UIKit
 
 final class MenuViewController: UIViewController {
     let menuSections: [SectionItem] = [
@@ -27,7 +27,7 @@ final class MenuViewController: UIViewController {
             MenuItem(systemName: "gear", titleText: "Settings"),
         ]),
     ]
-    
+
     lazy var tableView: UITableView = {
         let t = UITableView(frame: .zero, style: .insetGrouped)
         t.register(MenuCellTableViewCell.self,
@@ -43,7 +43,7 @@ final class MenuViewController: UIViewController {
         t.delegate = self
         return t
     }()
-    
+
     lazy var closeButton: UIBarButtonItem = {
         let b = UIBarButtonItem(image: UIImage(systemName: "xmark"),
                                 landscapeImagePhone: UIImage(systemName: "xmark"),
@@ -53,22 +53,22 @@ final class MenuViewController: UIViewController {
         b.tintColor = .white
         return b
     }()
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Menu"
         navigationItem.leftBarButtonItem = closeButton
         configureViews()
     }
-    
+
     // MARK: - Actions
-    
+
     @objc func closeMenuAction() {
         dismiss(animated: true, completion: nil)
     }
-    
+
     @objc func updateAvatar() {
         let imagePickerViewController = UIImagePickerController()
         imagePickerViewController.delegate = self
@@ -93,7 +93,7 @@ extension MenuViewController: UIImagePickerControllerDelegate & UINavigationCont
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let image = info[.originalImage] as? UIImage,
             let smallImage = image.scale(to: 256.0) else { return }
-        
+
         let outputFileURL = URL.randomURL
         do {
             try smallImage.pngData()?.write(to: outputFileURL)
@@ -102,7 +102,7 @@ extension MenuViewController: UIImagePickerControllerDelegate & UINavigationCont
             imagePickerController.dismiss(animated: true, completion: nil)
             return
         }
-        
+
         CKContainer.default().updateUser(image: outputFileURL, completion: { [unowned self] saved in
             DispatchQueue.main.async {
                 UserDefaults.standard.set(smallImage.pngData(), forKey: Current.k.currentUserAvatar)

@@ -253,7 +253,7 @@ extension PlaybackViewController: ViewBootstrappable {
 
     internal func configureStreams() {
         Current.mapDimensionSubject.sink { dimension in
-            
+
             self.mapCamera.centerCoordinate = self.mapView
                 .annotations
                 .first(where: { !($0 is MKUserLocation) })?

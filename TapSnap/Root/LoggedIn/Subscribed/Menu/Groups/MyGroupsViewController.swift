@@ -3,17 +3,17 @@
 
 import CloudKit
 import Combine
-import UIKit
 import os.log
+import UIKit
 
 class MyGroupsViewController: UIViewController {
     var cancellables = Set<AnyCancellable>()
     private var newGroupName: String?
-    
+
     lazy var newGroup: NewGroupViewController = {
         let c = NewGroupViewController(title: "New Group",
-                               message: "Enter a name for your new group",
-                               preferredStyle: .alert)
+                                       message: "Enter a name for your new group",
+                                       preferredStyle: .alert)
         c.delegate = self
         return c
     }()
@@ -71,8 +71,8 @@ extension MyGroupsViewController: ViewBootstrappable {
                 self.activityIndicatorView.stopAnimating()
                 self.myGroupsCollectionView.refreshControl?.endRefreshing()
 
-                let items = groups.compactMap { record -> GroupValue? in                    
-                    return GroupValue(record: record)
+                let items = groups.compactMap { record -> GroupValue? in
+                    GroupValue(record: record)
                 }
 
                 switch items.isEmpty {
@@ -89,7 +89,6 @@ extension MyGroupsViewController: ViewBootstrappable {
 }
 
 extension MyGroupsViewController: NewGroupViewControllerDelegate {
-    
     func createNewGroup(with name: String) {
         newGroupName = name
         CKContainer.default().createNewGroup(with: name, from: self)
@@ -109,4 +108,3 @@ extension MyGroupsViewController: UICloudSharingControllerDelegate {
         UIImage(systemName: "video.fill")?.pngData()
     }
 }
-

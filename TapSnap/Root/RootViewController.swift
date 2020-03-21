@@ -1,11 +1,11 @@
 // RootViewController.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
+import AVFoundation
 import CloudKit
 import Combine
 import os.log
 import UIKit
-import AVFoundation
 
 class RootViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
@@ -15,113 +15,113 @@ class RootViewController: UIViewController {
         c.modalPresentationStyle = .fullScreen
         return c
     }()
-    
+
     // MARK: - Onboarding
-    
+
     lazy var onboardingICloud: OnboardingViewController = {
         OnboardingViewController(title: "iCloud",
                                  image: UIImage(systemName: "icloud.fill"),
                                  description: "Tapsnap uses your apple iCloud account to login and allow people to find you.",
                                  buttonText: "Prompt Authorization",
                                  valueAction: { [unowned self] in
-                                    
-                                    CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
-                                        switch error {
-                                        case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-                                        case .none: break
-                                        }
-                                        
-                                        switch status {
-                                        case .granted:
-                                            CKContainer.default().currentUser()
-                                            DispatchQueue.main.async {
-                                                self.onboarding.pushViewController(self.onboardingCamera, animated: true)
-                                            }
-                                        case .couldNotComplete, .denied, .initialState:
-                                            print("you must got to settings")
+
+                                     CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
+                                         switch error {
+                                         case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+                                         case .none: break
+                                         }
+
+                                         switch status {
+                                         case .granted:
+                                             CKContainer.default().currentUser()
+                                             DispatchQueue.main.async {
+                                                 self.onboarding.pushViewController(self.onboardingCamera, animated: true)
+                                             }
+                                         case .couldNotComplete, .denied, .initialState:
+                                             print("you must got to settings")
                                         @unknown default: os_log("Unknown applicatoin permissions", log: .cloudKit, type: .error)
-                                        }
-                                    }
+                                         }
+                                     }
         })
     }()
-    
+
     lazy var onboardingCamera: OnboardingViewController = {
         OnboardingViewController(title: "Camera",
                                  image: UIImage(systemName: "camera.fill"),
                                  description: "Tapsnap is a video and photo app and uses your camera to create vidoes and photos.",
                                  buttonText: "Prompt Authorization",
                                  valueAction: { [unowned self] in
-                                    
-                                    AVCaptureDevice.requestAccess(for: .video) { granted in
-                                        switch granted {
-                                        case true:
-                                            DispatchQueue.main.async {
-                                                self.onboarding.pushViewController(self.onboardingMicrophone, animated: true)
-                                            }
-                                        case false: print("go to settings")
-                                        }
-                                    }
+
+                                     AVCaptureDevice.requestAccess(for: .video) { granted in
+                                         switch granted {
+                                         case true:
+                                             DispatchQueue.main.async {
+                                                 self.onboarding.pushViewController(self.onboardingMicrophone, animated: true)
+                                             }
+                                         case false: print("go to settings")
+                                         }
+                                     }
         })
     }()
+
     lazy var onboardingMicrophone: OnboardingViewController = {
         OnboardingViewController(title: "Microphone",
                                  image: UIImage(systemName: "mic.fill"),
                                  description: "Tapsnap uses your microphone to record your voice and audio for your video taps.",
                                  buttonText: "Prompt Authorization",
                                  valueAction: { [unowned self] in
-                                    
-                                    AVCaptureDevice.requestAccess(for: .audio) { granted in
-                                        switch granted {
-                                        case true:
-                                            DispatchQueue.main.async {
-                                                self.onboarding.pushViewController(self.onboardingNotifications, animated: true)
-                                            }
-                                        case false: print("go to settings")
-                                        }
-                                    }
+
+                                     AVCaptureDevice.requestAccess(for: .audio) { granted in
+                                         switch granted {
+                                         case true:
+                                             DispatchQueue.main.async {
+                                                 self.onboarding.pushViewController(self.onboardingNotifications, animated: true)
+                                             }
+                                         case false: print("go to settings")
+                                         }
+                                     }
         })
     }()
-    
+
     lazy var onboardingNotifications: OnboardingViewController = {
         OnboardingViewController(title: "Notifictions",
                                  image: UIImage(systemName: "app.badge.fill"),
                                  description: "Tapsnap can alert you whenever new messages are avaiable.",
                                  buttonText: "Prompt Authorization",
                                  valueAction: { [unowned self] in
-                                    
-                                    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { (granted, error) in
-                                        switch error {
-                                        case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-                                        case .none: break
-                                        }
-                                        
-                                        DispatchQueue.main.async {
-                                            self.onboarding.pushViewController(self.onboardingLocation, animated: true)
-                                        }
-                                    }
-                                    
+
+                                     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, error in
+                                         switch error {
+                                         case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+                                         case .none: break
+                                         }
+
+                                         DispatchQueue.main.async {
+                                             self.onboarding.pushViewController(self.onboardingLocation, animated: true)
+                                         }
+                                     }
+
         })
     }()
-    
-    
+
     lazy var onboardingLocation: OnboardingViewController = {
         OnboardingViewController(title: "Location",
                                  image: UIImage(systemName: "location.fill"),
                                  description: "Tapsnap can share your location with your taps.",
                                  buttonText: "Prompt Authorization",
                                  valueAction: { [unowned self] in
-                                    
-                                    Current.locationManager.requestWhenInUseAuthorization()
-                                    
+
+                                     Current.locationManager.requestWhenInUseAuthorization()
+
         })
     }()
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         bootstrap()
-        switch UserDefaults.standard.bool(forKey:  Current.k.isOnboardingComplete) {
+        switch UserDefaults.standard.bool(forKey: Current.k.isOnboardingComplete) {
         case false:
             showOnboarding()
         case true:
@@ -132,14 +132,14 @@ class RootViewController: UIViewController {
             }
         }
     }
-    
+
     // MARK: - Private
-    
+
     private func showOnboarding() {
         onboarding.viewControllers = [onboardingICloud]
         present(onboarding, animated: true, completion: nil)
     }
-    
+
     private func login() {
         DispatchQueue.main.async {
             switch self.presentedViewController {
@@ -154,7 +154,7 @@ class RootViewController: UIViewController {
             }
         }
     }
-    
+
     private func logout() {
         DispatchQueue.main.async {
             switch self.presentedViewController {
@@ -169,13 +169,13 @@ class RootViewController: UIViewController {
             }
         }
     }
-    
+
     private func showLogin() {
         let loggedIn = LoggedInViewController()
         loggedIn.modalPresentationStyle = .fullScreen
         present(loggedIn, animated: false, completion: nil)
     }
-    
+
     private func showLogout() {
         let loggedOut = UINavigationController(rootViewController: LoggedOutViewController())
         loggedOut.modalPresentationStyle = .fullScreen
@@ -186,33 +186,32 @@ class RootViewController: UIViewController {
 // MARK: - ViewBootstrappable
 
 extension RootViewController: ViewBootstrappable {
-    
     func configureStreams() {
         Current.currentLocationAuthorizationSubject
             .removeDuplicates()
             .sink { status in
-            switch status {
-            case .authorizedWhenInUse:
-                DispatchQueue.main.async {
-                    self.onboarding.dismiss(animated: true) {
-                        UserDefaults.standard.set(true, forKey: Current.k.isOnboardingComplete)
-                        self.login()
+                switch status {
+                case .authorizedWhenInUse:
+                    DispatchQueue.main.async {
+                        self.onboarding.dismiss(animated: true) {
+                            UserDefaults.standard.set(true, forKey: Current.k.isOnboardingComplete)
+                            self.login()
+                        }
                     }
+                default: break
                 }
-            default: break
-            }
-        }.store(in: &self.cancellables)
-        
+            }.store(in: &cancellables)
+
         Current.cloudKitUserSubject
             .removeDuplicates()
             .sink { record in
-            guard UserDefaults.standard.bool(forKey:  Current.k.isOnboardingComplete) else { return }
-            switch record {
-            case .some:
-                self.login()
-            case .none:
-                self.logout()
-            }
-        }.store(in: &cancellables)
+                guard UserDefaults.standard.bool(forKey: Current.k.isOnboardingComplete) else { return }
+                switch record {
+                case .some:
+                    self.login()
+                case .none:
+                    self.logout()
+                }
+            }.store(in: &cancellables)
     }
 }

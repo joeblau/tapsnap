@@ -19,20 +19,20 @@ extension Data {
 
         do {
             var exif = [String: Any]()
-            
+
             var exifProperties = EXIRProperites()
             exifProperties.group = name
             exifProperties.address = Current.currentAddressSubject.value
             exifProperties.author = UserDefaults.standard.string(forKey: Current.k.currentUserName)
-            
+
             if let exifCommentString = try? JSONEncoder().encode(exifProperties).base64EncodedString() {
                 exif[kCGImagePropertyExifUserComment as String] = exifCommentString
             }
-            
+
             exif[kCGImagePropertyExifDateTimeDigitized as String] = Current.formatter.dateTimeDigitized.string(from: Date())
             metadata[kCGImagePropertyExifDictionary as String] = exif
         }
-        
+
         if let currentLocation = Current.currentLocationSubject.value {
             metadata[kCGImagePropertyGPSDictionary as String] = [kCGImagePropertyGPSLatitudeRef: currentLocation.coordinate.latitude < 0 ? "S" : "N",
                                                                  kCGImagePropertyGPSLatitude: fabs(currentLocation.coordinate.latitude),
@@ -41,7 +41,7 @@ extension Data {
                                                                  kCGImagePropertyGPSAltitudeRef: currentLocation.altitude < 0 ? 1 : 0,
                                                                  kCGImagePropertyGPSAltitude: fabs(currentLocation.altitude)]
         }
-        
+
         let destinationData = NSMutableData(data: self)
         guard let destination = CGImageDestinationCreateWithData(destinationData, ref, 1, nil) else {
             return nil
@@ -63,11 +63,9 @@ extension Data {
         var address: String?
         var date = Date()
         if let exif = metadata[kCGImagePropertyExifDictionary as String] as? [String: Any] {
-
             if let exifCommentString = exif[kCGImagePropertyExifUserComment as String] as? String,
                 let exifData = Data(base64Encoded: exifCommentString),
                 let exifProperties = try? JSONDecoder().decode(EXIRProperites.self, from: exifData) {
-                
                 group = exifProperties.group
                 author = exifProperties.author
                 address = exifProperties.address
@@ -78,7 +76,7 @@ extension Data {
                 date = creationDate
             }
         }
-        
+
         var avatar: UIImage?
         if let aux = metadata[kCGImagePropertyExifAuxDictionary as String] as? [String: Any],
             let avatarData = aux["avatar"] as? Data {
@@ -182,7 +180,7 @@ extension Array where Element: AVMetadataItem {
             username.value = currentUsername as NSString
             metadata.append(username)
         }
-        
+
         if let currentAvatar = UserDefaults.standard.data(forKey: Current.k.currentUserAvatar) {
             let avatar = AVMutableMetadataItem()
             avatar.keySpace = .quickTimeUserData

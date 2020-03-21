@@ -1,9 +1,5 @@
-//
-//  NewGroupViewController.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/15/20.
-//
+// NewGroupViewController.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
@@ -12,36 +8,33 @@ protocol NewGroupViewControllerDelegate {
 }
 
 class NewGroupViewController: UIAlertController {
-
     var delegate: NewGroupViewControllerDelegate?
-    lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { action  in
-                // NO op
-            }
-            
-    lazy var createAction = UIAlertAction(title: "Create", style: .default) { action in
+    lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+        // NO op
+    }
+
+    lazy var createAction = UIAlertAction(title: "Create", style: .default) { _ in
         guard let groupName = self.textFields?.first?.text else { return }
         self.delegate?.createNewGroup(with: groupName)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         addTextField()
         textFields?.first?.placeholder = "Group name"
         textFields?.first?.clearButtonMode = .whileEditing
         textFields?.first?.delegate = self
 
         createAction.isEnabled = false
-        
+
         addAction(cancelAction)
         addAction(createAction)
     }
-
 }
 
 extension NewGroupViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
-        actions.first(where: { $0.title == "Create"})?.isEnabled = !(textField.text?.isEmpty ?? false)
+        actions.first(where: { $0.title == "Create" })?.isEnabled = !(textField.text?.isEmpty ?? false)
     }
 }
-

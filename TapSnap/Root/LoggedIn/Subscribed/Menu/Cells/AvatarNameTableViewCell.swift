@@ -1,8 +1,8 @@
 // AvatarNameTableViewCell.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
+import UIKit
 
 class AvatarNameTableViewCell: UITableViewCell {
     lazy var avatarView: UIButton = {
@@ -27,17 +27,16 @@ class AvatarNameTableViewCell: UITableViewCell {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
         translatesAutoresizingMaskIntoConstraints = false
         selectionStyle = .none
-        
-        
+
         guard let userRecord = Current.cloudKitUserSubject.value else { return }
-        
-        CKContainer.default().fetchUser(with: userRecord.recordID) { [unowned self] (username, avatar) in
+
+        CKContainer.default().fetchUser(with: userRecord.recordID) { [unowned self] username, avatar in
             DispatchQueue.main.async {
                 self.nameView.text = username
                 self.avatarView.setImage(avatar, for: .normal)
             }
         }
-        
+
         bootstrap()
     }
 

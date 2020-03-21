@@ -1,9 +1,5 @@
-//
-//  CKContainer+UICloudSharingControllerDelegate.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 3/17/20.
-//
+// CKContainer+UICloudSharingControllerDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import CloudKit
 import os.log

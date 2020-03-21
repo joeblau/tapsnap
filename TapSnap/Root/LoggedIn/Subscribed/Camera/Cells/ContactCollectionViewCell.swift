@@ -84,7 +84,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
     @objc func handleVideoAction(_ recognizer: UIPanGestureRecognizer) {
         switch recognizer.state {
         case .began:
-            Current.cloudKitSelectedGroupSubject.send(self.record)
+            Current.cloudKitSelectedGroupSubject.send(record)
             Current.mediaActionSubject.send(.captureVideoStart)
         case .ended:
             guard !(Current.mediaActionSubject.value == .captureVideoEnd) else { return }
@@ -96,7 +96,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
     @objc func handlePhotoAction(_ recognizer: UITapGestureRecognizer) {
         switch recognizer.state {
         case .ended:
-            Current.cloudKitSelectedGroupSubject.send(self.record)
+            Current.cloudKitSelectedGroupSubject.send(record)
             Current.mediaActionSubject.send(.capturePhoto)
         default: break
         }

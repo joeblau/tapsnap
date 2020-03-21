@@ -5,10 +5,10 @@ import CoreLocation
 import os.log
 
 extension AppDelegate: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    func locationManager(_: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         Current.currentLocationAuthorizationSubject.send(status)
     }
-    
+
     func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         Current.currentLocationSubject.send(locations.last)
         guard let currentLocation = locations.last else { return }

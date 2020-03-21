@@ -1,12 +1,11 @@
 // LoggedOutViewController.swift
 // Copyright (c) 2020 Tapsnap, LLC
 
-import UIKit
 import CloudKit
 import os.log
+import UIKit
 
 class LoggedOutViewController: UIViewController {
-
     lazy var loginButton: UIButton = {
         let b = UIButton(type: .system)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -14,12 +13,12 @@ class LoggedOutViewController: UIViewController {
         b.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         return b
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = "Logged Out"
-        CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
+        CKContainer.default().requestApplicationPermission(.userDiscoverability) { _, error in
             switch error {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: break

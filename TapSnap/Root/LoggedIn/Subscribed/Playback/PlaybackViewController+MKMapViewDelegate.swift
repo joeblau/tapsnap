@@ -4,11 +4,10 @@
 import MapKit
 
 extension PlaybackViewController: MKMapViewDelegate {
-    
     func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
         reloadOverlays(mapView: mapView)
     }
-    
+
     func mapView(_: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         guard let polyline = overlay as? MKPolyline else {
             return MKOverlayRenderer()
@@ -32,18 +31,18 @@ extension PlaybackViewController: MKMapViewDelegate {
             return mapView.dequeueReusableAnnotationView(withIdentifier: MKPinAnnotationView.id) ?? pin
         }
     }
-    
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+
+    func mapView(_ mapView: MKMapView, didUpdate _: MKUserLocation) {
         reloadOverlays(mapView: mapView)
     }
-    
+
     private func reloadOverlays(mapView: MKMapView) {
         mapView.removeOverlays(mapView.overlays)
-        
+
         guard let theirCoordinate = mapView.annotations
             .first(where: { !($0 is MKUserLocation) })?
             .coordinate else { return }
-        
+
         var coordinates = [theirCoordinate, mapView.userLocation.coordinate]
         let geodesicPolyline = MKGeodesicPolyline(coordinates: &coordinates, count: coordinates.count)
         mapView.addOverlay(geodesicPolyline)

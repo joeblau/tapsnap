@@ -7,7 +7,6 @@ import os.log
 import UIKit
 
 final class LoggedInViewController: UIViewController {
-    
     lazy var tag: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -15,7 +14,7 @@ final class LoggedInViewController: UIViewController {
         l.text = self.title
         return l
     }()
-    
+
     private lazy var camera: UINavigationController = {
         let nc = UINavigationController(rootViewController: CameraViewController())
         nc.modalPresentationStyle = .fullScreen
@@ -42,7 +41,6 @@ final class LoggedInViewController: UIViewController {
         present(camera, animated: false) {}
 //        present(subscription, animated: false) {}
     }
-
 }
 
 extension LoggedInViewController: ViewBootstrappable {
