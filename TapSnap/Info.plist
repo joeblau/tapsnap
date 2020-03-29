@@ -42,6 +42,10 @@
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
+		<string>wifi</string>
+		<string>still-camera</string>
+		<string>video-camera</string>
+		<string>telephony</string>
 	</array>
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
