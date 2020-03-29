@@ -119,7 +119,7 @@ final class MapViewOverlay: UIView {
 }
 
 extension MapViewOverlay: ViewBootstrappable {
-    func configureViews() {
+    func configureViews() { 
         toggle3DButton.widthAnchor.constraint(equalToConstant: kButtonSize).isActive = true
         toggle3DButton.heightAnchor.constraint(equalToConstant: kButtonSize).isActive = true
 

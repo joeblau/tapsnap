@@ -10,13 +10,13 @@ final class MenuViewController: UIViewController {
         SectionItem(menuItems: [
             MenuItem(systemName: "person.crop.square", titleText: "Profile"),
         ]),
+//        SectionItem(menuItems: [
+//            MenuItem(systemName: "clock", titleText: "Activity"),
+//            MenuItem(systemName: "calendar", titleText: "Sent Today"),
+//            MenuItem(systemName: "heart", titleText: "Saved"),
+//        ]),
         SectionItem(menuItems: [
-            MenuItem(systemName: "clock", titleText: "Activity"),
-            MenuItem(systemName: "calendar", titleText: "Sent Today"),
-            MenuItem(systemName: "heart", titleText: "Saved"),
-        ]),
-        SectionItem(menuItems: [
-            MenuItem(systemName: "paperplane", titleText: "Invite A Friend"),
+//            MenuItem(systemName: "paperplane", titleText: "Invite A Friend"),
             MenuItem(systemName: "person.2", titleText: "My Groups"),
         ]),
         SectionItem(menuItems: [

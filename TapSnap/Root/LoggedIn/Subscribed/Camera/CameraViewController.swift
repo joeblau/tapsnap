@@ -163,11 +163,11 @@ final class CameraViewController: UIViewController {
         }
 
         toolbarItems = [
-            UIBarButtonItem(title: "Edit", style: .plain, target: self, action: nil),
+//            UIBarButtonItem(title: "Edit", style: .plain, target: self, action: nil),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
             UIBarButtonItem(customView: contactPageControl),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
-            UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction)),
+//            UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchContactsAction)),
         ]
 
         sessionQueue.async {
