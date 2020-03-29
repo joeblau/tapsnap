@@ -4,13 +4,22 @@
 import UIKit
 
 final class OnboardingViewController: UIViewController {
-    private var valueAction: () -> Void = {}
+    private var valueAction: (_ controller: OnboardingViewController) -> Void = { _ in }
 
     lazy var valueDescription: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
         l.numberOfLines = 0
         l.font = UIFont.preferredFont(forTextStyle: .title2)
+        l.textAlignment = .center
+        return l
+    }()
+    
+    lazy var valueError: UILabel = {
+        let l = UILabel()
+        l.translatesAutoresizingMaskIntoConstraints = false
+        l.numberOfLines = 0
+        l.textColor = .systemRed
         l.textAlignment = .center
         return l
     }()
@@ -34,7 +43,7 @@ final class OnboardingViewController: UIViewController {
     }()
 
     lazy var stackView: UIStackView = {
-        let v = UIStackView(arrangedSubviews: [valueImage, valueDescription, UIView(), valueButton])
+        let v = UIStackView(arrangedSubviews: [valueImage, valueDescription, UIView(), valueError, valueButton])
         v.translatesAutoresizingMaskIntoConstraints = false
         v.axis = .vertical
         return v
@@ -44,14 +53,21 @@ final class OnboardingViewController: UIViewController {
          image: UIImage?,
          description: String,
          buttonText: String,
-         valueAction: @escaping () -> Void) {
+         valueAction: @escaping (_ controller: OnboardingViewController) -> Void) {
         super.init(nibName: nil, bundle: nil)
         self.title = title
         valueImage.image = image
         valueDescription.text = description
+        
         valueButton.setTitle(buttonText, for: .normal)
         self.valueAction = valueAction
         navigationItem.hidesBackButton = true
+    }
+    
+    func show(error: String? = nil) {
+        DispatchQueue.main.async {
+            self.valueError.text = error
+        }
     }
 
     required init?(coder _: NSCoder) {
@@ -65,7 +81,7 @@ final class OnboardingViewController: UIViewController {
     }
 
     @objc func valueButtonAction() {
-        valueAction()
+        valueAction(self)
     }
 }
 

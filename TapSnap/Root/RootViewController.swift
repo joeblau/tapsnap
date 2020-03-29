@@ -21,13 +21,15 @@ class RootViewController: UIViewController {
     lazy var onboardingICloud: OnboardingViewController = {
         OnboardingViewController(title: "iCloud",
                                  image: UIImage(systemName: "icloud.fill"),
-                                 description: "Tapsnap uses your apple iCloud account to login and allow people to find you.",
+                                 description: "Tapsnap uses your iCloud Apple ID account as your account. You will not be able to use Tapsnap without an iCloud account.",
                                  buttonText: "Prompt Authorization",
-                                 valueAction: { [unowned self] in
+                                 valueAction: { [unowned self] controller in
 
                                      CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
                                          switch error {
-                                         case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+                                         case let .some(error):
+                                            os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+                                            controller.show(error: error.localizedDescription)
                                          case .none: break
                                          }
 
@@ -38,7 +40,9 @@ class RootViewController: UIViewController {
                                                  self.onboarding.pushViewController(self.onboardingCamera, animated: true)
                                              }
                                          case .couldNotComplete, .denied, .initialState:
-                                             print("you must got to settings")
+                                            DispatchQueue.main.async {
+                                                UIApplication.shared.open(URL(string:"App-Prefs:root=General")!, options: [:], completionHandler: nil)
+                                            }
                                         @unknown default: os_log("Unknown applicatoin permissions", log: .cloudKit, type: .error)
                                          }
                                      }
@@ -50,7 +54,7 @@ class RootViewController: UIViewController {
                                  image: UIImage(systemName: "camera.fill"),
                                  description: "Tapsnap is a video and photo app and uses your camera to create vidoes and photos.",
                                  buttonText: "Prompt Authorization",
-                                 valueAction: { [unowned self] in
+                                 valueAction: { [unowned self] _ in
 
                                      AVCaptureDevice.requestAccess(for: .video) { granted in
                                          switch granted {
@@ -69,7 +73,7 @@ class RootViewController: UIViewController {
                                  image: UIImage(systemName: "mic.fill"),
                                  description: "Tapsnap uses your microphone to record your voice and audio for your video taps.",
                                  buttonText: "Prompt Authorization",
-                                 valueAction: { [unowned self] in
+                                 valueAction: { [unowned self] _ in
 
                                      AVCaptureDevice.requestAccess(for: .audio) { granted in
                                          switch granted {
@@ -88,7 +92,7 @@ class RootViewController: UIViewController {
                                  image: UIImage(systemName: "app.badge.fill"),
                                  description: "Tapsnap can alert you whenever new messages are avaiable.",
                                  buttonText: "Prompt Authorization",
-                                 valueAction: { [unowned self] in
+                                 valueAction: { [unowned self] _ in
 
                                      UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, error in
                                          switch error {
@@ -109,7 +113,7 @@ class RootViewController: UIViewController {
                                  image: UIImage(systemName: "location.fill"),
                                  description: "Tapsnap can share your location with your taps.",
                                  buttonText: "Prompt Authorization",
-                                 valueAction: { [unowned self] in
+                                 valueAction: { [unowned self] _ in
 
                                      Current.locationManager.requestWhenInUseAuthorization()
 

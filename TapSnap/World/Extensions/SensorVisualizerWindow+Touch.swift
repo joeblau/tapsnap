@@ -20,8 +20,8 @@ extension SensorVisualizerWindow: TouchVisualizable {
                 switch touch.phase {
                 case .began: create(touch: touch)
                 case .moved: move(touch: touch)
-                case .ended, .cancelled, .stationary: remove(touch: touch)
-            @unknown default: remove(touch: touch)
+                case .ended, .cancelled, .stationary, .regionEntered, .regionExited, .regionMoved: remove(touch: touch)
+                @unknown default: remove(touch: touch)
                 }
             }
     }
