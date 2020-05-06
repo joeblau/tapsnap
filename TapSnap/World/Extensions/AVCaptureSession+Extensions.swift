@@ -101,9 +101,9 @@ extension AVCaptureSession {
                 if currentDevice.isFocusModeSupported(.continuousAutoFocus) {
                     currentDevice.focusMode = .continuousAutoFocus
                 }
-//                if currentDevice.isGeometricDistortionCorrectionSupported {
-//                    currentDevice.isGeometricDistortionCorrectionEnabled = true
-//                }
+                if currentDevice.isGeometricDistortionCorrectionSupported {
+                    currentDevice.isGeometricDistortionCorrectionEnabled = true
+                }
                 if currentDevice.isLowLightBoostSupported {
                     currentDevice.automaticallyEnablesLowLightBoostWhenAvailable = true
                 }

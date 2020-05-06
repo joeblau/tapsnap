@@ -81,7 +81,7 @@ final class ContactCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Actions
 
-    @objc func handleVideoAction(_ recognizer: UIPanGestureRecognizer) {
+    @objc func handleVideoAction(_ recognizer: UILongPressGestureRecognizer) {
         switch recognizer.state {
         case .began:
             Current.cloudKitSelectedGroupSubject.send(record)
