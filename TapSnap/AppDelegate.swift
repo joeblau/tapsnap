@@ -8,6 +8,7 @@ import os.log
 import PencilKit
 import StoreKit
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -34,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         do { // Notificaions
             UIApplication.shared.registerForRemoteNotifications()
+            UNUserNotificationCenter.current().delegate = self
         }
 
         do { // CloudKit
@@ -96,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-
+    
     // MARK: - CloudKit
 
     func application(_: UIApplication,
@@ -138,6 +140,18 @@ extension AppDelegate: ViewBootstrappable {
                 }
             default: break
             }
+        }.store(in: &cancellables)
+        
+        Current.reachability
+            .reachabilitySubject
+            .sink { status in
+                switch status {
+                case .offline:
+                    let offlineRequest = UNNotificationRequest.noConnectivity
+                    UNUserNotificationCenter.current().add(offlineRequest)
+                    
+                case .online(_), .unknown: break
+                }
         }.store(in: &cancellables)
     }
 }

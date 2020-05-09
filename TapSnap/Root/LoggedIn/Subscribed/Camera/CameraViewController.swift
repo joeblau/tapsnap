@@ -89,7 +89,6 @@ final class CameraViewController: UIViewController {
     lazy var activityView: UIActivityIndicatorView = {
         let v = UIActivityIndicatorView()
         v.translatesAutoresizingMaskIntoConstraints = false
-        v.startAnimating()
         return v
     }()
 

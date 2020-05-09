@@ -79,6 +79,9 @@
 		ED5CA379241EBE76009A03A4 /* RenameGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA378241EBE76009A03A4 /* RenameGroupViewController.swift */; };
 		ED5CA37B241EC40B009A03A4 /* DeleteGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA37A241EC40B009A03A4 /* DeleteGroupViewController.swift */; };
 		ED5CA37E241EEA57009A03A4 /* NewGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED5CA37D241EEA57009A03A4 /* NewGroupViewController.swift */; };
+		ED723D5224674F8800B6C1D7 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D5124674F8800B6C1D7 /* Reachability.swift */; };
+		ED723D54246763EC00B6C1D7 /* UNNotificationRequest+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D53246763EC00B6C1D7 /* UNNotificationRequest+Extensions.swift */; };
+		ED723D5624676DC600B6C1D7 /* AppDelegate+ UNUserNotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D5524676DC600B6C1D7 /* AppDelegate+ UNUserNotificationCenterDelegate.swift */; };
 		ED77D2362421CCC0005D3134 /* CKContainer+UICloudSharingControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED77D2352421CCC0005D3134 /* CKContainer+UICloudSharingControllerDelegate.swift */; };
 		ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */; };
 		ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA3240C810700DA4081 /* Aliases.swift */; };
@@ -181,6 +184,9 @@
 		ED5CA378241EBE76009A03A4 /* RenameGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameGroupViewController.swift; sourceTree = "<group>"; };
 		ED5CA37A241EC40B009A03A4 /* DeleteGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteGroupViewController.swift; sourceTree = "<group>"; };
 		ED5CA37D241EEA57009A03A4 /* NewGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGroupViewController.swift; sourceTree = "<group>"; };
+		ED723D5124674F8800B6C1D7 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = TapSnap/World/Reachability/Reachability.swift; sourceTree = SOURCE_ROOT; };
+		ED723D53246763EC00B6C1D7 /* UNNotificationRequest+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UNNotificationRequest+Extensions.swift"; path = "TapSnap/World/Extensions/UNNotificationRequest+Extensions.swift"; sourceTree = SOURCE_ROOT; };
+		ED723D5524676DC600B6C1D7 /* AppDelegate+ UNUserNotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AppDelegate+ UNUserNotificationCenterDelegate.swift"; path = "TapSnap/AppDelegate+ UNUserNotificationCenterDelegate.swift"; sourceTree = SOURCE_ROOT; };
 		ED77D2352421CCC0005D3134 /* CKContainer+UICloudSharingControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CKContainer+UICloudSharingControllerDelegate.swift"; path = "TapSnap/World/Extensions/CKContainer+UICloudSharingControllerDelegate.swift"; sourceTree = SOURCE_ROOT; };
 		ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyCryptography.swift; sourceTree = "<group>"; };
 		ED8C2EA3240C810700DA4081 /* Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
@@ -293,13 +299,14 @@
 				1CF68CFF208FBD50311A01D5 /* AppDelegate.swift */,
 				EDAAAB6524140FB1002326D9 /* AppDelegate+SKPaymentTransactionObserver.swift */,
 				A3190FA1230DC53C00386AE7 /* AppDelegate+CLLocationManagerDelegate.swift */,
+				EDAAAB692414175B002326D9 /* AppDelegate+SKRequestDelegate.swift */,
+				ED723D5524676DC600B6C1D7 /* AppDelegate+ UNUserNotificationCenterDelegate.swift */,
 				4D03047C2E3CD982E5D1E38E /* Assets.xcassets */,
 				880AA06728253910B5D1F81A /* Info.plist */,
 				CBB92E046CD027936FF1AB84 /* LaunchScreen.storyboard */,
 				9E7383D01AD2CD3DC33CB3E2 /* Tapsnap.entitlements */,
 				3485EF75C3FD9E24EC1B2598 /* Root */,
 				5B357A0CFC5D38D252784D58 /* World */,
-				EDAAAB692414175B002326D9 /* AppDelegate+SKRequestDelegate.swift */,
 			);
 			path = Tapsnap;
 			sourceTree = "<group>";
@@ -307,6 +314,7 @@
 		5B357A0CFC5D38D252784D58 /* World */ = {
 			isa = PBXGroup;
 			children = (
+				ED723D4E2467152600B6C1D7 /* Reachability */,
 				ED5CA368241D6A58009A03A4 /* SensorVisuzlier */,
 				EDE8F0B3240A0F9400DFA828 /* Crypto */,
 				4541C7BAC1D79F3AE529B414 /* Constants.swift */,
@@ -429,6 +437,7 @@
 				EDAAAB6F24174B21002326D9 /* UICollectionViewCell+Extensions.swift */,
 				ED5CA371241E6C58009A03A4 /* MKPinAnnotationView+Extensions.swift */,
 				ED77D2352421CCC0005D3134 /* CKContainer+UICloudSharingControllerDelegate.swift */,
+				ED723D53246763EC00B6C1D7 /* UNNotificationRequest+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -506,6 +515,14 @@
 				ED5CA37D241EEA57009A03A4 /* NewGroupViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		ED723D4E2467152600B6C1D7 /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				ED723D5124674F8800B6C1D7 /* Reachability.swift */,
+			);
+			path = Reachability;
 			sourceTree = "<group>";
 		};
 		EDAAAB6124140D41002326D9 /* Subscribed */ = {
@@ -668,12 +685,14 @@
 				EDE8F0C2240AC56B00DFA828 /* MyGorupsCollectionView.swift in Sources */,
 				9D4E662859FBDF5BEC5704E2 /* CKRecord+Extensions.swift in Sources */,
 				F1049AD0FAD3C79A3CE179D7 /* CLLocationManager+Combine.swift in Sources */,
+				ED723D5624676DC600B6C1D7 /* AppDelegate+ UNUserNotificationCenterDelegate.swift in Sources */,
 				E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */,
 				22441ACCFD9F673D8EC70B23 /* CameraPreviewView.swift in Sources */,
 				ED5CA372241E6C58009A03A4 /* MKPinAnnotationView+Extensions.swift in Sources */,
 				20122B4E8B2E6B67C0B0979C /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift in Sources */,
 				82E8D57768BC08D80FE7CC89 /* CameraViewController+AVCapturePhotoCaptureDelegate.swift in Sources */,
 				29ECF65DB83B3C480AC782C0 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
+				ED723D54246763EC00B6C1D7 /* UNNotificationRequest+Extensions.swift in Sources */,
 				4A98C7DD8DD24B8F690FCFD2 /* CameraViewController.swift in Sources */,
 				93706DF7B6ABC7130ADC4B4F /* CameraGroupsDiffableDataSource.swift in Sources */,
 				DC538E002715EBD7FF6F0D98 /* CloudKitKeys.swift in Sources */,
@@ -714,6 +733,7 @@
 				1047116A40B5EE793B3B33B2 /* PlaybackViewController.swift in Sources */,
 				A9A7591F02AC39A45275A65D /* PlayerLooper.swift in Sources */,
 				FC8C8BDACCCEF7914FC62666 /* RecordProgressView.swift in Sources */,
+				ED723D5224674F8800B6C1D7 /* Reachability.swift in Sources */,
 				E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */,
 				500C9678CE94513205BEA4D0 /* SavedTapsViewController+UISearchBarDelegate.swift in Sources */,
 				B2B31D4CC31457910B010787 /* SavedTapsViewController+UISearchControllerDelegate.swift in Sources */,
@@ -770,7 +790,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Tapsnap/Tapsnap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 5WSA243UP9;
 				INFOPLIST_FILE = Tapsnap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -900,7 +920,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Tapsnap/Tapsnap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 5WSA243UP9;
 				INFOPLIST_FILE = Tapsnap/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
