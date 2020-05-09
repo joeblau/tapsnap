@@ -428,6 +428,17 @@ extension CameraViewController: ViewBootstrappable {
             default: break
             }
         }.store(in: &cancellables)
+        
+        Current.reachability
+            .reachabilitySubject
+            .sink { status in
+                switch status {
+                case .offline:
+                    self.navigationItem.rightBarButtonItem = nil
+                case .online(_), .unknown:
+                    CKContainer.default().loadInbox()
+                }
+        }.store(in: &cancellables)
     }
 
     func configureGestureRecoginzers() {
