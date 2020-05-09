@@ -7,17 +7,17 @@ import UIKit
 final class MusicPlaybackView: UIView {
     private let intrinsicHeight: CGFloat
     private lazy var musicTableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .insetGrouped)
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        tv.alwaysBounceVertical = false
-        tv.estimatedRowHeight = 54
-        tv.rowHeight = UITableView.automaticDimension
-        tv.backgroundColor = .clear
-        tv.allowsSelection = false
-        tv.register(SyncTableViewCell.self, forCellReuseIdentifier: SyncTableViewCell.id)
-        tv.register(NowPlayingPreviewTableViewCell.self, forCellReuseIdentifier: NowPlayingPreviewTableViewCell.id)
-        tv.dataSource = self
-        return tv
+        let v = UITableView(frame: .zero, style: .insetGrouped)
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.alwaysBounceVertical = false
+        v.estimatedRowHeight = 54
+        v.rowHeight = UITableView.automaticDimension
+        v.backgroundColor = .clear
+        v.allowsSelection = false
+        v.register(SyncTableViewCell.self, forCellReuseIdentifier: SyncTableViewCell.id)
+        v.register(NowPlayingPreviewTableViewCell.self, forCellReuseIdentifier: NowPlayingPreviewTableViewCell.id)
+        v.dataSource = self
+        return v
     }()
 
     init(height: CGFloat) {
@@ -42,10 +42,13 @@ final class MusicPlaybackView: UIView {
 extension MusicPlaybackView: ViewBootstrappable {
     internal func configureViews() {
         addSubview(musicTableView)
-        musicTableView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        musicTableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
-        musicTableView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        musicTableView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
+        NSLayoutConstraint.activate([
+            musicTableView.topAnchor.constraint(equalTo: topAnchor),
+            musicTableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            musicTableView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            musicTableView.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ])
     }
 }
 

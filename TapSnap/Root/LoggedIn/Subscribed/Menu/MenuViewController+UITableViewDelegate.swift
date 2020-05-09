@@ -6,7 +6,7 @@ import UIKit
 extension MenuViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath {
-        case IndexPath(row: 1, section: 1):
+        case IndexPath(row: 0, section: 1):
             let myGroups = MyGroupsViewController()
             navigationController?.pushViewController(myGroups, animated: true)
         case IndexPath(row: 0, section: 2):

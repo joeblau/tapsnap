@@ -12,6 +12,7 @@ final class CameraOverlayView: UIView {
 
     private let kButtonSize: CGFloat = 56
     private let kButtonPadding: CGFloat = 8
+    private let kHackForKeyboardHeight: CGFloat = 55
 
     // Bottom right
     private lazy var musicButton: UIButton = {
@@ -130,9 +131,14 @@ final class CameraOverlayView: UIView {
     }
 
     @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            drawingToolsViewHeight = keyboardRectangle.height
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {
+            return
+        }
+        switch UIDevice.current.userInterfaceIdiom {
+        case .pad:
+            drawingToolsViewHeight = keyboardFrame.cgRectValue.height - kHackForKeyboardHeight
+        default:
+            drawingToolsViewHeight = keyboardFrame.cgRectValue.height
         }
     }
 

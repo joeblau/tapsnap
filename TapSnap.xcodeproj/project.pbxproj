@@ -389,10 +389,10 @@
 				EDE8F0BA240AC3A000DFA828 /* Groups */,
 				3059A4AF94DCA0B1236599D8 /* MenuViewController.swift */,
 				698527CF1BAF2A4AFBCED1FD /* MenuViewController+UITableViewDataSource.swift */,
+				EDE8F0C3240AC7FD00DFA828 /* MenuViewController+UITableViewDelegate.swift */,
 				03017EADA659A2F2EB261194 /* Cells */,
 				FEED53FF1A6FE82D2CE20A0E /* Models */,
 				AC8E376C67070B908DA41A49 /* Saved */,
-				EDE8F0C3240AC7FD00DFA828 /* MenuViewController+UITableViewDelegate.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -780,7 +780,7 @@
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.tap;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -910,7 +910,7 @@
 				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = app.tapsnap.tap;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

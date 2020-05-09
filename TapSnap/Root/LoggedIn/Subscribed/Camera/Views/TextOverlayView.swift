@@ -13,6 +13,7 @@ final class TextOverlayView: UITextView {
         translatesAutoresizingMaskIntoConstraints = false
         textAlignment = .center
         backgroundColor = .clear
+        autocorrectionType = .no
         tintColor = .label
         isOpaque = false
         sizeToFit()

@@ -22,6 +22,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         let b = UIButton(type: .custom)
         b.setImage(UIImage(systemName: "textbox"), for: .normal)
         b.setBackgroundColor(color: .init(white: 1.0, alpha: 0.7), for: .selected)
+        b.addTarget(self, action: #selector(pressKeyboardAction), for: .touchUpInside)
         b.keyboardAccessory()
         return b
     }()
@@ -30,6 +31,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         let b = UIButton(type: .custom)
         b.setImage(UIImage(systemName: "scribble"), for: .normal)
         b.setBackgroundColor(color: .init(white: 1.0, alpha: 0.7), for: .selected)
+        b.addTarget(self, action: #selector(pressDrawingAction), for: .touchUpInside)
         b.keyboardAccessory()
         return b
     }()
@@ -38,6 +40,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
         let b = UIButton(type: .custom)
         b.setImage(UIImage(systemName: "music.note"), for: .normal)
         b.setBackgroundColor(color: .init(white: 1.0, alpha: 0.7), for: .selected)
+        b.addTarget(self, action: #selector(musicPlaybackAction), for: .touchUpInside)
         b.keyboardAccessory()
         return b
     }()
@@ -45,6 +48,7 @@ final class KeyboardAccessoryView: UIVisualEffectView {
     private lazy var doneButton: UIButton = {
         let b = UIButton(type: .custom)
         b.setTitle("Done", for: .normal)
+        b.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)
         b.keyboardAccessory(alpha: 0.15)
         return b
     }()
@@ -85,13 +89,6 @@ final class KeyboardAccessoryView: UIVisualEffectView {
 }
 
 extension KeyboardAccessoryView: ViewBootstrappable {
-    internal func configureButtonTargets() {
-        textKeyboard.addTarget(self, action: #selector(pressKeyboardAction), for: .touchUpInside)
-        drawToolPicker.addTarget(self, action: #selector(pressDrawingAction), for: .touchUpInside)
-        musicPlayback.addTarget(self, action: #selector(musicPlaybackAction), for: .touchUpInside)
-        doneButton.addTarget(self, action: #selector(pressDoneAction), for: .touchUpInside)
-    }
-
     internal func configureViews() {
         contentView.addSubview(accessoryStack)
         accessoryStack.topAnchor.constraint(equalTo: topAnchor).isActive = true
@@ -103,7 +100,6 @@ extension KeyboardAccessoryView: ViewBootstrappable {
     internal func configureStreams() {
         Current.editingSubject
             .sink { editState in
-
                 switch editState {
                 case .keyboard:
                     self.currentSelected?.isSelected = false
