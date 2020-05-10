@@ -8,7 +8,7 @@ protocol NewGroupViewControllerDelegate {
 }
 
 class NewGroupViewController: UIAlertController {
-    weak var delegate: NewGroupViewControllerDelegate?
+    var delegate: NewGroupViewControllerDelegate?
     lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
         // NO op
     }

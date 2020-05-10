@@ -68,6 +68,8 @@
 		E023B65985451D87D08E505A /* CameraOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ACD5EBEE81BF3F3703D00 /* CameraOverlayView.swift */; };
 		E3A361588485DBA8950E0A39 /* AVCaptureSession+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */; };
 		E3ED872C4EB02E8B00CC5920 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A86F521E8A3727658211B4A2 /* RootViewController.swift */; };
+		ED1244CA246843F5009360E7 /* ResetKeysViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1244C9246843F5009360E7 /* ResetKeysViewController.swift */; };
+		ED1244CC246847F4009360E7 /* ToggleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1244CB246847F4009360E7 /* ToggleTableViewCell.swift */; };
 		ED28B8412420987700B9C7A3 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED28B8402420987700B9C7A3 /* CloudKit.framework */; };
 		ED371268241C8C63001B972D /* CurrentSongView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED371267241C8C63001B972D /* CurrentSongView.swift */; };
 		ED3D5F4324219A1100F93F28 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED3D5F4224219A1100F93F28 /* OnboardingViewController.swift */; };
@@ -177,6 +179,8 @@
 		E75AF4F2AFFAC3179572271C /* SearchContactsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchContactsTableView.swift; sourceTree = "<group>"; };
 		E7F4C07C5C51030334DDE02E /* CloudKitKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitKeys.swift; sourceTree = "<group>"; };
 		E982C0C024CD462D0DE95929 /* CameraViewController+AVCaptureFileOutputRecordingDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CameraViewController+AVCaptureFileOutputRecordingDelegate.swift"; sourceTree = "<group>"; };
+		ED1244C9246843F5009360E7 /* ResetKeysViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResetKeysViewController.swift; path = TapSnap/Root/LoggedIn/Subscribed/Menu/Security/ResetKeysViewController.swift; sourceTree = SOURCE_ROOT; };
+		ED1244CB246847F4009360E7 /* ToggleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ToggleTableViewCell.swift; path = TapSnap/Root/LoggedIn/Subscribed/Menu/Cells/ToggleTableViewCell.swift; sourceTree = SOURCE_ROOT; };
 		ED28B8402420987700B9C7A3 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS13.2.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		ED371267241C8C63001B972D /* CurrentSongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentSongView.swift; sourceTree = "<group>"; };
 		ED3D5F4224219A1100F93F28 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OnboardingViewController.swift; path = TapSnap/Root/OnboardingViewController.swift; sourceTree = SOURCE_ROOT; };
@@ -262,6 +266,7 @@
 			children = (
 				0DF3EFD1681C289327AEDEA5 /* AvatarNameTableViewCell.swift */,
 				5238843AA98A456F4A06E3EA /* MenuCellTableViewCell.swift */,
+				ED1244CB246847F4009360E7 /* ToggleTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -403,6 +408,7 @@
 		7C5978959DFB0C415BC9A390 /* Menu */ = {
 			isa = PBXGroup;
 			children = (
+				ED1244C8246843BE009360E7 /* Security */,
 				EDE8F0BA240AC3A000DFA828 /* Groups */,
 				3059A4AF94DCA0B1236599D8 /* MenuViewController.swift */,
 				698527CF1BAF2A4AFBCED1FD /* MenuViewController+UITableViewDataSource.swift */,
@@ -497,6 +503,14 @@
 				6217B4B7FA2175C2D4D28CFF /* Views */,
 			);
 			path = Camera;
+			sourceTree = "<group>";
+		};
+		ED1244C8246843BE009360E7 /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				ED1244C9246843F5009360E7 /* ResetKeysViewController.swift */,
+			);
+			path = Security;
 			sourceTree = "<group>";
 		};
 		ED28B83F2420987700B9C7A3 /* Frameworks */ = {
@@ -722,6 +736,7 @@
 				EDE8F0BC240AC3B200DFA828 /* MyGroupsViewController.swift in Sources */,
 				B43FA60F5F10D71DF32E9760 /* ContactCollectionViewCell.swift in Sources */,
 				ED8C2EA8240E104A00DA4081 /* PlaybackMetadata.swift in Sources */,
+				ED1244CC246847F4009360E7 /* ToggleTableViewCell.swift in Sources */,
 				155FD04BF3EA39EBD754BDD6 /* ContactsCollectionView.swift in Sources */,
 				6B43BDADE1938D6C860D4BE9 /* DrawingToolsView.swift in Sources */,
 				EDE8F0B7240A0FC300DFA828 /* GenericPasswordConvertible.swift in Sources */,
@@ -773,6 +788,7 @@
 				A058166BFF713A68E73E4851 /* SearchContactsValue.swift in Sources */,
 				CF316AB82F76159755C780BD /* SearchContactsViewController+UISearchBarDelegate.swift in Sources */,
 				2F4F7CB3B90C4A3A2D8B8F71 /* SearchContactsViewController+UISearchControllerDelegate.swift in Sources */,
+				ED1244CA246843F5009360E7 /* ResetKeysViewController.swift in Sources */,
 				ED77D2362421CCC0005D3134 /* CKContainer+UICloudSharingControllerDelegate.swift in Sources */,
 				C29EE32C12F71E0B9F186304 /* SearchContactsViewController+UISearchResultsUpdating.swift in Sources */,
 				EDAAAB6E241746F9002326D9 /* UITableViewCell+Extensions.swift in Sources */,

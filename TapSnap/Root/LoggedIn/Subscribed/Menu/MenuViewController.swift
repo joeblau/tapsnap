@@ -21,21 +21,22 @@ final class MenuViewController: UIViewController {
         ]),
         SectionItem(menuItems: [
             MenuItem(systemName: "square.and.arrow.down", titleText: "Auto-Save", subtitleText: "Automatically save sent taps"),
-            MenuItem(systemName: "hand.draw", titleText: "Visualizer", subtitleText: "Visualize touches on screen (requires app restart)"),
+            MenuItem(systemName: "hand.draw", titleText: "Visualizer", subtitleText: "Visualize touches on screen"),
         ]),
         SectionItem(menuItems: [
-            MenuItem(systemName: "gear", titleText: "Settings"),
+            MenuItem(systemName: "gear", titleText: "Settings", subtitleText: "iOS app settings"),
+        ]),
+        SectionItem(header: "Security",
+                    menuItems: [
+             MenuItem(systemName: "lock.shield", titleText: "Reset Keys", subtitleText: "Reset public and private keys"),
         ]),
     ]
 
     lazy var tableView: UITableView = {
         let t = UITableView(frame: .zero, style: .insetGrouped)
-        t.register(MenuCellTableViewCell.self,
-                   forCellReuseIdentifier: MenuCellTableViewCell.id)
-        t.register(UITableViewCell.self,
-                   forCellReuseIdentifier: UITableViewCell.id)
-        t.register(AvatarNameTableViewCell.self,
-                   forCellReuseIdentifier: AvatarNameTableViewCell.id)
+        t.register(MenuCellTableViewCell.self, forCellReuseIdentifier: MenuCellTableViewCell.id)
+        t.register(ToggleTableViewCell.self, forCellReuseIdentifier: ToggleTableViewCell.id)
+        t.register(AvatarNameTableViewCell.self, forCellReuseIdentifier: AvatarNameTableViewCell.id)
         t.translatesAutoresizingMaskIntoConstraints = false
         t.rowHeight = UITableView.automaticDimension
         t.estimatedRowHeight = 44.0

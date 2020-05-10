@@ -1,9 +1,13 @@
-// MenuCellTableViewCell.swift
-// Copyright (c) 2020 Tapsnap, LLC
+//
+//  ToggleTableViewCell.swift
+//  Tapsnap
+//
+//  Created by Joe Blau on 5/10/20.
+//
 
 import UIKit
 
-final class MenuCellTableViewCell: UITableViewCell {
+class ToggleTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
@@ -16,7 +20,10 @@ final class MenuCellTableViewCell: UITableViewCell {
     
     func configure(menuItem: MenuItem) {
         imageView?.image = UIImage(systemName: menuItem.systemName)
+        imageView?.tintColor = .label
         textLabel?.text = menuItem.titleText
         detailTextLabel?.text = menuItem.subtitleText
+        accessoryType = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden) ? .none : .checkmark
     }
+
 }

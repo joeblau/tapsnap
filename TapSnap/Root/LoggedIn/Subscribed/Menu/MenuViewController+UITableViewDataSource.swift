@@ -24,30 +24,20 @@ extension MenuViewController: UITableViewDataSource {
             }
             cell.avatarView.addTarget(self, action: #selector(updateAvatar), for: .touchUpInside)
             return cell
-        case IndexPath(row: 0, section: 2):
-            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.id, for: indexPath)
+        case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 2):
+            let cell = tableView.dequeueReusableCell(withIdentifier: ToggleTableViewCell.id, for: indexPath)
             let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
-            cell.imageView?.image = UIImage(systemName: menuItem.systemName)
-            cell.imageView?.tintColor = .label
-            cell.textLabel?.text = menuItem.titleText
-            cell.detailTextLabel?.text = menuItem.subtitleText
-            cell.accessoryType = UserDefaults.standard.bool(forKey: Current.k.settingAutoSave) ? .checkmark : .none
-            return cell
-        case IndexPath(row: 1, section: 2):
-            let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.id, for: indexPath)
-            let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
-            cell.imageView?.image = UIImage(systemName: menuItem.systemName)
-            cell.imageView?.tintColor = .label
-            cell.textLabel?.text = menuItem.titleText
-            cell.detailTextLabel?.text = menuItem.subtitleText
-            cell.accessoryType = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden) ? .none : .checkmark
+            (cell as? ToggleTableViewCell)?.configure(menuItem: menuItem)
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)
             let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
-            cell.imageView?.image = UIImage(systemName: menuItem.systemName)
-            cell.textLabel?.text = menuItem.titleText
+            (cell as? MenuCellTableViewCell)?.configure(menuItem: menuItem)
             return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        menuSections[section].header
     }
 }

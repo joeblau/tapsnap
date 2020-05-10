@@ -4,8 +4,15 @@
 import Foundation
 
 struct SectionItem {
-    let title: String? = nil
+    let header: String?
+    let footer: String?
     let menuItems: [MenuItem]
+    
+    init(header: String? = nil, footer: String? = nil, menuItems: [MenuItem]) {
+        self.header = header
+        self.footer = footer
+        self.menuItems = menuItems
+    }
 }
 
 struct MenuItem {
