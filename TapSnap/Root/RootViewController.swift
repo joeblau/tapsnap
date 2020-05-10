@@ -122,18 +122,16 @@ class RootViewController: UIViewController {
 
     // MARK: - Lifecycle
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        bootstrap()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        bootstrap()
         switch UserDefaults.standard.bool(forKey: Current.k.isOnboardingComplete) {
-        case false:
-            showOnboarding()
-        case true:
-            CKContainer.default().currentUser()
-            switch UserDefaults.standard.data(forKey: Current.k.userAccount) {
-            case .some: login()
-            case .none: logout()
-            }
+        case false: showOnboarding()
+        case true: CKContainer.default().currentUser()
         }
     }
 
@@ -196,9 +194,9 @@ extension RootViewController: ViewBootstrappable {
             .sink { status in
                 switch status {
                 case .authorizedWhenInUse:
+                    UserDefaults.standard.set(true, forKey: Current.k.isOnboardingComplete)
                     DispatchQueue.main.async {
                         self.onboarding.dismiss(animated: true) {
-                            UserDefaults.standard.set(true, forKey: Current.k.isOnboardingComplete)
                             self.login()
                         }
                     }
