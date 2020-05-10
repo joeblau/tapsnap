@@ -13,8 +13,6 @@ extension CameraViewController: UICollectionViewDelegate {
         switch indexPath {
         case IndexPath(row: 0, section: 1):
             break
-//            CKContainer.default().create
-//            Current.cloudKitManager.createNewGroup(sender: self)
         default: break
         }
     }
