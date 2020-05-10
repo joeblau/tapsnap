@@ -14,7 +14,7 @@ final class OnboardingViewController: UIViewController {
         l.textAlignment = .center
         return l
     }()
-    
+
     lazy var valueError: UILabel = {
         let l = UILabel()
         l.translatesAutoresizingMaskIntoConstraints = false
@@ -58,12 +58,12 @@ final class OnboardingViewController: UIViewController {
         self.title = title
         valueImage.image = image
         valueDescription.text = description
-        
+
         valueButton.setTitle(buttonText, for: .normal)
         self.valueAction = valueAction
         navigationItem.hidesBackButton = true
     }
-    
+
     func show(error: String? = nil) {
         DispatchQueue.main.async {
             self.valueError.text = error

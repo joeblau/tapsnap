@@ -82,6 +82,10 @@
 		ED723D5224674F8800B6C1D7 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D5124674F8800B6C1D7 /* Reachability.swift */; };
 		ED723D54246763EC00B6C1D7 /* UNNotificationRequest+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D53246763EC00B6C1D7 /* UNNotificationRequest+Extensions.swift */; };
 		ED723D5624676DC600B6C1D7 /* AppDelegate+ UNUserNotificationCenterDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D5524676DC600B6C1D7 /* AppDelegate+ UNUserNotificationCenterDelegate.swift */; };
+		ED723D5924683C9E00B6C1D7 /* CKContainer+User.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D5824683C9E00B6C1D7 /* CKContainer+User.swift */; };
+		ED723D5B24683CE600B6C1D7 /* CKContainer+PKI.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D5A24683CE600B6C1D7 /* CKContainer+PKI.swift */; };
+		ED723D5E24683E0F00B6C1D7 /* CKContainer+Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D5D24683E0F00B6C1D7 /* CKContainer+Messages.swift */; };
+		ED723D6024683E1B00B6C1D7 /* CKContainer+Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED723D5F24683E1B00B6C1D7 /* CKContainer+Groups.swift */; };
 		ED77D2362421CCC0005D3134 /* CKContainer+UICloudSharingControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED77D2352421CCC0005D3134 /* CKContainer+UICloudSharingControllerDelegate.swift */; };
 		ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */; };
 		ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED8C2EA3240C810700DA4081 /* Aliases.swift */; };
@@ -187,6 +191,10 @@
 		ED723D5124674F8800B6C1D7 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = TapSnap/World/Reachability/Reachability.swift; sourceTree = SOURCE_ROOT; };
 		ED723D53246763EC00B6C1D7 /* UNNotificationRequest+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UNNotificationRequest+Extensions.swift"; path = "TapSnap/World/Extensions/UNNotificationRequest+Extensions.swift"; sourceTree = SOURCE_ROOT; };
 		ED723D5524676DC600B6C1D7 /* AppDelegate+ UNUserNotificationCenterDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AppDelegate+ UNUserNotificationCenterDelegate.swift"; path = "TapSnap/AppDelegate+ UNUserNotificationCenterDelegate.swift"; sourceTree = SOURCE_ROOT; };
+		ED723D5824683C9E00B6C1D7 /* CKContainer+User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CKContainer+User.swift"; path = "TapSnap/World/CloudKit/CKContainer+User.swift"; sourceTree = SOURCE_ROOT; };
+		ED723D5A24683CE600B6C1D7 /* CKContainer+PKI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CKContainer+PKI.swift"; path = "TapSnap/World/CloudKit/CKContainer+PKI.swift"; sourceTree = SOURCE_ROOT; };
+		ED723D5D24683E0F00B6C1D7 /* CKContainer+Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CKContainer+Messages.swift"; path = "TapSnap/World/CloudKit/CKContainer+Messages.swift"; sourceTree = SOURCE_ROOT; };
+		ED723D5F24683E1B00B6C1D7 /* CKContainer+Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CKContainer+Groups.swift"; path = "TapSnap/World/CloudKit/CKContainer+Groups.swift"; sourceTree = SOURCE_ROOT; };
 		ED77D2352421CCC0005D3134 /* CKContainer+UICloudSharingControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CKContainer+UICloudSharingControllerDelegate.swift"; path = "TapSnap/World/Extensions/CKContainer+UICloudSharingControllerDelegate.swift"; sourceTree = SOURCE_ROOT; };
 		ED8C2E9F240C57AE00DA4081 /* PublicKeyCryptography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicKeyCryptography.swift; sourceTree = "<group>"; };
 		ED8C2EA3240C810700DA4081 /* Aliases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aliases.swift; sourceTree = "<group>"; };
@@ -314,6 +322,7 @@
 		5B357A0CFC5D38D252784D58 /* World */ = {
 			isa = PBXGroup;
 			children = (
+				ED723D5724683C7D00B6C1D7 /* CloudKit */,
 				ED723D4E2467152600B6C1D7 /* Reachability */,
 				ED5CA368241D6A58009A03A4 /* SensorVisuzlier */,
 				EDE8F0B3240A0F9400DFA828 /* Crypto */,
@@ -421,7 +430,6 @@
 				ED5CA36B241D6BA5009A03A4 /* SensorVisualizerWindow+Touch.swift */,
 				E67DD7438DFB355B5132D5E3 /* AVAssetTrack+Extensions.swift */,
 				AC394824EA0FADBDA6A1A712 /* AVCaptureSession+Extensions.swift */,
-				99AC699B7654EFE34FD9C755 /* CKContainer+Extensions.swift */,
 				AB7036C718054EB3309DB1FD /* CKRecord+Extensions.swift */,
 				20B3DE7C0F9B697573115BFA /* CLLocationManager+Combine.swift */,
 				F7D5A06F6B5145B89F4FE58B /* EXIFData+Extensions.swift */,
@@ -523,6 +531,18 @@
 				ED723D5124674F8800B6C1D7 /* Reachability.swift */,
 			);
 			path = Reachability;
+			sourceTree = "<group>";
+		};
+		ED723D5724683C7D00B6C1D7 /* CloudKit */ = {
+			isa = PBXGroup;
+			children = (
+				99AC699B7654EFE34FD9C755 /* CKContainer+Extensions.swift */,
+				ED723D5824683C9E00B6C1D7 /* CKContainer+User.swift */,
+				ED723D5A24683CE600B6C1D7 /* CKContainer+PKI.swift */,
+				ED723D5D24683E0F00B6C1D7 /* CKContainer+Messages.swift */,
+				ED723D5F24683E1B00B6C1D7 /* CKContainer+Groups.swift */,
+			);
+			path = CloudKit;
 			sourceTree = "<group>";
 		};
 		EDAAAB6124140D41002326D9 /* Subscribed */ = {
@@ -677,6 +697,7 @@
 				579FC49A9D5FE9ABF57CA74B /* AppDelegate+CLLocationManagerDelegate.swift in Sources */,
 				EDE8F0C7240AF07100DFA828 /* MyGroupsViewController+UICollectionViewDelegate.swift in Sources */,
 				EDAAAB5D240F84D4002326D9 /* UINavigationBar+Extensions.swift in Sources */,
+				ED723D5B24683CE600B6C1D7 /* CKContainer+PKI.swift in Sources */,
 				EDAAAB6A2414175B002326D9 /* AppDelegate+SKRequestDelegate.swift in Sources */,
 				5067307D7CA64C0B64BFE45C /* AppDelegate.swift in Sources */,
 				ED8C2EA4240C810700DA4081 /* Aliases.swift in Sources */,
@@ -710,6 +731,7 @@
 				EDAAAB7024174B21002326D9 /* UICollectionViewCell+Extensions.swift in Sources */,
 				DF7728FCA91D5B5E5234D3E0 /* GroupSection.swift in Sources */,
 				EDAAAB6424140DA9002326D9 /* SubscriptionViewController.swift in Sources */,
+				ED723D5924683C9E00B6C1D7 /* CKContainer+User.swift in Sources */,
 				BB2C52A7BAC8857534C19704 /* GroupValue.swift in Sources */,
 				23CEA16D7F7985D61172B946 /* IndeterminateProgressView.swift in Sources */,
 				ED8C2EA0240C57AE00DA4081 /* PublicKeyCryptography.swift in Sources */,
@@ -742,9 +764,11 @@
 				6006081149337EAE465CE208 /* SavedTapsViewController.swift in Sources */,
 				66768FC1EDCE409731DCBBA6 /* SearchContactTableViewCell.swift in Sources */,
 				ED5CA37E241EEA57009A03A4 /* NewGroupViewController.swift in Sources */,
+				ED723D5E24683E0F00B6C1D7 /* CKContainer+Messages.swift in Sources */,
 				EDE8F0BF240AC49600DFA828 /* MyGroupCollectionViewCell.swift in Sources */,
 				ED5CA36C241D6BA5009A03A4 /* SensorVisualizerWindow+Touch.swift in Sources */,
 				F61C92CF1B3263C4F0D72D17 /* SearchContactsSection.swift in Sources */,
+				ED723D6024683E1B00B6C1D7 /* CKContainer+Groups.swift in Sources */,
 				2B37C0C4091DCE3004B9AD60 /* SearchContactsTableView.swift in Sources */,
 				A058166BFF713A68E73E4851 /* SearchContactsValue.swift in Sources */,
 				CF316AB82F76159755C780BD /* SearchContactsViewController+UISearchBarDelegate.swift in Sources */,

@@ -42,7 +42,7 @@ final class MusicPlaybackView: UIView {
 extension MusicPlaybackView: ViewBootstrappable {
     internal func configureViews() {
         addSubview(musicTableView)
-        
+
         NSLayoutConstraint.activate([
             musicTableView.topAnchor.constraint(equalTo: topAnchor),
             musicTableView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),

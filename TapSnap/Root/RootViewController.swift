@@ -28,8 +28,8 @@ class RootViewController: UIViewController {
                                      CKContainer.default().requestApplicationPermission(.userDiscoverability) { status, error in
                                          switch error {
                                          case let .some(error):
-                                            os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
-                                            controller.show(error: error.localizedDescription)
+                                             os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
+                                             controller.show(error: error.localizedDescription)
                                          case .none: break
                                          }
 
@@ -40,9 +40,9 @@ class RootViewController: UIViewController {
                                                  self.onboarding.pushViewController(self.onboardingCamera, animated: true)
                                              }
                                          case .couldNotComplete, .denied, .initialState:
-                                            DispatchQueue.main.async {
-                                                UIApplication.shared.open(URL(string:"App-Prefs:root=General")!, options: [:], completionHandler: nil)
-                                            }
+                                             DispatchQueue.main.async {
+                                                 UIApplication.shared.open(URL(string: "App-Prefs:root=General")!, options: [:], completionHandler: nil)
+                                             }
                                         @unknown default: os_log("Unknown applicatoin permissions", log: .cloudKit, type: .error)
                                          }
                                      }
@@ -126,7 +126,7 @@ class RootViewController: UIViewController {
         super.viewDidLoad()
         bootstrap()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         switch UserDefaults.standard.bool(forKey: Current.k.isOnboardingComplete) {

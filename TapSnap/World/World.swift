@@ -96,7 +96,7 @@ struct World {
 
         return URLSession(configuration: configuraiton)
     }()
-    
+
     // Reachablity
     let reachability = Reachability()
 

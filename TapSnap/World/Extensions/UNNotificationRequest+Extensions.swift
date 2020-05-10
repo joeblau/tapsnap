@@ -1,9 +1,5 @@
-//
-//  UILocalNotification+Extensions.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 5/9/20.
-//
+// UNNotificationRequest+Extensions.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UserNotifications
 
@@ -15,7 +11,7 @@ extension UNNotificationRequest {
         content.sound = UNNotificationSound.defaultCritical
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 2,
                                                         repeats: false)
-        
+
         return UNNotificationRequest(identifier: UUID().uuidString,
                                      content: content,
                                      trigger: trigger)

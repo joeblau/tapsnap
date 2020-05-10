@@ -1,18 +1,12 @@
-//
-//  AppDelegate+ UNUserNotificationCenterDelegate.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 5/9/20.
-//
+// AppDelegate+ UNUserNotificationCenterDelegate.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
+    func userNotificationCenter(_: UNUserNotificationCenter,
+                                willPresent _: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler(.alert)
     }
-    
 }

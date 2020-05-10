@@ -89,6 +89,7 @@ final class CameraViewController: UIViewController {
     lazy var activityView: UIActivityIndicatorView = {
         let v = UIActivityIndicatorView()
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.startAnimating()
         return v
     }()
 
@@ -403,24 +404,24 @@ extension CameraViewController: ViewBootstrappable {
 
         Current.inboxURLsSubject
             .removeDuplicates()
+            .subscribe(on: DispatchQueue.main)
             .sink { inboxState in
-                DispatchQueue.main.async {
-                    switch inboxState {
-                    case .idle: break
-                    case .fetching:
-                        self.navigationItem.rightBarButtonItem = self.activityButtonItem
-                    case let .completedFetching(urls):
-                        switch urls {
-                        case let .some(urls) where !urls.isEmpty:
-                            self.inboxMessageURLs = urls
-                            self.navigationItem.rightBarButtonItem = self.notificationButtonItem
-                            self.notificationButton.setTitle("\(urls.count)", for: .normal)
-                        default:
-                            self.navigationItem.rightBarButtonItem = nil
-                        }
+                switch inboxState {
+                case .idle: break
+                case .fetching:
+                    self.navigationItem.rightBarButtonItem = self.activityButtonItem
+                case let .completedFetching(urls):
+                    switch urls {
+                    case let .some(urls) where !urls.isEmpty:
+                        self.inboxMessageURLs = urls
+                        self.navigationItem.rightBarButtonItem = self.notificationButtonItem
+                        self.notificationButton.setTitle("\(urls.count)", for: .normal)
+                    default:
+                        self.navigationItem.rightBarButtonItem = nil
                     }
                 }
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
 
         Current.cleanupSubject.sink { cleanup in
             switch cleanup {
@@ -428,17 +429,17 @@ extension CameraViewController: ViewBootstrappable {
             default: break
             }
         }.store(in: &cancellables)
-        
+
         Current.reachability
             .reachabilitySubject
             .sink { status in
                 switch status {
                 case .offline:
                     self.navigationItem.rightBarButtonItem = nil
-                case .online(_), .unknown:
+                case .online, .unknown:
                     CKContainer.default().loadInbox()
                 }
-        }.store(in: &cancellables)
+            }.store(in: &cancellables)
     }
 
     func configureGestureRecoginzers() {

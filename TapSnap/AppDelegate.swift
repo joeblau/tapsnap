@@ -98,7 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
+
     // MARK: - CloudKit
 
     func application(_: UIApplication,
@@ -141,7 +141,7 @@ extension AppDelegate: ViewBootstrappable {
             default: break
             }
         }.store(in: &cancellables)
-        
+
         Current.reachability
             .reachabilitySubject
             .sink { status in
@@ -149,9 +149,9 @@ extension AppDelegate: ViewBootstrappable {
                 case .offline:
                     let offlineRequest = UNNotificationRequest.noConnectivity
                     UNUserNotificationCenter.current().add(offlineRequest)
-                    
-                case .online(_), .unknown: break
+
+                case .online, .unknown: break
                 }
-        }.store(in: &cancellables)
+            }.store(in: &cancellables)
     }
 }
