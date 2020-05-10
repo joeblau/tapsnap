@@ -181,7 +181,7 @@ class RootViewController: UIViewController {
     }
 
     private func showLogout() {
-        let loggedOut = UINavigationController(rootViewController: LoggedOutViewController())
+        let loggedOut = LoggedOutViewController()
         loggedOut.modalPresentationStyle = .fullScreen
         present(loggedOut, animated: true, completion: nil)
     }
