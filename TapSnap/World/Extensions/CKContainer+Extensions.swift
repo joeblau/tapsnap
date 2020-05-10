@@ -117,6 +117,7 @@ extension CKContainer {
 
         let sharingController = UICloudSharingController(preparationHandler: { (_, handler:
             @escaping (CKShare?, CKContainer?, Error?) -> Void) in
+            
             let operation = CKModifyRecordsOperation(recordsToSave: [group, share],
                                                      recordIDsToDelete: nil)
             operation.perRecordCompletionBlock = { [unowned self] _, error in
@@ -256,7 +257,10 @@ extension CKContainer {
         }
 
         privateCloudDatabase.perform(query, inZoneWith: sharedZoneID) { [unowned self] records, error in
-            guard self.no(error: error), let groups = records else { return }
+            guard self.no(error: error), let groups = records else {
+                self.bootstrapSahredRecordZone()
+                return
+            }
 
             let exsitingGroups = Current.cloudKitGroupsSubject.value ?? Set<CKRecord>()
             let newGroups = Set(groups)
@@ -341,6 +345,13 @@ extension CKContainer {
                 guard subscriptions.isEmpty else { return }
                 self.buildMessageSubscriptions()
             }
+        }
+    }
+    
+    private func bootstrapSahredRecordZone() {
+        let sharedZone = CKRecordZone(zoneID: sharedZoneID)
+        privateCloudDatabase.save(sharedZone) { zone, error in
+            guard self.no(error: error) else { return }
         }
     }
 }
