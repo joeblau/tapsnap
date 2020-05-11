@@ -3,12 +3,12 @@
 
 import UIKit
 
-protocol NewGroupViewControllerDelegate {
+protocol NewGroupViewControllerDelegate: AnyObject {
     func createNewGroup(with name: String)
 }
 
 class NewGroupViewController: UIAlertController {
-    var delegate: NewGroupViewControllerDelegate?
+    weak var delegate: NewGroupViewControllerDelegate?
     lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
         // NO op
     }

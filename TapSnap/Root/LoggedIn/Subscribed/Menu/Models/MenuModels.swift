@@ -7,7 +7,7 @@ struct SectionItem {
     let header: String?
     let footer: String?
     let menuItems: [MenuItem]
-    
+
     init(header: String? = nil, footer: String? = nil, menuItems: [MenuItem]) {
         self.header = header
         self.footer = footer

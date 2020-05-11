@@ -36,8 +36,8 @@ extension MenuViewController: UITableViewDataSource {
             return cell
         }
     }
-    
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+
+    func tableView(_: UITableView, titleForHeaderInSection section: Int) -> String? {
         menuSections[section].header
     }
 }

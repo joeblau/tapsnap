@@ -60,6 +60,8 @@ extension CKContainer {
     }
 
     func fetchUnreadMessages(completion: ((UIBackgroundFetchResult) -> Void)? = nil) {
+        guard Current.inboxURLsSubject.value != .fetching else { return }
+
         Current.inboxURLsSubject.send(.fetching)
 
         guard let recipientPredicateData = UserDefaults.standard.value(forKey: Current.k.recipientPredicate) as? Data,

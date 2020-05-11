@@ -28,8 +28,8 @@ final class MenuViewController: UIViewController {
         ]),
         SectionItem(header: "Security",
                     menuItems: [
-             MenuItem(systemName: "lock.shield", titleText: "Reset Keys", subtitleText: "Reset public and private keys"),
-        ]),
+                        MenuItem(systemName: "lock.shield", titleText: "Reset Keys", subtitleText: "Reset public and private keys"),
+                    ]),
     ]
 
     lazy var tableView: UITableView = {

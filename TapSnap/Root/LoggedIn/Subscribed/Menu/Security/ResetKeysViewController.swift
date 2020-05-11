@@ -1,9 +1,5 @@
-//
-//  ResetKeysViewController.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 5/10/20.
-//
+// ResetKeysViewController.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import CloudKit
 import UIKit
@@ -14,17 +10,17 @@ class ResetKeysViewController: UIAlertController {
     lazy var resetAction = UIAlertAction(title: "Reset", style: .destructive) { _ in
         CKContainer.default().bootstrapKeys(reset: true)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         addTextField()
         textFields?.first?.placeholder = "RESET KEYS"
         textFields?.first?.clearButtonMode = .whileEditing
         textFields?.first?.delegate = self
-        
+
         resetAction.isEnabled = false
-        
+
         addAction(cancelAction)
         addAction(resetAction)
     }

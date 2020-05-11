@@ -1,14 +1,10 @@
-//
-//  ToggleTableViewCell.swift
-//  Tapsnap
-//
-//  Created by Joe Blau on 5/10/20.
-//
+// ToggleTableViewCell.swift
+// Copyright (c) 2020 Tapsnap, LLC
 
 import UIKit
 
 class ToggleTableViewCell: UITableViewCell {
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    override init(style _: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
         imageView?.tintColor = .label
@@ -17,7 +13,7 @@ class ToggleTableViewCell: UITableViewCell {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func configure(menuItem: MenuItem) {
         imageView?.image = UIImage(systemName: menuItem.systemName)
         imageView?.tintColor = .label
@@ -25,5 +21,4 @@ class ToggleTableViewCell: UITableViewCell {
         detailTextLabel?.text = menuItem.subtitleText
         accessoryType = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden) ? .none : .checkmark
     }
-
 }
