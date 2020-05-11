@@ -24,10 +24,15 @@ extension MenuViewController: UITableViewDataSource {
             }
             cell.avatarView.addTarget(self, action: #selector(updateAvatar), for: .touchUpInside)
             return cell
-        case IndexPath(row: 0, section: 2), IndexPath(row: 1, section: 2):
+        case IndexPath(row: 0, section: 2):
             let cell = tableView.dequeueReusableCell(withIdentifier: ToggleTableViewCell.id, for: indexPath)
             let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
-            (cell as? ToggleTableViewCell)?.configure(menuItem: menuItem)
+            (cell as? ToggleTableViewCell)?.configure(menuItem: menuItem, enabled: UserDefaults.standard.bool(forKey: Current.k.settingAutoSave))
+            return cell
+        case IndexPath(row: 1, section: 2):
+            let cell = tableView.dequeueReusableCell(withIdentifier: ToggleTableViewCell.id, for: indexPath)
+            let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
+            (cell as? ToggleTableViewCell)?.configure(menuItem: menuItem, enabled: UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden))
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)

@@ -14,11 +14,11 @@ class ToggleTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(menuItem: MenuItem) {
+    func configure(menuItem: MenuItem, enabled: Bool = false) {
         imageView?.image = UIImage(systemName: menuItem.systemName)
         imageView?.tintColor = .label
         textLabel?.text = menuItem.titleText
         detailTextLabel?.text = menuItem.subtitleText
-        accessoryType = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden) ? .none : .checkmark
+        accessoryType = enabled ? .checkmark : .none
     }
 }
