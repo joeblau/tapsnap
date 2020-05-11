@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         bootstrap()
 
         do { // Bootstrap user
-            if let data = UserDefaults.standard.data(forKey: Current.k.userAccount),
+            if let data = UserDefaults.standard.data(forKey: Constant.userAccount),
                 let record = try? CKRecord.unarchive(data: data) {
                 Current.cloudKitUserSubject.send(record)
             }
@@ -67,11 +67,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UINavigationBar.appearance().isTranslucent = true
 
             UIBarButtonItem.appearance().tintColor = .label
-        }
-
-        do { // Visuzliser
-            let hideVizualiser = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden)
-            Current.hideTouchVisuzlierSubject.send(hideVizualiser)
         }
 
         window = sensorVisualizerWindow
@@ -123,13 +118,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: ViewBootstrappable {
     func configureStreams() {
-        Current.hideTouchVisuzlierSubject
+        Current.showTouchVisuzlierSubject
             .receive(on: DispatchQueue.main)
             .sink { showVisualizer in
                 self.sensorVisualizerWindow
                     .visualizationWindow
-                    .isHidden = showVisualizer
-                UserDefaults.standard.set(showVisualizer, forKey: Current.k.isVisualizerHidden)
+                    .isHidden = !showVisualizer
             }.store(in: &cancellables)
 
         Current.inboxURLsSubject

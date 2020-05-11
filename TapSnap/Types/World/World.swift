@@ -75,7 +75,6 @@ enum InboxRequestState: Equatable {
 
 struct World {
     let pki = PublicKeyCryptography()
-    let k = Constants()
 
     // Sensors
     var locationManager: CLLocationManager = {
@@ -125,7 +124,8 @@ struct World {
     var inboxURLsSubject = CurrentValueSubject<InboxRequestState, Never>(.idle)
     var outboxRecordsSubject = CurrentValueSubject<[CKRecord]?, Never>(nil)
 
-    var hideTouchVisuzlierSubject = CurrentValueSubject<Bool, Never>(true)
+    
+    var showTouchVisuzlierSubject = CurrentValueSubject<Bool, Never>(UserDefaults.standard.bool(forKey: Constant.showVisualizer))
 
     var currentLocationAuthorizationSubject = CurrentValueSubject<CLAuthorizationStatus, Never>(.notDetermined)
     // CloudKit

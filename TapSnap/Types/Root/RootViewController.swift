@@ -125,7 +125,7 @@ class RootViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        switch UserDefaults.standard.bool(forKey: Current.k.isOnboardingComplete) {
+        switch UserDefaults.standard.bool(forKey: Constant.isOnboardingComplete) {
         case false: present(onboarding, animated: true, completion: nil)
         case true: CKContainer.default().currentUser()
         }
@@ -192,7 +192,7 @@ extension RootViewController: ViewBootstrappable {
             .sink { status in
                 switch status {
                 case .authorizedWhenInUse:
-                    UserDefaults.standard.set(true, forKey: Current.k.isOnboardingComplete)
+                    UserDefaults.standard.set(true, forKey: Constant.isOnboardingComplete)
                     self.onboarding.dismiss(animated: true) {
                         self.login()
                     }
@@ -204,7 +204,7 @@ extension RootViewController: ViewBootstrappable {
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { record in
-                guard UserDefaults.standard.bool(forKey: Current.k.isOnboardingComplete) else { return }
+                guard UserDefaults.standard.bool(forKey: Constant.isOnboardingComplete) else { return }
                 switch record {
                 case .some: self.login()
                 case .none: self.logout()

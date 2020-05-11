@@ -64,7 +64,7 @@ extension CKContainer {
 
         Current.inboxURLsSubject.send(.fetching)
 
-        guard let recipientPredicateData = UserDefaults.standard.value(forKey: Current.k.recipientPredicate) as? Data,
+        guard let recipientPredicateData = UserDefaults.standard.value(forKey: Constant.recipientPredicate) as? Data,
             let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
             currentUser(); return
         }
@@ -130,7 +130,7 @@ extension CKContainer {
     func subscribeToInbox() {
         // removeAllSubscriptions()
 
-        if !UserDefaults.standard.bool(forKey: Current.k.messagePublicSubscriptionCached) {
+        if !UserDefaults.standard.bool(forKey: Constant.messagePublicSubscriptionCached) {
             publicCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
                 guard self.no(error: error), let subscriptions = subscriptions else { return }
 
@@ -157,15 +157,15 @@ extension CKContainer {
                 }
 
                 do {
-                    guard let pvSigning: Curve25519.Signing.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateSigningKey),
-                        let pkSigning: Curve25519.Signing.PublicKey = try? GenericPasswordStore().readKey(account: Current.k.publicSigningKey) else {
+                    guard let pvSigning: Curve25519.Signing.PrivateKey = try? GenericPasswordStore().readKey(account: Constant.privateSigningKey),
+                        let pkSigning: Curve25519.Signing.PublicKey = try? GenericPasswordStore().readKey(account: Constant.publicSigningKey) else {
                         fatalError("Could not read private key/re-bootstrap")
                     }
                     let sealed = URL.sealedURL
 
                     let record = CKRecord(recordType: .message)
 
-                    if let data = UserDefaults.standard.data(forKey: Current.k.userAccount),
+                    if let data = UserDefaults.standard.data(forKey: Constant.userAccount),
                         let userRecord = try? CKRecord.unarchive(data: data),
                         let username = userRecord[UserAliasKey.name] as? String {
                         switch mediaCapture {
@@ -222,7 +222,7 @@ extension CKContainer {
     }
 
     private func buildMessageSubscriptions() {
-        guard let recipientPredicateData = UserDefaults.standard.data(forKey: Current.k.recipientPredicate),
+        guard let recipientPredicateData = UserDefaults.standard.data(forKey: Constant.recipientPredicate),
             let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
             currentUser()
             return
@@ -244,7 +244,7 @@ extension CKContainer {
 
         publicCloudDatabase.save(subscription) { _, error in
             guard self.no(error: error) else { return }
-            UserDefaults.standard.set(true, forKey: Current.k.messagePublicSubscriptionCached)
+            UserDefaults.standard.set(true, forKey: Constant.messagePublicSubscriptionCached)
         }
         return
     }
@@ -260,6 +260,6 @@ extension CKContainer {
             }
         }
 
-        UserDefaults.standard.removeObject(forKey: Current.k.messagePublicSubscriptionCached)
+        UserDefaults.standard.removeObject(forKey: Constant.messagePublicSubscriptionCached)
     }
 }

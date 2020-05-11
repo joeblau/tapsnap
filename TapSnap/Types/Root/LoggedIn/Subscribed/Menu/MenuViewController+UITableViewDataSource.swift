@@ -27,12 +27,12 @@ extension MenuViewController: UITableViewDataSource {
         case IndexPath(row: 0, section: 2):
             let cell = tableView.dequeueReusableCell(withIdentifier: ToggleTableViewCell.id, for: indexPath)
             let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
-            (cell as? ToggleTableViewCell)?.configure(menuItem: menuItem, enabled: UserDefaults.standard.bool(forKey: Current.k.settingAutoSave))
+            (cell as? ToggleTableViewCell)?.configure(menuItem: menuItem, enabled: UserDefaults.standard.bool(forKey: Constant.settingAutoSave))
             return cell
         case IndexPath(row: 1, section: 2):
             let cell = tableView.dequeueReusableCell(withIdentifier: ToggleTableViewCell.id, for: indexPath)
             let menuItem = menuSections[indexPath.section].menuItems[indexPath.row]
-            (cell as? ToggleTableViewCell)?.configure(menuItem: menuItem, enabled: UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden))
+            (cell as? ToggleTableViewCell)?.configure(menuItem: menuItem, enabled: UserDefaults.standard.bool(forKey: Constant.showVisualizer))
             return cell
         default:
             let cell = tableView.dequeueReusableCell(withIdentifier: MenuCellTableViewCell.id, for: indexPath)

@@ -9,10 +9,10 @@ import UIKit
 extension CKContainer {
     func bootstrapKeys(reset: Bool = false) {
         do {
-            let pvEncryption: Curve25519.KeyAgreement.PrivateKey? = try GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey)
-            let pkEncryption: Curve25519.KeyAgreement.PublicKey? = try GenericPasswordStore().readKey(account: Current.k.publicEncryptionKey)
-            let pvSigning: Curve25519.Signing.PrivateKey? = try GenericPasswordStore().readKey(account: Current.k.privateSigningKey)
-            let pkSigning: Curve25519.Signing.PublicKey? = try GenericPasswordStore().readKey(account: Current.k.publicSigningKey)
+            let pvEncryption: Curve25519.KeyAgreement.PrivateKey? = try GenericPasswordStore().readKey(account: Constant.privateEncryptionKey)
+            let pkEncryption: Curve25519.KeyAgreement.PublicKey? = try GenericPasswordStore().readKey(account: Constant.publicEncryptionKey)
+            let pvSigning: Curve25519.Signing.PrivateKey? = try GenericPasswordStore().readKey(account: Constant.privateSigningKey)
+            let pkSigning: Curve25519.Signing.PublicKey? = try GenericPasswordStore().readKey(account: Constant.publicSigningKey)
             if pvEncryption == nil || pkEncryption == nil || pvSigning == nil || pkSigning == nil {
                 resetKeys()
             }
@@ -27,7 +27,7 @@ extension CKContainer {
     func decrypt(sealed message: SealedMessage,
                  publicKey signing: Curve25519.Signing.PublicKey,
                  completed: (_ saved: Bool) -> Void) {
-        guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Current.k.privateEncryptionKey) else {
+        guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Constant.privateEncryptionKey) else {
             fatalError("Bootstrap private encryptoin key")
         }
 
@@ -62,7 +62,7 @@ extension CKContainer {
 
     private func store(privateKey encryption: Curve25519.KeyAgreement.PrivateKey,
                        privateKey signing: Curve25519.Signing.PrivateKey) {
-        guard let creatorReferenceData = UserDefaults.standard.data(forKey: Current.k.creatorReference),
+        guard let creatorReferenceData = UserDefaults.standard.data(forKey: Constant.creatorReference),
             let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
             currentUser(); return
         }
@@ -70,8 +70,8 @@ extension CKContainer {
         let query = CKQuery(recordType: .privateKey, predicate: NSPredicate(value: true))
         privateCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] records, error in
             guard self.no(error: error) else { return }
-            try? GenericPasswordStore().deleteKey(account: Current.k.privateEncryptionKey)
-            try? GenericPasswordStore().deleteKey(account: Current.k.privateSigningKey)
+            try? GenericPasswordStore().deleteKey(account: Constant.privateEncryptionKey)
+            try? GenericPasswordStore().deleteKey(account: Constant.privateSigningKey)
             records?.forEach { [unowned self] record in
                 self.privateCloudDatabase.delete(withRecordID: record.recordID) { _, error in
                     guard self.no(error: error) else { return }
@@ -84,17 +84,17 @@ extension CKContainer {
             record[CryptoKey.creator] = creatorReference
             self.privateCloudDatabase.save(record) { [unowned self] _, error in
                 guard self.no(error: error) else { return }
-                try? GenericPasswordStore().storeKey(encryption, account: Current.k.privateEncryptionKey)
-                try? GenericPasswordStore().storeKey(signing, account: Current.k.privateSigningKey)
+                try? GenericPasswordStore().storeKey(encryption, account: Constant.privateEncryptionKey)
+                try? GenericPasswordStore().storeKey(signing, account: Constant.privateSigningKey)
             }
         }
     }
 
     private func store(publicKey encryption: Curve25519.KeyAgreement.PublicKey,
                        publicKey signing: Curve25519.Signing.PublicKey) {
-        guard let creatorPredicateData = UserDefaults.standard.data(forKey: Current.k.creatorPredicate),
+        guard let creatorPredicateData = UserDefaults.standard.data(forKey: Constant.creatorPredicate),
             let creatorPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorPredicateData) as? NSPredicate,
-            let creatorReferenceData = UserDefaults.standard.data(forKey: Current.k.creatorReference),
+            let creatorReferenceData = UserDefaults.standard.data(forKey: Constant.creatorReference),
             let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
             currentUser(); return
         }
@@ -102,8 +102,8 @@ extension CKContainer {
         let query = CKQuery(recordType: .publicKey, predicate: creatorPredicate)
         publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] records, error in
             guard self.no(error: error) else { return }
-            try? GenericPasswordStore().deleteKey(account: Current.k.publicEncryptionKey)
-            try? GenericPasswordStore().deleteKey(account: Current.k.publicSigningKey)
+            try? GenericPasswordStore().deleteKey(account: Constant.publicEncryptionKey)
+            try? GenericPasswordStore().deleteKey(account: Constant.publicSigningKey)
             records?.forEach { [unowned self] record in
                 self.publicCloudDatabase.delete(withRecordID: record.recordID) { _, error in
                     guard self.no(error: error) else { return }
@@ -116,8 +116,8 @@ extension CKContainer {
             record[CryptoKey.creator] = creatorReference
             self.publicCloudDatabase.save(record) { [unowned self] _, error in
                 guard self.no(error: error) else { return }
-                try? GenericPasswordStore().storeKey(encryption, account: Current.k.publicEncryptionKey)
-                try? GenericPasswordStore().storeKey(signing, account: Current.k.publicSigningKey)
+                try? GenericPasswordStore().storeKey(encryption, account: Constant.publicEncryptionKey)
+                try? GenericPasswordStore().storeKey(signing, account: Constant.publicSigningKey)
             }
         }
     }

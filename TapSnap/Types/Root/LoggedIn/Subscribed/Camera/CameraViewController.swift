@@ -297,10 +297,14 @@ extension CameraViewController: ViewBootstrappable {
                         self.session.enableBackgroundAudio()
                     }
                 case .playback:
-                    guard let inboxMessageURLs = self.inboxMessageURLs else { return }
-                    inboxMessageURLs.forEach { url in
-                        self.playbackViewController.pushViewController(PlaybackViewController(messageURL: url), animated: false)
-                    }
+                    self.inboxMessageURLs?
+                        .compactMap({ $0 })
+                        .forEach({ url in
+                            guard FileManager.default.fileExists(atPath: url.path) else { return }
+                            self.playbackViewController
+                                .pushViewController(PlaybackViewController(messageURL: url),
+                                                    animated: false)
+                    })
                     self.present(self.playbackViewController, animated: true) {
                         self.session.disableBackgroundAudio()
                     }

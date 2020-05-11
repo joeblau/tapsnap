@@ -10,14 +10,15 @@ extension MenuViewController: UITableViewDelegate {
             let myGroups = MyGroupsViewController()
             navigationController?.pushViewController(myGroups, animated: true)
         case IndexPath(row: 0, section: 2):
-            var autoSave = UserDefaults.standard.bool(forKey: Current.k.settingAutoSave)
+            var autoSave = UserDefaults.standard.bool(forKey: Constant.settingAutoSave)
             autoSave.toggle()
-            UserDefaults.standard.set(autoSave, forKey: Current.k.settingAutoSave)
+            UserDefaults.standard.set(autoSave, forKey: Constant.settingAutoSave)
             tableView.reloadRows(at: [indexPath], with: .automatic)
         case IndexPath(row: 1, section: 2):
-            var visualizer = UserDefaults.standard.bool(forKey: Current.k.isVisualizerHidden)
+            var visualizer = Current.showTouchVisuzlierSubject.value
             visualizer.toggle()
-            Current.hideTouchVisuzlierSubject.send(visualizer)
+            UserDefaults.standard.set(visualizer, forKey: Constant.showVisualizer)
+            Current.showTouchVisuzlierSubject.send(visualizer)
             tableView.reloadRows(at: [indexPath], with: .automatic)
         case IndexPath(row: 0, section: 3):
             guard let settings = URL(string: UIApplication.openSettingsURLString) else { return }

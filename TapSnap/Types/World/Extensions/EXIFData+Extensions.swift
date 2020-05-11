@@ -23,7 +23,7 @@ extension Data {
             var exifProperties = EXIRProperites()
             exifProperties.group = name
             exifProperties.address = Current.currentAddressSubject.value
-            exifProperties.author = UserDefaults.standard.string(forKey: Current.k.currentUserName)
+            exifProperties.author = UserDefaults.standard.string(forKey: Constant.currentUserName)
 
             if let exifCommentString = try? JSONEncoder().encode(exifProperties).base64EncodedString() {
                 exif[kCGImagePropertyExifUserComment as String] = exifCommentString
@@ -172,7 +172,7 @@ extension Array where Element: AVMetadataItem {
             metadata.append(group)
         }
 
-        if let currentUsername = UserDefaults.standard.string(forKey: Current.k.currentUserName) {
+        if let currentUsername = UserDefaults.standard.string(forKey: Constant.currentUserName) {
             let username = AVMutableMetadataItem()
             username.keySpace = .quickTimeUserData
             username.key = AVMetadataKey.quickTimeUserDataKeyArtist as NSString
@@ -181,7 +181,7 @@ extension Array where Element: AVMetadataItem {
             metadata.append(username)
         }
 
-        if let currentAvatar = UserDefaults.standard.data(forKey: Current.k.currentUserAvatar) {
+        if let currentAvatar = UserDefaults.standard.data(forKey: Constant.currentUserAvatar) {
             let avatar = AVMutableMetadataItem()
             avatar.keySpace = .quickTimeUserData
             avatar.key = AVMetadataKey.id3MetadataKeyAttachedPicture as NSString

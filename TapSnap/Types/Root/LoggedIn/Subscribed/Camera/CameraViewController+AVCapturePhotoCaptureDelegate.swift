@@ -79,7 +79,7 @@ extension CameraViewController: AVCapturePhotoCaptureDelegate {
         }
         CKContainer.default()
             .createNewMessage(for: currentGroup, with: .photo(outputFileURL)) { isSaved in
-                guard UserDefaults.standard.bool(forKey: Current.k.settingAutoSave) else {
+                guard UserDefaults.standard.bool(forKey: Constant.settingAutoSave) else {
                     Current.cleanupSubject.send(.cleanUp(outputFileURL))
                     return
                 }

@@ -7,7 +7,7 @@ import UIKit
 
 extension CKContainer {
     func currentUser() {
-        guard UserDefaults.standard.data(forKey: Current.k.userAccount) == nil else { return }
+        guard UserDefaults.standard.data(forKey: Constant.userAccount) == nil else { return }
         fetchUserRecordID { [unowned self] recordID, error in
             guard self.no(error: error), let recordID = recordID else { return }
 
@@ -16,19 +16,19 @@ extension CKContainer {
             let recipientPredicate = NSPredicate(format: "recipient == %@", creatorReference)
 
             let creatorReferenceData = try? NSKeyedArchiver.archivedData(withRootObject: creatorReference, requiringSecureCoding: true)
-            UserDefaults.standard.set(creatorReferenceData, forKey: Current.k.creatorReference)
+            UserDefaults.standard.set(creatorReferenceData, forKey: Constant.creatorReference)
 
             let creatorPredicateData = try? NSKeyedArchiver.archivedData(withRootObject: creatorPredicate, requiringSecureCoding: true)
-            UserDefaults.standard.set(creatorPredicateData, forKey: Current.k.creatorPredicate)
+            UserDefaults.standard.set(creatorPredicateData, forKey: Constant.creatorPredicate)
 
             let recipientPredicateData = try? NSKeyedArchiver.archivedData(withRootObject: recipientPredicate, requiringSecureCoding: true)
-            UserDefaults.standard.set(recipientPredicateData, forKey: Current.k.recipientPredicate)
+            UserDefaults.standard.set(recipientPredicateData, forKey: Constant.recipientPredicate)
             self.buildUser(with: recordID)
         }
     }
 
     func updateUser(image url: URL, completion: @escaping (Bool) -> Void) {
-        guard let data = UserDefaults.standard.data(forKey: Current.k.userAccount),
+        guard let data = UserDefaults.standard.data(forKey: Constant.userAccount),
             let userRecord = try? CKRecord.unarchive(data: data) else {
             completion(false); return
         }
@@ -43,7 +43,7 @@ extension CKContainer {
                     let record = record,
                     let data = try? CKRecord.archive(record: record) else { completion(false); return }
 
-                UserDefaults.standard.set(data, forKey: Current.k.userAccount)
+                UserDefaults.standard.set(data, forKey: Constant.userAccount)
                 Current.cloudKitUserSubject.send(record)
 
                 completion(true)
@@ -68,12 +68,12 @@ extension CKContainer {
             if let avatarAsset = userRecord[UserAliasKey.avatar] as? CKAsset,
                 let avatarURL = avatarAsset.fileURL,
                 let imageData = try? Data(contentsOf: avatarURL) {
-                UserDefaults.standard.set(imageData, forKey: Current.k.currentUserAvatar)
+                UserDefaults.standard.set(imageData, forKey: Constant.currentUserAvatar)
                 image = UIImage(data: imageData)
             }
 
             if let data = try? CKRecord.archive(record: userRecord) {
-                UserDefaults.standard.set(data, forKey: Current.k.userAccount)
+                UserDefaults.standard.set(data, forKey: Constant.userAccount)
                 Current.cloudKitUserSubject.send(userRecord)
             }
             completion(username, image)
@@ -83,7 +83,7 @@ extension CKContainer {
     // MARK: - Private
 
     private func buildUser(with recordID: CKRecord.ID) {
-        switch UserDefaults.standard.data(forKey: Current.k.userAccount) {
+        switch UserDefaults.standard.data(forKey: Constant.userAccount) {
         case let .some(record):
             guard let user = try? CKRecord.unarchive(data: record) else { return }
             Current.cloudKitUserSubject.send(user)
@@ -101,7 +101,7 @@ extension CKContainer {
 
     private func createUser(from identity: CKUserIdentity) {
         guard let components = identity.nameComponents,
-            let creatorReferenceData = UserDefaults.standard.data(forKey: Current.k.creatorReference),
+            let creatorReferenceData = UserDefaults.standard.data(forKey: Constant.creatorReference),
             let creatorReference = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(creatorReferenceData) as? CKRecord.Reference else {
             fatalError("No identity name components")
         }
@@ -116,8 +116,8 @@ extension CKContainer {
                 let record = record,
                 let data = try? CKRecord.archive(record: record) else { return }
 
-            UserDefaults.standard.set(name, forKey: Current.k.currentUserName)
-            UserDefaults.standard.set(data, forKey: Current.k.userAccount)
+            UserDefaults.standard.set(name, forKey: Constant.currentUserName)
+            UserDefaults.standard.set(data, forKey: Constant.userAccount)
             Current.cloudKitUserSubject.send(record)
         }
     }
