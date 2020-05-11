@@ -28,7 +28,6 @@ class ResetKeysViewController: UIAlertController {
         addAction(cancelAction)
         addAction(resetAction)
     }
-    
 }
 
 extension ResetKeysViewController: UITextFieldDelegate {

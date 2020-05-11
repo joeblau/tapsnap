@@ -24,7 +24,7 @@ extension MenuViewController: UITableViewDelegate {
             UIApplication.shared.open(settings)
         case IndexPath(row: 0, section: 4):
             let alert = ResetKeysViewController(title: "Reset Keys",
-                                                message: "Reset public and private keys",
+                                                message: "Type \"RESET KEYS\" Reset public and private keys",
                                                 preferredStyle: .alert)
             present(alert, animated: true, completion: nil)
         default: break

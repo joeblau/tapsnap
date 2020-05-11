@@ -6,10 +6,7 @@ import UIKit
 
 class RenameGroupViewController: UIAlertController {
     var groupName: String?
-    lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-        // NO op
-    }
-
+    lazy var cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
     lazy var renameAction = UIAlertAction(title: "Rename", style: .default) { _ in
         guard let record = Current.cloudKitSelectedGroupSubject.value,
             let newGroupName = self.textFields?.first?.text else { return }
