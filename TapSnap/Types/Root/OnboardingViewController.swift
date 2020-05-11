@@ -89,17 +89,19 @@ extension OnboardingViewController: ViewBootstrappable {
     func configureViews() {
         view.addSubview(stackView)
 
-        valueImage.heightAnchor.constraint(equalToConstant: 64).isActive = true
-        valueImage.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            valueImage.heightAnchor.constraint(equalToConstant: 64),
+            valueImage.widthAnchor.constraint(equalTo: stackView.widthAnchor),
 
-        valueDescription.heightAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+            valueDescription.heightAnchor.constraint(equalTo: stackView.widthAnchor),
 
-        valueButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        valueButton.widthAnchor.constraint(equalTo: stackView.widthAnchor).isActive = true
+            valueButton.heightAnchor.constraint(equalToConstant: 50),
+            valueButton.widthAnchor.constraint(equalTo: stackView.widthAnchor),
 
-        stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32).isActive = true
-        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32).isActive = true
-        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32).isActive = true
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32),
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32),
+        ])
     }
 }

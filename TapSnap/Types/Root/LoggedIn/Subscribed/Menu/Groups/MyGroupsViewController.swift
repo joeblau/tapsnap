@@ -64,10 +64,10 @@ extension MyGroupsViewController: ViewBootstrappable {
     }
 
     func configureStreams() {
-        Current.cloudKitGroupsSubject.sink { [unowned self] groups in
-            guard let groups = groups else { return }
-
-            DispatchQueue.main.async {
+        Current.cloudKitGroupsSubject
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink(receiveValue: { [unowned self] groups in
                 self.activityIndicatorView.stopAnimating()
                 self.myGroupsCollectionView.refreshControl?.endRefreshing()
 
@@ -83,8 +83,8 @@ extension MyGroupsViewController: ViewBootstrappable {
                     snapshot.appendItems(items, toSection: .groups)
                     self.myGroupsCollectionView.diffableDataSource?.apply(snapshot)
                 }
-            }
-        }.store(in: &cancellables)
+            })
+            .store(in: &cancellables)
     }
 }
 

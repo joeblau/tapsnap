@@ -1,74 +1,63 @@
-"title_icloud" = "iCloud";
+"body_camera_use" = "Tapsnap is a video and photo app and uses your camera to create videos and photos.";
+"body_delete_group" = "Type the word \"CONFIRM\" in caps to confirm group deletion";
+"body_icloud_use" = "Tapsnap uses your iCloud Apple ID account as your account. You will not be able to use Tapsnap without an iCloud account.";
+"body_location_use" = "Tapsnap can share your location with your taps.";
+"body_microphone_use" = "Tapsnap uses your microphone to record your voice and audio for your video taps.";
+"body_new_group" = "Enter a name for your new group";
+"body_no_connectivity" = "You are currently not connected to the Internet, please connect to cellular or Wi-Fi.";
+"body_notifications_use" = "Tapsnap can alert you whenever new messages are available.";
+"body_reset_keys" = "Type \"RESET KEYS\" Reset public and private keys";
+"deferred" = "Deferred";
+"error_keystore_failed_to_locate_stored_key" = "Failed to locate stored key.";
+"error_keystore_keychain_read_failed" = "Keychain read failed: %@";
+"error_keystore_unable_to_store" = "Unable to store item: %@";
+"error_keystore_unexpected_deletion" = "Unexpected deletion error: %@";
+"error_no_app_store_receipt" = "No App Store receipt.";
+"failed" = "Failed";
+"key_byte_count" = "Key representation contains %d bytes.";
+"photo_from" = "Photo from %@";
+"prompt_authorization" = "Prompt Authorization";
+"purchased" = "Purchased";
+"purchasing" = "Purchasing";
+"restored" = "Restored";
+"subtilte_reset_keys" = "Reset public and private keys";
+"subtitle_auto_ave" = "Automatically save sent taps";
+"subtitle_music_playback" = "Play song from current position when video starts";
+"subtitle_settings" = "iOS app settings";
+"subtitle_visualizer" = "Visualize touches on screen";
+"title_auto_save" = "Auto-Save";
 "title_camera" = "Camera";
-"title_microphone" = "Microphone";
-"title_notifications" = "Notifications";
+"title_cancel" = "Cancel";
+"title_cancel_send" = "Cancel Send";
+"title_create" = "Create";
+"title_delete" = "Delete";
+"title_delete_group" = "Delete Group";
+"title_done" = "Done";
+"title_group_name" = "Group Name";
+"title_icloud" = "iCloud";
+"title_image" = "Image";
+"title_join_group" = "Join Tapsnap group";
 "title_location" = "Location";
 "title_logged_out" = "Logged Out";
 "title_login" = "Login";
-"title_join_group" = "Join Tapsnap group";
-"title_no_friends" = "You have no friends.";
-"title_profile" = "Profile";
+"title_microphone" = "Microphone";
+"title_music_sync" = "Music Sync";
 "title_my_groups" = "My Groups";
-"title_auto_save" = "Auto-Save";
-"title_visualizer" = "Visualizer";
-"title_settings" = "Settings";
+"title_new_group" = "New Group";
+"title_no_connectivity" = "No Connectivity";
+"title_no_friends" = "You have no friends.";
+"title_notifications" = "Notifications";
+"title_profile" = "Profile";
 "title_rename" = "Rename";
-"title_share" = "Share";
-"title_image" = "Image";
-"title_delete" = "Delete";
-"title_delete_group" = "Delete Group";
 "title_rename_group" = "Rename Group";
-"title_cancel" = "Cancel";
-"title_create" = "Create";
-"title_group_name" = "Group Name";
 "title_reset" = "Reset";
+"title_reset_keys" = "Reset Keys";
 "title_saved_taps" = "Saved Taps";
+"title_search" = "Search";
+"title_settings" = "Settings";
+"title_share" = "Share";
 "title_sort_by_date" = "Sort by Date";
 "title_sort_by_name" = "Sort by Name";
-"title_music_sync" = "Music Sync";
-"title_new_group" = "New Group";
-"body_new_group" = "Enter a name for your new group";
-"title_cancel_send" = "Cancel Send";
-"title_done" = "Done";
-"title_search" = "Search";
-
-"subtitle_music_playback" = "Play song from current position when video starts";
-
-"body_delete_group" = "Type the word \"CONFIRM\" in caps to confirm group deletion";
-"subtitle_auto_ave" = "Automatically save sent taps";
-"subtitle_visualizer" = "Visualize touches on screen";
-"subtitle_settings" = "iOS app settings";
-"subtilte_reset_keys" = "Reset public and private keys";
-
-"video_from" = "Video from %@";
-"photo_from" = "Photo from %@";
-
-"body_icloud_use" = "Tapsnap uses your iCloud Apple ID account as your account. You will not be able to use Tapsnap without an iCloud account.";
-"body_camera_use" = "Tapsnap is a video and photo app and uses your camera to create videos and photos.";
-"body_microphone_use" = "Tapsnap uses your microphone to record your voice and audio for your video taps.";
-"body_notifications_use" = "Tapsnap can alert you whenever new messages are available.";
-"body_location_use" = "Tapsnap can share your location with your taps.";
-
-"prompt_authorization" = "Prompt Authorization";
-
-
-"key_byte_count" = "Key representation contains %d bytes.";
-
-"title_reset_keys" = "Reset Keys";
-"body_reset_keys" = "Type \"RESET KEYS\" Reset public and private keys";
-
-"title_no_connectivity" = "No Connectivity";
-"body_no_connectivity" = "You are currently not connected to the internet, please connect to cellular or wifi.";
-
-"purchasing" = "Purchasing";
-"purchased" = "Purchased";
-"failed" = "Failed";
-"restored" = "Restored";
-"deferred" = "Deferred";
+"title_visualizer" = "Visualizer";
 "unknown" = "Unknown";
-
-"error_keystore_unable_to_store" = "Unable to store item: %@";
-"error_keystore_keychain_read_failed" = "Keychain read failed: %@";
-"error_keystore_failed_to_locate_stored_key" = "Failed to locate stored key.";
-"error_keystore_unexpected_deletion" = "Unexpected deletion error: %@";
-"error_no_app_store_receipt" = "No App Store receipt.";
+"video_from" = "Video from %@";

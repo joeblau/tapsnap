@@ -10,7 +10,7 @@ import UIKit
 class RootViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
     lazy var onboarding: UINavigationController = {
-        let c = UINavigationController()
+        let c = UINavigationController(rootViewController: onboardingICloud)
         c.navigationBar.prefersLargeTitles = true
         c.modalPresentationStyle = .fullScreen
         return c
@@ -35,8 +35,8 @@ class RootViewController: UIViewController {
 
                                          switch status {
                                          case .granted:
-                                             CKContainer.default().currentUser()
                                              DispatchQueue.main.async {
+                                                 CKContainer.default().currentUser()
                                                  self.onboarding.pushViewController(self.onboardingCamera, animated: true)
                                              }
                                          case .couldNotComplete, .denied, .initialState:
@@ -60,8 +60,7 @@ class RootViewController: UIViewController {
                                              DispatchQueue.main.async {
                                                  self.onboarding.pushViewController(self.onboardingMicrophone, animated: true)
                                              }
-                                         case false:
-                                             self.openSettings()
+                                         case false: self.openSettings()
                                          }
                                      }
         })
@@ -80,8 +79,7 @@ class RootViewController: UIViewController {
                                              DispatchQueue.main.async {
                                                  self.onboarding.pushViewController(self.onboardingNotifications, animated: true)
                                              }
-                                         case false:
-                                             self.openSettings()
+                                         case false: self.openSettings()
                                          }
                                      }
         })
@@ -104,7 +102,6 @@ class RootViewController: UIViewController {
                                              self.onboarding.pushViewController(self.onboardingLocation, animated: true)
                                          }
                                      }
-
         })
     }()
 
@@ -114,7 +111,6 @@ class RootViewController: UIViewController {
                                  description: L10n.bodyLocationUse,
                                  buttonText: L10n.promptAuthorization,
                                  valueAction: { [unowned self] _ in
-
                                      Current.locationManager.requestWhenInUseAuthorization()
 
         })
@@ -130,17 +126,12 @@ class RootViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         switch UserDefaults.standard.bool(forKey: Current.k.isOnboardingComplete) {
-        case false: showOnboarding()
+        case false: present(onboarding, animated: true, completion: nil)
         case true: CKContainer.default().currentUser()
         }
     }
 
     // MARK: - Private
-
-    private func showOnboarding() {
-        onboarding.viewControllers = [onboardingICloud]
-        present(onboarding, animated: true, completion: nil)
-    }
 
     private func login() {
         DispatchQueue.main.async {
@@ -197,14 +188,13 @@ extension RootViewController: ViewBootstrappable {
     func configureStreams() {
         Current.currentLocationAuthorizationSubject
             .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .sink { status in
                 switch status {
                 case .authorizedWhenInUse:
                     UserDefaults.standard.set(true, forKey: Current.k.isOnboardingComplete)
-                    DispatchQueue.main.async {
-                        self.onboarding.dismiss(animated: true) {
-                            self.login()
-                        }
+                    self.onboarding.dismiss(animated: true) {
+                        self.login()
                     }
                 default: break
                 }
@@ -212,13 +202,12 @@ extension RootViewController: ViewBootstrappable {
 
         Current.cloudKitUserSubject
             .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .sink { record in
                 guard UserDefaults.standard.bool(forKey: Current.k.isOnboardingComplete) else { return }
                 switch record {
-                case .some:
-                    self.login()
-                case .none:
-                    self.logout()
+                case .some: self.login()
+                case .none: self.logout()
                 }
             }.store(in: &cancellables)
     }

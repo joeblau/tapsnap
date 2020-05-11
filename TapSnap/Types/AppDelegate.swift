@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 Current.cloudKitUserSubject.send(record)
             }
         }
+
         do { // StoreKit
             SKPaymentQueue.default().add(self)
         }
@@ -90,10 +91,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_: UIApplication,
                      didReceiveRemoteNotification _: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        // TODO: Figure out race condition between push notifiction and asset upload
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             CKContainer.default().fetchUnreadMessages { result in
-
                 completionHandler(result)
             }
         }
@@ -103,7 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_: UIApplication,
                      userDidAcceptCloudKitShareWith cloudKitShareMetadata: CKShare.Metadata) {
-        let acceptShareOperation: CKAcceptSharesOperation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
+        let acceptShareOperation = CKAcceptSharesOperation(shareMetadatas: [cloudKitShareMetadata])
 
         acceptShareOperation.qualityOfService = .userInteractive
         acceptShareOperation.perShareCompletionBlock = { _, _, error in
@@ -117,8 +116,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case let .some(error): os_log("%@", log: .cloudKit, type: .error, error.localizedDescription)
             case .none: break
             }
-
-            /// Send your user to where they need to go in your app
         }
         CKContainer(identifier: cloudKitShareMetadata.containerIdentifier).add(acceptShareOperation)
     }
@@ -127,29 +124,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: ViewBootstrappable {
     func configureStreams() {
         Current.hideTouchVisuzlierSubject
+            .receive(on: DispatchQueue.main)
             .sink { showVisualizer in
-                self.sensorVisualizerWindow.visualizationWindow.isHidden = showVisualizer
+                self.sensorVisualizerWindow
+                    .visualizationWindow
+                    .isHidden = showVisualizer
                 UserDefaults.standard.set(showVisualizer, forKey: Current.k.isVisualizerHidden)
             }.store(in: &cancellables)
 
-        Current.inboxURLsSubject.sink { inboxState in
-            switch inboxState {
-            case let .completedFetching(urls):
-                DispatchQueue.main.async {
-                    UIApplication.shared.applicationIconBadgeNumber = urls?.count ?? 0
+        Current.inboxURLsSubject
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { inboxState in
+                switch inboxState {
+                case let .completedFetching(urls):
+                    switch urls {
+                    case let .some(urls): UIApplication.shared.applicationIconBadgeNumber = urls.count
+                    case .none: UIApplication.shared.applicationIconBadgeNumber = 0
+                    }
+                default: break
                 }
-            default: break
-            }
-        }.store(in: &cancellables)
+            }.store(in: &cancellables)
 
         Current.reachability
             .reachabilitySubject
             .sink { status in
                 switch status {
                 case .offline:
-                    let offlineRequest = UNNotificationRequest.noConnectivity
-                    UNUserNotificationCenter.current().add(offlineRequest)
-
+                    UNUserNotificationCenter.current()
+                        .add(UNNotificationRequest.noConnectivity)
                 case .online, .unknown: break
                 }
             }.store(in: &cancellables)
