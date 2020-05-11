@@ -299,8 +299,8 @@ extension CameraViewController: ViewBootstrappable {
                 case .playback:
                     self.inboxMessageURLs?
                         .compactMap({ $0 })
+                        .filter({ FileManager.default.fileExists(atPath: $0.path) })
                         .forEach({ url in
-                            guard FileManager.default.fileExists(atPath: url.path) else { return }
                             self.playbackViewController
                                 .pushViewController(PlaybackViewController(messageURL: url),
                                                     animated: false)

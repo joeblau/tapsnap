@@ -28,7 +28,8 @@ extension CKContainer {
                  publicKey signing: Curve25519.Signing.PublicKey,
                  completed: (_ saved: Bool) -> Void) {
         guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Constant.privateEncryptionKey) else {
-            fatalError("Bootstrap private encryptoin key")
+            bootstrapKeys()
+            return
         }
 
         do {
