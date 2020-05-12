@@ -236,7 +236,6 @@ extension CKContainer {
             let ni = CKSubscription.NotificationInfo()
             ni.titleLocalizationKey = "%@"
             ni.titleLocalizationArgs = ["notification"]
-            ni.shouldBadge = true
             ni.soundName = "default"
             ni.shouldSendContentAvailable = true
             return ni
@@ -249,12 +248,12 @@ extension CKContainer {
         return
     }
 
-    private func removeAllSubscriptions() {
-        privateCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
+    func removeAllSubscriptions() {
+        publicCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
             guard self.no(error: error), let subscriptions = subscriptions else { return }
 
             subscriptions.forEach { subscription in
-                self.privateCloudDatabase.delete(withSubscriptionID: subscription.subscriptionID) { _, error in
+                self.publicCloudDatabase.delete(withSubscriptionID: subscription.subscriptionID) { _, error in
                     guard self.no(error: error) else { return }
                 }
             }

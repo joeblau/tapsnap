@@ -10,6 +10,7 @@ class ResetKeysViewController: UIAlertController {
     lazy var cancelAction = UIAlertAction(title: L10n.titleCancel, style: .cancel, handler: nil)
     lazy var resetAction = UIAlertAction(title: L10n.titleReset, style: .destructive) { _ in
         CKContainer.default().bootstrapKeys(reset: true)
+        CKContainer.default().removeAllSubscriptions()
     }
 
     override func viewDidLoad() {

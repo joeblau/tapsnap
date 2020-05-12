@@ -567,6 +567,7 @@
 		ED82F1EA2468DF64005070E7 /* Playback */ = {
 			isa = PBXGroup;
 			children = (
+				EDB3CF8B246A1E7200BFA6ED /* Manager */,
 				ED82F1EB2468DF64005070E7 /* PlaybackViewController+MKMapViewDelegate.swift */,
 				ED82F1EC2468DF64005070E7 /* PlaybackViewController.swift */,
 				ED82F1ED2468DF64005070E7 /* Views */,
@@ -673,6 +674,13 @@
 				ED82F20A2468DF64005070E7 /* MenuModels.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		EDB3CF8B246A1E7200BFA6ED /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -870,7 +878,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Tapsnap/SupportingFiles/Tapsnap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 5WSA243UP9;
 				INFOPLIST_FILE = Tapsnap/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1000,7 +1008,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Tapsnap/SupportingFiles/Tapsnap.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 5WSA243UP9;
 				INFOPLIST_FILE = Tapsnap/SupportingFiles/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
