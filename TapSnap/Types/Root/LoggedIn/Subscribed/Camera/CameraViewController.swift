@@ -392,9 +392,11 @@ extension CameraViewController: ViewBootstrappable {
             })
             .store(in: &cancellables)
 
-        Current.zoomVeloictySubject.sink { zoomVelocity in
-            self.session.zoom(with: Float(zoomVelocity.y))
-        }.store(in: &cancellables)
+        Current.zoomVeloictySubject
+            .sink(receiveValue: { zoomVelocity in
+                self.session.zoom(with: Float(zoomVelocity.y))
+            })
+            .store(in: &cancellables)
 
         Current.cloudKitGroupsSubject
             .receive(on: DispatchQueue.main)
@@ -412,9 +414,11 @@ extension CameraViewController: ViewBootstrappable {
             })
             .store(in: &cancellables)
 
-        Current.cloudKitSelectedGroupSubject.sink { currentGroup in
-            self.currentGroup = currentGroup
-        }.store(in: &cancellables)
+        Current.cloudKitSelectedGroupSubject
+            .sink(receiveValue: { currentGroup in
+                self.currentGroup = currentGroup
+            })
+            .store(in: &cancellables)
 
         Current.inboxURLsSubject
             .removeDuplicates()
@@ -439,12 +443,14 @@ extension CameraViewController: ViewBootstrappable {
             })
             .store(in: &cancellables)
 
-        Current.cleanupSubject.sink { cleanup in
-            switch cleanup {
-            case let .cleanUp(url): self.cleanUp(url: url)
-            default: break
-            }
-        }.store(in: &cancellables)
+        Current.cleanupSubject
+            .sink(receiveValue: { cleanup in
+                switch cleanup {
+                case let .cleanUp(url): self.cleanUp(url: url)
+                default: break
+                }
+            })
+            .store(in: &cancellables)
 
         Current.reachability
             .reachabilitySubject
