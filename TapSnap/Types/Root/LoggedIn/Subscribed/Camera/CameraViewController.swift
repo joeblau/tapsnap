@@ -86,18 +86,18 @@ final class CameraViewController: UIViewController {
     }()
 
     // Top right
-    lazy var activityView: UIActivityIndicatorView = {
-        let v = UIActivityIndicatorView()
-        v.translatesAutoresizingMaskIntoConstraints = false
-        v.startAnimating()
-        return v
-    }()
+//    lazy var activityView: UIActivityIndicatorView = {
+//        let v = UIActivityIndicatorView()
+//        v.translatesAutoresizingMaskIntoConstraints = false
+//        v.startAnimating()
+//        return v
+//    }()
 
-    lazy var activityButtonItem: UIBarButtonItem = {
-        let bbi = UIBarButtonItem(customView: activityView)
-        activityView.startAnimating()
-        return bbi
-    }()
+//    lazy var activityButtonItem: UIBarButtonItem = {
+//        let bbi = UIBarButtonItem(customView: activityView)
+//        activityView.startAnimating()
+//        return bbi
+//    }()
 
     lazy var notificationButton: UIButton = {
         let b = UIButton(type: .custom)
@@ -423,7 +423,9 @@ extension CameraViewController: ViewBootstrappable {
                 switch inboxState {
                 case .idle: break
                 case .fetching:
-                    self.navigationItem.rightBarButtonItem = self.activityButtonItem
+                    let indicator = UIActivityIndicatorView()
+                    indicator.startAnimating()
+                    self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: indicator)
                 case let .completedFetching(urls):
                     switch urls {
                     case let .some(urls) where !urls.isEmpty:
