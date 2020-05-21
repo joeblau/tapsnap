@@ -9,7 +9,7 @@ import UIKit
 
 extension CKContainer {
     static var outboxSubscriber = AnySubscriber<CKRecord, Never>()
-
+    
     func createNewMessage(for group: CKRecord,
                           with mediaURL: MediaCapture,
                           completion: @escaping (_ saved: Bool) -> Void) {
@@ -17,12 +17,12 @@ extension CKContainer {
             completion(false)
             return
         }
-
+        
         switch group.recordID.zoneID.ownerName {
         case CKRecordZone.ID.default.ownerName:
             privateCloudDatabase.fetch(withRecordID: shareRecordID) { [unowned self] share, error in
                 guard self.no(error: error), let share = share as? CKShare else { return }
-
+                
                 let participantRecordIDs = share.participants.filter { participant -> Bool in
                     !(participant.value(forKeyPath: "isCurrentUser") as? Bool ?? true)
                 }.compactMap { participant -> CKRecord.ID? in
@@ -33,18 +33,18 @@ extension CKContainer {
         default:
             sharedCloudDatabase.fetch(withRecordID: shareRecordID) { [unowned self] share, error in
                 guard self.no(error: error), let share = share as? CKShare else { return }
-
+                
                 let participantRecordIDs = share.participants.filter { participant -> Bool in
                     !(participant.value(forKeyPath: "isCurrentUser") as? Bool ?? true)
                 }.compactMap { participant -> CKRecord.ID? in
                     participant.userIdentity.userRecordID
                 }
-
+                
                 self.buildMessages(to: participantRecordIDs, with: mediaURL, completion: completion)
             }
         }
     }
-
+    
     func sendMessages() {
         guard let sendMessages = Current.outboxRecordsSubject.value else { return }
         let operation = CKModifyRecordsOperation(recordsToSave: sendMessages, recordIDsToDelete: nil)
@@ -58,90 +58,86 @@ extension CKContainer {
         }
         publicCloudDatabase.add(operation)
     }
-
+    
     func fetchUnreadMessages(completion: ((UIBackgroundFetchResult) -> Void)? = nil) {
         guard Current.inboxURLsSubject.value != .fetching else { return }
-
+        
         Current.inboxURLsSubject.send(.fetching)
-
+        
         guard let recipientPredicateData = UserDefaults.standard.value(forKey: Constant.recipientPredicate) as? Data,
             let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
-            currentUser(); return
+                currentUser(); return
         }
         let query = CKQuery(recordType: .message, predicate: recipientPredicate)
-        publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] messages, error in
-            guard self.no(error: error), let messages = messages else { return }
-
-            let deleteIDs = messages.map { message -> CKRecord.ID in
-
-                guard let ciphertextAsset = message[MessageKey.ciphertext] as? CKAsset,
-                    let ciphertextURL = ciphertextAsset.fileURL,
-                    let ciphertextData = try? Data(contentsOf: ciphertextURL),
-
-                    let signatureAsset = message[MessageKey.signature] as? CKAsset,
-                    let signatureURL = signatureAsset.fileURL,
-                    let signatureData = try? Data(contentsOf: signatureURL),
-
-                    let ephemeralPublicKeyAsset = message[MessageKey.media] as? CKAsset,
-                    let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
-                    let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL),
-
-                    let senderSigningKeyData = message[MessageKey.senderSigningKey] as? Data,
-                    let senderSigningKey = try? Curve25519.Signing.PublicKey(rawRepresentation: senderSigningKeyData) else {
-                    fatalError("Invalid message/delete message")
-                }
-
-                let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
-                                                    ciphertextData: ciphertextData,
-                                                    signatureData: signatureData)
-                self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, completed: { isSaved in
-                    guard isSaved else { return }
-                })
-
-                return message.recordID
+        
+        let messageDownloadOperation = CKQueryOperation(query: query)
+        messageDownloadOperation.recordFetchedBlock = { [unowned self] message in
+            guard let ciphertextAsset = message[MessageKey.ciphertext] as? CKAsset,
+                let ciphertextURL = ciphertextAsset.fileURL,
+                let ciphertextData = try? Data(contentsOf: ciphertextURL),
+                
+                let signatureAsset = message[MessageKey.signature] as? CKAsset,
+                let signatureURL = signatureAsset.fileURL,
+                let signatureData = try? Data(contentsOf: signatureURL),
+                
+                let ephemeralPublicKeyAsset = message[MessageKey.media] as? CKAsset,
+                let ephemeralPublicKeyURL = ephemeralPublicKeyAsset.fileURL,
+                let ephemeralPublicKeyData = try? Data(contentsOf: ephemeralPublicKeyURL),
+                
+                let senderSigningKeyData = message[MessageKey.senderSigningKey] as? Data,
+                let senderSigningKey = try? Curve25519.Signing.PublicKey(rawRepresentation: senderSigningKeyData) else {
+                    return
             }
-
-            let operation = CKModifyRecordsOperation(recordsToSave: nil,
-                                                     recordIDsToDelete: deleteIDs)
-            operation.modifyRecordsCompletionBlock = { [unowned self] _, recordIDs, error in
-                guard self.no(error: error), let recordIDs = recordIDs else { completion?(.failed); return }
-                self.loadInbox()
-                switch recordIDs.isEmpty {
-                case true: completion?(.noData)
-                case false: completion?(.newData)
+            
+            let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
+                                                ciphertextData: ciphertextData,
+                                                signatureData: signatureData)
+            self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, completed: { isSaved in
+                self.publicCloudDatabase.delete(withRecordID: message.recordID) { (recordID, error) in
+                    guard self.no(error: error) else { return }
+                    
                 }
-            }
-            self.publicCloudDatabase.add(operation)
+            })
         }
+            
+        messageDownloadOperation.queryCompletionBlock = { [unowned self] cursor, error in
+            guard self.no(error: error) else {
+                completion?(.failed)
+                return
+            }
+            self.loadInbox()
+            completion?(.newData)
+        }
+        
+        publicCloudDatabase.add(messageDownloadOperation)
     }
-
+    
     func loadInbox() {
         do {
-            let messageURLs = try FileManager.default.contentsOfDirectory(at: URL.inboxURL,
-                                                                          includingPropertiesForKeys: nil,
-                                                                          options: .includesDirectoriesPostOrder)
-            let reverseOrderMessageURLs = messageURLs.sorted(by: { $0.path > $1.path })
-            Current.inboxURLsSubject.send(.completedFetching(reverseOrderMessageURLs))
+            let messageURLs = try FileManager.default
+                .contentsOfDirectory(at: URL.inboxURL,
+                                     includingPropertiesForKeys: nil,
+                                     options: .includesDirectoriesPostOrder)
+                .sorted(by: { $0.lastPathComponent > $1.lastPathComponent })
+            Current.inboxURLsSubject.send(.completedFetching(messageURLs))
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
     }
-
+    
     func subscribeToInbox() {
-        // removeAllSubscriptions()
-
         if !UserDefaults.standard.bool(forKey: Constant.messagePublicSubscriptionCached) {
             publicCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
                 guard self.no(error: error), let subscriptions = subscriptions else { return }
-
+                
                 guard subscriptions.isEmpty else { return }
                 self.buildMessageSubscriptions()
             }
         }
     }
-
+    
     // MARK: - Private
-
+    
     private func buildMessages(to participantRecordIDs: [CKRecord.ID],
                                with mediaCapture: MediaCapture,
                                completion: @escaping (_ saved: Bool) -> Void) {
@@ -149,22 +145,23 @@ extension CKContainer {
         let query = CKQuery(recordType: .publicKey, predicate: predecate)
         publicCloudDatabase.perform(query, inZoneWith: nil) { [unowned self] publicKeys, error in
             guard self.no(error: error), let publicKeys = publicKeys else { return }
-
+            
             let sendMessages = publicKeys.compactMap { publicKey -> CKRecord? in
                 guard let bytes = publicKey[CryptoKey.encryption] as? Data,
                     let pkEncryption = try? Curve25519.KeyAgreement.PublicKey(rawRepresentation: bytes) else {
-                    return nil
+                        return nil
                 }
-
+                
                 do {
                     guard let pvSigning: Curve25519.Signing.PrivateKey = try? GenericPasswordStore().readKey(account: Constant.privateSigningKey),
                         let pkSigning: Curve25519.Signing.PublicKey = try? GenericPasswordStore().readKey(account: Constant.publicSigningKey) else {
-                        fatalError("Could not read private key/re-bootstrap")
+                            self.bootstrapKeys()
+                            return nil
                     }
                     let sealed = URL.sealedURL
-
+                    
                     let record = CKRecord(recordType: .message)
-
+                    
                     if let data = UserDefaults.standard.data(forKey: Constant.userAccount),
                         let userRecord = try? CKRecord.unarchive(data: data),
                         let username = userRecord[UserAliasKey.name] as? String {
@@ -173,10 +170,10 @@ extension CKContainer {
                         case .photo: record[MessageKey.notification] = L10n.photoFrom(username)
                         }
                     }
-
+                    
                     record[MessageKey.senderSigningKey] = pkSigning.rawRepresentation
                     let sealedMessage: SealedMessage
-
+                    
                     switch mediaCapture {
                     case let .movie(url), let .photo(url):
                         let mediaData = try Data(contentsOf: url)
@@ -184,25 +181,25 @@ extension CKContainer {
                         try sealedMessage.ephemeralPublicKeyData.write(to: sealed.ephemeralPublicKeyURL)
                         record[MessageKey.media] = CKAsset(fileURL: sealed.ephemeralPublicKeyURL)
                     }
-
+                    
                     try sealedMessage.ciphertextData.write(to: sealed.ciphertexURL)
                     record[MessageKey.ciphertext] = CKAsset(fileURL: sealed.ciphertexURL)
                     try sealedMessage.signatureData.write(to: sealed.signatureURL)
                     record[MessageKey.signature] = CKAsset(fileURL: sealed.signatureURL)
                     record[MessageKey.recipient] = publicKey[CryptoKey.creator] as? CKRecord.Reference
-
+                    
                     return record
                 } catch {
                     os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
                 }
                 return nil
             }
-
+            
             Current.outboxRecordsSubject.send(sendMessages)
             completion(true)
         }
     }
-
+    
     private func cleanUpEncryptedOutbox() {
         do {
             try FileManager.default
@@ -215,23 +212,23 @@ extension CKContainer {
                     } catch {
                         os_log("%@", log: .fileManager, type: .error, "Could not remove file at url: \(url)")
                     }
-                }
+            }
         } catch {
             os_log("%@", log: .fileManager, type: .error, error.localizedDescription)
         }
     }
-
+    
     private func buildMessageSubscriptions() {
         guard let recipientPredicateData = UserDefaults.standard.data(forKey: Constant.recipientPredicate),
             let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
-            currentUser()
-            return
+                currentUser()
+                return
         }
         let subscription = CKQuerySubscription(recordType: .message,
                                                predicate: recipientPredicate,
                                                subscriptionID: UUID().uuidString,
                                                options: [CKQuerySubscription.Options.firesOnRecordCreation])
-
+        
         subscription.notificationInfo = {
             let ni = CKSubscription.NotificationInfo()
             ni.titleLocalizationKey = "%@"
@@ -240,25 +237,25 @@ extension CKContainer {
             ni.shouldSendContentAvailable = true
             return ni
         }()
-
+        
         publicCloudDatabase.save(subscription) { _, error in
             guard self.no(error: error) else { return }
             UserDefaults.standard.set(true, forKey: Constant.messagePublicSubscriptionCached)
         }
         return
     }
-
+    
     func removeAllSubscriptions() {
         publicCloudDatabase.fetchAllSubscriptions { [unowned self] subscriptions, error in
             guard self.no(error: error), let subscriptions = subscriptions else { return }
-
+            
             subscriptions.forEach { subscription in
                 self.publicCloudDatabase.delete(withSubscriptionID: subscription.subscriptionID) { _, error in
                     guard self.no(error: error) else { return }
                 }
             }
         }
-
+        
         UserDefaults.standard.removeObject(forKey: Constant.messagePublicSubscriptionCached)
     }
 }

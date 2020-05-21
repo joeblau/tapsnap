@@ -30,10 +30,13 @@ final class LoggedInViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        CKContainer.default().bootstrapKeys()
-        CKContainer.default().fetchAllGroups()
-        CKContainer.default().subscribeToInbox()
-        CKContainer.default().fetchUnreadMessages()
+        
+        DispatchQueue.main.async {
+            CKContainer.default().bootstrapKeys()
+            CKContainer.default().fetchAllGroups()
+            CKContainer.default().subscribeToInbox()
+            CKContainer.default().fetchUnreadMessages()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
