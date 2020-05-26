@@ -402,7 +402,8 @@ extension CameraViewController: ViewBootstrappable {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [unowned self] groups in
                 guard let groups = groups else { return }
-                let items = groups.compactMap { record -> GroupValue? in
+                let items = groups.sorted(by: { $0.creationDate ?? Date() < $1.creationDate ?? Date() })
+                    .compactMap { record -> GroupValue? in
                     GroupValue(record: record)
                 }
 
