@@ -55,17 +55,17 @@ class MyGroupCollectionViewCell: UICollectionViewCell {
         }
 
         if let title = record[GroupKey.name] as? String {
-            let userCount = record[GroupKey.userCount] as? Int ?? 1
+//            let userCount = record[GroupKey.userCount] as? Int ?? 1
             let attributedString = NSMutableAttributedString()
-            switch userCount {
-            case 1 ... 50:
-                let imageAttachment = NSTextAttachment()
-                imageAttachment.image = UIImage(systemName: "\(userCount).circle.fill",
-                                                withConfiguration: UIImage.SymbolConfiguration(scale: .large))?
-                    .withTintColor(.label, renderingMode: .alwaysTemplate)
-                attributedString.append(NSAttributedString(attachment: imageAttachment))
-            default: break
-            }
+//            switch userCount {
+//            case 1 ... 50:
+//                let imageAttachment = NSTextAttachment()
+//                imageAttachment.image = UIImage(systemName: "\(userCount).circle.fill",
+//                                                withConfiguration: UIImage.SymbolConfiguration(scale: .large))?
+//                    .withTintColor(.label, renderingMode: .alwaysTemplate)
+//                attributedString.append(NSAttributedString(attachment: imageAttachment))
+//            default: break
+//            }
             attributedString.append(NSAttributedString(string: "\(title)"))
             contactTitleLabel.attributedText = attributedString
         }
