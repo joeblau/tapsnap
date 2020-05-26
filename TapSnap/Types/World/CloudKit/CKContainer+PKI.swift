@@ -25,8 +25,7 @@ extension CKContainer {
     }
 
     func decrypt(sealed message: SealedMessage,
-                 publicKey signing: Curve25519.Signing.PublicKey,
-                 completed: (_ saved: Bool) -> Void) {
+                 publicKey signing: Curve25519.Signing.PublicKey) {
         guard let pvEncryption: Curve25519.KeyAgreement.PrivateKey = try? GenericPasswordStore().readKey(account: Constant.privateEncryptionKey) else {
             bootstrapKeys()
             return
@@ -41,9 +40,7 @@ extension CKContainer {
             case .none:
                 try decryptedMessage.write(to: URL.randomInboxSaveURL(fileExtension: .mov), options: .atomicWrite)
             }
-            completed(true)
         } catch {
-            completed(false)
             os_log("%@", log: .cryptoKit, type: .error, error.localizedDescription)
         }
     }

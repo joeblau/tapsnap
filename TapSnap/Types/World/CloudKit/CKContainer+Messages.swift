@@ -64,6 +64,7 @@ extension CKContainer {
         
         Current.inboxURLsSubject.send(.fetching)
         
+        var recordIDsToDelete = [CKRecord.ID]()
         guard let recipientPredicateData = UserDefaults.standard.value(forKey: Constant.recipientPredicate) as? Data,
             let recipientPredicate = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(recipientPredicateData) as? NSPredicate else {
                 currentUser(); return
@@ -92,24 +93,34 @@ extension CKContainer {
             let sealedMessage: SealedMessage = (ephemeralPublicKeyData: ephemeralPublicKeyData,
                                                 ciphertextData: ciphertextData,
                                                 signatureData: signatureData)
-            self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey, completed: { isSaved in
-                self.publicCloudDatabase.delete(withRecordID: message.recordID) { (recordID, error) in
-                    guard self.no(error: error) else { return }
-                    
-                }
-            })
+            
+            self.decrypt(sealed: sealedMessage, publicKey: senderSigningKey)
+            recordIDsToDelete.append(message.recordID)
         }
             
         messageDownloadOperation.queryCompletionBlock = { [unowned self] cursor, error in
+            self.deleteMessages(messageDownloadOperation: messageDownloadOperation, recordIDsToDelete: recordIDsToDelete)
             guard self.no(error: error) else {
                 completion?(.failed)
                 return
             }
-            self.loadInbox()
             completion?(.newData)
         }
         
         publicCloudDatabase.add(messageDownloadOperation)
+    }
+    
+    private func deleteMessages(messageDownloadOperation: CKQueryOperation, recordIDsToDelete: [CKRecord.ID]) {
+        let deleteMessageOperation = CKModifyRecordsOperation(recordsToSave: nil, recordIDsToDelete: recordIDsToDelete)
+        deleteMessageOperation.perRecordCompletionBlock = { [unowned self] _, error in
+            guard self.no(error: error) else { return }
+        }
+        deleteMessageOperation.modifyRecordsCompletionBlock = { _, _, error in
+            self.loadInbox()
+            guard self.no(error: error) else { return }
+        }
+        deleteMessageOperation.addDependency(messageDownloadOperation)
+        publicCloudDatabase.add(deleteMessageOperation)
     }
     
     func loadInbox() {
