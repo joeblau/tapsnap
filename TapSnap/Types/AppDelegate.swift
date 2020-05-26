@@ -81,6 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
             Current.locationManager.startMonitoringSignificantLocationChanges()
         }
+        CKContainer.default().fetchAllGroups()
         CKContainer.default().fetchUnreadMessages()
     }
 

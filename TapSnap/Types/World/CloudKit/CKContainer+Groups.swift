@@ -25,6 +25,7 @@ extension CKContainer {
             }
             operation.modifyRecordsCompletionBlock = { _, _, error in
                 handler(share, CKContainer.default(), error)
+                CKContainer.default().fetchAllGroups()
             }
             self.privateCloudDatabase.add(operation)
         })
@@ -63,6 +64,7 @@ extension CKContainer {
     func removeGroup(recordID: CKRecord.ID, completion: @escaping (Bool) -> Void) {
         privateCloudDatabase.delete(withRecordID: recordID) { _, error in
             guard self.no(error: error) else { completion(false); return }
+            CKContainer.default().fetchAllGroups()
             completion(true)
         }
     }
