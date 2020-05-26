@@ -4,5 +4,6 @@
 import Foundation
 
 enum GroupSection: Int, CaseIterable {
-    case groups
+    case ownedGroups
+    case memberGroups
 }

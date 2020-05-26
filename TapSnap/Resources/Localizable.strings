@@ -61,3 +61,5 @@
 "title_visualizer" = "Visualizer";
 "unknown" = "Unknown";
 "video_from" = "Video from %@";
+"owned_groups" = "Owned";
+"member_groups" = "Member";

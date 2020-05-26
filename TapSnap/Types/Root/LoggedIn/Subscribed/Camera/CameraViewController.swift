@@ -407,8 +407,8 @@ extension CameraViewController: ViewBootstrappable {
                 }
 
                 var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
-                snapshot.appendSections([.groups])
-                snapshot.appendItems(items, toSection: .groups)
+                snapshot.appendSections([.ownedGroups])
+                snapshot.appendItems(items, toSection: .ownedGroups)
                 self.contactsCollectionView.diffableDataSource?.apply(snapshot)
                 self.contactPageControl.numberOfPages = Int(ceil(Double(items.count) / 8.0))
             })

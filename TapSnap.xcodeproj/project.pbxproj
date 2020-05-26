@@ -40,7 +40,6 @@
 		ED82F2272468DF64005070E7 /* AVAssetTrack+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F1A52468DF63005070E7 /* AVAssetTrack+Extensions.swift */; };
 		ED82F2282468DF64005070E7 /* UINavigationBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F1A62468DF63005070E7 /* UINavigationBar+Extensions.swift */; };
 		ED82F2292468DF64005070E7 /* CLLocationManager+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F1A72468DF63005070E7 /* CLLocationManager+Combine.swift */; };
-		ED82F22A2468DF64005070E7 /* UICollectionViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F1A82468DF63005070E7 /* UICollectionViewCell+Extensions.swift */; };
 		ED82F22B2468DF64005070E7 /* SensorVisualizerWindow+Touch.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F1A92468DF63005070E7 /* SensorVisualizerWindow+Touch.swift */; };
 		ED82F22C2468DF64005070E7 /* EXIFData+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F1AA2468DF63005070E7 /* EXIFData+Extensions.swift */; };
 		ED82F22D2468DF64005070E7 /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F1AB2468DF63005070E7 /* UITableViewCell+Extensions.swift */; };
@@ -116,6 +115,8 @@
 		ED82F2732468DF64005070E7 /* MenuViewController+UITableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F20B2468DF64005070E7 /* MenuViewController+UITableViewDataSource.swift */; };
 		ED82F2742468DF64005070E7 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F20C2468DF64005070E7 /* MenuViewController.swift */; };
 		ED82F2752468DF64005070E7 /* MenuViewController+UITableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED82F20D2468DF64005070E7 /* MenuViewController+UITableViewDelegate.swift */; };
+		EDBDACC1247DD6F500A3F4F1 /* GroupHeaderCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDBDACC0247DD6F500A3F4F1 /* GroupHeaderCollectionReusableView.swift */; };
+		EDBDACC3247DD7B400A3F4F1 /* UICollectionReusableView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDBDACC2247DD7B400A3F4F1 /* UICollectionReusableView+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -155,7 +156,6 @@
 		ED82F1A52468DF63005070E7 /* AVAssetTrack+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVAssetTrack+Extensions.swift"; sourceTree = "<group>"; };
 		ED82F1A62468DF63005070E7 /* UINavigationBar+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Extensions.swift"; sourceTree = "<group>"; };
 		ED82F1A72468DF63005070E7 /* CLLocationManager+Combine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocationManager+Combine.swift"; sourceTree = "<group>"; };
-		ED82F1A82468DF63005070E7 /* UICollectionViewCell+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		ED82F1A92468DF63005070E7 /* SensorVisualizerWindow+Touch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SensorVisualizerWindow+Touch.swift"; sourceTree = "<group>"; };
 		ED82F1AA2468DF63005070E7 /* EXIFData+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EXIFData+Extensions.swift"; sourceTree = "<group>"; };
 		ED82F1AB2468DF63005070E7 /* UITableViewCell+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Extensions.swift"; sourceTree = "<group>"; };
@@ -231,6 +231,8 @@
 		ED82F20B2468DF64005070E7 /* MenuViewController+UITableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MenuViewController+UITableViewDataSource.swift"; sourceTree = "<group>"; };
 		ED82F20C2468DF64005070E7 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		ED82F20D2468DF64005070E7 /* MenuViewController+UITableViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MenuViewController+UITableViewDelegate.swift"; sourceTree = "<group>"; };
+		EDBDACC0247DD6F500A3F4F1 /* GroupHeaderCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupHeaderCollectionReusableView.swift; sourceTree = "<group>"; };
+		EDBDACC2247DD7B400A3F4F1 /* UICollectionReusableView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionReusableView+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -397,7 +399,6 @@
 				ED82F1A52468DF63005070E7 /* AVAssetTrack+Extensions.swift */,
 				ED82F1A62468DF63005070E7 /* UINavigationBar+Extensions.swift */,
 				ED82F1A72468DF63005070E7 /* CLLocationManager+Combine.swift */,
-				ED82F1A82468DF63005070E7 /* UICollectionViewCell+Extensions.swift */,
 				ED82F1A92468DF63005070E7 /* SensorVisualizerWindow+Touch.swift */,
 				ED82F1AA2468DF63005070E7 /* EXIFData+Extensions.swift */,
 				ED82F1AB2468DF63005070E7 /* UITableViewCell+Extensions.swift */,
@@ -405,6 +406,7 @@
 				ED82F1AD2468DF63005070E7 /* UNNotificationRequest+Extensions.swift */,
 				ED82F1AE2468DF63005070E7 /* AVCaptureSession+Extensions.swift */,
 				ED82F1AF2468DF63005070E7 /* CKContainer+UICloudSharingControllerDelegate.swift */,
+				EDBDACC2247DD7B400A3F4F1 /* UICollectionReusableView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -664,6 +666,7 @@
 			isa = PBXGroup;
 			children = (
 				ED82F2082468DF64005070E7 /* MyGorupsCollectionView.swift */,
+				EDBDACC0247DD6F500A3F4F1 /* GroupHeaderCollectionReusableView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -771,7 +774,6 @@
 				ED82F2382468DF64005070E7 /* AppDelegate+SKPaymentTransactionObserver.swift in Sources */,
 				ED82F2662468DF64005070E7 /* MenuCellTableViewCell.swift in Sources */,
 				ED82F2402468DF64005070E7 /* SubscriptionViewController.swift in Sources */,
-				ED82F22A2468DF64005070E7 /* UICollectionViewCell+Extensions.swift in Sources */,
 				ED2222D72468DD6D0007D3EE /* Strings.swift in Sources */,
 				ED82F2732468DF64005070E7 /* MenuViewController+UITableViewDataSource.swift in Sources */,
 				ED82F2302468DF64005070E7 /* AVCaptureSession+Extensions.swift in Sources */,
@@ -846,6 +848,7 @@
 				ED82F22D2468DF64005070E7 /* UITableViewCell+Extensions.swift in Sources */,
 				ED82F2422468DF64005070E7 /* CameraViewController+UICollectionViewDelegate.swift in Sources */,
 				ED82F20F2468DF64005070E7 /* Constants.swift in Sources */,
+				EDBDACC1247DD6F500A3F4F1 /* GroupHeaderCollectionReusableView.swift in Sources */,
 				ED82F2142468DF64005070E7 /* SensorVisualizerWindow.swift in Sources */,
 				ED82F24B2468DF64005070E7 /* CameraOverlayView.swift in Sources */,
 				ED82F2292468DF64005070E7 /* CLLocationManager+Combine.swift in Sources */,
@@ -855,6 +858,7 @@
 				ED82F24E2468DF64005070E7 /* ContactsCollectionView.swift in Sources */,
 				ED82F2432468DF64005070E7 /* NowPlayingPreviewTableViewCell.swift in Sources */,
 				ED82F2332468DF64005070E7 /* Reachability.swift in Sources */,
+				EDBDACC3247DD7B400A3F4F1 /* UICollectionReusableView+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

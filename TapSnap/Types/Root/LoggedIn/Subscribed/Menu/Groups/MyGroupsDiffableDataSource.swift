@@ -12,5 +12,17 @@ class MyGroupsDiffableDataSource: UICollectionViewDiffableDataSource<GroupSectio
             cell.configure(record: record)
             return cell
         }
+        
+        supplementaryViewProvider = { ( collectionView, kind, indexPath) -> UICollectionReusableView? in
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                                         withReuseIdentifier: GroupHeaderCollectionReusableView.id,
+                                                                         for: indexPath) as? GroupHeaderCollectionReusableView
+            switch indexPath.section {
+            case GroupSection.ownedGroups.rawValue: header?.configure(text: L10n.ownedGroups)
+            case GroupSection.memberGroups.rawValue: header?.configure(text: L10n.memberGroups)
+            default: preconditionFailure("Unknown group")
+            }
+            return header
+        }
     }
 }

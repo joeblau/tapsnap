@@ -70,19 +70,38 @@ extension MyGroupsViewController: ViewBootstrappable {
             .sink(receiveValue: { [unowned self] groups in
                 self.activityIndicatorView.stopAnimating()
                 self.myGroupsCollectionView.refreshControl?.endRefreshing()
-
-                let items = groups.compactMap { record -> GroupValue? in
+                let myRecordID = Current.cloudKitUserSubject.value?.creatorUserRecordID
+                
+                let ownedItems = groups
+                    .filter({ record -> Bool in
+                        record.creatorUserRecordID == myRecordID
+                    })
+                    .compactMap { record -> GroupValue? in
                     GroupValue(record: record)
                 }
-
-                switch items.isEmpty {
-                case true: break
-                case false:
-                    var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
-                    snapshot.appendSections([.groups])
-                    snapshot.appendItems(items, toSection: .groups)
-                    self.myGroupsCollectionView.diffableDataSource?.apply(snapshot)
+                
+                let memberItems = groups
+                    .filter({ record -> Bool in
+                        record.creatorUserRecordID != myRecordID
+                    })
+                    .compactMap { record -> GroupValue? in
+                    GroupValue(record: record)
                 }
+                
+                var snapshot = NSDiffableDataSourceSnapshot<GroupSection, GroupValue>()
+                
+                snapshot.appendSections([.ownedGroups])
+                if !ownedItems.isEmpty {
+                    snapshot.appendItems(ownedItems, toSection: .ownedGroups)
+                }
+
+                snapshot.appendSections([.memberGroups])
+                if !memberItems.isEmpty {
+                    snapshot.appendItems(memberItems, toSection: .memberGroups)
+                }
+                
+                self.myGroupsCollectionView.diffableDataSource?.apply(snapshot)
+
             })
             .store(in: &cancellables)
     }
