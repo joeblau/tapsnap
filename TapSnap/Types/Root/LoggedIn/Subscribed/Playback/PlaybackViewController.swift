@@ -124,6 +124,7 @@ final class PlaybackViewController: UIViewController {
         }
 
         super.init(nibName: nil, bundle: nil)
+
         if let coverArt = playbackMetadata?.coverArt,
             let artist = playbackMetadata?.artist,
             let title = playbackMetadata?.title,
@@ -141,6 +142,11 @@ final class PlaybackViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
+        navigationController?.navigationBar.layer.shadowOffset = .zero
+        navigationController?.navigationBar.layer.shadowRadius = 3
+        navigationController?.navigationBar.layer.shadowOpacity = 1
+
         title = playbackMetadata?.author
         view.backgroundColor = .systemBackground
         view.floatView()

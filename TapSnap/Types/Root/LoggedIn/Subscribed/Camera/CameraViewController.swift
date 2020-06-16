@@ -136,18 +136,14 @@ final class CameraViewController: UIViewController {
     }()
 
     // MARK: - Lifecycle
-
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        bootstrap()
-    }
-
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.layer.shadowColor = UIColor.black.cgColor
+        navigationController?.navigationBar.layer.shadowOffset = .zero
+        navigationController?.navigationBar.layer.shadowRadius = 3
+        navigationController?.navigationBar.layer.shadowOpacity = 1
+        
         view.backgroundColor = .systemBackground
 
         navigationItem.leftBarButtonItem = menuButton
@@ -173,13 +169,13 @@ final class CameraViewController: UIViewController {
         sessionQueue.async {
             self.session.bootstrap()
         }
+        bootstrap()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         sessionQueue.async {
             self.session.startRunning()
-
             self.session.initZoom()
         }
     }
@@ -314,6 +310,7 @@ extension CameraViewController: ViewBootstrappable {
             .store(in: &cancellables)
 
         Current.topLeftNavBarSubject
+            .receive(on: DispatchQueue.main)
             .sink(receiveValue: { leftNavBarItem in
                 switch leftNavBarItem {
                 case .none:
@@ -323,6 +320,7 @@ extension CameraViewController: ViewBootstrappable {
                 case .clear:
                     self.navigationItem.leftBarButtonItem = self.clearButton
                 }
+
             })
             .store(in: &cancellables)
 
